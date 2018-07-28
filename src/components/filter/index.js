@@ -1,3 +1,4 @@
+//用于排期管理页面日期显示
 export default function (Vue) {
   Vue.filter('dateDate', function (tplData) {
     let dateMM = tplData ? new Date(tplData) : new Date()
