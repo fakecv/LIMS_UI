@@ -20,7 +20,7 @@
         label="菜单描述">
       </el-table-column>
       <el-table-column
-        prop="createUserId"
+        prop="lastModifiedBy"
         label="菜单创建者">
       </el-table-column>
     </el-table>

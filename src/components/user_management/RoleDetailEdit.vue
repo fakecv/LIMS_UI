@@ -11,8 +11,7 @@ export default {
     return {
       roleForm: {
         parentMenuId: [],
-        name: '',
-        createUserId: ''
+        name: ''
       },
       staticOptions: {
         parentMenu: []

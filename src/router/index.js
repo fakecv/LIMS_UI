@@ -27,6 +27,9 @@ import MenuDetailNew from '@/components/menu/MenuDetailNew'
 import MenuDetailEdit from '@/components/menu/MenuDetailEdit'
 import MenuMaintenance from '@/components/menu/MenuMaintenance'
 import RoleDetailNew from '@/components/user_management/RoleDetailNew'
+import DepartmentDetailNew from '@/components/sample/department/DepartmentDetailNew'
+import DepartmentDetailEdit from '@/components/sample/department/DepartmentDetailEdit'
+import DepartmentMaintenance from '@/components/sample/department/DepartmentMaintenance'
 import RoleDetailEdit from '@/components/user_management/RoleDetailEdit'
 import RoleGroupDetailNew from '@/components/user_management/RoleGroupDetailNew'
 import RoleGroupDetailEdit from '@/components/user_management/RoleGroupDetailEdit'
@@ -109,6 +112,21 @@ const router = new Router({
           path: 'roleGroupDetailNew',
           name: 'roleGroupDetailNew',
           component: RoleGroupDetailNew
+        },
+        {
+          path: 'departmentDetailEdit',
+          name: 'departmentDetailEdit',
+          component: DepartmentDetailEdit
+        },
+        {
+          path: 'departmentMaintenance',
+          name: 'departmentMaintenance',
+          component: DepartmentMaintenance
+        },
+        {
+          path: 'departmentDetailNew',
+          name: 'departmentDetailNew',
+          component: DepartmentDetailNew
         },
         {
           path: 'menuDetailEdit/:id',
