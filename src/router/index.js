@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import login from '@/components/system/login/Login'
 import ForgetPassword from '@/components/system/login/ForgetPassword'
 import Lims from '@/components/frame/LimsNew'
-import Task from '@/components/reference/Task'
 import ThemePicker from '@/components/frame/themePicker'
 import Preview from '@/views/preview/preview'
 import EditorFormAside from '@/views/editor/form/aside'
@@ -136,11 +135,6 @@ const router = new Router({
           component: MenuMaintenance
         },
         {
-          path: 'task',
-          name: 'task',
-          component: Task
-        },
-        {
           path: 'UIGenerator',
           name: 'UIGenerator',
           component: UIGenerator,
@@ -174,9 +168,10 @@ const router = new Router({
       ]
 
     },
+    // 正式上线后要改为 /login/first 或者错误信息提示页面，跳转后需要用户重新登录系统, 当出现问题后跳转至该页面，提示问题
     {
       path: '*',
-      redirect: '/lims'
+      redirect: '/lims/menuDetailNew'
     }
   ]
 })

@@ -55,7 +55,8 @@ export default class AuthService {
     localStorage.setItem('userProfile', JSON.stringify(decoded))
     // localStorage.setItem('userProfile', decoded.sub)
     this.authNotifier.emit('authChange', { authenticated: true })
-    router.replace({name: 'task'})
+    // 正式上线应该跳转至欢迎页面，或者流转状态列表
+    router.replace({name: 'userDetailNew'})
   }
 
   logout () {
