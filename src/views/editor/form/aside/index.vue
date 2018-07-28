@@ -1,0 +1,113 @@
+<template lang="pug">
+  el-aside.bowen-aside
+    el-tabs(v-model="activeName" tab-position="right" type="border-card")
+
+      el-tab-pane(label="添加组件" name="items-list")
+        items-list(@add="addItem")
+
+      el-tab-pane(label="组件配置" name="item-config")
+        component(
+          v-if="selectedItem"
+          :is="`editor-${selectedItem.type}`"
+          :form-item="selectedItem"
+          size="mini"
+          label-position="right"
+          label-width="80px"
+        )
+        p(v-else) 先选择一个组件
+
+      el-tab-pane(label="全局配置" name="global-config")
+        dynamic-form(:form-config="require('./editor-global.json')" v-model="currentForm")
+        //- todo 配置按钮
+
+      el-tab-pane(label="查看JSON" name="source")
+        pre {{currentForm}}
+</template>
+
+<script>
+import ItemsList from './items-list'
+import EditorInput from './editors-item/input'
+import EditorNumber from './editors-item/number'
+import EditorSwitch from './editors-item/switch'
+import EditorRadio from './editors-item/radio'
+import EditorCheckbox from './editors-item/checkbox'
+import EditorSelect from './editors-item/select'
+import EditorDate from './editors-item/date'
+import EditorCascader from './editors-item/cascader'
+
+export default {
+  components: {
+    ItemsList,
+    EditorInput,
+    EditorNumber,
+    EditorSwitch,
+    EditorRadio,
+    EditorCheckbox,
+    EditorSelect,
+    EditorDate,
+    EditorCascader
+  },
+  computed: {
+    activeName: {
+      get () {
+        return this.$store.state.asideActiveName
+      },
+      set (newV) {
+        this.$store.commit('TOGGLE_ASIDE_ACTIVE', newV)
+      }
+    },
+    currentForm: {
+      get () {
+        return this.$store.state.forms[this.$route.params.fid]
+      },
+      set (newV) {
+        this.$store.commit('FORM_UPDATE_WITH_FID_G', { fid: this.$route.params.fid, newV })
+      }
+    },
+    selectedItem () {
+      return this.currentForm.formItemList.find(item => item.key === this.$store.state.itemKey)
+    }
+  },
+  data () {
+    return {
+      popInput: false
+    }
+  },
+  methods: {
+    addItem (item) {
+      this.currentForm.formItemList.push(item)
+      this.$store.commit('SELECT_ITEM', item.key)
+    }
+  }
+}
+</script>
+<style lang="less">
+.bowen-aside {
+  background-color: #e3d7d3;
+  padding: 10px;
+  .el-tag.item {
+    cursor: pointer;
+    background-color: #e38335;
+    color: #ffffff;
+    font-size: 14px;
+    height: 60px;
+    width: 60px;
+    line-height: 1.2;
+    padding: 10px;
+    text-align: center;
+    margin: 5px;
+    .icon-svg,
+    [class^=el-icon],
+    [class^=icon] {
+      width: 1.3em;
+      height: 1.3em;
+    }
+    span {
+      display: block;
+    }
+  }
+  .el-input-number--mini {
+    width: 100px;
+  }
+}
+</style>
