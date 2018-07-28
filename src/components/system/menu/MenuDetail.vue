@@ -120,7 +120,7 @@
           <el-row :gutter="20">
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="菜单创建人:">
-                <span>{{menuForm.createUserId}}</span>
+                <span>{{menuForm.lastModifiedBy}}</span>
               </el-form-item>
             </el-col>
           </el-row>

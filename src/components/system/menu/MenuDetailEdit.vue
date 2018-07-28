@@ -3,15 +3,12 @@
 </template>
 
 <script>
-import MenuDetail from '@/components/menu/MenuDetail'
+import MenuDetail from '@/components/system/menu/MenuDetail'
 export default {
   name: 'menuDetail',
   components: {MenuDetail},
   data () {
     return {
-      staticOptions: {
-        parentMenu: []
-      },
       menuForm: {
         id: '',
         parentMenuId: [],
@@ -24,6 +21,9 @@ export default {
         type: '',
         description: '',
         createUserId: ''
+      },
+      staticOptions: {
+        parentMenu: []
       }
     }
   },
@@ -37,10 +37,23 @@ export default {
           console.log(error.message)
           vm.$message('Somthing wrong happen in loadParentMenu!')
         })
+    },
+    loadMenuItem (menuItemid) {
+      let vm = this
+      this.$ajax.get('/api/systemMenu/singleMenuItem/' + menuItemid)
+        .then(function (res) {
+          vm.menuForm = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message('Somthing wrong happen in loadMenuItem!')
+        })
     }
   },
   mounted () {
     this.loadParentMenu()
+    if (this.$route.params.id !== undefined) {
+      this.loadMenuItem(this.$route.params.id)
+    }
   }
 }
 </script>

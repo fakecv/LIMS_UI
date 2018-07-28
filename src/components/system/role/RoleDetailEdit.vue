@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import RoleDetail from '@/components/user_management/RoleDetail'
+import RoleDetail from '@/components/system/role/RoleDetail'
 export default {
   name: 'roleDetailEdit',
   components: {RoleDetail},
