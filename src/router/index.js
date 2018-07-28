@@ -12,7 +12,6 @@ import EditorTableAside from '@/views/editor/table/aside'
 import EditorTableMain from '@/views/editor/table/main'
 import UIGenerator from '@/components/develop/UIGenerator'
 import ActionHeader from '@/components/frame/ActionHeader'
-import FileUpload from '@/components/Sample-FileUpload'
 import UserDetailNew from '@/components/system/user/UserDetailNew'
 import UserDetailEdit from '@/components/system/user/UserDetailEdit'
 import UserMaintenance from '@/components/system/user/UserMaintenance'
@@ -140,11 +139,6 @@ const router = new Router({
           path: 'task',
           name: 'task',
           component: Task
-        },
-        {
-          path: 'FileUpload',
-          name: 'FileUpload',
-          component: FileUpload
         },
         {
           path: 'UIGenerator',
