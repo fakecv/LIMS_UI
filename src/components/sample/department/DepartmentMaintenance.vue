@@ -4,7 +4,7 @@
         <el-form :model="departmentRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-form-item label="部门名称">
-              <el-input name="departmentName" v-model="departmentRequestForm.paramName"></el-input>
+              <el-input name="departmentName" v-model="departmentRequestForm.departmentName"></el-input>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -48,7 +48,7 @@ export default {
       tableData: [],
       totalDepartments: 0,
       departmentRequestForm: {
-        paramName: '',
+        departmentName: '',
         itemsPerPage: 20,
         currentPage: 1
       }
@@ -82,8 +82,8 @@ export default {
       let vm = this
       this.$ajax.post('/api/sample/department/queryDepartment', this.departmentRequestForm)
         .then(function (res) {
-          vm.tableData = res.data.pageResult
-          vm.totalDepartments = res.data.totalDepartments || []
+          vm.tableData = res.data.pageResult || []
+          vm.totalDepartments = res.data.totalDepartments || 0
           console.log('totalDeparts is: ' + vm.totalDepartments)
         })
     }

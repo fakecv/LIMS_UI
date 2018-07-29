@@ -8,8 +8,8 @@
       <el-tabs v-model="activeName" style="color::active: #005458">
         <el-tab-pane label="用户登录" name="first" style="{color: #005458, active: {color: #005458} width: 175px}">
           <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="0px">
-            <el-form-item prop="username">
-              <el-input v-model="loginForm.username" placeholder="输入用户名">
+            <el-form-item prop="userName">
+              <el-input v-model="loginForm.userName" placeholder="输入用户名">
                 <template slot="prepend"><i class="fa fa-user" aria-hidden="true"></i></template>
               </el-input>
             </el-form-item>
@@ -28,8 +28,8 @@
         </el-tab-pane>
         <el-tab-pane label="用户注册" name="second">
           <el-form :model="registerForm" :rules="rules" ref="registerForm" label-width="0px">
-            <el-form-item prop="username">
-              <el-input v-model="registerForm.username" placeholder="输入用户名">
+            <el-form-item prop="userName">
+              <el-input v-model="registerForm.userName" placeholder="输入用户名">
                 <template slot="prepend"><i class="fa fa-user" aria-hidden="true"></i></template>
               </el-input>
             </el-form-item>
@@ -75,16 +75,16 @@ export default {
     return {
       activeName: 'first',
       loginForm: {
-        username: '',
+        userName: '',
         password: ''
       },
       registerForm: {
-        username: '',
+        userName: '',
         password: '',
         confirmPassword: ''
       },
       rules: {
-        username: [
+        userName: [
           { required: true, message: '用户名不能为空', trigger: 'blur' }],
         password: [
           { required: true, message: '密码不能为空', trigger: 'blur' }
@@ -98,7 +98,7 @@ export default {
   methods: {
     submitForm (formName) {
       var credentials = {
-        username: this.loginForm.username,
+        userName: this.loginForm.userName,
         password: this.loginForm.password
       }
       var vm = this
@@ -120,7 +120,7 @@ export default {
     },
     regForm (formName) {
       var register = {
-        username: this.registerForm.username,
+        userName: this.registerForm.userName,
         password: this.registerForm.password
       }
       var vm = this
@@ -129,8 +129,10 @@ export default {
           vm.$ajax.post('/api/users/sign-up', register)
             .then(function (res) {
               toastr.success('注册成功！')
+              vm.auth.login(res.headers.authorization)
             }).catch(function (error) {
-              toastr.error(error.message)
+              console.log(error.response.data.message)
+              toastr.error(error.response.data.message)
             })
         } else {
           console.log('error submit!!')

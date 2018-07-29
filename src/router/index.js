@@ -110,7 +110,7 @@ const router = new Router({
           component: RoleGroupMaintenance
         },
         {
-          path: 'departmentDetailEdit',
+          path: 'departmentDetailEdit/:id',
           name: 'departmentDetailEdit',
           component: DepartmentDetailEdit
         },
