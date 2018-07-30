@@ -1,97 +1,136 @@
 <template>
-<div>
-  <el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
-    <el-form-item
-      prop="email"
-      label="邮箱"
-      :label-position="labelPosition"
-      :rules="[
-        { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-        { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }
-      ]"
-    >
-      <el-input v-model="dynamicValidateForm.email"></el-input>
-    </el-form-item>
-    <el-form-item
-      v-for="(domain, index) in dynamicValidateForm.domains"
-      :label="'域名' + index"
-      :label-position="labelPosition"
-      :key="domain.key"
-      :prop="'domains.' + index + '.value'"
-      :rules="{
-        required: true, message: '域名不能为空', trigger: 'blur'
-      }"
-    >
-      <el-input v-model="domain.value"></el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="submitForm('dynamicValidateForm')">提交</el-button>
-      <el-button @click="addDomain">新增域名</el-button>
-      <el-button @click="resetForm('dynamicValidateForm')">重置</el-button>
-    </el-form-item>
-  </el-form>
   <el-container>
-    <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
-      <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
-      <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-      <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-      <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
-    </el-tabs>
+    <el-header>
+      <el-button-group>
+        <el-button type="info" v-for="(action,index) in actions" :key="index" size="mini" :icon="action.icon" :loading="action.loading" @click="actionHandle(action)">{{action.name}}
+        </el-button>
+      </el-button-group>
+    </el-header>
+    <el-container style="padding: 10px">
+      <el-form :model="userForm" label-width="100px" label-position="left" size="mini">
+        <el-row :gutter="20">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="用户名">
+              <el-input name="userName" v-model="userForm.userName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="用户密码">
+              <el-input name="password" v-model="userForm.password"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="所属部门">
+              <el-select name="department" v-model=userForm.department>
+               <el-option label="张秀梅" value="zxm"></el-option>
+               <el-option label="关锋" value="augur"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="用户角色组">
+              <el-select name="roleGroup" v-model=userForm.roleGroup>
+               <el-option label="张秀梅" value="zxm"></el-option>
+               <el-option label="关锋" value="augur"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="真实姓名">
+              <el-input name="realName" v-model="userForm.realName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="性别">
+              <el-select name="sex" v-model=userForm.sex>
+               <el-option label="张秀梅" value="zxm"></el-option>
+               <el-option label="关锋" value="augur"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="职称">
+              <el-input name="title" v-model="userForm.title"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="文化程度">
+              <el-select name="degreeOfEducation" v-model=userForm.degreeOfEducation>
+               <el-option label="张秀梅" value="zxm"></el-option>
+               <el-option label="关锋" value="augur"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="所学专业">
+              <el-input name="major" v-model="userForm.major"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="毕业时间">
+              <el-date-picker type="date" placeholder="选择日期" v-model="userForm.graduateOn" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="手机号码">
+              <el-input name="mobileNumber" v-model="userForm.mobileNumber"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="注册邮箱">
+              <el-input name="email" v-model="userForm.email"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="上次登录时间">
+              <el-date-picker type="date" placeholder="选择日期" v-model="userForm.date" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="登录次数">
+              <el-input name="logonTimes" v-model="userForm.logonTimes"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-container>
   </el-container>
-</div>
 </template>
+
 <script>
 export default {
   name: 'userDetail',
   data () {
     return {
-      activeName2: 'first',
-      labelPosition: 'left',
-      dynamicValidateForm: {
-        domains: [{
-          value: ''
-        }],
-        email: ''
-      }
+      userForm: {},
+      actions: [
+        {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
+        {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
+        {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
+        {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
+      ],
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
     }
   },
   methods: {
-    handleClick (tab, event) {
-      console.log(tab, event)
-    },
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    resetForm (formName) {
-      this.$refs[formName].resetFields()
-    },
-    removeDomain (item) {
-      var index = this.dynamicValidateForm.domains.indexOf(item)
-      if (index !== -1) {
-        this.dynamicValidateForm.domains.splice(index, 1)
+    actionHandle (action) {
+      // var vm = this
+      console.log(action.id)
+      if (action.id === '1') {
+        this.saveToDB()
+      } else if (action.id === '2') {
+        console.log(action.id)
+        this.delete()
+      } else if (action.id === '3') {
+        console.log(action.id)
+      } else if (action.id === '4') {
+        console.log(action.id)
       }
     },
-    addDomain () {
-      this.dynamicValidateForm.domains.push({
-        value: '',
-        key: Date.now()
-      })
+    mounted () {
     }
   }
 }
 </script>
-<style>
-  .el-select .el-input {
-    width: 130px;
-  }
-  .input-with-select .el-input-group__prepend {
-    background-color: #fff;
-  }
+<style lang="less">
 </style>
