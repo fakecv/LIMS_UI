@@ -1,5 +1,5 @@
 <template>
-  <RoleDetail :staticOptions="staticOptions" :roleForm="roleForm"/>
+  <RoleDetail :staticOptions="staticOptions" :roleForm="roleForm"  v-on:deleteUserRole="resetRoleForm"/>
 </template>
 
 <script>
@@ -10,13 +10,19 @@ export default {
   data () {
     return {
       roleForm: {
-        menuId: '',
-        roleName: '',
-        roleId: '',
-        roleDescription: ''
+        id: '',
+        userRoleName: '',
+        menuId: [],
+        userRoleDescription: ''
+      },
+      roleResetForm: {
+        id: '',
+        userRoleName: '',
+        menuId: [],
+        userRoleDescription: ''
       },
       staticOptions: {
-        linkMenu: []
+        linkMenus: []
       }
     }
   },
@@ -25,28 +31,31 @@ export default {
       let vm = this
       this.$ajax.post('/api/systemMenu/menuLinks', 'LINK')
         .then(function (res) {
-          vm.staticOptions.linkMenu = res.data
+          vm.staticOptions.linkMenus = res.data
         }).catch(function (error) {
           console.log(error.message)
           vm.$message('Somthing wrong happen in loadParentMenu!')
         })
     },
-    loadRole (roleId) {
+    loadUserRole (userRoleId) {
       let vm = this
-      this.$ajax.get('/api/security/singleRole/' + roleId)
+      this.$ajax.get('/api/role/' + userRoleId)
         .then(function (res) {
           vm.roleForm = res.data
         }).catch(function (error) {
           console.log(error.message)
-          vm.$message('Somthing wrong happen in loadRole!')
+          vm.$message('Somthing wrong happen in user role!')
         })
+    },
+    resetRoleForm () {
+      this.roleForm = this.roleResetForm
     }
   },
   mounted () {
     this.loadMenuLinks()
     console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
-      this.loadMenuItem(this.$route.params.id)
+      this.loadUserRole(this.$route.params.id)
     }
   }
 }

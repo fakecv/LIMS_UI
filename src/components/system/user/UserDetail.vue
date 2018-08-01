@@ -43,8 +43,8 @@
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="性别">
               <el-select name="sex" v-model=userForm.sex>
-               <el-option label="张秀梅" value="zxm"></el-option>
-               <el-option label="关锋" value="augur"></el-option>
+               <el-option label="男" value="male"></el-option>
+               <el-option label="女" value="female"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -56,8 +56,11 @@
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="文化程度">
               <el-select name="degreeOfEducation" v-model=userForm.degreeOfEducation>
-               <el-option label="张秀梅" value="zxm"></el-option>
-               <el-option label="关锋" value="augur"></el-option>
+               <el-option label="大专" value="juniorCollege"></el-option>
+               <el-option label="大学" value="college"></el-option>
+               <el-option label="高职" value="technicalSecondarySchool"></el-option>
+               <el-option label="硕士" value="master"></el-option>
+               <el-option label="博士" value="doctor"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -83,12 +86,12 @@
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="上次登录时间">
-              <el-date-picker type="date" placeholder="选择日期" v-model="userForm.date" style="width: 100%;"></el-date-picker>
+              <el-date-picker type="date" readonly placeholder="选择日期" v-model="userForm.date" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="登录次数">
-              <el-input name="logonTimes" v-model="userForm.logonTimes"></el-input>
+              <el-input name="logonTimes" readonly v-model="userForm.logonTimes"></el-input>
             </el-form-item>
           </el-col>
         </el-row>

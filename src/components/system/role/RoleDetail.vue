@@ -10,13 +10,14 @@
       <el-form :model="roleForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-form-item label="角色名称">
-            <el-input name="roleName" v-model="roleForm.roleName"></el-input>
-          <el-form-item label="菜单名称">
-            <el-cascader :options="staticOptions.menuList" v-model="roleForm.menuId"></el-cascader>
+            <el-input name="roleName" v-model="roleForm.userRoleName"></el-input>
           </el-form-item>
+          <el-form-item label="菜单名称">
+            <el-cascader :options="staticOptions.linkMenus" v-model="roleForm.menuId" style="width: 300px;" :change-on-select="true">
+            </el-cascader>
           </el-form-item>
           <el-form-item label="角色描述">
-            <el-input name="roleName" v-model="roleForm.roleDescription"></el-input>
+            <el-input type="textarea" name="roleDescription" v-model="roleForm.userRoleDescription"></el-input>
           </el-form-item>
         </el-row>
       </el-form>
@@ -56,9 +57,12 @@ export default {
     },
     saveToDB () {
       let vm = this
-      this.$ajax.post('/api/systemRole', this.roleForm)
+      this.$ajax.post('/api/role', this.roleForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
+          console.log('saveToDB')
+          console.log(res.data)
+          vm.$emit('updateRoleForm', res.data)
         }).catch(function (error) {
           console.log(error.message)
           vm.$message('Something wrong happen!')
@@ -66,9 +70,10 @@ export default {
     },
     delete () {
       let vm = this
-      this.$ajax.get('/api/systemRole/delete/' + this.roleForm.id)
+      this.$ajax.get('/api/role/delete/' + this.roleForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
+          vm.$emit('deleteUserRole')
         }).catch(function (error) {
           console.log('RoleDetail delete ' + error)
           vm.$message('Something wrong happen!')

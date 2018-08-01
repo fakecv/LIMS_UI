@@ -1,5 +1,5 @@
 <template>
-  <RoleDetail :staticOptions="staticOptions" :roleForm="roleForm"/>
+  <RoleDetail :staticOptions="staticOptions" :roleForm="roleForm" v-on:updateRoleForm="updateRoleForm" v-on:deleteUserRole="resetRoleForm"/>
 </template>
 
 <script>
@@ -10,13 +10,19 @@ export default {
   data () {
     return {
       roleForm: {
-        menuId: '',
-        roleName: '',
-        roleId: '',
-        roleDescription: ''
+        id: '',
+        userRoleName: '',
+        menuId: [],
+        userRoleDescription: ''
+      },
+      roleResetForm: {
+        id: '',
+        userRoleName: '',
+        menuId: [],
+        userRoleDescription: ''
       },
       staticOptions: {
-        linkMenu: []
+        linkMenus: []
       }
     }
   },
@@ -25,19 +31,23 @@ export default {
       let vm = this
       this.$ajax.post('/api/systemMenu/menuLinks', 'LINK')
         .then(function (res) {
-          vm.staticOptions.linkMenu = res.data
+          vm.staticOptions.linkMenus = res.data
         }).catch(function (error) {
           console.log(error.message)
-          vm.$message('Somthing wrong happen in loadParentMenu!')
+          vm.$message('Somthing wrong happen in load menuLinks!')
         })
+    },
+    updateRoleForm (event) {
+      console.log('updateRoleForm' + event.id)
+
+      this.roleForm.id = event.id
+    },
+    resetRoleForm () {
+      this.roleForm = this.roleResetForm
     }
   },
   mounted () {
     this.loadMenuLinks()
-    console.log(this.$route.params.id)
-    if (this.$route.params.id !== undefined) {
-      this.loadMenuItem(this.$route.params.id)
-    }
   }
 }
 </script>

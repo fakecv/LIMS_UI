@@ -1,5 +1,5 @@
 <template>
-  <userDetail :userForm="userForm"/>
+  <userDetail :staticOptions="staticOptions" :userForm="userForm"/>
 </template>
 
 <script>
@@ -25,24 +25,39 @@ export default {
         email: '',
         logonAt: '',
         lastLogonAt: '',
-        logonTimes: ''
+        logonTimes: 0
+      },
+      staticOptions: {
+        departments: [],
+        roleGroups: []
       }
     }
   },
   methods: {
-    loadParentMenu () {
+    loadDepartment () {
       let vm = this
-      this.$ajax.get('/api/systemMenu/parentMenuOptions')
+      this.$ajax.get('/api/sample/department/getDepartment')
         .then(function (res) {
-          vm.staticOptions.parentMenu = res.data
+          vm.staticOptions.departments = res.data
         }).catch(function (error) {
           console.log(error.message)
           vm.$message('Somthing wrong happen in loadParentMenu!')
         })
+    },
+    loadRoleGroups () {
+      let vm = this
+      this.$ajax.get('/api/security/roleGroup/getRoleGroup')
+        .then(function (res) {
+          vm.staticOptions.roleGroups = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message('Somthing wrong happen in getRoleGroup!')
+        })
     }
   },
   mounted () {
-    this.loadParentMenu()
+    this.loadDepartment()
+    this.loadRoleGroups()
   }
 }
 </script>

@@ -4,7 +4,7 @@
         <el-form :model="roleRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-form-item label="角色名称">
-              <el-input name="roleName" v-model="roleRequestForm.roleName"></el-input>
+              <el-input name="userRoleName" v-model="roleRequestForm.userRoleName"></el-input>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -16,19 +16,20 @@
       </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
-          prop="roleName"
+          prop="userRoleName"
           label="角色名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="menuId"
-          :formatter="formatter"
           label="菜单名称"
-          width="180">
+          width="370">
+          <template slot-scope="scope">
+            <el-cascader :options="linkMenus" v-model="scope.row.menuId" style="width: 350px;">
+            </el-cascader>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="roleDescription"
-          :formatter="formatter"
+          prop="userRoleDescription"
           label="角色描述"
           width="180">
         </el-table-column>
@@ -55,11 +56,11 @@ export default {
       tableData: [],
       totalRoles: 0,
       roleRequestForm: {
-        roleName: '',
+        userRoleName: '',
         itemsPerPage: 20,
         currentPage: 1
       },
-      menuList: []
+      linkMenus: []
     }
   },
   methods: {
@@ -91,15 +92,26 @@ export default {
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/sample/role/queryRole', this.roleRequestForm)
+      this.$ajax.post('/api/role/queryUserRole', this.roleRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
-          vm.totalRoles = res.data.totalRoles || 0
-          console.log('totalDeparts is: ' + vm.totalRoles)
+          vm.totalRoles = res.data.totalUserRoles || 0
+          console.log('totalRoles is: ' + vm.totalRoles)
+        })
+    },
+    loadMenuLinks () {
+      let vm = this
+      this.$ajax.post('/api/systemMenu/menuLinks', 'LINK')
+        .then(function (res) {
+          vm.linkMenus = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message('Somthing wrong happen in load menuLinks!')
         })
     }
   },
   mounted () {
+    this.loadMenuLinks()
     this.onSubmit()
   }
 
