@@ -129,7 +129,9 @@ export default {
           vm.$ajax.post('/api/users/sign-up', register)
             .then(function (res) {
               toastr.success('注册成功！')
-              vm.auth.login(res.headers.authorization)
+              vm.loginForm.userName = vm.registerForm.userName
+              vm.loginForm.password = vm.registerForm.password
+              vm.submitForm(vm.loginForm)
             }).catch(function (error) {
               console.log(error.response.data.message)
               toastr.error(error.response.data.message)

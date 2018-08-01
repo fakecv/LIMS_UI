@@ -1,10 +1,10 @@
     <template>
     <div>
       <el-container style="padding: 10px">
-        <el-form :model="userRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-form :model="agreementRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-form-item label="部门名称">
-              <el-input name="userName" v-model="userRequestForm.userName"></el-input>
+              <el-input name="agreementName" v-model="agreementRequestForm.agreementName"></el-input>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -16,12 +16,12 @@
       </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
-          prop="userName"
+          prop="agreementName"
           label="部门名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="userDescription"
+          prop="agreementDescription"
           label="部门描述"
           width="180">
         </el-table-column>
@@ -30,11 +30,11 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="userRequestForm.currentPage"
+          :current-page.sync="agreementRequestForm.currentPage"
           :page-sizes="[10, 20, 50]"
           :page-size="20"
           layout="sizes, prev, pager, next"
-          :total="totalUsers">
+          :total="totalAgreements">
         </el-pagination>
       </div>
     </div>
@@ -42,13 +42,13 @@
 
 <script>
 export default {
-  name: 'userMaintenance',
+  name: 'agreementMaintenance',
   data () {
     return {
       tableData: [],
-      totalUsers: 0,
-      userRequestForm: {
-        userName: '',
+      totalAgreements: 0,
+      agreementRequestForm: {
+        agreementName: '',
         itemsPerPage: 20,
         currentPage: 1
       }
@@ -56,35 +56,35 @@ export default {
   },
   methods: {
     handleSizeChange (val) {
-      this.userRequestForm.itemsPerPage = val
+      this.agreementRequestForm.itemsPerPage = val
       console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
-      this.userRequestForm.currentPage = val
+      this.agreementRequestForm.currentPage = val
       console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
       let vm = this
-      this.$ajax.get('/api/sample/user/getUser')
+      this.$ajax.get('/api/sample/agreement/getAgreement')
         .then(function (res) {
-          console.log('userMaintenance')
+          console.log('agreementMaintenance')
           console.log(res)
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
       console.log(row.id)
-      this.$router.push('/lims/userDetailEdit/' + row.id)
+      this.$router.push('/lims/agreementDetailEdit/' + row.id)
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/sample/user/queryUser', this.userRequestForm)
+      this.$ajax.post('/api/sample/agreement/queryAgreement', this.agreementRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
-          vm.totalUsers = res.data.totalUsers || 0
-          console.log('totalDeparts is: ' + vm.totalUsers)
+          vm.totalAgreements = res.data.totalAgreements || 0
+          console.log('totalDeparts is: ' + vm.totalAgreements)
         })
     }
   },

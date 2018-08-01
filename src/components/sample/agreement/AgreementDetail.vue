@@ -7,16 +7,15 @@
       </el-button-group>
     </el-header>
     <el-container style="padding: 10px">
-      <el-form :model="roleForm" label-width="100px" label-position="left" size="mini">
+      <el-form :model="agreementForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-form-item label="角色名称">
-            <el-input name="roleName" v-model="roleForm.roleName"></el-input>
-          <el-form-item label="菜单名称">
-            <el-cascader :options="staticOptions.menuList" v-model="roleForm.menuId"></el-cascader>
+          <el-form-item label="部门名称">
+            <el-input name="agreementName" v-model="agreementForm.agreementName"></el-input>
           </el-form-item>
-          </el-form-item>
-          <el-form-item label="角色描述">
-            <el-input name="roleName" v-model="roleForm.roleDescription"></el-input>
+        </el-row>
+        <el-row :gutter="20">
+          <el-form-item label="部门描述">
+            <el-input type="textarea" name="agreementDescription" v-model="agreementForm.agreementDescription"></el-input>
           </el-form-item>
         </el-row>
       </el-form>
@@ -26,8 +25,8 @@
 
 <script>
 export default {
-  name: 'roleDetail',
-  props: ['staticOptions', 'roleForm'],
+  name: 'agreementDetail',
+  props: ['agreementForm'],
   data () {
     return {
       actions: [
@@ -56,7 +55,7 @@ export default {
     },
     saveToDB () {
       let vm = this
-      this.$ajax.post('/api/systemRole', this.roleForm)
+      this.$ajax.post('/api/sample/agreement', this.agreementForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
         }).catch(function (error) {
@@ -66,16 +65,14 @@ export default {
     },
     delete () {
       let vm = this
-      this.$ajax.get('/api/systemRole/delete/' + this.roleForm.id)
+      this.$ajax.get('/api/sample/agreement/delete/' + this.agreementForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
         }).catch(function (error) {
-          console.log('RoleDetail delete ' + error)
+          console.log('AgreementDetail delete ' + error)
           vm.$message('Something wrong happen!')
         })
     }
-  },
-  mounted () {
   }
 }
 </script>

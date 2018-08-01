@@ -10,21 +10,22 @@ export default {
   data () {
     return {
       roleForm: {
-        parentMenuId: [],
+        menuId: '',
         roleName: '',
-        roleId: ''
+        roleId: '',
+        roleDescription: ''
       },
       staticOptions: {
-        parentMenu: []
+        linkMenu: []
       }
     }
   },
   methods: {
-    loadParentMenu () {
+    loadMenuLinks () {
       let vm = this
-      this.$ajax.get('/api/systemMenu/parentMenuLinks')
+      this.$ajax.post('/api/systemMenu/menuLinks', 'LINK')
         .then(function (res) {
-          vm.staticOptions.parentMenu = res.data
+          vm.staticOptions.linkMenu = res.data
         }).catch(function (error) {
           console.log(error.message)
           vm.$message('Somthing wrong happen in loadParentMenu!')
@@ -32,7 +33,11 @@ export default {
     }
   },
   mounted () {
-    this.loadParentMenu()
+    this.loadMenuLinks()
+    console.log(this.$route.params.id)
+    if (this.$route.params.id !== undefined) {
+      this.loadMenuItem(this.$route.params.id)
+    }
   }
 }
 </script>
