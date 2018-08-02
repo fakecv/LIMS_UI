@@ -1,5 +1,5 @@
 <template>
-  <RoleGroupDetail :userRoleGroupForm="userRoleGroupForm"/>
+  <RoleGroupDetail :userRoleGroupForm="userRoleGroupForm" v-on:deleteUserRoleGroup="resetRoleGroupForm"/>
 </template>
 
 <script>
@@ -10,6 +10,12 @@ export default {
   data () {
     return {
       userRoleGroupForm: {
+        id: '',
+        userRoleGroupName: '',
+        userRoleIds: [],
+        userRoleGroupDescription: ''
+      },
+      userRoleGroupResetForm: {
         id: '',
         userRoleGroupName: '',
         userRoleIds: [],
@@ -27,6 +33,9 @@ export default {
           console.log(error.message)
           vm.$message('Somthing wrong happen in user role!')
         })
+    },
+    resetRoleGroupForm () {
+      this.userRoleGroupForm = this.userRoleGroupResetForm
     }
   },
   mounted () {

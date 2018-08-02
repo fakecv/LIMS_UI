@@ -61,59 +61,6 @@
           </el-row>
         </el-form>
       </el-row>
-      <el-row>
-        <div class="btn-group mr-2" role="group" aria-label="First group">
-          <button type="button" class="btn btn-secondary" @click="dialogFormVisible  = true">1</button>
-          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter">2</button>
-          <button type="button" class="btn btn-secondary">3</button>
-          <button type="button" class="btn btn-secondary">4</button>
-        </div>
-        <div class="btn-group mr-2" role="group" aria-label="Second group">
-          <button type="button" class="btn btn-secondary">5</button>
-          <button type="button" class="btn btn-secondary">6</button>
-          <button type="button" class="btn btn-secondary">7</button>
-        </div>
-        <div class="btn-group" role="group" aria-label="Third group">
-          <button type="button" class="btn btn-secondary">8</button>
-        </div>
-      </el-row>
-    <el-dialog title="收货地址" :visible.sync="dialogFormVisible" :modal-append-to-body="false">
-      <el-form :model="form">
-        <el-form-item label="活动名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="活动区域" :label-width="formLabelWidth">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click.native="dialogFormVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            ...
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
-        </div>
-      </div>
-    </div>
   </el-container>
       <el-row class="footer-row">
         <el-form :model="menuForm" label-width="100px" label-position="left" size="mini">
@@ -135,23 +82,6 @@ export default {
   props: ['staticOptions', 'menuForm'],
   data () {
     return {
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
-      formLabelWidth: '120px',
-      selectedOptions: [],
-      selectedParentId: '',
-      dialogFormVisible: false,
-      footerForm: {
-        parentMenuId: '张秀梅'
-      },
       actions: [
         {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
         {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
@@ -162,15 +92,7 @@ export default {
     }
   },
   methods: {
-    handleClose (done) {
-      this.$confirm('确认关闭？')
-        .then(_ => {
-          done()
-        })
-        .catch(_ => {})
-    },
     actionHandle (action) {
-      // var vm = this
       console.log(action.id)
       if (action.id === '1') {
         this.saveToDB()

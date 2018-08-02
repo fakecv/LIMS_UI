@@ -46,8 +46,9 @@ export default {
   data () {
     return {
       tableData: [],
-      totalRoleGroups: 0,
+      totalUserRoleGroups: 0,
       userRoleGroupRequestForm: {
+        id: '',
         userRoleGroupName: '',
         itemsPerPage: 20,
         currentPage: 1
@@ -71,10 +72,10 @@ export default {
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/roleGroup/queryRoleGroup', this.roleGroupRequestForm)
+      this.$ajax.post('/api/roleGroup/queryUserRoleGroup', this.userRoleGroupRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
-          vm.totalUserRoleGroups = res.data.totalRoleGroups || 0
+          vm.totalUserRoleGroups = res.data.totalUserRoleGroups || 0
           console.log('total user role group is: ' + vm.totalUserRoleGroups)
         })
     }

@@ -1,5 +1,8 @@
 <template>
-  <RoleGroupDetail :userRoleGroupForm="userRoleGroupForm"/>
+  <RoleGroupDetail :userRoleGroupForm="userRoleGroupForm"
+  v-on:updateUserRoleGroupForm="updateRoleGroupForm"
+  v-on:deleteUserRoleGroup="resetRoleGroupForm"
+  v-on:updateUserRoles="updateUserRoles"/>
 </template>
 
 <script>
@@ -14,10 +17,28 @@ export default {
         userRoleGroupName: '',
         userRoleIds: [],
         userRoleGroupDescription: ''
+      },
+      userRoleGroupResetForm: {
+        id: '',
+        userRoleGroupName: '',
+        userRoleIds: [],
+        userRoleGroupDescription: ''
       }
     }
   },
   methods: {
+    updateRoleGroupForm (event) {
+      console.log('updateRoleGroupForm' + event.id)
+
+      this.userRoleGroupForm.id = event.id
+    },
+    updateUserRoles (event) {
+      console.log('updateUserRoles' + event)
+      this.userRoleGroupForm.userRoleIds = event
+    },
+    resetRoleGroupForm () {
+      this.userRoleGroupForm = this.userRoleGroupResetForm
+    }
   },
   mounted () {
   }
