@@ -19,8 +19,7 @@ export default {
         state: false,
         sort: '',
         type: '',
-        description: '',
-        createUserId: ''
+        description: ''
       },
       staticOptions: {
         parentMenu: []

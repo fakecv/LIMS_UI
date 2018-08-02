@@ -7,10 +7,10 @@
       </el-button-group>
     </el-header>
     <el-container style="padding: 10px">
-      <el-form :model="roleForm" label-width="100px" label-position="left" size="mini">
+      <el-form :model="userRoleGroupForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-form-item label="角色组名称">
-            <el-input name="icon" v-model="roleForm.name"></el-input>
+            <el-input name="userRoleGroupName" v-model="userRoleGroupForm.userRoleGroupName"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
@@ -18,7 +18,7 @@
         <div style="text-align: center; height: 850px;width: 600px;margin: auto">
           <el-transfer
             style="text-align: left; display: inline-block;"
-            v-model="targetValue"
+            v-model="selectedUserRoles"
             :titles="['角色列表', '已包含角色列表']"
             :left-default-checked="[1]"
             :button-texts="['到左边', '到右边']"
@@ -27,7 +27,7 @@
               hasChecked: '${checked}/${total}'
             }"
             @change="handleChange"
-            :data="data">
+            :data="userRoles">
             <el-row  class="transfer-footer-left" slot="left-footer">
               <el-col :span="12">
                 <el-button type="primary" size="mini" @click="lastPage">上一页</el-button>
@@ -49,12 +49,17 @@
 
 <script>
 export default {
-  name: 'roleDetailGroup',
-  props: ['staticOptions', 'roleForm'],
+  name: 'roleGroupDetail',
+  props: ['userRoleGroupForm'],
   data () {
     return {
-      data: [],
-      targetValue: [1, 4],
+      userRoles: [],
+      selectedUserRoles: [],
+      userRoleGroupRequestForm: {
+        id: '',
+        currentPage: 1,
+        itemsPerPage: 20
+      },
       actions: [
         {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
         {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
@@ -80,39 +85,17 @@ export default {
       }
     },
     nextPage () {
-      this.form.currentPage += 1
+      this.userRoleGroupRequestForm.currentPage += 1
       this.query()
     },
     lastPage () {
-      if (this.form.currentPage > 1) {
-        this.form.currentPage -= 1
+      if (this.userRoleGroupRequestForm.currentPage > 1) {
+        this.userRoleGroupRequestForm.currentPage -= 1
         this.query()
       }
     },
     handleChange (value, direction, movedKeys) {
-      let vm = this
-      let tag = {}
-      if (direction === 'right') {
-        movedKeys.forEach(function (movedKey) {
-          vm.tags.push({name: movedKey, key: movedKey})
-          vm.appreciateCount += 1
-        })
-        vm.message = ''
-        vm.tags.forEach(function (tag) {
-          vm.message += tag.name + ' '
-        })
-      }
-      if (direction === 'left') {
-        movedKeys.forEach(function (movedKey) {
-          tag = {name: movedKey, key: movedKey}
-          vm.tags.splice(vm.tags.indexOf(tag), 1)
-          vm.appreciateCount -= 1
-        })
-        vm.message = ''
-        vm.tags.forEach(function (tag) {
-          vm.message += tag.name + ' '
-        })
-      }
+
     },
     query () {
       let vm = this
@@ -123,19 +106,48 @@ export default {
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })
-      this.$ajax.get('/api/queryRoles', this.form)
+      this.userRoleGroupRequestForm.id = this.userRoleGroupForm.id
+      this.$ajax.post('/api/roleGroup/queryTransferFormUserRole', this.userRoleGroupRequestForm)
         .then(function (res) {
-          res.data.pageResult.forEach(item => {
-            vm.data.push({key: item.name, label: item.name})
+          res.data.userRoles.forEach(item => {
+            vm.userRoles.push({key: item.id, label: item.userRoleName})
+          })
+          res.data.selectedUserRoles.forEach(item => {
+            vm.selectedUserRoles.push({key: item.id, label: item.userRoleName})
           })
           loading.close()
         }).catch(function (error) {
           console.log(error.message)
           loading.close()
         })
+    },
+    saveToDB () {
+      let vm = this
+      this.$ajax.post('/api/roleGroup', this.roleGroupForm)
+        .then(function (res) {
+          vm.$message('已经成功保存到数据库!')
+          console.log('saveToDB')
+          console.log(res.data)
+          vm.$emit('updateRoleForm', res.data)
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message('Something wrong happen!')
+        })
+    },
+    delete () {
+      let vm = this
+      this.$ajax.get('/api/role/delete/' + this.roleForm.id)
+        .then(function (res) {
+          vm.$message('已经成功删除！')
+          vm.$emit('deleteUserRole')
+        }).catch(function (error) {
+          console.log('RoleDetail delete ' + error)
+          vm.$message('Something wrong happen!')
+        })
     }
   },
   mounted () {
+    this.query()
   }
 }
 </script>

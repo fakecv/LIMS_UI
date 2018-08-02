@@ -1,10 +1,10 @@
     <template>
     <div>
       <el-container style="padding: 10px">
-        <el-form :model="roleGroupRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-form :model="userRoleGroupRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
-            <el-form-item label="部门名称">
-              <el-input name="roleGroupName" v-model="roleGroupRequestForm.roleGroupName"></el-input>
+            <el-form-item label="角色组名称">
+              <el-input name="userRoleGroupName" v-model="userRoleGroupRequestForm.userRoleGroupName"></el-input>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -16,13 +16,13 @@
       </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
-          prop="roleGroupName"
-          label="部门名称"
+          prop="userRoleGroupName"
+          label="角色组名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="roleGroupDescription"
-          label="部门描述"
+          prop="userRoleGroupDescription"
+          label="角色组描述"
           width="180">
         </el-table-column>
       </el-table>
@@ -30,11 +30,11 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="roleGroupRequestForm.currentPage"
+          :current-page.sync="userRoleGroupRequestForm.currentPage"
           :page-sizes="[10, 20, 50]"
           :page-size="20"
           layout="sizes, prev, pager, next"
-          :total="totalRoleGroups">
+          :total="totalUserRoleGroups">
         </el-pagination>
       </div>
     </div>
@@ -47,8 +47,8 @@ export default {
     return {
       tableData: [],
       totalRoleGroups: 0,
-      roleGroupRequestForm: {
-        roleGroupName: '',
+      userRoleGroupRequestForm: {
+        userRoleGroupName: '',
         itemsPerPage: 20,
         currentPage: 1
       }
@@ -65,26 +65,17 @@ export default {
       console.log(`当前页: ${val}`)
       this.onSubmit()
     },
-    loadData () {
-      let vm = this
-      this.$ajax.get('/api/sample/roleGroup/getRoleGroup')
-        .then(function (res) {
-          console.log('roleGroupMaintenance')
-          console.log(res)
-          vm.tableData = res.data
-        })
-    },
     dblclick (row, event) {
       console.log(row.id)
       this.$router.push('/lims/roleGroupDetailEdit/' + row.id)
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/sample/roleGroup/queryRoleGroup', this.roleGroupRequestForm)
+      this.$ajax.post('/api/roleGroup/queryRoleGroup', this.roleGroupRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
-          vm.totalRoleGroups = res.data.totalRoleGroups || 0
-          console.log('totalDeparts is: ' + vm.totalRoleGroups)
+          vm.totalUserRoleGroups = res.data.totalRoleGroups || 0
+          console.log('total user role group is: ' + vm.totalUserRoleGroups)
         })
     }
   },

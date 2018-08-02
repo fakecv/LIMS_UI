@@ -1,5 +1,5 @@
 <template>
-  <RoleGroupDetail :staticOptions="staticOptions" :roleForm="roleForm"/>
+  <RoleGroupDetail :userRoleGroupForm="userRoleGroupForm"/>
 </template>
 
 <script>
@@ -9,13 +9,11 @@ export default {
   components: {RoleGroupDetail},
   data () {
     return {
-      roleForm: {
-        parentMenuId: [],
-        name: '',
-        createUserId: ''
-      },
-      staticOptions: {
-        parentMenu: []
+      userRoleGroupForm: {
+        id: '',
+        userRoleGroupName: '',
+        userRoleIds: [],
+        userRoleGroupDescription: ''
       }
     }
   },

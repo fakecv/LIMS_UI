@@ -46,7 +46,7 @@ export default {
     },
     loadRoleGroups () {
       let vm = this
-      this.$ajax.get('/api/security/roleGroup/getRoleGroup')
+      this.$ajax.get('/api/roleGroup/getRoleGroup')
         .then(function (res) {
           vm.staticOptions.roleGroups = res.data
         }).catch(function (error) {
