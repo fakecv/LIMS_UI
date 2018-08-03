@@ -29,6 +29,7 @@ import RoleGroupMaintenance from '@/components/system/rolegroup/RoleGroupMainten
 import TableSchedule from '@/components/equipment/MyTableSchedule'
 import Schedule from '@/components/equipment/Schedule'
 import ComposeSchedule from '@/components/equipment/ComposeSchedule'
+import CheckableTable from '@/components/reference/CheckableTable'
 
 Vue.use(Router)
 
@@ -50,6 +51,11 @@ const router = new Router({
       name: 'lims',
       component: Lims,
       children: [
+        {
+          path: 'checkableTable',
+          name: 'checkableTable',
+          component: CheckableTable
+        },
         {
           path: 'userDetailNew',
           name: 'userDetailNew',

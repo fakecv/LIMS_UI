@@ -7,7 +7,7 @@
           </el-button>
         </el-button-group>
       </el-header>
-      <el-container style="padding: 10px">
+      <el-container style="padding: 10px" direction="vertical">
         <el-form :model="userRoleGroupForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-form-item label="角色组名称">
@@ -15,16 +15,43 @@
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
-            <el-form-item label="角色组角色">
-              <button type="button" class="btn btn-secondary" @click="loadUserRoles">添加角色</button>
-            </el-form-item>
-          </el-row>
-          <el-row :gutter="20">
             <el-form-item label="角色组描述">
               <el-input type="textarea" name="userRoleGroupDescription" v-model="userRoleGroupForm.userRoleGroupDescription"></el-input>
             </el-form-item>
           </el-row>
+          <el-row :gutter="20">
+            <el-form-item label="角色组角色">
+              <button type="button" class="btn btn-secondary" @click="addUserRoles">添加角色</button>
+              <button type="button" class="btn btn-secondary" @click="addUserRoles">删除角色</button>
+            </el-form-item>
+          </el-row>
         </el-form>
+          <div>
+          <el-table ref="userRoleTable" :data="staticOptions.selectedUserRoles" style="width: 100%" @selection-change="handleSelectionChange">
+            <el-table-column
+              type="selection"
+              width="55">
+            </el-table-column>
+            <el-table-column
+              prop="userRoleName"
+              label="角色名称"
+              width="160">
+            </el-table-column>
+            <el-table-column
+              label="菜单名称"
+              width="370">
+              <template slot-scope="scope">
+                <el-cascader :options="staticOptions.linkMenus" v-model="scope.row.menuId" style="width: 350px;">
+                </el-cascader>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="userRoleDescription"
+              label="角色描述"
+              width="180">
+            </el-table-column>
+          </el-table>
+          </div>
       </el-container>
     </el-container>
         <el-dialog title="角色列表" :visible.sync="dialogFormVisible" :modal-append-to-body="false">
@@ -37,12 +64,13 @@
               </el-row>
               <el-row :gutter="20">
                 <el-form-item>
-                  <el-button type="primary" @click="onSubmit">查询</el-button>
+                  <el-button type="primary" @click="reloadUserRoles">查询</el-button>
                 </el-form-item>
               </el-row>
             </el-form>
+
           </el-container>
-          <el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
+          <el-table ref="userRoleTable" :data="staticOptions.userRoles" style="width: 100%" @selection-change="handleSelectionChange">
             <el-table-column
               type="selection"
               width="55">
@@ -56,7 +84,7 @@
               label="菜单名称"
               width="370">
               <template slot-scope="scope">
-                <el-cascader :options="linkMenus" v-model="scope.row.menuId" style="width: 350px;">
+                <el-cascader :options="staticOptions.linkMenus" v-model="scope.row.menuId" style="width: 350px;">
                 </el-cascader>
               </template>
             </el-table-column>
@@ -74,7 +102,7 @@
               :page-sizes="[10, 20, 50]"
               :page-size="20"
               layout="sizes, prev, pager, next"
-              :total="totalRoles">
+              :total="staticOptions.totalRoles">
             </el-pagination>
           </div>
         <div slot="footer" class="dialog-footer">
@@ -88,21 +116,17 @@
 <script>
 export default {
   name: 'roleGroupDetail',
-  props: ['userRoleGroupForm'],
+  props: ['userRoleGroupForm', 'staticOptions'],
   data () {
     return {
       tableData: [],
-      totalRoles: 0,
       roleRequestForm: {
         userRoleName: '',
         itemsPerPage: 20,
         currentPage: 1
       },
-      linkMenus: [],
-      userRoles: [],
       multipleSelection: [],
       dialogFormVisible: false,
-      selectedUserRoles: [],
       userRoleGroupRequestForm: {
         id: '',
         currentPage: 1,
@@ -135,93 +159,39 @@ export default {
     handleSizeChange (val) {
       this.roleRequestForm.itemsPerPage = val
       console.log(`每页 ${val} 条`)
-      this.onSubmit()
+      this.$emit('reloadUserRoles', this.roleRequestForm)
     },
     handleCurrentChange (val) {
       this.roleRequestForm.currentPage = val
       console.log(`当前页: ${val}`)
-      this.onSubmit()
+      this.$emit('reloadUserRoles', this.roleRequestForm)
     },
-    formatter (row, column) {
-      return this.menuList[row.menuId]
+    reloadUserRoles () {
+      this.$emit('reloadUserRoles', this.roleRequestForm)
     },
-    onSubmit () {
+    addUserRoles () {
       let vm = this
-      this.$ajax.post('/api/role/queryUserRole', this.roleRequestForm)
-        .then(function (res) {
-          vm.tableData = res.data.pageResult || []
-          vm.totalRoles = res.data.totalUserRoles || 0
-          console.log('totalRoles is: ' + vm.totalRoles)
-        })
-    },
-    loadMenuLinks () {
-      let vm = this
-      this.$ajax.post('/api/systemMenu/menuLinks', 'LINK')
-        .then(function (res) {
-          vm.linkMenus = res.data
-        }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Somthing wrong happen in load menuLinks!')
-        })
-    },
-    loadUserRoles () {
       this.dialogFormVisible = true
-      this.loadMenuLinks()
-      this.onSubmit()
+      this.$nextTick(() => {
+        vm.staticOptions.userRoles.forEach(row => {
+          if (this.userRoleGroupForm.userRoleIds && this.userRoleGroupForm.userRoleIds.indexOf(row.id) !== -1) {
+            vm.$refs.userRoleTable.toggleRowSelection(row)
+          }
+        })
+      })
     },
     handleSelectionChange (val) {
-      // this.multipleSelection = val
-      val.forEach(row => {
-        console.log(row.id)
-        this.multipleSelection.push(row.id)
-      })
+      this.multipleSelection = val
     },
     updateUserRoles () {
       this.$emit('updateUserRoles', this.multipleSelection)
       this.dialogFormVisible = false
-      this.multipleSelection = []
-    },
-    nextPage () {
-      this.userRoleGroupRequestForm.currentPage += 1
-      this.query()
-    },
-    lastPage () {
-      if (this.userRoleGroupRequestForm.currentPage > 1) {
-        this.userRoleGroupRequestForm.currentPage -= 1
-        this.query()
-      }
-    },
-    query () {
-      let vm = this
-      this.data = []
-      const loading = this.$loading({
-        lock: true,
-        text: '加载角色列表，请稍等。。。',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      })
-      this.userRoleGroupRequestForm.id = this.userRoleGroupForm.id
-      this.$ajax.post('/api/roleGroup/queryTransferFormUserRole', this.userRoleGroupRequestForm)
-        .then(function (res) {
-          res.data.userRoles.forEach(item => {
-            vm.userRoles.push({key: item.id, label: item.userRoleName})
-          })
-          res.data.selectedUserRoles.forEach(item => {
-            vm.selectedUserRoles.push({key: item.id, label: item.userRoleName})
-          })
-          loading.close()
-        }).catch(function (error) {
-          console.log(error.message)
-          loading.close()
-        })
     },
     saveToDB () {
       let vm = this
       this.$ajax.post('/api/roleGroup', this.userRoleGroupForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
-          console.log('saveToDB')
-          console.log(res.data)
           vm.$emit('updateUserRoleGroupForm', res.data)
         }).catch(function (error) {
           console.log(error.message)
@@ -241,7 +211,6 @@ export default {
     }
   },
   mounted () {
-    this.query()
   }
 }
 </script>
