@@ -1,5 +1,10 @@
 <template>
-  <MenuDetail :staticOptions="staticOptions" :menuForm="menuForm"/>
+  <MenuDetail :staticOptions="staticOptions"
+   :menuForm="menuForm"
+   v-on:updateMenuForm="updateMenuForm"
+   v-on:deleteMenuItem="resetMenuForm"
+   v-on:new="resetMenuForm"
+   v-on:copy="resetMenuId"/>
 </template>
 
 <script>
@@ -23,6 +28,18 @@ export default {
         sort: '',
         type: '',
         description: ''
+      },
+      menuResetForm: {
+        id: '',
+        parentMenuId: [],
+        parentId: '',
+        name: '',
+        icon: '',
+        alias: '',
+        state: false,
+        sort: '',
+        type: '',
+        description: ''
       }
     }
   },
@@ -33,9 +50,17 @@ export default {
         .then(function (res) {
           vm.staticOptions.parentMenu = res.data
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Somthing wrong happen in loadParentMenu!')
+          vm.$message(error.response.data.message)
         })
+    },
+    updateMenuForm (event) {
+      this.menuForm.id = event.id
+    },
+    resetMenuForm () {
+      this.menuForm = JSON.parse(JSON.stringify(this.menuForm))
+    },
+    resetMenuId () {
+      this.menuForm.id = ''
     }
   },
   mounted () {

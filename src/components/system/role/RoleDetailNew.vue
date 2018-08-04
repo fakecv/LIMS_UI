@@ -1,5 +1,8 @@
 <template>
-  <RoleDetail :staticOptions="staticOptions" :roleForm="roleForm" v-on:updateRoleForm="updateRoleForm" v-on:deleteUserRole="resetRoleForm"/>
+  <RoleDetail :staticOptions="staticOptions"
+   :roleForm="roleForm"
+    v-on:updateRoleForm="updateRoleForm"
+    v-on:deleteUserRole="resetRoleForm"/>
 </template>
 
 <script>
@@ -34,7 +37,7 @@ export default {
           vm.staticOptions.linkMenus = res.data
         }).catch(function (error) {
           console.log(error.message)
-          vm.$message('Somthing wrong happen in load menuLinks!')
+          vm.$message(error.response.data.message)
         })
     },
     updateRoleForm (event) {

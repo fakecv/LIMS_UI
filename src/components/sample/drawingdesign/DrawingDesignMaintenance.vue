@@ -3,7 +3,10 @@
       <el-container style="padding: 10px">
         <el-form :model="drawingDesignRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
-            <el-form-item label="部门名称">
+            <el-form-item label="图纸名称">
+              <el-input name="drawingDesignName" v-model="drawingDesignRequestForm.drawingDesignName"></el-input>
+            </el-form-item>
+            <el-form-item label="图纸编号">
               <el-input name="drawingDesignName" v-model="drawingDesignRequestForm.drawingDesignName"></el-input>
             </el-form-item>
           </el-row>
@@ -17,12 +20,12 @@
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
           prop="drawingDesignName"
-          label="部门名称"
+          label="图纸名称"
           width="180">
         </el-table-column>
         <el-table-column
           prop="drawingDesignDescription"
-          label="部门描述"
+          label="图纸编号"
           width="180">
         </el-table-column>
       </el-table>

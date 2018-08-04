@@ -1,5 +1,9 @@
 <template>
-  <AgreementDetail :agreementForm="agreementForm"/>
+  <AgreementDetail :agreementForm="agreementForm"
+  v-on:updateAgreementForm="updateAgreementForm"
+  v-on:deleteAgreementForm="resetAgreementForm"
+  v-on:new="resetAgreementForm"
+  v-on:copy="resetAgreementId"/>
 </template>
 
 <script>
@@ -10,12 +14,27 @@ export default {
   data () {
     return {
       agreementForm: {
+        id: '',
+        agreementName: '',
+        agreementDescription: ''
+      },
+      agreementResetForm: {
+        id: '',
         agreementName: '',
         agreementDescription: ''
       }
     }
   },
   methods: {
+    updateAgreementForm (event) {
+      this.agreementForm.id = event.id
+    },
+    resetAgreementId () {
+      this.agreementForm.id = ''
+    },
+    resetAgreementForm () {
+      this.agreementForm = JSON.parse(JSON.stringify(this.agreementResetForm))
+    }
   },
   mounted () {
   }

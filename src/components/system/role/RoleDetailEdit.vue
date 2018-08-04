@@ -1,5 +1,7 @@
 <template>
-  <RoleDetail :staticOptions="staticOptions" :roleForm="roleForm"  v-on:deleteUserRole="resetRoleForm"/>
+  <RoleDetail :staticOptions="staticOptions"
+   :roleForm="roleForm"
+    v-on:deleteUserRole="resetRoleForm"/>
 </template>
 
 <script>

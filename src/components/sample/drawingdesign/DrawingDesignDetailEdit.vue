@@ -1,5 +1,9 @@
 <template>
-  <DrawingDesignDetail :drawingDesignForm="drawingDesignForm"/>
+  <DrawingDesignDetail
+   :drawingDesignForm="drawingDesignForm"
+   v-on:deleteDrawingDesign="resetDrawingDesignForm"
+   v-on:new="resetDrawingDesignForm"
+   v-on:copy="resetDrawingDesignId"/>
 </template>
 
 <script>
@@ -10,6 +14,12 @@ export default {
   data () {
     return {
       drawingDesignForm: {
+        id: '',
+        drawingDesignName: '',
+        drawingDesignDescription: ''
+      },
+      drawingDesignResetForm: {
+        id: '',
         drawingDesignName: '',
         drawingDesignDescription: ''
       }
@@ -23,8 +33,14 @@ export default {
           vm.drawingDesignForm = res.data
         }).catch(function (error) {
           console.log(error.message)
-          vm.$message('Somthing wrong happen in loadDrawingDesign!')
+          vm.$message(error.response.data.message)
         })
+    },
+    resetDrawingDesignForm () {
+      this.drawingDesignForm = JSON.parse(JSON.stringify(this.drawingDesignResetForm))
+    },
+    resetDrawingDesignId () {
+      this.drawingDesignForm.id = ''
     }
   },
   mounted () {

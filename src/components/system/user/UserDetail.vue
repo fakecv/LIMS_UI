@@ -21,7 +21,7 @@
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="所属部门">
-              <el-select name="department" v-model=userForm.department>
+              <el-select name="user" v-model=userForm.user>
                <el-option label="张秀梅" value="zxm"></el-option>
                <el-option label="关锋" value="augur"></el-option>
               </el-select>
@@ -107,7 +107,10 @@ export default {
     return {
       userForm: {},
       actions: [
+        {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false},
+        {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
         {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
+        {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false},
         {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
         {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
@@ -128,10 +131,42 @@ export default {
         console.log(action.id)
       } else if (action.id === '4') {
         console.log(action.id)
+      } else if (action.id === '5') {
+        this.new()
+      } else if (action.id === '6') {
+        this.copy()
+      } else if (action.id === '7') {
+        console.log(action.id)
       }
     },
-    mounted () {
+    new () {
+      this.$emit('new')
+    },
+    copy () {
+      this.$emit('copy')
+    },
+    saveToDB () {
+      let vm = this
+      this.$ajax.post('/api/sample/user', this.userForm)
+        .then(function (res) {
+          vm.$message('已经成功保存到数据库!')
+          vm.$emit('updateUserForm', res.data)
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    delete () {
+      let vm = this
+      this.$ajax.get('/api/sample/user/delete/' + this.userForm.id)
+        .then(function (res) {
+          vm.$message('已经成功删除！')
+          vm.$emit('deleteUser')
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     }
+  },
+  mounted () {
   }
 }
 </script>

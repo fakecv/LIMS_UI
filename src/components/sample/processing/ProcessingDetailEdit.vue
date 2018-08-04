@@ -1,5 +1,9 @@
 <template>
-  <ProcessingDetail :processingForm="processingForm"/>
+  <ProcessingDetail
+   :processingForm="processingForm"
+   v-on:deleteProcessing="resetProcessingForm"
+   v-on:new="resetProcessingForm"
+   v-on:copy="resetProcessingId"/>
 </template>
 
 <script>
@@ -10,6 +14,12 @@ export default {
   data () {
     return {
       processingForm: {
+        id: '',
+        processingName: '',
+        processingDescription: ''
+      },
+      processingResetForm: {
+        id: '',
         processingName: '',
         processingDescription: ''
       }
@@ -23,8 +33,14 @@ export default {
           vm.processingForm = res.data
         }).catch(function (error) {
           console.log(error.message)
-          vm.$message('Somthing wrong happen in loadProcessing!')
+          vm.$message(error.response.data.message)
         })
+    },
+    resetProcessingForm () {
+      this.processingForm = JSON.parse(JSON.stringify(this.processingResetForm))
+    },
+    resetProcessingId () {
+      this.processingForm.id = ''
     }
   },
   mounted () {

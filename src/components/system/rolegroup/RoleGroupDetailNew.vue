@@ -1,9 +1,13 @@
 <template>
-  <RoleGroupDetail :userRoleGroupForm="userRoleGroupForm"
+  <RoleGroupDetail ref="roleGroupDetail" :userRoleGroupForm="userRoleGroupForm"
   :staticOptions="staticOptions"
   v-on:updateUserRoleGroupForm="updateRoleGroupForm"
   v-on:deleteUserRoleGroup="resetRoleGroupForm"
-  v-on:updateUserRoles="updateUserRoles"/>
+  v-on:updateUserRoles="updateUserRoles"
+  v-on:reloadUserRoles="reloadUserRoles"
+  v-on:deleteUserRoles="deleteUserRoles"
+  v-on:new="resetRoleGroupForm"
+  v-on:copy="resetRoleGroupId"/>
 </template>
 
 <script>
@@ -52,21 +56,32 @@ export default {
           vm.$message('Somthing wrong happen in load menuLinks!')
         })
     },
-    loadUserRoles (event) {
+    reloadUserRoles (event) {
       let vm = this
       this.$ajax.post('/api/role/queryUserRole', event)
         .then(function (res) {
-          vm.userRoles = res.data.pageResult || []
-          vm.totalRoles = res.data.totalUserRoles || 0
-          console.log('totalRoles is: ' + vm.totalRoles)
+          vm.staticOptions.userRoles = res.data.pageResult || []
+          vm.staticOptions.totalRoles = res.data.totalUserRoles || 0
+          vm.$refs.roleGroupDetail.addUserRoles()
         })
     },
     updateUserRoles (event) {
       let vm = this
-      console.log('updateUserRoles' + event)
       this.userRoleGroupForm.userRoleIds = []
       this.staticOption.selectedUserRoles = event
       event.forEach(row => {
+        vm.userRoleGroupForm.userRoleIds.push(row.id)
+      })
+    },
+    deleteUserRoles (event) {
+      console.log('role group edit deleteUserRoles')
+      let vm = this
+      event.forEach(row => {
+        console.log('role group edit deleteUserRoles for each' + row.id)
+        vm.staticOptions.selectedUserRoles.splice(row, 1)
+      })
+      this.userRoleGroupForm.userRoleIds = []
+      this.staticOptions.selectedUserRoles.forEach(row => {
         vm.userRoleGroupForm.userRoleIds.push(row.id)
       })
     },
@@ -76,11 +91,13 @@ export default {
         .then(function (res) {
           vm.staticOptions.userRoles = res.data.pageResult || []
           vm.staticOptions.totalRoles = res.data.totalUserRoles || 0
-          console.log('totalRoles is: ' + vm.totalRoles)
         })
     },
     resetRoleGroupForm () {
-      this.userRoleGroupForm = this.userRoleGroupResetForm
+      this.userRoleGroupForm = JSON.parse(JSON.stringify(this.userRoleGroupResetForm))
+    },
+    resetRoleGroupId () {
+      this.userRoleGroupForm = ''
     }
   },
   mounted () {

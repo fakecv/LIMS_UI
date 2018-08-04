@@ -22,12 +22,12 @@
           <el-row :gutter="20">
             <el-form-item label="角色组角色">
               <button type="button" class="btn btn-secondary" @click="addUserRoles">添加角色</button>
-              <button type="button" class="btn btn-secondary" @click="addUserRoles">删除角色</button>
+              <button type="button" class="btn btn-secondary" @click="deleteUserRoles">删除角色</button>
             </el-form-item>
           </el-row>
         </el-form>
           <div>
-          <el-table ref="userRoleTable" :data="staticOptions.selectedUserRoles" style="width: 100%" @selection-change="handleSelectionChange">
+          <el-table ref="userRoleTable" :data="staticOptions.selectedUserRoles" style="width: 100%" @selection-change="handleUserRoleChange">
             <el-table-column
               type="selection"
               width="55">
@@ -119,13 +119,13 @@ export default {
   props: ['userRoleGroupForm', 'staticOptions'],
   data () {
     return {
-      tableData: [],
       roleRequestForm: {
         userRoleName: '',
         itemsPerPage: 20,
         currentPage: 1
       },
       multipleSelection: [],
+      deletedUserRoles: [],
       dialogFormVisible: false,
       userRoleGroupRequestForm: {
         id: '',
@@ -133,7 +133,10 @@ export default {
         itemsPerPage: 20
       },
       actions: [
+        {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false},
+        {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
         {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
+        {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false},
         {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
         {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
@@ -154,16 +157,26 @@ export default {
         console.log(action.id)
       } else if (action.id === '4') {
         console.log(action.id)
+      } else if (action.id === '5') {
+        this.new()
+      } else if (action.id === '6') {
+        this.copy()
+      } else if (action.id === '7') {
+        console.log(action.id)
       }
+    },
+    new () {
+      this.$emit('new')
+    },
+    copy () {
+      this.$emit('copy')
     },
     handleSizeChange (val) {
       this.roleRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.$emit('reloadUserRoles', this.roleRequestForm)
     },
     handleCurrentChange (val) {
       this.roleRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.$emit('reloadUserRoles', this.roleRequestForm)
     },
     reloadUserRoles () {
@@ -173,15 +186,24 @@ export default {
       let vm = this
       this.dialogFormVisible = true
       this.$nextTick(() => {
+        vm.$refs.userRoleTable.clearSelection()
         vm.staticOptions.userRoles.forEach(row => {
-          if (this.userRoleGroupForm.userRoleIds && this.userRoleGroupForm.userRoleIds.indexOf(row.id) !== -1) {
-            vm.$refs.userRoleTable.toggleRowSelection(row)
+          if (vm.userRoleGroupForm.userRoleIds && vm.userRoleGroupForm.userRoleIds.indexOf(row.id) !== -1) {
+            vm.$refs.userRoleTable.toggleRowSelection(row, true)
           }
         })
       })
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
+    },
+    handleUserRoleChange (val) {
+      console.log('handleUserRoleChange' + val.length)
+      this.deletedUserRoles = val
+    },
+    deleteUserRoles () {
+      console.log('deleteUserRoles' + this.deletedUserRoles.length)
+      this.$emit('deleteUserRoles', this.deletedUserRoles)
     },
     updateUserRoles () {
       this.$emit('updateUserRoles', this.multipleSelection)

@@ -1,80 +1,96 @@
-<template>
-  <el-container>
-    <el-header>
-      <el-button-group>
-        <el-button type="info" v-for="(action,index) in actions" :key="index" size="mini" :icon="action.icon" :loading="action.loading" @click="actionHandle(action)">{{action.name}}
-        </el-button>
-      </el-button-group>
-    </el-header>
-    <el-container style="padding: 10px">
-      <el-form :model="processingStatusForm" label-width="100px" label-position="left" size="mini">
-        <el-row :gutter="20">
-          <el-form-item label="部门名称">
-            <el-input name="processingStatusName" v-model="processingStatusForm.processingStatusName"></el-input>
-          </el-form-item>
-        </el-row>
-        <el-row :gutter="20">
-          <el-form-item label="部门描述">
-            <el-input type="textarea" name="processingStatusDescription" v-model="processingStatusForm.processingStatusDescription"></el-input>
-          </el-form-item>
-        </el-row>
-      </el-form>
-    </el-container>
-  </el-container>
-</template>
+    <template>
+    <div>
+      <el-container style="padding: 10px">
+        <el-form :model="processingStatusRequestForm" label-width="100px" label-position="left" size="mini">
+          <el-row :gutter="20">
+            <el-form-item label="部门名称">
+              <el-input name="processingStatusName" v-model="processingStatusRequestForm.processingStatusName"></el-input>
+            </el-form-item>
+          </el-row>
+          <el-row :gutter="20">
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit">查询</el-button>
+            </el-form-item>
+          </el-row>
+        </el-form>
+      </el-container>
+      <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
+        <el-table-column
+          prop="processingStatusName"
+          label="部门名称"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="processingStatusDescription"
+          label="部门描述"
+          width="180">
+        </el-table-column>
+      </el-table>
+      <div class="block text-right">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="processingStatusRequestForm.currentPage"
+          :page-sizes="[10, 20, 50]"
+          :page-size="20"
+          layout="sizes, prev, pager, next"
+          :total="totalProcessingStatuss">
+        </el-pagination>
+      </div>
+    </div>
+  </template>
 
 <script>
 export default {
-  name: 'processingStatusDetail',
-  props: ['processingStatusForm'],
+  name: 'processingStatusMaintenance',
   data () {
     return {
-      actions: [
-        {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
-        {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
-        {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
-        {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
-      ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
+      tableData: [],
+      totalProcessingStatuss: 0,
+      processingStatusRequestForm: {
+        processingStatusName: '',
+        itemsPerPage: 20,
+        currentPage: 1
+      }
     }
   },
   methods: {
-    actionHandle (action) {
-      // var vm = this
-      console.log(action.id)
-      if (action.id === '1') {
-        this.saveToDB()
-      } else if (action.id === '2') {
-        console.log(action.id)
-        this.delete()
-      } else if (action.id === '3') {
-        console.log(action.id)
-      } else if (action.id === '4') {
-        console.log(action.id)
-      }
+    handleSizeChange (val) {
+      this.processingStatusRequestForm.itemsPerPage = val
+      console.log(`每页 ${val} 条`)
+      this.onSubmit()
     },
-    saveToDB () {
+    handleCurrentChange (val) {
+      this.processingStatusRequestForm.currentPage = val
+      console.log(`当前页: ${val}`)
+      this.onSubmit()
+    },
+    loadData () {
       let vm = this
-      this.$ajax.post('/api/sample/processingStatus', this.processingStatusForm)
+      this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
         .then(function (res) {
-          vm.$message('已经成功保存到数据库!')
-        }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Something wrong happen!')
+          console.log('processingStatusMaintenance')
+          console.log(res)
+          vm.tableData = res.data
         })
     },
-    delete () {
+    dblclick (row, event) {
+      console.log(row.id)
+      this.$router.push('/lims/processingStatusDetailEdit/' + row.id)
+    },
+    onSubmit () {
       let vm = this
-      this.$ajax.get('/api/sample/processingStatus/delete/' + this.processingStatusForm.id)
+      this.$ajax.post('/api/sample/processingStatus/queryProcessingStatus', this.processingStatusRequestForm)
         .then(function (res) {
-          vm.$message('已经成功删除！')
-        }).catch(function (error) {
-          console.log('ProcessingStatusDetail delete ' + error)
-          vm.$message('Something wrong happen!')
+          vm.tableData = res.data.pageResult || []
+          vm.totalProcessingStatuss = res.data.totalProcessingStatuss || 0
+          console.log('totalDeparts is: ' + vm.totalProcessingStatuss)
         })
     }
+  },
+  mounted () {
+    this.onSubmit()
   }
+
 }
 </script>
-<style lang="less">
-</style>

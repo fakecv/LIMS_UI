@@ -1,5 +1,9 @@
 <template>
-  <ExperimentalMethodDetail :experimentalMethodForm="experimentalMethodForm"/>
+  <ExperimentalMethodDetail
+   :experimentalMethodForm="experimentalMethodForm"
+   v-on:deleteExperimentalMethod="resetExperimentalMethodForm"
+   v-on:new="resetExperimentalMethodForm"
+   v-on:copy="resetExperimentalMethodId"/>
 </template>
 
 <script>
@@ -10,6 +14,12 @@ export default {
   data () {
     return {
       experimentalMethodForm: {
+        id: '',
+        experimentalMethodName: '',
+        experimentalMethodDescription: ''
+      },
+      experimentalMethodResetForm: {
+        id: '',
         experimentalMethodName: '',
         experimentalMethodDescription: ''
       }
@@ -23,8 +33,14 @@ export default {
           vm.experimentalMethodForm = res.data
         }).catch(function (error) {
           console.log(error.message)
-          vm.$message('Somthing wrong happen in loadExperimentalMethod!')
+          vm.$message(error.response.data.message)
         })
+    },
+    resetExperimentalMethodForm () {
+      this.experimentalMethodForm = JSON.parse(JSON.stringify(this.experimentalMethodResetForm))
+    },
+    resetExperimentalMethodId () {
+      this.experimentalMethodForm.id = ''
     }
   },
   mounted () {

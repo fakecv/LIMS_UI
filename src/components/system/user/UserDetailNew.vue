@@ -1,5 +1,11 @@
 <template>
-  <userDetail :staticOptions="staticOptions" :userForm="userForm"/>
+  <userDetail
+   :staticOptions="staticOptions"
+    :userForm="userForm"
+    v-on:updateUserForm="updateUserForm"
+    v-on:deleteUserForm="resetUserForm"
+    v-on:new="resetUserForm"
+    v-on:copy="resetUserId"/>
 </template>
 
 <script>
@@ -10,6 +16,24 @@ export default {
   data () {
     return {
       userForm: {
+        id: '',
+        userName: '',
+        password: '',
+        department: '',
+        roleGroups: '',
+        name: '',
+        sex: '',
+        title: '',
+        degreeOfEducation: '',
+        major: '',
+        graduateOn: '',
+        mobileNumber: '',
+        email: '',
+        logonAt: '',
+        lastLogonAt: '',
+        logonTimes: 0
+      },
+      userResetForm: {
         id: '',
         userName: '',
         password: '',
@@ -41,7 +65,7 @@ export default {
           vm.staticOptions.departments = res.data
         }).catch(function (error) {
           console.log(error.message)
-          vm.$message('Somthing wrong happen in loadParentMenu!')
+          vm.$message(error.response.data.message)
         })
     },
     loadRoleGroups () {
@@ -51,8 +75,17 @@ export default {
           vm.staticOptions.roleGroups = res.data
         }).catch(function (error) {
           console.log(error.message)
-          vm.$message('Somthing wrong happen in getRoleGroup!')
+          vm.$message(error.response.data.message)
         })
+    },
+    updateUserForm (event) {
+      this.userForm.id = event.id
+    },
+    resetUserId () {
+      this.userForm.id = ''
+    },
+    resetUserForm () {
+      this.userForm = JSON.parse(JSON.stringify(this.userResetForm))
     }
   },
   mounted () {

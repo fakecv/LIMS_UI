@@ -1,5 +1,9 @@
 <template>
-  <ExperimentalMethodDetail :experimentalMethodForm="experimentalMethodForm"/>
+  <ExperimentalMethodDetail :experimentalMethodForm="experimentalMethodForm"
+  v-on:updateExperimentalMethodForm="updateExperimentalMethodForm"
+  v-on:deleteExperimentalMethodForm="resetExperimentalMethodForm"
+  v-on:new="resetExperimentalMethodForm"
+  v-on:copy="resetExperimentalMethodId"/>
 </template>
 
 <script>
@@ -10,12 +14,27 @@ export default {
   data () {
     return {
       experimentalMethodForm: {
+        id: '',
+        experimentalMethodName: '',
+        experimentalMethodDescription: ''
+      },
+      experimentalMethodResetForm: {
+        id: '',
         experimentalMethodName: '',
         experimentalMethodDescription: ''
       }
     }
   },
   methods: {
+    updateExperimentalMethodForm (event) {
+      this.experimentalMethodForm.id = event.id
+    },
+    resetExperimentalMethodId () {
+      this.experimentalMethodForm.id = ''
+    },
+    resetExperimentalMethodForm () {
+      this.experimentalMethodForm = JSON.parse(JSON.stringify(this.experimentalMethodResetForm))
+    }
   },
   mounted () {
   }

@@ -58,16 +58,13 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.roleGroupRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.roleGroupRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/roleGroupDetailEdit/' + row.id)
     },
     onSubmit () {

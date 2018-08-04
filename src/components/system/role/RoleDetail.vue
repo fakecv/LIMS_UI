@@ -6,14 +6,14 @@
         </el-button>
       </el-button-group>
     </el-header>
-    <el-container style="padding: 10px">
+    <el-container style="padding: 10px" direction="vertical">
       <el-form :model="roleForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-form-item label="角色名称">
             <el-input name="roleName" v-model="roleForm.userRoleName"></el-input>
           </el-form-item>
           <el-form-item label="菜单名称">
-            <el-cascader :options="staticOptions.linkMenus" v-model="roleForm.menuId" style="width: 300px;" :change-on-select="true">
+            <el-cascader :options="staticOptions.linkMenus" v-model="roleForm.menuId" style="width: 100%;" :change-on-select="true">
             </el-cascader>
           </el-form-item>
           <el-form-item label="角色描述">
@@ -32,7 +32,10 @@ export default {
   data () {
     return {
       actions: [
+        {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false},
+        {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
         {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
+        {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false},
         {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
         {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
@@ -53,19 +56,28 @@ export default {
         console.log(action.id)
       } else if (action.id === '4') {
         console.log(action.id)
+      } else if (action.id === '5') {
+        this.new()
+      } else if (action.id === '6') {
+        this.copy()
+      } else if (action.id === '7') {
+        console.log(action.id)
       }
+    },
+    new () {
+      this.$emit('new')
+    },
+    copy () {
+      this.$emit('copy')
     },
     saveToDB () {
       let vm = this
       this.$ajax.post('/api/role', this.roleForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
-          console.log('saveToDB')
-          console.log(res.data)
           vm.$emit('updateRoleForm', res.data)
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Something wrong happen!')
+          vm.$message(error.response.data.message)
         })
     },
     delete () {
@@ -75,8 +87,7 @@ export default {
           vm.$message('已经成功删除！')
           vm.$emit('deleteUserRole')
         }).catch(function (error) {
-          console.log('RoleDetail delete ' + error)
-          vm.$message('Something wrong happen!')
+          vm.$message(error.response.data.message)
         })
     }
   },

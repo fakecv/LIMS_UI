@@ -1,5 +1,9 @@
 <template>
-  <AgreementDetail :agreementForm="agreementForm"/>
+  <AgreementDetail
+   :agreementForm="agreementForm"
+   v-on:deleteAgreement="resetAgreementForm"
+   v-on:new="resetAgreementForm"
+   v-on:copy="resetAgreementId"/>
 </template>
 
 <script>
@@ -10,6 +14,12 @@ export default {
   data () {
     return {
       agreementForm: {
+        id: '',
+        agreementName: '',
+        agreementDescription: ''
+      },
+      agreementResetForm: {
+        id: '',
         agreementName: '',
         agreementDescription: ''
       }
@@ -23,8 +33,14 @@ export default {
           vm.agreementForm = res.data
         }).catch(function (error) {
           console.log(error.message)
-          vm.$message('Somthing wrong happen in loadAgreement!')
+          vm.$message(error.response.data.message)
         })
+    },
+    resetAgreementForm () {
+      this.agreementForm = JSON.parse(JSON.stringify(this.agreementResetForm))
+    },
+    resetAgreementId () {
+      this.agreementForm.id = ''
     }
   },
   mounted () {

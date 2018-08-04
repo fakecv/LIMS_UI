@@ -27,30 +27,57 @@ export default {
         lastLogonAt: '',
         logonTimes: ''
       },
+      userResetForm: {
+        id: '',
+        userName: '',
+        password: '',
+        department: '',
+        roleGroups: '',
+        name: '',
+        sex: '',
+        title: '',
+        degreeOfEducation: '',
+        major: '',
+        graduateOn: '',
+        mobileNumber: '',
+        email: '',
+        logonAt: '',
+        lastLogonAt: '',
+        logonTimes: ''
+      },
       staticOptions: {
         parentuser: []
       }
     }
   },
   methods: {
-    loadParentuser () {
+    updateUserForm (event) {
+      this.userForm.id = event.id
+    },
+    resetUserId () {
+      this.userForm.id = ''
+    },
+    resetUserForm () {
+      this.userForm = JSON.parse(JSON.stringify(this.userResetForm))
+    },
+    loadDepartment () {
       let vm = this
-      this.$ajax.get('/api/systemuser/parentuserOptions')
+      this.$ajax.get('/api/sample/department/getDepartment')
         .then(function (res) {
-          vm.staticOptions.parentuser = res.data
+          vm.staticOptions.departments = res.data
         }).catch(function (error) {
           console.log(error.message)
-          vm.$message('Somthing wrong happen in loadParentuser!')
+          vm.$message(error.response.data.message)
         })
     },
-    loadUserItem (userItemid) {
+    loadRoleGroups () {
       let vm = this
-      this.$ajax.get('/api/systemuser/singleuserItem/' + userItemid)
+      this.$ajax.get('/api/roleGroup/getRoleGroup')
         .then(function (res) {
-          vm.userForm = res.data
+          vm.staticOptions.roleGroups = res.data
         }).catch(function (error) {
           console.log(error.message)
-          vm.$message('Somthing wrong happen in loaduserItem!')
+          vm.$message(error.response.data.message)
         })
     }
   },

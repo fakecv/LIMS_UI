@@ -1,5 +1,9 @@
 <template>
-  <ProcessingStatusDetail :processingStatusForm="processingStatusForm"/>
+  <ProcessingStatusDetail :processingStatusForm="processingStatusForm"
+  v-on:updateProcessingStatusForm="updateProcessingStatusForm"
+  v-on:deleteProcessingStatusForm="resetProcessingStatusForm"
+  v-on:new="resetProcessingStatusForm"
+  v-on:copy="resetProcessingStatusId"/>
 </template>
 
 <script>
@@ -10,12 +14,27 @@ export default {
   data () {
     return {
       processingStatusForm: {
+        id: '',
+        processingStatusName: '',
+        processingStatusDescription: ''
+      },
+      processingStatusResetForm: {
+        id: '',
         processingStatusName: '',
         processingStatusDescription: ''
       }
     }
   },
   methods: {
+    updateProcessingStatusForm (event) {
+      this.processingStatusForm.id = event.id
+    },
+    resetProcessingStatusId () {
+      this.processingStatusForm.id = ''
+    },
+    resetProcessingStatusForm () {
+      this.processingStatusForm = JSON.parse(JSON.stringify(this.processingStatusResetForm))
+    }
   },
   mounted () {
   }

@@ -23,6 +23,21 @@ import RoleMaintenance from '@/components/system/role/RoleMaintenance'
 import DepartmentDetailNew from '@/components/sample/department/DepartmentDetailNew'
 import DepartmentDetailEdit from '@/components/sample/department/DepartmentDetailEdit'
 import DepartmentMaintenance from '@/components/sample/department/DepartmentMaintenance'
+import AgreementDetailNew from '@/components/sample/agreement/AgreementDetailNew'
+import AgreementDetailEdit from '@/components/sample/agreement/AgreementDetailEdit'
+import AgreementMaintenance from '@/components/sample/agreement/AgreementMaintenance'
+import DrawingDesignDetailNew from '@/components/sample/drawingdesign/DrawingDesignDetailNew'
+import DrawingDesignDetailEdit from '@/components/sample/drawingdesign/DrawingDesignDetailEdit'
+import DrawingDesignMaintenance from '@/components/sample/drawingdesign/DrawingDesignMaintenance'
+import ExperimentalMethodDetailNew from '@/components/sample/experimentalmethod/ExperimentalMethodDetailNew'
+import ExperimentalMethodDetailEdit from '@/components/sample/experimentalmethod/ExperimentalMethodDetailEdit'
+import ExperimentalMethodMaintenance from '@/components/sample/experimentalmethod/ExperimentalMethodMaintenance'
+import ProcessingDetailNew from '@/components/sample/processing/ProcessingDetailNew'
+import ProcessingDetailEdit from '@/components/sample/processing/ProcessingDetailEdit'
+import ProcessingMaintenance from '@/components/sample/processing/ProcessingMaintenance'
+import ProcessingStatusDetailNew from '@/components/sample/processingstatus/ProcessingStatusDetailNew'
+import ProcessingStatusDetailEdit from '@/components/sample/processingstatus/ProcessingStatusDetailEdit'
+import ProcessingStatusMaintenance from '@/components/sample/processingstatus/ProcessingStatusMaintenance'
 import RoleGroupDetailNew from '@/components/system/rolegroup/RoleGroupDetailNew'
 import RoleGroupDetailEdit from '@/components/system/rolegroup/RoleGroupDetailEdit'
 import RoleGroupMaintenance from '@/components/system/rolegroup/RoleGroupMaintenance'
@@ -135,6 +150,81 @@ const router = new Router({
           path: 'departmentDetailNew',
           name: 'departmentDetailNew',
           component: DepartmentDetailNew
+        },
+        {
+          path: 'agreementDetailEdit/:id',
+          name: 'agreementDetailEdit',
+          component: AgreementDetailEdit
+        },
+        {
+          path: 'agreementMaintenance',
+          name: 'agreementMaintenance',
+          component: AgreementMaintenance
+        },
+        {
+          path: 'agreementDetailNew',
+          name: 'agreementDetailNew',
+          component: AgreementDetailNew
+        },
+        {
+          path: 'drawingDesignDetailEdit/:id',
+          name: 'drawingDesignDetailEdit',
+          component: DrawingDesignDetailEdit
+        },
+        {
+          path: 'drawingDesignMaintenance',
+          name: 'drawingDesignMaintenance',
+          component: DrawingDesignMaintenance
+        },
+        {
+          path: 'drawingDesignDetailNew',
+          name: 'drawingDesignDetailNew',
+          component: DrawingDesignDetailNew
+        },
+        {
+          path: 'experimentalMethodDetailEdit/:id',
+          name: 'experimentalMethodDetailEdit',
+          component: ExperimentalMethodDetailEdit
+        },
+        {
+          path: 'experimentalMethodMaintenance',
+          name: 'experimentalMethodMaintenance',
+          component: ExperimentalMethodMaintenance
+        },
+        {
+          path: 'experimentalMethodDetailNew',
+          name: 'experimentalMethodDetailNew',
+          component: ExperimentalMethodDetailNew
+        },
+        {
+          path: 'processingDetailEdit/:id',
+          name: 'processingDetailEdit',
+          component: ProcessingDetailEdit
+        },
+        {
+          path: 'processingMaintenance',
+          name: 'processingMaintenance',
+          component: ProcessingMaintenance
+        },
+        {
+          path: 'processingDetailNew',
+          name: 'processingDetailNew',
+          component: ProcessingDetailNew
+        },
+        {
+          path: 'processingStatusDetailEdit/:id',
+          name: 'processingStatusDetailEdit',
+          component: ProcessingStatusDetailEdit
+        },
+        {
+          path: 'processingStatusMaintenance',
+          name: 'processingStatusMaintenance',
+          component: ProcessingStatusMaintenance
+        },
+        {
+          path: 'processingStatusDetailNew',
+          name: 'processingStatusDetailNew',
+          component: ProcessingStatusDetailNew
         },
         {
           path: 'menuDetailEdit/:id',

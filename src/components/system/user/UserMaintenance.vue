@@ -57,34 +57,21 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.userRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.userRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
-    loadData () {
-      let vm = this
-      this.$ajax.get('/api/sample/user/getUser')
-        .then(function (res) {
-          console.log('userMaintenance')
-          console.log(res)
-          vm.tableData = res.data
-        })
-    },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/userDetailEdit/' + row.id)
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/sample/user/queryUser', this.userRequestForm)
+      this.$ajax.post('/api/security/user/queryUser', this.userRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalUsers = res.data.totalUsers || 0
-          console.log('totalDeparts is: ' + vm.totalUsers)
         })
     }
   },
