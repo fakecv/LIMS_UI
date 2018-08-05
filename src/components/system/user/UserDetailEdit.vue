@@ -1,5 +1,12 @@
 <template>
-  <userDetail :staticOptions="staticOptions" :userForm="userForm"/>
+  <userDetail ref="userDetail" :userForm="userForm"
+    :staticOptions="staticOptions"
+    v-on:updateUserRoleGroups="updateUserRoleGroups"
+    v-on:reloadUserRoleGroups="reloadUserRoleGroups"
+    v-on:deleteUserRoleGroups="deleteUserRoleGroups"
+    v-on:new="resetUserForm"
+    v-on:copy="resetUserId"
+    v-on:deleteUser="resetUserForm"/>
 </template>
 
 <script>
@@ -14,7 +21,8 @@ export default {
         userName: '',
         password: '',
         department: '',
-        roleGroups: '',
+        roleGroups: [],
+        roles: [],
         name: '',
         sex: '',
         title: '',
@@ -32,7 +40,8 @@ export default {
         userName: '',
         password: '',
         department: '',
-        roleGroups: '',
+        roleGroups: [],
+        roles: [],
         name: '',
         sex: '',
         title: '',
@@ -46,7 +55,15 @@ export default {
         logonTimes: ''
       },
       staticOptions: {
-        parentuser: []
+        userRoleGroups: [],
+        selectedUserRoleGroups: [],
+        departments: [],
+        totalRoleGroups: 0
+      },
+      userRoleGroupRequestForm: {
+        userRoleGroupName: '',
+        itemsPerPage: 20,
+        currentPage: 1
       }
     }
   },
@@ -70,21 +87,61 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    loadRoleGroups () {
+    initRoleGroups () {
       let vm = this
-      this.$ajax.get('/api/roleGroup/getRoleGroup')
+      this.$ajax.post('/api/roleGroup/queryUserRoleGroup', this.userRoleGroupRequestForm)
         .then(function (res) {
-          vm.staticOptions.roleGroups = res.data
+          vm.tableData = res.data.pageResult || []
+          vm.totalUserRoleGroups = res.data.totalUserRoleGroups || 0
+          console.log('total user role group is: ' + vm.totalUserRoleGroups)
+        })
+    },
+    reloadUserRoleGroups (event) {
+      let vm = this
+      this.$ajax.post('/api/roleGroup/queryUserRoleGroup', event)
+        .then(function (res) {
+          vm.tableData = res.data.pageResult || []
+          vm.totalUserRoleGroups = res.data.totalUserRoleGroups || 0
+          vm.$refs.userDetail.addUserRoleGroups()
+        })
+    },
+    updateUserRoleGroups (event) {
+      let vm = this
+      this.userForm.userRoleGroupIds = []
+      this.staticOptions.selectedUserRoleGroups = event
+      this.staticOptions.selectedUserRoleGroups.forEach(row => {
+        vm.userForm.userRoleGroupIds.push(row.id)
+      })
+    },
+    deleteUserRoleGroups (event) {
+      let vm = this
+      event.forEach(row => {
+        console.log('role group edit deleteUserRoles for each' + row.id)
+        vm.staticOptions.selectedUserRoleGroups.splice(row, 1)
+      })
+      this.userForm.userRoleGroupIds = []
+      this.staticOptions.selectedUserRoleGroups.forEach(row => {
+        vm.userForm.userRoleGroupIds.push(row.id)
+      })
+    },
+    loadSelectedUserRoleGroup (userId) {
+      let vm = this
+      this.$ajax.get('/api/users/selectedUserRoleGroups/' + userId)
+        .then(function (res) {
+          vm.staticOptions.selectedUserRoles = res.data
         }).catch(function (error) {
           console.log(error.message)
-          vm.$message(error.response.data.message)
+          vm.$message('Somthing wrong happen in user role!')
         })
     }
   },
   mounted () {
-    this.loadParentuser()
+    console.log('user detail edit')
+    this.initRoleGroups()
+    this.loadDepartment()
     if (this.$route.params.id !== undefined) {
-      this.loaduserItem(this.$route.params.id)
+      this.loadUser(this.$route.params.id)
+      this.loadSelectedUserRoleGroup(this.$route.params.id)
     }
   }
 }

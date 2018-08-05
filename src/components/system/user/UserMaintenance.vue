@@ -1,28 +1,129 @@
     <template>
     <div>
-      <el-container style="padding: 10px">
-        <el-form :model="userRequestForm" label-width="100px" label-position="left" size="mini">
-          <el-row :gutter="20">
-            <el-form-item label="部门名称">
+<el-container style="padding: 10px">
+      <el-form :model="userRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-row :gutter="20">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="用户名">
               <el-input name="userName" v-model="userRequestForm.userName"></el-input>
             </el-form-item>
-          </el-row>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="所属部门">
+              <el-select name="department" v-model=userRequestForm.department>
+               <el-option v-for="item in departments"
+                :key="item.Id"
+                :label="item.departmentName"
+                :value="item.id">
+              </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="真实姓名">
+              <el-input name="name" v-model="userRequestForm.name"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="性别">
+              <el-select name="sex" v-model=userRequestForm.sex>
+               <el-option label="男" value="male"></el-option>
+               <el-option label="女" value="female"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="职称">
+              <el-input name="title" v-model="userRequestForm.title"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="文化程度">
+              <el-select name="degreeOfEducation" v-model=userRequestForm.degreeOfEducation>
+               <el-option label="大专" value="juniorCollege"></el-option>
+               <el-option label="大学" value="college"></el-option>
+               <el-option label="高职" value="technicalSecondarySchool"></el-option>
+               <el-option label="硕士" value="master"></el-option>
+               <el-option label="博士" value="doctor"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="所学专业">
+              <el-input name="major" v-model="userRequestForm.major"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="手机号码">
+              <el-input name="mobileNumber" v-model="userRequestForm.mobileNumber"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="注册邮箱">
+              <el-input name="email" v-model="userRequestForm.email"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
           <el-row :gutter="20">
             <el-form-item>
               <el-button type="primary" @click="onSubmit">查询</el-button>
             </el-form-item>
           </el-row>
-        </el-form>
-      </el-container>
+      </el-form>
+    </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
           prop="userName"
-          label="部门名称"
+          label="用户名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="userDescription"
-          label="部门描述"
+          prop="department"
+          label="所属部门"
+          :formatter="departmentFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="真实姓名"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="sex"
+          label="性别"
+          :formatter="sexFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="title"
+          label="职称"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="degreeOfEducation"
+          label="文化程度"
+          :formatter="degreeOfEducationFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="major"
+          label="所学专业"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="graduateOn"
+          label="毕业时间"
+          :formatter="dateFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="mobileNumber"
+          label="手机号码"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="email"
+          label="注册邮箱"
           width="180">
         </el-table-column>
       </el-table>
@@ -45,13 +146,23 @@ export default {
   name: 'userMaintenance',
   data () {
     return {
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
       tableData: [],
       totalUsers: 0,
       userRequestForm: {
         userName: '',
+        department: '',
+        name: '',
+        sex: '',
+        title: '',
+        degreeOfEducation: '',
+        major: '',
+        mobileNumber: '',
+        email: '',
         itemsPerPage: 20,
         currentPage: 1
-      }
+      },
+      departments: []
     }
   },
   methods: {
@@ -68,15 +179,53 @@ export default {
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/security/user/queryUser', this.userRequestForm)
+      this.$ajax.post('/api/users/queryApplicationUser', this.userRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalUsers = res.data.totalUsers || 0
         })
+    },
+    loadDepartment () {
+      let vm = this
+      this.$ajax.get('/api/sample/department/getDepartment')
+        .then(function (res) {
+          vm.departments = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    sexFormatter (row, column) {
+      if (row.set === 'male') {
+        return '男'
+      } else {
+        return '女'
+      }
+    },
+    degreeOfEducationFormatter (row, column) {
+      if (row.degreeOfEducation === 'juniorCollege') {
+        return '大专'
+      } else {
+        return '大学'
+      }
+    },
+    departmentFormatter (row, column) {
+      let name = ''
+      this.departments.forEach(item => {
+        if (row.department === item.id) {
+          name = item.departmentName
+        }
+      })
+      return name
+    },
+    dateFormatter (row, column) {
+      if (row.graduateOn) {
+        return row.graduateOn.slice(0, 10)
+      }
     }
   },
   mounted () {
     this.onSubmit()
+    this.loadDepartment()
   }
 
 }

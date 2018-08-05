@@ -20,7 +20,8 @@ export default {
         userName: '',
         password: '',
         department: '',
-        roleGroups: '',
+        roleGroups: [],
+        roles: [],
         name: '',
         sex: '',
         title: '',
@@ -38,7 +39,8 @@ export default {
         userName: '',
         password: '',
         department: '',
-        roleGroups: '',
+        roleGroups: [],
+        roles: [],
         name: '',
         sex: '',
         title: '',
@@ -52,8 +54,15 @@ export default {
         logonTimes: 0
       },
       staticOptions: {
+        userRoleGroups: [],
+        selectedUserRoleGroups: [],
         departments: [],
-        roleGroups: []
+        totalUserRoleGroups: 0
+      },
+      userRoleGroupRequestForm: {
+        userRoleGroupName: '',
+        itemsPerPage: 20,
+        currentPage: 1
       }
     }
   },
@@ -68,14 +77,22 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    loadRoleGroups () {
+    initRoleGroups () {
       let vm = this
-      this.$ajax.get('/api/roleGroup/getRoleGroup')
+      this.$ajax.post('/api/roleGroup/queryUserRoleGroup', this.userRoleGroupRequestForm)
         .then(function (res) {
-          vm.staticOptions.roleGroups = res.data
-        }).catch(function (error) {
-          console.log(error.message)
-          vm.$message(error.response.data.message)
+          vm.tableData = res.data.pageResult || []
+          vm.totalUserRoleGroups = res.data.totalUserRoleGroups || 0
+          console.log('total user role group is: ' + vm.totalUserRoleGroups)
+        })
+    },
+    reloadUserRoleGroups () {
+      let vm = this
+      this.$ajax.post('/api/roleGroup/queryUserRoleGroup', this.userRoleGroupRequestForm)
+        .then(function (res) {
+          vm.tableData = res.data.pageResult || []
+          vm.totalUserRoleGroups = res.data.totalUserRoleGroups || 0
+          console.log('total user role group is: ' + vm.totalUserRoleGroups)
         })
     },
     updateUserForm (event) {
@@ -90,7 +107,7 @@ export default {
   },
   mounted () {
     this.loadDepartment()
-    this.loadRoleGroups()
+    this.initRoleGroups()
   }
 }
 </script>

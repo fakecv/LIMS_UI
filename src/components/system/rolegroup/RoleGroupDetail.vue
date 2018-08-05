@@ -127,11 +127,6 @@ export default {
       multipleSelection: [],
       deletedUserRoles: [],
       dialogFormVisible: false,
-      userRoleGroupRequestForm: {
-        id: '',
-        currentPage: 1,
-        itemsPerPage: 20
-      },
       actions: [
         {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false},
         {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
@@ -202,7 +197,6 @@ export default {
       this.deletedUserRoles = val
     },
     deleteUserRoles () {
-      console.log('deleteUserRoles' + this.deletedUserRoles.length)
       this.$emit('deleteUserRoles', this.deletedUserRoles)
     },
     updateUserRoles () {
@@ -216,8 +210,7 @@ export default {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateUserRoleGroupForm', res.data)
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Something wrong happen!')
+          vm.$message(error.response.data.message)
         })
     },
     delete () {
@@ -227,8 +220,7 @@ export default {
           vm.$message('已经成功删除！')
           vm.$emit('deleteUserRoleGroup')
         }).catch(function (error) {
-          console.log('RoleDetail delete ' + error)
-          vm.$message('Something wrong happen!')
+          vm.$message(error.response.data.message)
         })
     }
   },
