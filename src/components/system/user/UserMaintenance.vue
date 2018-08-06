@@ -1,6 +1,6 @@
-    <template>
-    <div>
-<el-container style="padding: 10px">
+<template>
+  <div>
+    <el-container style="padding: 10px">
       <el-form :model="userRequestForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -71,7 +71,7 @@
           </el-row>
       </el-form>
     </el-container>
-      <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
+      <el-table :data="tableData" style="width: 100%" @row-dblclick="dblclick">
         <el-table-column
           prop="userName"
           label="用户名称"

@@ -9,12 +9,12 @@
     <el-container style="padding: 10px" direction="vertical">
       <el-form :model="processingStatusForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-form-item label="部门名称">
+          <el-form-item label="状态名称">
             <el-input name="processingStatusName" v-model="processingStatusForm.processingStatusName"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
-          <el-form-item label="部门描述">
+          <el-form-item label="状态描述">
             <el-input type="textarea" name="processingStatusDescription" v-model="processingStatusForm.processingStatusDescription"></el-input>
           </el-form-item>
         </el-row>

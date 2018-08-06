@@ -3,8 +3,11 @@
       <el-container style="padding: 10px">
         <el-form :model="experimentalMethodRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
-            <el-form-item label="部门名称">
+            <el-form-item label="实验方法名称">
               <el-input name="experimentalMethodName" v-model="experimentalMethodRequestForm.experimentalMethodName"></el-input>
+            </el-form-item>
+            <el-form-item label="实验方法编号">
+              <el-input name="experimentalMethodNumber" v-model="experimentalMethodRequestForm.experimentalMethodNumber"></el-input>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -17,12 +20,12 @@
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
           prop="experimentalMethodName"
-          label="部门名称"
+          label="实验方法名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="experimentalMethodDescription"
-          label="部门描述"
+          prop="experimentalMethodNumber"
+          label="实验方法编号"
           width="180">
         </el-table-column>
       </el-table>
@@ -49,6 +52,7 @@ export default {
       totalExperimentalMethods: 0,
       experimentalMethodRequestForm: {
         experimentalMethodName: '',
+        experimentalMethodNumber: '',
         itemsPerPage: 20,
         currentPage: 1
       }

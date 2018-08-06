@@ -17,12 +17,12 @@
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
           prop="processingStatusName"
-          label="部门名称"
+          label="状态名称"
           width="180">
         </el-table-column>
         <el-table-column
           prop="processingStatusDescription"
-          label="部门描述"
+          label="状态描述"
           width="180">
         </el-table-column>
       </el-table>

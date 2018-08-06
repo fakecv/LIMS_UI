@@ -12,12 +12,12 @@
         <el-row :gutter="20">
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="用户名">
-              <el-input name="userName" v-model="userForm.userName"></el-input>
+              <el-input name="userName" v-model="userForm.userName" autoComplete="userName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="用户密码">
-              <el-input type="password" name="password" v-model="userForm.password"></el-input>
+              <el-input type="password" name="password" v-model="userForm.password" autoComplete="off"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -33,7 +33,7 @@
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="真实姓名">
-              <el-input name="name" v-model="userForm.name"></el-input>
+              <el-input name="name" v-model="userForm.name" autoComplete="name"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -46,7 +46,7 @@
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="职称">
-              <el-input name="title" v-model="userForm.title"></el-input>
+              <el-input name="title" v-model="userForm.title" autoComplete="title"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -62,27 +62,32 @@
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="所学专业">
-              <el-input name="major" v-model="userForm.major"></el-input>
+              <el-input name="major" v-model="userForm.major" autoComplete="major"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="毕业时间">
-              <el-date-picker type="date" placeholder="选择日期" v-model="userForm.graduateOn" style="width: 100%;"></el-date-picker>
+              <el-date-picker id="graduateOn" type="date" placeholder="选择日期" v-model="userForm.graduateOn" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="手机号码">
-              <el-input name="mobileNumber" v-model="userForm.mobileNumber"></el-input>
+              <el-input name="mobileNumber" v-model="userForm.mobileNumber" autoComplete="mobileNumber"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="注册邮箱">
-              <el-input name="email" v-model="userForm.email"></el-input>
+              <el-input name="email" v-model="userForm.email" autoComplete="email"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="上次登录时间">
-              <el-date-picker type="date" readonly placeholder="选择日期" v-model="userForm.date" style="width: 100%;"></el-date-picker>
+              <el-date-picker id="lastLogonAt" type="date" readonly placeholder="选择日期" v-model="userForm.lastLogonAt" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="登录时间">
+              <el-date-picker id="logonAt" type="date" readonly placeholder="选择日期" v-model="userForm.logonAt" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -100,7 +105,11 @@
       </el-form>
     </el-container>
   </el-container>
-  <el-table ref="userRoleGroupTable" :data="staticOptions.userRoleGroups" style="width: 100%" @selection-change="handleUserRoleGroupChange">
+  <el-table ref="userRoleGroupTable" :data="staticOptions.selectedUserRoleGroups" style="width: 100%" @selection-change="handleUserRoleGroupChange">
+    <el-table-column
+      type="selection"
+      width="55">
+    </el-table-column>
     <el-table-column
       prop="userRoleGroupName"
       label="角色组名称"
@@ -127,7 +136,7 @@
           </el-row>
         </el-form>
       </el-container>
-      <el-table ref="userRoleTable" :data="staticOptions.userRoleGroups" style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table ref="userRoleGroupTable" :data="staticOptions.userRoleGroups" style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column
           type="selection"
           width="55">

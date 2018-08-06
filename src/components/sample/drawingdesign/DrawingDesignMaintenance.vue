@@ -7,7 +7,7 @@
               <el-input name="drawingDesignName" v-model="drawingDesignRequestForm.drawingDesignName"></el-input>
             </el-form-item>
             <el-form-item label="图纸编号">
-              <el-input name="drawingDesignName" v-model="drawingDesignRequestForm.drawingDesignName"></el-input>
+              <el-input name="drawingDesignNumber" v-model="drawingDesignRequestForm.drawingDesignNumber"></el-input>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -24,7 +24,7 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="drawingDesignDescription"
+          prop="drawingDesignNumber"
           label="图纸编号"
           width="180">
         </el-table-column>

@@ -9,13 +9,13 @@
     <el-container style="padding: 10px" direction="vertical">
       <el-form :model="experimentalMethodForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-form-item label="部门名称">
+          <el-form-item label="实验方法名称">
             <el-input name="experimentalMethodName" v-model="experimentalMethodForm.experimentalMethodName"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
-          <el-form-item label="部门描述">
-            <el-input type="textarea" name="experimentalMethodDescription" v-model="experimentalMethodForm.experimentalMethodDescription"></el-input>
+          <el-form-item label="实验方法编号">
+            <el-input type="textarea" name="experimentalMethodNumber" v-model="experimentalMethodForm.experimentalMethodNumber"></el-input>
           </el-form-item>
         </el-row>
       </el-form>

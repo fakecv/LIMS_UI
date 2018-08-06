@@ -15,7 +15,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-form-item label="图纸编号">
-            <el-input name="drawingDesignDescription" v-model="drawingDesignForm.drawingDesignDescription"></el-input>
+            <el-input name="drawingDesignNumber" v-model="drawingDesignForm.drawingDesignNumber"></el-input>
           </el-form-item>
         </el-row>
       </el-form>

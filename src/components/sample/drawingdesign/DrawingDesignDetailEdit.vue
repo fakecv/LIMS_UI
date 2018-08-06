@@ -16,12 +16,12 @@ export default {
       drawingDesignForm: {
         id: '',
         drawingDesignName: '',
-        drawingDesignDescription: ''
+        drawingDesignNumber: ''
       },
       drawingDesignResetForm: {
         id: '',
         drawingDesignName: '',
-        drawingDesignDescription: ''
+        drawingDesignNumber: ''
       }
     }
   },

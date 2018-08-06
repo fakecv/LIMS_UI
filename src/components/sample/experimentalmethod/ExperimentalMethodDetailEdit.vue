@@ -1,9 +1,10 @@
 <template>
   <ExperimentalMethodDetail
    :experimentalMethodForm="experimentalMethodForm"
-   v-on:deleteExperimentalMethod="resetExperimentalMethodForm"
    v-on:new="resetExperimentalMethodForm"
-   v-on:copy="resetExperimentalMethodId"/>
+   v-on:copy="resetExperimentalMethodId"
+   v-on:deleteExperimentalMethod="resetExperimentalMethodForm"
+   />
 </template>
 
 <script>
@@ -16,12 +17,12 @@ export default {
       experimentalMethodForm: {
         id: '',
         experimentalMethodName: '',
-        experimentalMethodDescription: ''
+        experimentalMethodNumber: ''
       },
       experimentalMethodResetForm: {
         id: '',
         experimentalMethodName: '',
-        experimentalMethodDescription: ''
+        experimentalMethodNumber: ''
       }
     }
   },

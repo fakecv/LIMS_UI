@@ -12,7 +12,7 @@
 <script>
 import UserDetail from '@/components/system/user/userDetail'
 export default {
-  name: 'userDetail',
+  name: 'userDetailEdit',
   components: {UserDetail},
   data () {
     return {
@@ -91,8 +91,8 @@ export default {
       let vm = this
       this.$ajax.post('/api/roleGroup/queryUserRoleGroup', this.userRoleGroupRequestForm)
         .then(function (res) {
-          vm.tableData = res.data.pageResult || []
-          vm.totalUserRoleGroups = res.data.totalUserRoleGroups || 0
+          vm.staticOptions.userRoleGroups = res.data.pageResult || []
+          vm.staticOptions.totalUserRoleGroups = res.data.totalUserRoleGroups || 0
           console.log('total user role group is: ' + vm.totalUserRoleGroups)
         })
     },
@@ -100,38 +100,45 @@ export default {
       let vm = this
       this.$ajax.post('/api/roleGroup/queryUserRoleGroup', event)
         .then(function (res) {
-          vm.tableData = res.data.pageResult || []
+          vm.staticOptions.userRoleGroups = res.data.pageResult || []
           vm.totalUserRoleGroups = res.data.totalUserRoleGroups || 0
           vm.$refs.userDetail.addUserRoleGroups()
         })
     },
     updateUserRoleGroups (event) {
       let vm = this
-      this.userForm.userRoleGroupIds = []
+      this.userForm.roleGroups = []
       this.staticOptions.selectedUserRoleGroups = event
-      this.staticOptions.selectedUserRoleGroups.forEach(row => {
-        vm.userForm.userRoleGroupIds.push(row.id)
+      event.forEach(row => {
+        vm.userForm.roleGroups.push(row.id)
       })
     },
     deleteUserRoleGroups (event) {
       let vm = this
       event.forEach(row => {
-        console.log('role group edit deleteUserRoles for each' + row.id)
         vm.staticOptions.selectedUserRoleGroups.splice(row, 1)
       })
-      this.userForm.userRoleGroupIds = []
+      this.userForm.roleGroups = []
       this.staticOptions.selectedUserRoleGroups.forEach(row => {
-        vm.userForm.userRoleGroupIds.push(row.id)
+        vm.userForm.roleGroups.push(row.id)
       })
     },
     loadSelectedUserRoleGroup (userId) {
       let vm = this
       this.$ajax.get('/api/users/selectedUserRoleGroups/' + userId)
         .then(function (res) {
-          vm.staticOptions.selectedUserRoles = res.data
+          vm.staticOptions.selectedUserRoleGroups = res.data
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Somthing wrong happen in user role!')
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadUser (userId) {
+      let vm = this
+      this.$ajax.get('/api/users/' + userId)
+        .then(function (res) {
+          vm.userForm = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     }
   },

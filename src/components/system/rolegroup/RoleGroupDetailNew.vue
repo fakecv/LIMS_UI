@@ -1,12 +1,13 @@
 <template>
-  <RoleGroupDetail ref="roleGroupDetail" :userRoleGroupForm="userRoleGroupForm"
+  <RoleGroupDetail ref="roleGroupDetail"
   :staticOptions="staticOptions"
-  v-on:updateUserRoleGroupForm="updateRoleGroupForm"
-  v-on:deleteUserRoleGroup="resetRoleGroupForm"
   v-on:updateUserRoles="updateUserRoles"
   v-on:reloadUserRoles="reloadUserRoles"
   v-on:deleteUserRoles="deleteUserRoles"
+   :userRoleGroupForm="userRoleGroupForm"
   v-on:new="resetRoleGroupForm"
+  v-on:updateUserRoleGroupForm="updateRoleGroupForm"
+  v-on:deleteUserRoleGroup="resetRoleGroupForm"
   v-on:copy="resetRoleGroupId"/>
 </template>
 
@@ -52,8 +53,7 @@ export default {
         .then(function (res) {
           vm.staticOptions.linkMenus = res.data
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Somthing wrong happen in load menuLinks!')
+          vm.$message(error.response.data.message)
         })
     },
     reloadUserRoles (event) {
@@ -68,16 +68,14 @@ export default {
     updateUserRoles (event) {
       let vm = this
       this.userRoleGroupForm.userRoleIds = []
-      this.staticOption.selectedUserRoles = event
+      this.staticOptions.selectedUserRoles = event
       event.forEach(row => {
         vm.userRoleGroupForm.userRoleIds.push(row.id)
       })
     },
     deleteUserRoles (event) {
-      console.log('role group edit deleteUserRoles')
       let vm = this
       event.forEach(row => {
-        console.log('role group edit deleteUserRoles for each' + row.id)
         vm.staticOptions.selectedUserRoles.splice(row, 1)
       })
       this.userRoleGroupForm.userRoleIds = []

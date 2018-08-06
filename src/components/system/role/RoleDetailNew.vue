@@ -1,8 +1,11 @@
 <template>
   <RoleDetail :staticOptions="staticOptions"
    :roleForm="roleForm"
+    v-on:new="resetRoleForm"
+    v-on:copy="resetRoleId"
     v-on:updateRoleForm="updateRoleForm"
-    v-on:deleteUserRole="resetRoleForm"/>
+    v-on:deleteUserRole="resetRoleForm"
+    />
 </template>
 
 <script>
@@ -47,6 +50,9 @@ export default {
     },
     resetRoleForm () {
       this.roleForm = this.roleResetForm
+    },
+    resetRoleId () {
+      this.roleForm.id = ''
     }
   },
   mounted () {

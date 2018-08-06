@@ -1,11 +1,12 @@
 <template>
-  <RoleGroupDetail ref="roleGroupDetail" :userRoleGroupForm="userRoleGroupForm"
+  <RoleGroupDetail ref="roleGroupDetail"
   :staticOptions="staticOptions"
-   v-on:deleteUserRoleGroup="resetRoleGroupForm"
    v-on:updateUserRoles="updateUserRoles"
    v-on:reloadUserRoles="reloadUserRoles"
    v-on:deleteUserRoles="deleteUserRoles"
+   :userRoleGroupForm="userRoleGroupForm"
    v-on:new="resetRoleGroupForm"
+   v-on:deleteUserRoleGroup="resetRoleGroupForm"
    v-on:copy="resetRoleGroupId"/>
 </template>
 
@@ -48,8 +49,7 @@ export default {
         .then(function (res) {
           vm.userRoleGroupForm = res.data
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Somthing wrong happen in user role!')
+          vm.$message(error.response.data.message)
         })
     },
     loadSelectedUserRoles (userRoleGroupId) {
@@ -58,8 +58,7 @@ export default {
         .then(function (res) {
           vm.staticOptions.selectedUserRoles = res.data
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Somthing wrong happen in user role!')
+          vm.$message(error.response.data.message)
         })
     },
     loadMenuLinks () {
@@ -68,8 +67,7 @@ export default {
         .then(function (res) {
           vm.staticOptions.linkMenus = res.data
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Somthing wrong happen in load menuLinks!')
+          vm.$message(error.response.data.message)
         })
     },
     reloadUserRoles (event) {
@@ -101,7 +99,6 @@ export default {
       console.log('role group edit deleteUserRoles')
       let vm = this
       event.forEach(row => {
-        console.log('role group edit deleteUserRoles for each' + row.id)
         vm.staticOptions.selectedUserRoles.splice(row, 1)
       })
       this.userRoleGroupForm.userRoleIds = []
