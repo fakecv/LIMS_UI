@@ -108,9 +108,7 @@ export default {
             .then(function (res) {
               vm.auth.login(res.headers.authorization)
             }).catch(function (error) {
-              console.log(error.message)
-              toastr.options = { positionClass: 'toast-top-center' }
-              toastr.error('用户名或者密码输入不正确！')
+              vm.$message(error.response.data.message)
             })
         } else {
           console.log('error submit!!')
@@ -131,13 +129,10 @@ export default {
               toastr.success('注册成功！')
               vm.loginForm.userName = vm.registerForm.userName
               vm.loginForm.password = vm.registerForm.password
-              vm.submitForm(vm.loginForm)
             }).catch(function (error) {
-              console.log(error.response.data.message)
-              toastr.error(error.response.data.message)
+              vm.$message(error.response.data.message)
             })
         } else {
-          console.log('error submit!!')
           return false
         }
       })

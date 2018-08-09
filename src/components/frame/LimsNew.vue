@@ -118,13 +118,8 @@ export default {
         .then(function (res) {
           vm.$store.commit('FORM_IMPORT_WITH_FID_G', {fid: 'qry', initV: res.data})
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Something wrong happen in loadData!')
+          vm.$message(error.response.data.message)
         })
-    },
-    getData (obj) {
-      console.log(obj)
-      this.$router.push({path: '/lims/task'})
     },
     handleCommand (command) {
       switch (command) {
@@ -190,7 +185,7 @@ export default {
           // vm.defaultOpeneds.push(child.entity.name)
         }).catch(function (error) {
           console.log(error)
-          vm.$message('Something wrong happen in getTopMenus!')
+          vm.$message(error.response.data.message)
         })
     },
     /* 根据选取菜单改变导航面包屑 */

@@ -1,28 +1,98 @@
     <template>
     <div>
       <el-container style="padding: 10px">
-        <el-form :model="agreementRequestForm" label-width="100px" label-position="left" size="mini">
-          <el-row :gutter="20">
-            <el-form-item label="部门名称">
-              <el-input name="agreementName" v-model="agreementRequestForm.agreementName"></el-input>
+      <el-form :model="agreementRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-row :gutter="20">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="委托编号">
+              <el-input name="agreementNumber" v-model="agreementRequestForm.agreementNumber"></el-input>
             </el-form-item>
-          </el-row>
-          <el-row :gutter="20">
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">查询</el-button>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="委托单位">
+              <el-input name="client" v-model="agreementRequestForm.client"></el-input>
             </el-form-item>
-          </el-row>
-        </el-form>
-      </el-container>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="样品名称">
+              <el-input name="sampleName" v-model="agreementRequestForm.sampleName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="来样编号">
+              <el-input name="sampleClientNumber" v-model="agreementRequestForm.sampleClientNumber"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="试样编号">
+              <el-input name="sampleNumber" v-model="agreementRequestForm.sampleNumber"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="检测项目">
+              <el-input name="experimentalItem" v-model="agreementRequestForm.experimentalItem"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="检测方法">
+              <el-select name="createUserId" v-model=agreementRequestForm.createUserId>
+               <el-option label="张秀梅" value="zxm"></el-option>
+               <el-option label="关锋" value="augur"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="检测类别">
+              <el-checkbox-group v-model="agreementRequestForm.checkBox">
+                <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+                <el-checkbox label="地推活动" name="type"></el-checkbox>
+                <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+                <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
-          prop="agreementName"
-          label="部门名称"
+          prop="agreementNumber"
+          label="委托编号"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="agreementDescription"
-          label="部门描述"
+          prop="client"
+          label="委托单位"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="sampletName"
+          label="样品名称"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="sampletClientNumber"
+          label="来样编号"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="sampletNumber"
+          label="试样编号"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="experimentalItem"
+          label="检测项目"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="experimentalMethod"
+          label="检测方法"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="experimentalCategory"
+          label="检测类别"
           width="180">
         </el-table-column>
       </el-table>
@@ -48,10 +118,17 @@ export default {
       tableData: [],
       totalAgreements: 0,
       agreementRequestForm: {
-        agreementName: '',
+        agreementNumber: '',
+        client: '',
+        sampleName: '',
+        sampleClientNumber: '',
+        sampleNumber: '',
+        experimentalMethod: '',
+        experimentalCategory: '',
         itemsPerPage: 20,
         currentPage: 1
-      }
+      },
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
     }
   },
   methods: {
