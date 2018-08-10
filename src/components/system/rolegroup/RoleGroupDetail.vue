@@ -70,7 +70,7 @@
             </el-form>
 
           </el-container>
-          <el-table ref="userRoleTable" :data="staticOptions.userRoles" style="width: 100%" @selection-change="handleSelectionChange">
+          <el-table ref="userRoleTable" :data="staticOptions.userRoles" style="width: 100%" @select="handleSelect">
             <el-table-column
               type="selection"
               width="55">
@@ -189,8 +189,10 @@ export default {
         })
       })
     },
-    handleSelectionChange (val) {
-      this.multipleSelection = val
+    handleSelect (selection, row) {
+      console.log('handleSelect' + row.id)
+      console.log(selection)
+      this.$emit('updateUserRoles', row.id)
     },
     handleUserRoleChange (val) {
       console.log('handleUserRoleChange' + val.length)
@@ -200,7 +202,6 @@ export default {
       this.$emit('deleteUserRoles', this.deletedUserRoles)
     },
     updateUserRoles () {
-      this.$emit('updateUserRoles', this.multipleSelection)
       this.dialogFormVisible = false
     },
     saveToDB () {
@@ -229,15 +230,4 @@ export default {
 }
 </script>
 <style lang="less">
-  .transfer-footer-right {
-    margin-left: 50px;
-    padding: 5px;
-  }
-  .transfer-footer-left {
-    margin-left: 20px;
-    padding: 5px;
-  }
-  .el-transfer-panel, .el-transfer-panel__body, .el-transfer-panel__body, .el-checkbox-group {
-    height: 650px;
-  }
 </style>

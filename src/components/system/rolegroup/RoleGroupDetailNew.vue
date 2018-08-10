@@ -65,13 +65,35 @@ export default {
           vm.$refs.roleGroupDetail.addUserRoles()
         })
     },
-    updateUserRoles (event) {
+    updateUserRoles (id) {
       let vm = this
-      this.userRoleGroupForm.userRoleIds = []
-      this.staticOptions.selectedUserRoles = event
-      event.forEach(row => {
-        vm.userRoleGroupForm.userRoleIds.push(row.id)
-      })
+      var index = this.userRoleGroupForm.userRoleIds.indexOf(id)
+      if (index > -1) {
+        console.log('splice ' + id)
+        this.userRoleGroupForm.userRoleIds.splice(index, 1)
+        this.staticOptions.userRoles.forEach(row => {
+          if (row.id === id) {
+            vm.staticOptions.selectedUserRoles.splice(row, 1)
+          }
+        })
+      } else {
+        console.log('push ' + id)
+        this.userRoleGroupForm.userRoleIds.push(id)
+        this.staticOptions.userRoles.forEach(row => {
+          if (row.id === id) {
+            vm.staticOptions.selectedUserRoles.push(row)
+          }
+        })
+      }
+    },
+    addUserRole (id) {
+      this.userRoleGroupForm.userRoleIds.push(id)
+    },
+    removeUserRole (id) {
+      var index = this.userRoleGroupForm.userRoleIds.indexOf(id)
+      if (index > -1) {
+        this.userRoleGroupForm.userRoleIds.splice(index, 1)
+      }
     },
     deleteUserRoles (event) {
       let vm = this

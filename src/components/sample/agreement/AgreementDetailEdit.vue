@@ -1,9 +1,11 @@
 <template>
   <AgreementDetail
-   :agreementForm="agreementForm"
-   v-on:deleteAgreement="resetAgreementForm"
-   v-on:new="resetAgreementForm"
-   v-on:copy="resetAgreementId"/>
+    :agreementForm="agreementForm"
+    :staticOptions="staticOptions"
+    v-on:deleteAgreement="resetAgreementForm"
+    v-on:new="resetAgreementForm"
+    v-on:copy="resetAgreementId"
+    />
 </template>
 
 <script>
@@ -76,10 +78,20 @@ export default {
         receiverFaxNumber: '',
         receiverEmail: '',
         receiverAdress: ''
+      },
+      staticOptions: {
+        experimentalMethods: []
       }
     }
   },
   methods: {
+    loadExperimentalMethodData () {
+      let vm = this
+      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+        .then(function (res) {
+          vm.staticOptions.experimentalMethods = res.data
+        })
+    },
     loadAgreement (agreementId) {
       let vm = this
       this.$ajax.get('/api/sample/agreement/' + agreementId)
@@ -99,6 +111,7 @@ export default {
   },
   mounted () {
     console.log(this.$route.params.id)
+    this.loadExperimentalMethodData()
     if (this.$route.params.id !== undefined) {
       this.loadAgreement(this.$route.params.id)
     }

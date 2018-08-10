@@ -84,6 +84,7 @@ export default {
       menuItemRequestForm: {
         name: '',
         parentMenuId: [],
+        parentId: '',
         alias: '',
         state: true,
         type: 'OPTIONS',

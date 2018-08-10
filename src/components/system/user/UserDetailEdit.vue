@@ -31,6 +31,8 @@ export default {
         graduateOn: '',
         mobileNumber: '',
         email: '',
+        fax: '',
+        address: '',
         logonAt: '',
         lastLogonAt: '',
         logonTimes: ''
@@ -50,6 +52,8 @@ export default {
         graduateOn: '',
         mobileNumber: '',
         email: '',
+        fax: '',
+        address: '',
         logonAt: '',
         lastLogonAt: '',
         logonTimes: ''

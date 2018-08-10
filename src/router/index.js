@@ -23,6 +23,9 @@ import RoleMaintenance from '@/components/system/role/RoleMaintenance'
 import DepartmentDetailNew from '@/components/sample/department/DepartmentDetailNew'
 import DepartmentDetailEdit from '@/components/sample/department/DepartmentDetailEdit'
 import DepartmentMaintenance from '@/components/sample/department/DepartmentMaintenance'
+import CustomerDetailNew from '@/components/customer/CustomerDetailNew'
+import CustomerDetailEdit from '@/components/customer/CustomerDetailEdit'
+import CustomerMaintenance from '@/components/customer/CustomerMaintenance'
 import AgreementDetailNew from '@/components/sample/agreement/AgreementDetailNew'
 import AgreementDetailEdit from '@/components/sample/agreement/AgreementDetailEdit'
 import AgreementMaintenance from '@/components/sample/agreement/AgreementMaintenance'
@@ -135,6 +138,21 @@ const router = new Router({
           path: 'roleGroupMaintenance',
           name: 'roleGroupMaintenance',
           component: RoleGroupMaintenance
+        },
+        {
+          path: 'customerDetailEdit/:id',
+          name: 'customerDetailEdit',
+          component: CustomerDetailEdit
+        },
+        {
+          path: 'customerMaintenance',
+          name: 'customerMaintenance',
+          component: CustomerMaintenance
+        },
+        {
+          path: 'customerDetailNew',
+          name: 'customerDetailNew',
+          component: CustomerDetailNew
         },
         {
           path: 'departmentDetailEdit/:id',

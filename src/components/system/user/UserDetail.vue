@@ -81,6 +81,16 @@
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="传真">
+              <el-input name="fax" v-model="userForm.fax" autoComplete="fax"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="通讯地址">
+              <el-input name="address" v-model="userForm.address" autoComplete="address"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="上次登录时间">
               <el-date-picker id="lastLogonAt" type="date" readonly placeholder="选择日期" v-model="userForm.lastLogonAt" style="width: 100%;"></el-date-picker>
             </el-form-item>

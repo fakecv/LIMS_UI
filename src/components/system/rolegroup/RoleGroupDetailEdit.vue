@@ -87,16 +87,26 @@ export default {
           vm.staticOptions.totalRoles = res.data.totalUserRoles || 0
         })
     },
-    updateUserRoles (event) {
+    updateUserRoles (id) {
       let vm = this
-      this.userRoleGroupForm.userRoleIds = []
-      this.staticOptions.selectedUserRoles = event
-      this.staticOptions.selectedUserRoles.forEach(row => {
-        vm.userRoleGroupForm.userRoleIds.push(row.id)
-      })
+      var index = this.userRoleGroupForm.userRoleIds.indexOf(id)
+      if (index > -1) {
+        this.userRoleGroupForm.userRoleIds.splice(index, 1)
+        this.staticOptions.userRoles.forEach(row => {
+          if (row.id === id) {
+            vm.staticOptions.selectedUserRoles.splice(row, 1)
+          }
+        })
+      } else {
+        this.userRoleGroupForm.userRoleIds.push(id)
+        this.staticOptions.userRoles.forEach(row => {
+          if (row.id === id) {
+            vm.staticOptions.selectedUserRoles.push(row)
+          }
+        })
+      }
     },
     deleteUserRoles (event) {
-      console.log('role group edit deleteUserRoles')
       let vm = this
       event.forEach(row => {
         vm.staticOptions.selectedUserRoles.splice(row, 1)
@@ -105,7 +115,6 @@ export default {
       this.staticOptions.selectedUserRoles.forEach(row => {
         vm.userRoleGroupForm.userRoleIds.push(row.id)
       })
-      console.log('role group edit deleteUserRoles for each' + vm.userRoleGroupForm.userRoleIds.length)
     },
     resetRoleGroupForm () {
       this.userRoleGroupForm = JSON.parse(JSON.stringify(this.userRoleGroupResetForm))

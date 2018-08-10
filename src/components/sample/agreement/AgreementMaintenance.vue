@@ -146,13 +146,10 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/agreement/getAgreement')
         .then(function (res) {
-          console.log('agreementMaintenance')
-          console.log(res)
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/agreementDetailEdit/' + row.id)
     },
     onSubmit () {
@@ -161,7 +158,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalAgreements = res.data.totalAgreements || 0
-          console.log('totalDeparts is: ' + vm.totalAgreements)
         })
     }
   },
