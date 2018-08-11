@@ -64,6 +64,13 @@ export default {
           vm.staticOptions.drawingDesigns = res.data
         })
     },
+    loadProcessingStatusData () {
+      let vm = this
+      this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
+        .then(function (res) {
+          vm.staticOptions.processingStatuses = res.data
+        })
+    },
     loadProcess (processId) {
       let vm = this
       this.$ajax.get('/api/sample/process/' + processId)
@@ -90,6 +97,7 @@ export default {
   mounted () {
     this.loadExperimentalMethodData()
     this.loadDrawingDesignData()
+    this.loadProcessingStatusData()
     console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadProcess(this.$route.params.id)

@@ -12,7 +12,7 @@
           <el-row :gutter="20">
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="委托编号">
-                <el-input name="processNumber" v-model="processForm.processNumber" autoComplete="processNumber"></el-input>
+                <el-input name="agreementNumber" v-model="processForm.agreementNumber" autoComplete="agreementNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -47,7 +47,7 @@
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="检测方法">
-                <el-select name="experimentalMethods" filterable default-first-option v-model=processForm.experimentalMethods>
+                <el-select name="experimentalMethod" filterable default-first-option v-model="processForm.experimentalMethod">
                 <el-option v-for="item in staticOptions.experimentalMethods"
                   :key="item.Id"
                   :label="item.experimentalMethodNumber"
@@ -61,7 +61,7 @@
                 <el-select name="drawingDesign" filterable default-first-option v-model="processForm.drawingDesign">
                 <el-option v-for="item in staticOptions.drawingDesigns"
                   :key="item.Id"
-                  :label="item.experimentalMethodNumber"
+                  :label="item.drawingDesignName"
                   :value="item.id">
                 </el-option>
                 </el-select>

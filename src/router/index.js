@@ -35,6 +35,9 @@ import DrawingDesignMaintenance from '@/components/sample/drawingdesign/DrawingD
 import ExperimentalMethodDetailNew from '@/components/sample/experimentalmethod/ExperimentalMethodDetailNew'
 import ExperimentalMethodDetailEdit from '@/components/sample/experimentalmethod/ExperimentalMethodDetailEdit'
 import ExperimentalMethodMaintenance from '@/components/sample/experimentalmethod/ExperimentalMethodMaintenance'
+import ProcessDetailNew from '@/components/sample/process/ProcessDetailNew'
+import ProcessDetailEdit from '@/components/sample/process/ProcessDetailEdit'
+import ProcessMaintenance from '@/components/sample/process/ProcessMaintenance'
 import ProcessingDetailNew from '@/components/sample/processing/ProcessingDetailNew'
 import ProcessingDetailEdit from '@/components/sample/processing/ProcessingDetailEdit'
 import ProcessingMaintenance from '@/components/sample/processing/ProcessingMaintenance'
@@ -213,6 +216,21 @@ const router = new Router({
           path: 'experimentalMethodDetailNew',
           name: 'experimentalMethodDetailNew',
           component: ExperimentalMethodDetailNew
+        },
+        {
+          path: 'processDetailEdit/:id',
+          name: 'processDetailEdit',
+          component: ProcessDetailEdit
+        },
+        {
+          path: 'processMaintenance',
+          name: 'processMaintenance',
+          component: ProcessMaintenance
+        },
+        {
+          path: 'processDetailNew',
+          name: 'processDetailNew',
+          component: ProcessDetailNew
         },
         {
           path: 'processingDetailEdit/:id',

@@ -12,12 +12,17 @@
           <el-row :gutter="20">
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="委托编号">
-                <el-input name="processingNumber" v-model="processingForm.processingNumber" autoComplete="processingNumber"></el-input>
+                <el-input name="agreementNumber" v-model="processingForm.agreementNumber" autoComplete="agreementNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品名称">
                 <el-input name="sampleName" v-model="processingForm.sampleName" autoComplete="sampleName"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="样品编号">
+                <el-input name="sampleNumber" v-model="processingForm.sampleNumber" autoComplete="sampleNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -32,18 +37,30 @@
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="提交部门">
-                <el-input name="experimentalItem" v-model="processingForm.experimentalItem" autoComplete="experimentalItem"></el-input>
+                <el-select name="submitFrom" filterable default-first-option v-model="processingForm.submitFrom">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.Id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="提交至">
-                <el-input name="experimentalItem" v-model="processingForm.experimentalItem" autoComplete="experimentalItem"></el-input>
+                <el-select name="submitTo" filterable default-first-option v-model="processingForm.submitTo">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.Id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="流转状态">
-                <el-select name="processingStatus" filterable default-first-option v-model="processingForm.processingingStatus">
-                <el-option v-for="item in staticOptions.processingingStatuses"
+                <el-select name="processingStatus" filterable default-first-option v-model="processingForm.processingStatus">
+                <el-option v-for="item in staticOptions.processingStatuses"
                   :key="item.Id"
                   :label="item.processingStatusName"
                   :value="item.id">

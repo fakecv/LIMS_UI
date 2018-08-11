@@ -52,7 +52,8 @@ export default {
       },
       staticOptions: {
         experimentalMethods: [],
-        drawingDesigns: []
+        drawingDesigns: [],
+        processingStatuses: []
       }
     }
   },
@@ -71,6 +72,13 @@ export default {
           vm.staticOptions.drawingDesigns = res.data
         })
     },
+    loadProcessingStatusData () {
+      let vm = this
+      this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
+        .then(function (res) {
+          vm.staticOptions.processingStatuses = res.data
+        })
+    },
     updateProcessForm (event) {
       this.processForm.id = event.id
     },
@@ -84,6 +92,7 @@ export default {
   mounted () {
     this.loadExperimentalMethodData()
     this.loadDrawingDesignData()
+    this.loadProcessingStatusData()
   }
 }
 </script>

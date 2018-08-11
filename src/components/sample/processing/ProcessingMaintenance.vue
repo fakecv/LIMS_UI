@@ -59,7 +59,7 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="sampletName"
+          prop="sampleName"
           label="样品名称"
           width="180">
         </el-table-column>

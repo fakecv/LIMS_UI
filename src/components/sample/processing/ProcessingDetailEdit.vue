@@ -37,7 +37,9 @@ export default {
       },
       staticOptions: {
         experimentalMethods: [],
-        drawingDesigns: []
+        drawingDesigns: [],
+        processingStatuses: [],
+        departments: []
       }
     }
   },
@@ -54,6 +56,23 @@ export default {
       this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
         .then(function (res) {
           vm.staticOptions.drawingDesigns = res.data
+        })
+    },
+    loadProcessingStatusData () {
+      let vm = this
+      this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
+        .then(function (res) {
+          vm.staticOptions.processingStatuses = res.data
+        })
+    },
+    loadDepartment () {
+      let vm = this
+      this.$ajax.get('/api/sample/department/getDepartment')
+        .then(function (res) {
+          vm.staticOptions.departments = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message(error.response.data.message)
         })
     },
     loadProcessing (processingId) {
@@ -82,6 +101,8 @@ export default {
   mounted () {
     this.loadExperimentalMethodData()
     this.loadDrawingDesignData()
+    this.loadProcessingStatusData()
+    this.loadDepartment()
     console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadProcessing(this.$route.params.id)

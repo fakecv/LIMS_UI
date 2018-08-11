@@ -5,7 +5,7 @@
         <el-row :gutter="20">
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="委托编号">
-              <el-input name="processNumber" v-model="processRequestForm.processNumber"></el-input>
+              <el-input name="agreementNumber" v-model="processRequestForm.agreementNumber"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -19,8 +19,8 @@
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="来样编号">
-              <el-input name="sampleClientNumber" v-model="processRequestForm.sampleClientNumber"></el-input>
+            <el-form-item label="样品编号">
+              <el-input name="sampleNumber" v-model="processRequestForm.sampleNumber"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -54,7 +54,7 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="sampletName"
+          prop="sampleName"
           label="样品名称"
           width="180">
         </el-table-column>
