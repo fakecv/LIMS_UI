@@ -1,41 +1,41 @@
     <template>
     <div>
       <el-container style="padding: 10px">
-      <el-form :model="agreementRequestForm" label-width="100px" label-position="left" size="mini">
+      <el-form :model="processRequestForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="委托编号">
-              <el-input name="agreementNumber" v-model="agreementRequestForm.agreementNumber"></el-input>
+              <el-input name="processNumber" v-model="processRequestForm.processNumber"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="委托单位">
-              <el-input name="client" v-model="agreementRequestForm.client"></el-input>
+              <el-input name="client" v-model="processRequestForm.client"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="样品名称">
-              <el-input name="sampleName" v-model="agreementRequestForm.sampleName"></el-input>
+              <el-input name="sampleName" v-model="processRequestForm.sampleName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="来样编号">
-              <el-input name="sampleClientNumber" v-model="agreementRequestForm.sampleClientNumber"></el-input>
+              <el-input name="sampleClientNumber" v-model="processRequestForm.sampleClientNumber"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="试样编号">
-              <el-input name="sampleNumber" v-model="agreementRequestForm.sampleNumber"></el-input>
+              <el-input name="sampleNumber" v-model="processRequestForm.sampleNumber"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目">
-              <el-input name="experimentalItem" v-model="agreementRequestForm.experimentalItem"></el-input>
+              <el-input name="experimentalItem" v-model="processRequestForm.experimentalItem"></el-input>
             </el-form-item>
           </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="检测方法">
-                <el-select name="createUserId" filterable default-first-option v-model="agreementRequestForm.experimentalMethod">
+                <el-select name="createUserId" filterable default-first-option v-model="processRequestForm.experimentalMethod">
                 <el-option v-for="item in experimentalMethods"
                   :key="item.Id"
                   :label="item.experimentalMethodNumber"
@@ -54,22 +54,27 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="client"
-          label="委托单位"
-          width="180">
-        </el-table-column>
-        <el-table-column
           prop="sampletName"
           label="样品名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="sampletClientNumber"
-          label="来样编号"
+          prop="receiveSampleTime"
+          label="接收样品时间"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="sampletNumber"
+          prop="materialNumber"
+          label="材质编号"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="expectedCompletionTime"
+          label="要求完成时间"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="sampleSubNumber"
           label="试样编号"
           width="180">
         </el-table-column>
@@ -83,16 +88,26 @@
           label="检测方法"
           width="180">
         </el-table-column>
+        <el-table-column
+          prop="drawingDesign"
+          label="加工图号"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="processingStatus"
+          label="当前流转状态"
+          width="180">
+        </el-table-column>
       </el-table>
       <div class="block text-right">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="agreementRequestForm.currentPage"
+          :current-page.sync="processRequestForm.currentPage"
           :page-sizes="[10, 20, 50]"
           :page-size="20"
           layout="sizes, prev, pager, next"
-          :total="totalAgreements">
+          :total="totalProcesss">
         </el-pagination>
       </div>
     </div>
@@ -100,68 +115,76 @@
 
 <script>
 export default {
-  name: 'agreementMaintenance',
+  name: 'processMaintenance',
   data () {
     return {
       tableData: [],
-      totalAgreements: 0,
-      agreementRequestForm: {
+      totalProcesss: 0,
+      processRequestForm: {
         agreementNumber: '',
-        client: '',
         sampleName: '',
-        sampleClientNumber: '',
-        sampleNumber: '',
+        materialNumber: '',
+        sampleSubNumber: '',
         experimentalMethod: '',
-        experimentalItem: '',
-        experimentalCategory: [],
+        drawingDesign: '',
+        processingStatus: '',
         itemsPerPage: 20,
         currentPage: 1
       },
       experimentalMethods: [],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
+      drawingDesigns: [],
+      columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 8 }
     }
   },
   methods: {
     handleSizeChange (val) {
-      this.agreementRequestForm.itemsPerPage = val
+      this.processRequestForm.itemsPerPage = val
       console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
-      this.agreementRequestForm.currentPage = val
+      this.processRequestForm.currentPage = val
       console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
       let vm = this
-      this.$ajax.get('/api/sample/agreement/getAgreement')
-        .then(function (res) {
-          vm.tableData = res.data
-        })
+      this.$ajax.get('/api/sample/process/getProcess').then(function (res) {
+        vm.tableData = res.data
+      })
     },
     dblclick (row, event) {
-      this.$router.push('/lims/agreementDetailEdit/' + row.id)
+      this.$router.push('/lims/processDetailEdit/' + row.id)
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/sample/agreement/queryAgreement', this.agreementRequestForm)
+      this.$ajax
+        .post('/api/sample/process/queryProcess', this.processRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
-          vm.totalAgreements = res.data.totalAgreements || 0
+          vm.totalProcesss = res.data.totalProcesss || 0
         })
     },
     loadExperimentalMethodData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+      this.$ajax
+        .get('/api/sample/experimentalMethod/getExperimentalMethod')
         .then(function (res) {
           vm.experimentalMethods = res.data
+        })
+    },
+    loadDrawingDesignData () {
+      let vm = this
+      this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
+        .then(function (res) {
+          vm.staticOptions.drawingDesigns = res.data
         })
     }
   },
   mounted () {
     this.onSubmit()
     this.loadExperimentalMethodData()
+    this.loadDrawingDesignData()
   }
-
 }
 </script>

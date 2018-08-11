@@ -6,6 +6,8 @@
     :staticOptions="staticOptions"
     v-on:updateCustomer="updateCustomer"
     v-on:reloadCustomerData="reloadCustomerData"
+    v-on:updateUser="updateUser"
+    v-on:reloadUserData="reloadUserData"
     v-on:updateAgreementForm="updateAgreementForm"
     v-on:deleteAgreementForm="resetAgreementForm"
     v-on:new="resetAgreementForm"
@@ -31,26 +33,19 @@ export default {
         noOfSample: '',
         sampleClientNumber: '',
         sampleNumber: '',
-        experimentalNumber: '',
         experimentalItem: '',
         experimentalMethod: '',
         comments: '',
         finishedSampleHandlingMethod: '',
-        reportTransferMode: '',
+        reportTransferMode: [],
+        reportTransferModeOther: '',
         noOfReport: '',
         sampleCheckResult: '',
-        experimentalCategory: '',
+        experimentalCategory: [],
+        experimentalCategoryOther: '',
         privacyDeclaim: '',
-        clientName: '',
-        clientMobileNumber: '',
-        clientFaxNumber: '',
-        clientEmail: '',
-        clientAdress: '',
-        receiverName: '',
-        receiverMobileNumber: '',
-        receiverFaxNumber: '',
-        receiverEmail: '',
-        receiverAdress: ''
+        customerId: '',
+        receiverId: ''
       },
       agreementResetForm: {
         id: '',
@@ -63,26 +58,19 @@ export default {
         noOfSample: '',
         sampleClientNumber: '',
         sampleNumber: '',
-        experimentalNumber: '',
         experimentalItem: '',
         experimentalMethod: '',
         comments: '',
         finishedSampleHandlingMethod: '',
-        reportTransferMode: '',
+        reportTransferMode: [],
+        reportTransferModeOther: '',
         noOfReport: '',
         sampleCheckResult: '',
-        experimentalCategory: '',
+        experimentalCategory: [],
+        experimentalCategoryOther: '',
         privacyDeclaim: '',
-        clientName: '',
-        clientMobileNumber: '',
-        clientFaxNumber: '',
-        clientEmail: '',
-        clientAdress: '',
-        receiverName: '',
-        receiverMobileNumber: '',
-        receiverFaxNumber: '',
-        receiverEmail: '',
-        receiverAdress: ''
+        customerId: '',
+        receiverId: ''
       },
       customerForm: {},
       userForm: {},
@@ -90,9 +78,15 @@ export default {
         experimentalMethods: [],
         customers: [],
         users: [],
-        totalCustomers: 0
+        totalCustomers: 0,
+        totalUsers: 0
       },
       customerRequestForm: {
+        name: '',
+        itemsPerPage: 20,
+        currentPage: 1
+      },
+      userRequestForm: {
         name: '',
         itemsPerPage: 20,
         currentPage: 1
@@ -133,16 +127,42 @@ export default {
         })
     },
     updateCustomer (row) {
+      this.agreementForm.customerId = row.id
       this.customerForm.name = row.name
       this.customerForm.mobileNumber = row.mobileNumber
       this.customerForm.fax = row.fax
       this.customerForm.email = row.email
       this.customerForm.address = row.address
+    },
+    reloadUserData () {
+      let vm = this
+      this.$ajax.post('/api/users/queryApplicationUser', event)
+        .then(function (res) {
+          vm.staticOptions.users = res.data.pageResult || []
+          vm.staticOptions.totalUsers = res.data.totalUsers || 0
+        })
+    },
+    initUserData () {
+      let vm = this
+      this.$ajax.post('/api/users/queryApplicationUser', this.userRequestForm)
+        .then(function (res) {
+          vm.staticOptions.users = res.data.pageResult || []
+          vm.staticOptions.totalUsers = res.data.totalUsers || 0
+        })
+    },
+    updateUser (row) {
+      this.agreementForm.receiverId = row.id
+      this.userForm.name = row.name
+      this.userForm.mobileNumber = row.mobileNumber
+      this.userForm.fax = row.fax
+      this.userForm.email = row.email
+      this.userForm.address = row.address
     }
   },
   mounted () {
     this.loadExperimentalMethodData()
     this.initCustomerData()
+    this.initUserData()
   }
 }
 </script>

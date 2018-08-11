@@ -1,38 +1,46 @@
 <template>
-  <ProcessingDetail
-    :processingForm="processingForm"
+  <ProcessDetail
+    :processForm="processForm"
     :staticOptions="staticOptions"
-    v-on:deleteProcessing="resetProcessingForm"
-    v-on:new="resetProcessingForm"
-    v-on:copy="resetProcessingId"
+    v-on:deleteProcess="resetProcessForm"
+    v-on:new="resetProcessForm"
+    v-on:copy="resetProcessId"
     />
 </template>
 
 <script>
-import ProcessingDetail from '@/components/sample/processing/ProcessingDetail'
+import ProcessDetail from '@/components/sample/process/ProcessDetail'
 export default {
-  name: 'processingDetailEdit',
-  components: {ProcessingDetail},
+  name: 'processDetailEdit',
+  components: {ProcessDetail},
   data () {
     return {
-      processingForm: {
+      processForm: {
         id: '',
         agreementNumber: '',
         sampleName: '',
+        receiveSampleTime: '',
+        materialNumber: '',
+        expectedCompletionTime: '',
         sampleSubNumber: '',
         experimentalItem: '',
-        submitFrom: '',
-        submitTo: '',
+        experimentalMethod: '',
+        drawingDesign: '',
+        comments: '',
         processingStatus: ''
       },
-      processingResetForm: {
+      processResetForm: {
         id: '',
         agreementNumber: '',
         sampleName: '',
+        receiveSampleTime: '',
+        materialNumber: '',
+        expectedCompletionTime: '',
         sampleSubNumber: '',
         experimentalItem: '',
-        submitFrom: '',
-        submitTo: '',
+        experimentalMethod: '',
+        drawingDesign: '',
+        comments: '',
         processingStatus: ''
       },
       staticOptions: {
@@ -56,11 +64,11 @@ export default {
           vm.staticOptions.drawingDesigns = res.data
         })
     },
-    loadProcessing (processingId) {
+    loadProcess (processId) {
       let vm = this
-      this.$ajax.get('/api/sample/processing/' + processingId)
+      this.$ajax.get('/api/sample/process/' + processId)
         .then(function (res) {
-          vm.processingForm = res.data
+          vm.processForm = res.data
           if (res.data.customerId !== '') {
             vm.loadCustomer(res.data.customerId)
           }
@@ -72,11 +80,11 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    resetProcessingForm () {
-      this.processingForm = JSON.parse(JSON.stringify(this.processingResetForm))
+    resetProcessForm () {
+      this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
     },
-    resetProcessingId () {
-      this.processingForm.id = ''
+    resetProcessId () {
+      this.processForm.id = ''
     }
   },
   mounted () {
@@ -84,7 +92,7 @@ export default {
     this.loadDrawingDesignData()
     console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
-      this.loadProcessing(this.$route.params.id)
+      this.loadProcess(this.$route.params.id)
     }
   }
 }

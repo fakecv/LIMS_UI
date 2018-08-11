@@ -1,28 +1,96 @@
     <template>
     <div>
       <el-container style="padding: 10px">
-        <el-form :model="processingRequestForm" label-width="100px" label-position="left" size="mini">
-          <el-row :gutter="20">
-            <el-form-item label="部门名称">
-              <el-input name="processingName" v-model="processingRequestForm.processingName"></el-input>
+      <el-form :model="processingRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-row :gutter="20">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="委托编号">
+              <el-input name="processingNumber" v-model="processingRequestForm.processingNumber"></el-input>
             </el-form-item>
-          </el-row>
-          <el-row :gutter="20">
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">查询</el-button>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="样品名称">
+              <el-input name="sampleName" v-model="processingRequestForm.sampleName"></el-input>
             </el-form-item>
-          </el-row>
-        </el-form>
-      </el-container>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="样品编号">
+              <el-input name="sampleNumber" v-model="processingRequestForm.sampleNumber"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="试样编号">
+              <el-input name="sampleSubNumber" v-model="processingRequestForm.sampleSubNumber"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="检测项目">
+              <el-input name="experimentalItem" v-model="processingRequestForm.experimentalItem"></el-input>
+            </el-form-item>
+          </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="检测方法">
+                <el-select name="createUserId" filterable default-first-option v-model="processingRequestForm.experimentalMethod">
+                <el-option v-for="item in experimentalMethods"
+                  :key="item.Id"
+                  :label="item.experimentalMethodNumber"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="提交人">
+              <el-input name="submitFrom" v-model="processingRequestForm.experimentalItem"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="提交至">
+              <el-input name="submitTo" v-model="processingRequestForm.experimentalItem"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
-          prop="processingName"
-          label="部门名称"
+          prop="agreementNumber"
+          label="委托编号"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="processingDescription"
-          label="部门描述"
+          prop="sampletName"
+          label="样品名称"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="sampleNumber"
+          label="样品编号"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="sampleSubNumber"
+          label="试样编号"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="experimentalItem"
+          label="检测项目"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="submitFrom"
+          label="提交人"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="submitTo"
+          label="提交至"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="processingStatus"
+          label="流转状态"
           width="180">
         </el-table-column>
       </el-table>
@@ -48,49 +116,68 @@ export default {
       tableData: [],
       totalProcessings: 0,
       processingRequestForm: {
-        processingName: '',
+        agreementNumber: '',
+        sampleName: '',
+        sampleSubNumber: '',
+        experimentalItem: '',
+        submitFrom: '',
+        submitTo: '',
+        processingStatus: '',
         itemsPerPage: 20,
         currentPage: 1
-      }
+      },
+      experimentalMethods: [],
+      drawingDesigns: [],
+      columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 8 }
     }
   },
   methods: {
     handleSizeChange (val) {
       this.processingRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.processingRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
       let vm = this
-      this.$ajax.get('/api/sample/processing/getProcessing')
-        .then(function (res) {
-          console.log('processingMaintenance')
-          console.log(res)
-          vm.tableData = res.data
-        })
+      this.$ajax.get('/api/sample/processing/getProcessing').then(function (res) {
+        vm.tableData = res.data
+      })
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/processingDetailEdit/' + row.id)
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/sample/processing/queryProcessing', this.processingRequestForm)
+      this.$ajax
+        .post('/api/sample/processing/queryProcessing', this.processingRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalProcessings = res.data.totalProcessings || 0
-          console.log('totalDeparts is: ' + vm.totalProcessings)
+        })
+    },
+    loadExperimentalMethodData () {
+      let vm = this
+      this.$ajax
+        .get('/api/sample/experimentalMethod/getExperimentalMethod')
+        .then(function (res) {
+          vm.experimentalMethods = res.data
+        })
+    },
+    loadDrawingDesignData () {
+      let vm = this
+      this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
+        .then(function (res) {
+          vm.staticOptions.drawingDesigns = res.data
         })
     }
   },
   mounted () {
     this.onSubmit()
+    this.loadExperimentalMethodData()
+    this.loadDrawingDesignData()
   }
-
 }
 </script>

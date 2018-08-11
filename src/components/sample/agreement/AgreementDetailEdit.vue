@@ -1,7 +1,13 @@
 <template>
   <AgreementDetail
     :agreementForm="agreementForm"
+    :customerForm="customerForm"
+    :userForm="userForm"
     :staticOptions="staticOptions"
+    v-on:updateCustomer="updateCustomer"
+    v-on:reloadCustomerData="reloadCustomerData"
+    v-on:updateUser="updateUser"
+    v-on:reloadUserData="reloadUserData"
     v-on:deleteAgreement="resetAgreementForm"
     v-on:new="resetAgreementForm"
     v-on:copy="resetAgreementId"
@@ -26,26 +32,19 @@ export default {
         noOfSample: '',
         sampleClientNumber: '',
         sampleNumber: '',
-        experimentalNumber: '',
         experimentalItem: '',
         experimentalMethod: '',
         comments: '',
         finishedSampleHandlingMethod: '',
-        reportTransferMode: '',
+        reportTransferMode: [],
+        reportTransferModeOther: '',
         noOfReport: '',
         sampleCheckResult: '',
-        experimentalCategory: '',
+        experimentalCategory: [],
+        experimentalCategoryOther: '',
         privacyDeclaim: '',
-        clientName: '',
-        clientMobileNumber: '',
-        clientFaxNumber: '',
-        clientEmail: '',
-        clientAdress: '',
-        receiverName: '',
-        receiverMobileNumber: '',
-        receiverFaxNumber: '',
-        receiverEmail: '',
-        receiverAdress: ''
+        customerId: '',
+        receiverId: ''
       },
       agreementResetForm: {
         id: '',
@@ -58,29 +57,40 @@ export default {
         noOfSample: '',
         sampleClientNumber: '',
         sampleNumber: '',
-        experimentalNumber: '',
         experimentalItem: '',
         experimentalMethod: '',
         comments: '',
         finishedSampleHandlingMethod: '',
-        reportTransferMode: '',
+        reportTransferMode: [],
+        reportTransferModeOther: '',
         noOfReport: '',
         sampleCheckResult: '',
-        experimentalCategory: '',
+        experimentalCategory: [],
+        experimentalCategoryOther: '',
         privacyDeclaim: '',
-        clientName: '',
-        clientMobileNumber: '',
-        clientFaxNumber: '',
-        clientEmail: '',
-        clientAdress: '',
-        receiverName: '',
-        receiverMobileNumber: '',
-        receiverFaxNumber: '',
-        receiverEmail: '',
-        receiverAdress: ''
+        customerId: '',
+        receiverId: ''
+      },
+      customerForm: {},
+      userForm: {
+
       },
       staticOptions: {
-        experimentalMethods: []
+        experimentalMethods: [],
+        customers: [],
+        users: [],
+        totalCustomers: 0,
+        totalUsers: 0
+      },
+      customerRequestForm: {
+        name: '',
+        itemsPerPage: 20,
+        currentPage: 1
+      },
+      userRequestForm: {
+        name: '',
+        itemsPerPage: 20,
+        currentPage: 1
       }
     }
   },
@@ -97,6 +107,32 @@ export default {
       this.$ajax.get('/api/sample/agreement/' + agreementId)
         .then(function (res) {
           vm.agreementForm = res.data
+          if (res.data.customerId !== '') {
+            vm.loadCustomer(res.data.customerId)
+          }
+          if (res.data.receiverId !== '') {
+            vm.loadReceiver(res.data.receiverId)
+          }
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadCustomer (customerId) {
+      let vm = this
+      this.$ajax.get('/api/customer/' + customerId)
+        .then(function (res) {
+          vm.customerForm = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadReceiver (receiverId) {
+      let vm = this
+      this.$ajax.get('/api/users/' + receiverId)
+        .then(function (res) {
+          vm.userForm = res.data
         }).catch(function (error) {
           console.log(error.message)
           vm.$message(error.response.data.message)
@@ -107,11 +143,61 @@ export default {
     },
     resetAgreementId () {
       this.agreementForm.id = ''
+    },
+    reloadCustomerData () {
+      let vm = this
+      this.$ajax.post('/api/customer/queryCustomer', event)
+        .then(function (res) {
+          vm.staticOptions.customers = res.data.pageResult || []
+          vm.staticOptions.totalCustomers = res.data.totalCustomers || 0
+        })
+    },
+    initCustomerData () {
+      let vm = this
+      this.$ajax.post('/api/customer/queryCustomer', this.customerRequestForm)
+        .then(function (res) {
+          vm.staticOptions.customers = res.data.pageResult || []
+          vm.staticOptions.totalCustomers = res.data.totalCustomers || 0
+        })
+    },
+    updateCustomer (row) {
+      this.agreementForm.customerId = row.id
+      this.customerForm.name = row.name
+      this.customerForm.mobileNumber = row.mobileNumber
+      this.customerForm.fax = row.fax
+      this.customerForm.email = row.email
+      this.customerForm.address = row.address
+    },
+    reloadUserData () {
+      let vm = this
+      this.$ajax.post('/api/users/queryApplicationUser', event)
+        .then(function (res) {
+          vm.staticOptions.users = res.data.pageResult || []
+          vm.staticOptions.totalUsers = res.data.totalUsers || 0
+        })
+    },
+    initUserData () {
+      let vm = this
+      this.$ajax.post('/api/users/queryApplicationUser', this.userRequestForm)
+        .then(function (res) {
+          vm.staticOptions.users = res.data.pageResult || []
+          vm.staticOptions.totalUsers = res.data.totalUsers || 0
+        })
+    },
+    updateUser (row) {
+      this.agreementForm.receiverId = row.id
+      this.userForm.name = row.name
+      this.userForm.mobileNumber = row.mobileNumber
+      this.userForm.fax = row.fax
+      this.userForm.email = row.email
+      this.userForm.address = row.address
     }
   },
   mounted () {
-    console.log(this.$route.params.id)
     this.loadExperimentalMethodData()
+    this.initCustomerData()
+    this.initUserData()
+    console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadAgreement(this.$route.params.id)
     }

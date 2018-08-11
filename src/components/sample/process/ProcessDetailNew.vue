@@ -1,6 +1,6 @@
 <template>
-  <ProcessingDetail
-    :processingForm="processingForm"
+  <ProcessDetail
+    :processForm="processForm"
     :customerForm="customerForm"
     :userForm="userForm"
     :staticOptions="staticOptions"
@@ -8,38 +8,46 @@
     v-on:reloadCustomerData="reloadCustomerData"
     v-on:updateUser="updateUser"
     v-on:reloadUserData="reloadUserData"
-    v-on:updateProcessingForm="updateProcessingForm"
-    v-on:deleteProcessingForm="resetProcessingForm"
-    v-on:new="resetProcessingForm"
-    v-on:copy="resetProcessingId"
+    v-on:updateProcessForm="updateProcessForm"
+    v-on:deleteProcessForm="resetProcessForm"
+    v-on:new="resetProcessForm"
+    v-on:copy="resetProcessId"
     />
 </template>
 
 <script>
-import ProcessingDetail from '@/components/sample/processing/ProcessingDetail'
+import ProcessDetail from '@/components/sample/process/ProcessDetail'
 export default {
-  name: 'processingDetailNew',
-  components: {ProcessingDetail},
+  name: 'processDetailNew',
+  components: {ProcessDetail},
   data () {
     return {
-      processingForm: {
+      processForm: {
         id: '',
         agreementNumber: '',
         sampleName: '',
+        receiveSampleTime: '',
+        materialNumber: '',
+        expectedCompletionTime: '',
         sampleSubNumber: '',
         experimentalItem: '',
-        submitFrom: '',
-        submitTo: '',
+        experimentalMethod: '',
+        drawingDesign: '',
+        comments: '',
         processingStatus: ''
       },
-      processingResetForm: {
+      processResetForm: {
         id: '',
         agreementNumber: '',
         sampleName: '',
+        receiveSampleTime: '',
+        materialNumber: '',
+        expectedCompletionTime: '',
         sampleSubNumber: '',
         experimentalItem: '',
-        submitFrom: '',
-        submitTo: '',
+        experimentalMethod: '',
+        drawingDesign: '',
+        comments: '',
         processingStatus: ''
       },
       staticOptions: {
@@ -63,14 +71,14 @@ export default {
           vm.staticOptions.drawingDesigns = res.data
         })
     },
-    updateProcessingForm (event) {
-      this.processingForm.id = event.id
+    updateProcessForm (event) {
+      this.processForm.id = event.id
     },
-    resetProcessingId () {
-      this.processingForm.id = ''
+    resetProcessId () {
+      this.processForm.id = ''
     },
-    resetProcessingForm () {
-      this.processingForm = JSON.parse(JSON.stringify(this.processingResetForm))
+    resetProcessForm () {
+      this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
     }
   },
   mounted () {

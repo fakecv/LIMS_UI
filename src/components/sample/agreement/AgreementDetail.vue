@@ -32,12 +32,12 @@
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品接收时间">
-                <el-date-picker type="date" placeholder="选择日期" v-model="agreementForm.date" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择样品接收日期" v-model="agreementForm.receiveSampleTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="要求完成时间">
-                <el-date-picker type="date" placeholder="选择日期" v-model="agreementForm.date" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择要求完成日期" v-model="agreementForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -51,7 +51,7 @@
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="试样编号">
+              <el-form-item label="样品编号">
                 <el-input name="sampleNumber" v-model="agreementForm.sampleNumber" autoComplete="sampleNumber"></el-input>
               </el-form-item>
             </el-col>
@@ -62,7 +62,7 @@
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="检测方法">
-                <el-select name="createUserId" filterable default-first-option v-model=agreementForm.experimentalMethods>
+                <el-select name="experimentalMethod" filterable default-first-option v-model="agreementForm.experimentalMethod">
                 <el-option v-for="item in staticOptions.experimentalMethods"
                   :key="item.Id"
                   :label="item.experimentalMethodNumber"
@@ -78,7 +78,11 @@
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="已验样品处置">
-                <el-select  filterable allow-create default-first-option placeholder="请选择处置方式" name="finishedSampleHandlingMethod" v-model=agreementForm.finishedSampleHandlingMethod>
+                <el-select  filterable allow-create default-first-option
+                  placeholder="请选择处置方式"
+                  name="finishedSampleHandlingMethod"
+                  v-model="agreementForm.finishedSampleHandlingMethod"
+                  >
                 <el-option label="样品随报告带走" value="1"></el-option>
                 <el-option label="样品由本公司保存" value="2"></el-option>
                 </el-select>
@@ -87,13 +91,17 @@
             <el-col :span="24">
               <el-form-item label="报告传送方式">
                 <el-checkbox-group v-model="agreementForm.reportTransferMode">
-                  <el-checkbox label="取" name="reportTransferMode"></el-checkbox>
-                  <el-checkbox label="送" name="reportTransferMode"></el-checkbox>
-                  <el-checkbox label="邮寄" name="reportTransferMode"></el-checkbox>
-                  <el-checkbox label="传真" name="reportTransferMode"></el-checkbox>
-                  <el-checkbox label="其它" name="reportTransferMode"></el-checkbox>
-                  <el-input name="reportTransferMode" v-model="agreementForm.reportTransferMode" autoComplete="reportTransferMode"></el-input>
+                  <el-checkbox label="取" name="fetch"></el-checkbox>
+                  <el-checkbox label="送" name="send"></el-checkbox>
+                  <el-checkbox label="邮寄" name="mail"></el-checkbox>
+                  <el-checkbox label="传真" name="fax"></el-checkbox>
+                  <el-checkbox label="其它" name="other" @change="reportTransferModeOther"></el-checkbox>
                 </el-checkbox-group>
+                  <el-input name="reportTransferModeOther"
+                    :disabled="reportTransferModeOtherDisable"
+                    v-model="agreementForm.reportTransferModeOther"
+                    autoComplete="reportTransferMode"
+                  ></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -115,9 +123,13 @@
                   <el-checkbox label="委托检测" name="experimentalCategory"></el-checkbox>
                   <el-checkbox label="委托检验" name="experimentalCategory"></el-checkbox>
                   <el-checkbox label="现场检测" name="experimentalCategory"></el-checkbox>
-                  <el-checkbox label="其它" name="experimentalCategory"></el-checkbox>
-                  <el-input name="experimentalCategory" v-model="agreementForm.experimentalCategory" autoComplete="experimentalCategory"></el-input>
+                  <el-checkbox label="其它" name="experimentalCategory" @change="experimentalCategoryOther"></el-checkbox>
                 </el-checkbox-group>
+                <el-input name="experimentalCategoryOther"
+                  :disabled="experimentalCategoryOtherDisable"
+                  v-model="agreementForm.experimentalCategoryOther"
+                  autoComplete="experimentalCategory"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -128,7 +140,7 @@
           </el-row>
         </el-form>
       </el-container>
-          <el-container>
+      <el-container>
         <el-form :model="customerForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -160,13 +172,15 @@
             </el-col>
           </el-row>
         </el-form>
-          </el-container>
+      </el-container>
       <el-container>
         <el-form :model="userForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="海瑞检测接收人">
-                <el-input name="receiverName" v-model="userForm.name" autoComplete="receiverName"></el-input>
+                <el-input name="receiverName" v-model="userForm.name" autoComplete="receiverName">
+                  <el-button slot="append" icon="el-icon-search" @click.native="openUser"></el-button>
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -208,7 +222,11 @@
           </el-row>
         </el-form>
       </el-container>
-      <el-table ref="customerTable" :data="staticOptions.customers" style="width: 100%" @row-click="handleCustomerRowClick" @row-dbclick="handleCustomerRowDLClick">
+      <el-table ref="customerTable" :data="staticOptions.customers" style="width: 100%"
+        highlight-current-row
+        @row-click="handleCustomerRowClick"
+        @row-dbclick="handleCustomerRowDLClick"
+       >
         <el-table-column prop="name" label="客户名称" width="180"></el-table-column>
         <el-table-column prop="mobileNumber" label="客户电话" width="180"></el-table-column>
         <el-table-column prop="fax" label="客户传真" width="180"></el-table-column>
@@ -223,12 +241,54 @@
           :page-sizes="[10, 20, 50]"
           :page-size="20"
           layout="sizes, prev, pager, next"
-          :total="staticOptions.totalRoles">
+          :total="staticOptions.totalCustomers">
         </el-pagination>
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="customerDialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click.native="confirmCustomer">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="用户列表" :visible.sync="userDialogFormVisible" :modal-append-to-body="false">
+      <el-container style="padding: 10px">
+        <el-form :model="userRequestForm" label-width="100px" label-position="left" size="mini">
+          <el-row :gutter="20">
+            <el-form-item label="用户名称">
+              <el-input name="name" v-model="userRequestForm.name"></el-input>
+            </el-form-item>
+          </el-row>
+          <el-row :gutter="20">
+            <el-form-item>
+              <el-button type="primary" @click="reloadUsers">查询</el-button>
+            </el-form-item>
+          </el-row>
+        </el-form>
+      </el-container>
+      <el-table ref="userTable" :data="staticOptions.users" style="width: 100%"
+        highlight-current-row
+        @row-click="handleUserRowClick"
+        @row-dbclick="handleUserRowDLClick"
+      >
+        <el-table-column prop="name" label="接收人名称" width="180"></el-table-column>
+        <el-table-column prop="mobileNumber" label="接收人电话" width="180"></el-table-column>
+        <el-table-column prop="fax" label="接收人传真" width="180"></el-table-column>
+        <el-table-column prop="email" label="接收人邮箱" width="180"></el-table-column>
+        <el-table-column prop="address" label="接收人通讯地址" width="180"></el-table-column>
+      </el-table>
+      <div class="block text-right">
+        <el-pagination
+          @size-change="handleUserSizeChange"
+          @current-change="handleUserCurrentChange"
+          :current-page.sync="userRequestForm.currentPage"
+          :page-sizes="[10, 20, 50]"
+          :page-size="20"
+          layout="sizes, prev, pager, next"
+          :total="staticOptions.totalUsers">
+        </el-pagination>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="userDialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click.native="confirmUser">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -251,6 +311,7 @@ export default {
       ],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
       customerDialogFormVisible: false,
+      userDialogFormVisible: false,
       customerRequestForm: {
         name: '',
         itemsPerPage: 20,
@@ -260,7 +321,9 @@ export default {
         name: '',
         itemsPerPage: 20,
         currentPage: 1
-      }
+      },
+      reportTransferModeOtherDisable: true,
+      experimentalCategoryOtherDisable: true
     }
   },
   methods: {
@@ -282,6 +345,22 @@ export default {
         this.copy()
       } else if (action.id === '7') {
         console.log(action.id)
+      }
+    },
+    reportTransferModeOther (val) {
+      if (val) {
+        this.reportTransferModeOtherDisable = false
+      } else {
+        this.reportTransferModeOtherDisable = true
+        this.agreementForm.reportTransferModeOther = ''
+      }
+    },
+    experimentalCategoryOther (val) {
+      if (val) {
+        this.experimentalCategoryOtherDisable = false
+      } else {
+        this.experimentalCategoryOtherDisable = true
+        this.agreementForm.experimentalCategoryOther = ''
       }
     },
     new () {
@@ -333,6 +412,32 @@ export default {
     handleCustomerRowDLClick (row, event, column) {
       this.$emit('updateCustomer', row)
       this.customerDialogFormVisible = false
+    },
+    handleUserSizeChange (val) {
+      this.userRequestForm.itemsPerPage = val
+      this.$emit('reloadUserData', this.userRequestForm)
+    },
+    handleUserCurrentChange (val) {
+      this.userRequestForm.currentPage = val
+      this.$emit('reloadUserData', this.userRequestForm)
+    },
+    reloadUsers () {
+      this.$emit('reloadUserData', this.userRequestForm)
+    },
+    openUser () {
+      this.userDialogFormVisible = true
+    },
+    confirmUser () {
+      this.userDialogFormVisible = false
+    },
+    handleUserRowClick (row, event, column) {
+      console.log('handleCustomerRowClick')
+      console.log(row.name)
+      this.$emit('updateUser', row)
+    },
+    handleUserRowDLClick (row, event, column) {
+      this.$emit('updateUser', row)
+      this.userDialogFormVisible = false
     }
   }
 }

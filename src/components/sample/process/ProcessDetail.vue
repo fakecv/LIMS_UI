@@ -8,47 +8,79 @@
         </el-button-group>
       </el-header>
       <el-container style="padding: 10px">
-        <el-form :model="processingForm" label-width="100px" label-position="left" size="mini">
+        <el-form :model="processForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="委托编号">
-                <el-input name="processingNumber" v-model="processingForm.processingNumber" autoComplete="processingNumber"></el-input>
+                <el-input name="processNumber" v-model="processForm.processNumber" autoComplete="processNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品名称">
-                <el-input name="sampleName" v-model="processingForm.sampleName" autoComplete="sampleName"></el-input>
+                <el-input name="sampleName" v-model="processForm.sampleName" autoComplete="sampleName"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="样品接收时间">
+                <el-date-picker type="date" placeholder="选择日期" v-model="processForm.receiveSampleTime" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="材质牌号">
+                <el-input name="materialNumber" v-model="processForm.materialNumber" autoComplete="materialNumber"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="要求完成时间">
+                <el-date-picker type="date" placeholder="选择日期" v-model="processForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="试样编号">
-                <el-input name="sampleSubNumber" v-model="processingForm.sampleSubNumber" autoComplete="sampleSubNumber"></el-input>
+                <el-input name="sampleSubNumber" v-model="processForm.sampleSubNumber" autoComplete="sampleSubNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="检测项目">
-                <el-input name="experimentalItem" v-model="processingForm.experimentalItem" autoComplete="experimentalItem"></el-input>
+                <el-input name="experimentalItem" v-model="processForm.experimentalItem" autoComplete="experimentalItem"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="提交部门">
-                <el-input name="experimentalItem" v-model="processingForm.experimentalItem" autoComplete="experimentalItem"></el-input>
+              <el-form-item label="检测方法">
+                <el-select name="experimentalMethods" filterable default-first-option v-model=processForm.experimentalMethods>
+                <el-option v-for="item in staticOptions.experimentalMethods"
+                  :key="item.Id"
+                  :label="item.experimentalMethodNumber"
+                  :value="item.id">
+                </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="提交至">
-                <el-input name="experimentalItem" v-model="processingForm.experimentalItem" autoComplete="experimentalItem"></el-input>
+              <el-form-item label="加工图号">
+                <el-select name="drawingDesign" filterable default-first-option v-model="processForm.drawingDesign">
+                <el-option v-for="item in staticOptions.drawingDesigns"
+                  :key="item.Id"
+                  :label="item.experimentalMethodNumber"
+                  :value="item.id">
+                </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="流转状态">
-                <el-select name="processingStatus" filterable default-first-option v-model="processingForm.processingingStatus">
-                <el-option v-for="item in staticOptions.processingingStatuses"
+              <el-form-item label="当前流转状态">
+                <el-select name="processingStatus" filterable default-first-option v-model="processForm.processingStatus">
+                <el-option v-for="item in staticOptions.processingStatuses"
                   :key="item.Id"
                   :label="item.processingStatusName"
                   :value="item.id">
                 </el-option>
                 </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="其他信息">
+                <el-input name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -60,8 +92,8 @@
 
 <script>
 export default {
-  name: 'processingDetail',
-  props: ['processingForm', 'staticOptions', 'customerForm', 'userForm'],
+  name: 'processDetail',
+  props: ['processForm', 'staticOptions', 'customerForm', 'userForm'],
   data () {
     return {
       actions: [
@@ -103,7 +135,7 @@ export default {
     },
     saveToDB () {
       let vm = this
-      this.$ajax.post('/api/sample/processing', this.processingForm)
+      this.$ajax.post('/api/sample/process', this.processForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
         }).catch(function (error) {
@@ -112,7 +144,7 @@ export default {
     },
     delete () {
       let vm = this
-      this.$ajax.get('/api/sample/processing/delete/' + this.processingForm.id)
+      this.$ajax.get('/api/sample/process/delete/' + this.processForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
         }).catch(function (error) {
