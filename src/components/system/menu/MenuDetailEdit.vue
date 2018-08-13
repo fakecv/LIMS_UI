@@ -65,7 +65,7 @@ export default {
       this.menuForm = JSON.parse(JSON.stringify(this.menuResetForm))
     },
     resetMenuId () {
-      this.menuForm = ''
+      this.menuForm.id = ''
     }
   },
   mounted () {

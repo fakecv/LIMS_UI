@@ -22,11 +22,15 @@ export default {
         receiveSampleTime: '',
         materialNumber: '',
         expectedCompletionTime: '',
+        sampleClientNumber: '',
+        sampleNumber: '',
         sampleSubNumber: '',
         experimentalItem: '',
         experimentalMethod: '',
         drawingDesign: '',
-        comments: '',
+        comment: '',
+        submitFrom: '',
+        submitTo: '',
         processingStatus: ''
       },
       processResetForm: {
@@ -36,16 +40,23 @@ export default {
         receiveSampleTime: '',
         materialNumber: '',
         expectedCompletionTime: '',
+        sampleClientNumber: '',
+        sampleNumber: '',
         sampleSubNumber: '',
         experimentalItem: '',
         experimentalMethod: '',
         drawingDesign: '',
-        comments: '',
+        comment: '',
+        submitFrom: '',
+        submitTo: '',
         processingStatus: ''
       },
       staticOptions: {
         experimentalMethods: [],
-        drawingDesigns: []
+        drawingDesigns: [],
+        processingStatuses: [],
+        departments: [],
+        agreements: []
       }
     }
   },
@@ -55,6 +66,8 @@ export default {
       this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
         .then(function (res) {
           vm.staticOptions.experimentalMethods = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     },
     loadDrawingDesignData () {
@@ -62,6 +75,8 @@ export default {
       this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
         .then(function (res) {
           vm.staticOptions.drawingDesigns = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     },
     loadProcessingStatusData () {
@@ -69,6 +84,26 @@ export default {
       this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
         .then(function (res) {
           vm.staticOptions.processingStatuses = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadDepartment () {
+      let vm = this
+      this.$ajax.get('/api/sample/department/getDepartment')
+        .then(function (res) {
+          vm.staticOptions.departments = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadAgreement () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/getAgreement')
+        .then(function (res) {
+          vm.staticOptions.agreements = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     },
     loadProcess (processId) {
@@ -76,14 +111,7 @@ export default {
       this.$ajax.get('/api/sample/process/' + processId)
         .then(function (res) {
           vm.processForm = res.data
-          if (res.data.customerId !== '') {
-            vm.loadCustomer(res.data.customerId)
-          }
-          if (res.data.receiverId !== '') {
-            vm.loadReceiver(res.data.receiverId)
-          }
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },
@@ -98,6 +126,8 @@ export default {
     this.loadExperimentalMethodData()
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()
+    this.loadDepartment()
+    this.loadAgreement()
     console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadProcess(this.$route.params.id)

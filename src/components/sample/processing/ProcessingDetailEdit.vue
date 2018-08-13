@@ -39,7 +39,8 @@ export default {
         experimentalMethods: [],
         drawingDesigns: [],
         processingStatuses: [],
-        departments: []
+        departments: [],
+        agreements: []
       }
     }
   },
@@ -49,6 +50,8 @@ export default {
       this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
         .then(function (res) {
           vm.staticOptions.experimentalMethods = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     },
     loadDrawingDesignData () {
@@ -56,6 +59,8 @@ export default {
       this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
         .then(function (res) {
           vm.staticOptions.drawingDesigns = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     },
     loadProcessingStatusData () {
@@ -63,6 +68,8 @@ export default {
       this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
         .then(function (res) {
           vm.staticOptions.processingStatuses = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     },
     loadDepartment () {
@@ -75,17 +82,21 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadAgreement () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/getAgreement')
+        .then(function (res) {
+          vm.staticOptions.agreements = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
     loadProcessing (processingId) {
       let vm = this
       this.$ajax.get('/api/sample/processing/' + processingId)
         .then(function (res) {
           vm.processingForm = res.data
-          if (res.data.customerId !== '') {
-            vm.loadCustomer(res.data.customerId)
-          }
-          if (res.data.receiverId !== '') {
-            vm.loadReceiver(res.data.receiverId)
-          }
         }).catch(function (error) {
           console.log(error.message)
           vm.$message(error.response.data.message)
@@ -103,6 +114,7 @@ export default {
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()
     this.loadDepartment()
+    this.loadAgreement()
     console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadProcessing(this.$route.params.id)

@@ -12,27 +12,43 @@
           <el-row :gutter="20">
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="委托编号">
-                <el-input name="agreementNumber" v-model="processForm.agreementNumber" autoComplete="agreementNumber"></el-input>
+                <el-select name="agreementNumber" filterable default-first-option v-model="processForm.agreementNumber" @change="getAgreementNumber">
+                <el-option v-for="item in staticOptions.agreements"
+                  :key="item.Id"
+                  :label="item.agreementNumber"
+                  :value="item.id">
+                </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品名称">
-                <el-input name="sampleName" v-model="processForm.sampleName" autoComplete="sampleName"></el-input>
+                <el-input name="sampleName" v-model="processForm.sampleName" readonly autoComplete="sampleName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品接收时间">
-                <el-date-picker type="date" placeholder="选择日期" v-model="processForm.receiveSampleTime" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" readonly v-model="processForm.receiveSampleTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="材质牌号">
-                <el-input name="materialNumber" v-model="processForm.materialNumber" autoComplete="materialNumber"></el-input>
+                <el-input name="materialNumber" v-model="processForm.materialNumber" readonly autoComplete="materialNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="要求完成时间">
-                <el-date-picker type="date" placeholder="选择日期" v-model="processForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" readonly v-model="processForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="来样编号">
+                <el-input name="sampleClientNumber" v-model="processForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="样品编号">
+                <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -40,9 +56,9 @@
                 <el-input name="sampleSubNumber" v-model="processForm.sampleSubNumber" autoComplete="sampleSubNumber"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-col :span="24">
               <el-form-item label="检测项目">
-                <el-input name="experimentalItem" v-model="processForm.experimentalItem" autoComplete="experimentalItem"></el-input>
+                <el-input type="textarea" name="experimentalItem" v-model="processForm.experimentalItem" autoComplete="experimentalItem"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -68,6 +84,28 @@
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="提交部门">
+                <el-select name="submitFrom" filterable default-first-option v-model="processForm.submitFrom">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.Id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="提交至">
+                <el-select name="submitTo" filterable default-first-option v-model="processForm.submitTo">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.Id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="当前流转状态">
                 <el-select name="processingStatus" filterable default-first-option v-model="processForm.processingStatus">
                 <el-option v-for="item in staticOptions.processingStatuses"
@@ -78,9 +116,9 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-col  :span="24">
               <el-form-item label="其他信息">
-                <el-input name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
+                <el-input type="textarea" name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -100,6 +138,7 @@ export default {
         {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false},
         {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
         {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
+        {'name': '数据库保存并提交', '8': '1', 'icon': 'el-icon-check', 'loading': false},
         {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false},
         {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
         {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
@@ -125,6 +164,9 @@ export default {
         this.copy()
       } else if (action.id === '7') {
         console.log(action.id)
+      } else if (action.id === '8') {
+        console.log(action.id)
+        this.submit()
       }
     },
     new () {
@@ -138,6 +180,7 @@ export default {
       this.$ajax.post('/api/sample/process', this.processForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
+          vm.$emit('updateProcessForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -147,6 +190,19 @@ export default {
       this.$ajax.get('/api/sample/process/delete/' + this.processForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
+          vm.$emit('deleteProcess')
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    getAgreementNumber  (val) {
+      this.$emit('getAgreementInfo', val)
+    },
+    submit () {
+      let vm = this
+      this.$ajax.post('/api/sample/processing', this.processForm)
+        .then(function (res) {
+          vm.$message('已经成功保存到数据库!')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

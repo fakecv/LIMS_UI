@@ -36,7 +36,8 @@ export default {
         address: '',
         logonAt: '',
         lastLogonAt: '',
-        logonTimes: 0
+        logonTimes: 0,
+        modifiable: false
       },
       userResetForm: {
         id: '',
@@ -57,7 +58,8 @@ export default {
         address: '',
         logonAt: '',
         lastLogonAt: '',
-        logonTimes: 0
+        logonTimes: 0,
+        modifiable: false
       },
       staticOptions: {
         userRoleGroups: [],
@@ -100,6 +102,7 @@ export default {
     },
     updateUserForm (event) {
       this.userForm.id = event.id
+      this.userForm.modifiable = true
     },
     updateUserRoleGroups (event) {
       let vm = this

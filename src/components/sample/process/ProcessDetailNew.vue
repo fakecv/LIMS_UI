@@ -1,13 +1,8 @@
 <template>
   <ProcessDetail
     :processForm="processForm"
-    :customerForm="customerForm"
-    :userForm="userForm"
     :staticOptions="staticOptions"
-    v-on:updateCustomer="updateCustomer"
-    v-on:reloadCustomerData="reloadCustomerData"
-    v-on:updateUser="updateUser"
-    v-on:reloadUserData="reloadUserData"
+    v-on:getAgreementInfo="getAgreementInfo"
     v-on:updateProcessForm="updateProcessForm"
     v-on:deleteProcessForm="resetProcessForm"
     v-on:new="resetProcessForm"
@@ -29,11 +24,15 @@ export default {
         receiveSampleTime: '',
         materialNumber: '',
         expectedCompletionTime: '',
+        sampleClientNumber: '',
+        sampleNumber: '',
         sampleSubNumber: '',
         experimentalItem: '',
         experimentalMethod: '',
         drawingDesign: '',
-        comments: '',
+        comment: '',
+        submitFrom: '',
+        submitTo: '',
         processingStatus: ''
       },
       processResetForm: {
@@ -43,17 +42,23 @@ export default {
         receiveSampleTime: '',
         materialNumber: '',
         expectedCompletionTime: '',
+        sampleClientNumber: '',
+        sampleNumber: '',
         sampleSubNumber: '',
         experimentalItem: '',
         experimentalMethod: '',
         drawingDesign: '',
-        comments: '',
+        comment: '',
+        submitFrom: '',
+        submitTo: '',
         processingStatus: ''
       },
       staticOptions: {
         experimentalMethods: [],
         drawingDesigns: [],
-        processingStatuses: []
+        processingStatuses: [],
+        departments: [],
+        agreements: []
       }
     }
   },
@@ -79,6 +84,26 @@ export default {
           vm.staticOptions.processingStatuses = res.data
         })
     },
+    loadDepartment () {
+      let vm = this
+      this.$ajax.get('/api/sample/department/getDepartment')
+        .then(function (res) {
+          vm.staticOptions.departments = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadAgreement () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/getAgreement')
+        .then(function (res) {
+          vm.staticOptions.agreements = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
     updateProcessForm (event) {
       this.processForm.id = event.id
     },
@@ -87,12 +112,27 @@ export default {
     },
     resetProcessForm () {
       this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
+    },
+    getAgreementInfo (agreementId) {
+      let vm = this
+      console.log('getAgreementInfo ' + agreementId)
+      this.staticOptions.agreements.forEach(agreement => {
+        console.log('getAgreementInfo ' + agreement.id)
+        if (agreement.id === agreementId) {
+          vm.processForm.sampleName = agreement.sampleName
+          vm.processForm.materialNumber = agreement.materialNumber
+          vm.processForm.receiveSampleTime = agreement.receiveSampleTime
+          vm.processForm.expectedCompletionTime = agreement.expectedCompletionTime
+        }
+      })
     }
   },
   mounted () {
     this.loadExperimentalMethodData()
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()
+    this.loadDepartment()
+    this.loadAgreement()
   }
 }
 </script>

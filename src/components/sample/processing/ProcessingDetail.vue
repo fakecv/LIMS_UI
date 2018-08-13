@@ -12,12 +12,18 @@
           <el-row :gutter="20">
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="委托编号">
-                <el-input name="agreementNumber" v-model="processingForm.agreementNumber" autoComplete="agreementNumber"></el-input>
+                <el-select name="agreementNumber" filterable default-first-option v-model="processingForm.agreementNumber" @change="getAgreementNumber">
+                <el-option v-for="item in staticOptions.agreements"
+                  :key="item.Id"
+                  :label="item.agreementNumber"
+                  :value="item.id">
+                </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品名称">
-                <el-input name="sampleName" v-model="processingForm.sampleName" autoComplete="sampleName"></el-input>
+                <el-input name="sampleName" v-model="processingForm.sampleName" readonly autoComplete="sampleName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -123,6 +129,7 @@ export default {
       this.$ajax.post('/api/sample/processing', this.processingForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
+          vm.$emit('updateProcessingForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -132,9 +139,13 @@ export default {
       this.$ajax.get('/api/sample/processing/delete/' + this.processingForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
+          vm.$emit('deleteProcessing')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    getAgreementNumber  (val) {
+      this.$emit('getAgreementInfo', val)
     }
   }
 }

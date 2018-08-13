@@ -1,13 +1,8 @@
 <template>
   <ProcessingDetail
     :processingForm="processingForm"
-    :customerForm="customerForm"
-    :userForm="userForm"
     :staticOptions="staticOptions"
-    v-on:updateCustomer="updateCustomer"
-    v-on:reloadCustomerData="reloadCustomerData"
-    v-on:updateUser="updateUser"
-    v-on:reloadUserData="reloadUserData"
+    v-on:getAgreementInfo="getAgreementInfo"
     v-on:updateProcessingForm="updateProcessingForm"
     v-on:deleteProcessingForm="resetProcessingForm"
     v-on:new="resetProcessingForm"
@@ -46,7 +41,8 @@ export default {
         experimentalMethods: [],
         drawingDesigns: [],
         processingStatuses: [],
-        departments: []
+        departments: [],
+        agreements: []
       }
     }
   },
@@ -82,6 +78,16 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadAgreement () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/getAgreement')
+        .then(function (res) {
+          vm.staticOptions.agreements = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
     updateProcessingForm (event) {
       this.processingForm.id = event.id
     },
@@ -90,6 +96,14 @@ export default {
     },
     resetProcessingForm () {
       this.processingForm = JSON.parse(JSON.stringify(this.processingResetForm))
+    },
+    getAgreementInfo (agreementId) {
+      let vm = this
+      this.staticOptions.agreements.forEach(agreement => {
+        if (agreement.id === agreementId) {
+          vm.processingForm.sampleName = agreement.sampleName
+        }
+      })
     }
   },
   mounted () {
@@ -97,6 +111,7 @@ export default {
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()
     this.loadDepartment()
+    this.loadAgreement()
   }
 }
 </script>

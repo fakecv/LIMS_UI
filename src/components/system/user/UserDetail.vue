@@ -17,7 +17,9 @@
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="用户密码">
-              <el-input type="password" name="password" v-model="userForm.password" autoComplete="off"></el-input>
+              <el-input type="password" name="password" v-model="userForm.password" :readonly="userForm.modifiable" autoComplete="off">
+                <el-button slot="append" @click.native="modifyPassword">更改密码</el-button>
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -253,6 +255,9 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    modifyPassword () {
+      this.$emit('modifyPassword')
     },
     handleSizeChange (val) {
       this.roleGroupRequestForm.itemsPerPage = val

@@ -46,34 +46,8 @@
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="来样编号">
-                <el-input name="sampleClientNumber" v-model="agreementForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="样品编号">
-                <el-input name="sampleNumber" v-model="agreementForm.sampleNumber" autoComplete="sampleNumber"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="检测项目">
-                <el-input name="experimentalItem" v-model="agreementForm.experimentalItem" autoComplete="experimentalItem"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="检测方法">
-                <el-select name="experimentalMethod" filterable default-first-option v-model="agreementForm.experimentalMethod">
-                <el-option v-for="item in staticOptions.experimentalMethods"
-                  :key="item.Id"
-                  :label="item.experimentalMethodNumber"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="其他信息">
-                <el-input name="comment" v-model="agreementForm.comment" autoComplete="comment"></el-input>
+                <el-input type="textarea" name="comment" v-model="agreementForm.comment" autoComplete="comment"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -109,7 +83,7 @@
                 <el-input name="noOfReport" v-model="agreementForm.noOfReport" autoComplete="noOfReport"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-col :span="12">
               <el-form-item label="样品检查">
                 <el-radio-group v-model="agreementForm.sampleCheckResult">
                   <el-radio label="yes">符合检测要求</el-radio>
@@ -151,7 +125,7 @@
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="委托方联系人电话">
+              <el-form-item label="委托方电话">
                 <el-input name="clietMobileNumber" v-model="customerForm.mobileNumber" autoComplete="clietMobileNumber"></el-input>
               </el-form-item>
             </el-col>
@@ -177,7 +151,7 @@
         <el-form :model="userForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="海瑞检测接收人">
+              <el-form-item label="检测接收人">
                 <el-input name="receiverName" v-model="userForm.name" autoComplete="receiverName">
                   <el-button slot="append" icon="el-icon-search" @click.native="openUser"></el-button>
                 </el-input>
@@ -206,6 +180,30 @@
           </el-row>
         </el-form>
       </el-container>
+    <el-container direction="vertical">
+      <el-row>
+        <input id="multipleFileUploadInput" type="file" name="files" class="file-input" multiple required />
+        <el-upload
+          class="upload-demo"
+          drag
+          action="dummy"
+          :file-list="fileList"
+          :auto-upload="true"
+          :http-request="uploadPics"
+          list-type="picture"
+          multiple>
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
+      </el-row>
+      <el-row>
+        <label style="width: 180px;">来样状态图片</label>
+      </el-row>
+      <el-row >
+        <img src="/api/agreement/downloadFile/auth0login.PNG" />
+      </el-row>
+    </el-container>
     </el-container>
     <el-dialog title="客户列表" :visible.sync="customerDialogFormVisible" :modal-append-to-body="false">
       <el-container style="padding: 10px">
@@ -323,10 +321,28 @@ export default {
         currentPage: 1
       },
       reportTransferModeOtherDisable: true,
-      experimentalCategoryOtherDisable: true
+      experimentalCategoryOtherDisable: true,
+      src: [],
+      fileList: []
     }
   },
   methods: {
+    uploadPics (content) {
+      var formData = new FormData()
+      let config = {
+        headers: {'Content-Type': 'multipart/form-data'}
+      }
+      formData.append('files', content.file)
+      let vm = this
+      this.$ajax.post('/api/sample/agreement/uploadMultipleFiles', formData, config)
+        .then(function (res) {
+          console.log(res.data)
+          vm.src = res.data
+          vm.$message('已经成功保存到服务器!')
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     actionHandle (action) {
       // var vm = this
       console.log(action.id)
@@ -374,6 +390,7 @@ export default {
       this.$ajax.post('/api/sample/agreement', this.agreementForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
+          vm.$emit('updateAgreementForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -383,6 +400,7 @@ export default {
       this.$ajax.get('/api/sample/agreement/delete/' + this.agreementForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
+          vm.$emit('deleteAgreement')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

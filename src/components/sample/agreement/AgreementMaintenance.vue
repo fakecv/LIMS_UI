@@ -18,32 +18,11 @@
               <el-input name="sampleName" v-model="agreementRequestForm.sampleName"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="来样编号">
-              <el-input name="sampleClientNumber" v-model="agreementRequestForm.sampleClientNumber"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="试样编号">
-              <el-input name="sampleNumber" v-model="agreementRequestForm.sampleNumber"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目">
-              <el-input name="experimentalItem" v-model="agreementRequestForm.experimentalItem"></el-input>
-            </el-form-item>
-          </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="检测方法">
-                <el-select name="createUserId" filterable default-first-option v-model="agreementRequestForm.experimentalMethod">
-                <el-option v-for="item in experimentalMethods"
-                  :key="item.Id"
-                  :label="item.experimentalMethodNumber"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+          </el-form-item>
         </el-row>
       </el-form>
     </el-container>
@@ -61,26 +40,6 @@
         <el-table-column
           prop="sampletName"
           label="样品名称"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="sampletClientNumber"
-          label="来样编号"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="sampletNumber"
-          label="试样编号"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="experimentalItem"
-          label="检测项目"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="experimentalMethod"
-          label="检测方法"
           width="180">
         </el-table-column>
       </el-table>
@@ -109,10 +68,6 @@ export default {
         agreementNumber: '',
         client: '',
         sampleName: '',
-        sampleClientNumber: '',
-        sampleNumber: '',
-        experimentalMethod: '',
-        experimentalItem: '',
         experimentalCategory: [],
         itemsPerPage: 20,
         currentPage: 1
@@ -132,13 +87,6 @@ export default {
       console.log(`当前页: ${val}`)
       this.onSubmit()
     },
-    loadData () {
-      let vm = this
-      this.$ajax.get('/api/sample/agreement/getAgreement')
-        .then(function (res) {
-          vm.tableData = res.data
-        })
-    },
     dblclick (row, event) {
       this.$router.push('/lims/agreementDetailEdit/' + row.id)
     },
@@ -149,18 +97,10 @@ export default {
           vm.tableData = res.data.pageResult || []
           vm.totalAgreements = res.data.totalAgreements || 0
         })
-    },
-    loadExperimentalMethodData () {
-      let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
-        .then(function (res) {
-          vm.experimentalMethods = res.data
-        })
     }
   },
   mounted () {
     this.onSubmit()
-    this.loadExperimentalMethodData()
   }
 
 }

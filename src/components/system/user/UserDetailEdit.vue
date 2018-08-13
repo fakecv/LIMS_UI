@@ -1,11 +1,13 @@
 <template>
   <userDetail ref="userDetail" :userForm="userForm"
     :staticOptions="staticOptions"
+    v-on:modifyPassword="modifyPassword"
     v-on:updateUserRoleGroups="updateUserRoleGroups"
     v-on:reloadUserRoleGroups="reloadUserRoleGroups"
     v-on:deleteUserRoleGroups="deleteUserRoleGroups"
     v-on:new="resetUserForm"
     v-on:copy="resetUserId"
+    v-on:updateUserForm="updateUserForm"
     v-on:deleteUser="resetUserForm"/>
 </template>
 
@@ -35,7 +37,8 @@ export default {
         address: '',
         logonAt: '',
         lastLogonAt: '',
-        logonTimes: ''
+        logonTimes: '',
+        modifiable: true
       },
       userResetForm: {
         id: '',
@@ -56,7 +59,8 @@ export default {
         address: '',
         logonAt: '',
         lastLogonAt: '',
-        logonTimes: ''
+        logonTimes: '',
+        modifiable: false
       },
       staticOptions: {
         userRoleGroups: [],
@@ -74,12 +78,16 @@ export default {
   methods: {
     updateUserForm (event) {
       this.userForm.id = event.id
+      this.userForm.modifiable = true
     },
     resetUserId () {
       this.userForm.id = ''
     },
     resetUserForm () {
       this.userForm = JSON.parse(JSON.stringify(this.userResetForm))
+    },
+    modifyPassword () {
+      this.userForm.modifiable = false
     },
     loadDepartment () {
       let vm = this
@@ -141,6 +149,7 @@ export default {
       this.$ajax.get('/api/users/' + userId)
         .then(function (res) {
           vm.userForm = res.data
+          console.log('load user ' + vm.userForm.modifiable)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

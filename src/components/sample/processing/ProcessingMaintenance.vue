@@ -50,12 +50,18 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row :gutter="20">
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+          </el-form-item>
+        </el-row>
       </el-form>
     </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
           prop="agreementNumber"
           label="委托编号"
+          :fomatter="agreementFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -81,16 +87,19 @@
         <el-table-column
           prop="submitFrom"
           label="提交人"
+          :fomatter="departmentFormatter"
           width="180">
         </el-table-column>
         <el-table-column
           prop="submitTo"
+          :fomatter="departmentFormatter"
           label="提交至"
           width="180">
         </el-table-column>
         <el-table-column
           prop="processingStatus"
           label="流转状态"
+          :fomatter="processingStatusFormatter"
           width="180">
         </el-table-column>
       </el-table>
@@ -128,6 +137,9 @@ export default {
       },
       experimentalMethods: [],
       drawingDesigns: [],
+      departments: [],
+      agreements: [],
+      processStatuses: [],
       columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 8 }
     }
   },
@@ -170,8 +182,84 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
         .then(function (res) {
-          vm.staticOptions.drawingDesigns = res.data
+          vm.drawingDesigns = res.data
         })
+    },
+    loadDepartment () {
+      let vm = this
+      this.$ajax.get('/api/sample/department/getDepartment')
+        .then(function (res) {
+          vm.departments = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadAgreement () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/getAgreement')
+        .then(function (res) {
+          vm.agreements = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadProcessingStatusData () {
+      let vm = this
+      this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
+        .then(function (res) {
+          vm.processingStatuses = res.data
+        })
+    },
+    departmentFormatter (row, column) {
+      let name = ''
+      this.departments.forEach(item => {
+        if (row.department === item.id) {
+          name = item.departmentName
+        }
+      })
+      return name
+    },
+    experimentalMethodFormatter (row, column) {
+      let name = ''
+      this.experimentalMethods.forEach(item => {
+        if (row.experimentalMethod === item.id) {
+          name = item.experimentalMethodName
+        }
+      })
+      return name
+    },
+    drawingDesignFormatter (row, column) {
+      let name = ''
+      this.drawingDesigns.forEach(item => {
+        if (row.drawingDesign === item.id) {
+          name = item.drawingDesignName
+        }
+      })
+      return name
+    },
+    processingStatusFormatter (row, column) {
+      let name = ''
+      this.processStatuses.forEach(item => {
+        if (row.processStatus === item.id) {
+          name = item.processStatusName
+        }
+      })
+      return name
+    },
+    agreementFormatter (row, column) {
+      let name = ''
+      this.agreements.forEach(item => {
+        if (row.agreement === item.id) {
+          name = item.agreementName
+        }
+      })
+      return name
+    },
+    dateFormatter (row, column) {
+      if (row.graduateOn) {
+        return row.graduateOn.slice(0, 10)
+      }
     }
   },
   mounted () {
