@@ -182,7 +182,6 @@
       </el-container>
     <el-container direction="vertical">
       <el-row>
-        <input id="multipleFileUploadInput" type="file" name="files" class="file-input" multiple required />
         <el-upload
           class="upload-demo"
           drag
@@ -196,13 +195,14 @@
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
           <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
+        <el-button @click="downloadImage">下载图片</el-button>
       </el-row>
       <el-row>
         <label style="width: 180px;">来样状态图片</label>
       </el-row>
-      <el-row >
-        <img src="/api/agreement/downloadFile/auth0login.PNG" />
-      </el-row>
+
+        <img :src="src" class="img-rounded img-responsive" alt="JSA-About Image" style="width: 100%;height: 100px;display: block;"/>
+
     </el-container>
     </el-container>
     <el-dialog title="客户列表" :visible.sync="customerDialogFormVisible" :modal-append-to-body="false">
@@ -337,8 +337,24 @@ export default {
       this.$ajax.post('/api/sample/agreement/uploadMultipleFiles', formData, config)
         .then(function (res) {
           console.log(res.data)
-          vm.src = res.data
+          // vm.src = res.data
           vm.$message('已经成功保存到服务器!')
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    downloadImage () {
+      let vm = this
+      var reader = new FileReader()
+      console.log(reader)
+      this.$ajax.get('/api/sample/agreement/downloadFile/' + 'auth0login.PNG', { responseType: 'blob' })
+        .then(function (res) {
+          vm.$message('已经成功保存到服务器!')
+          reader.readAsDataURL(res.data)
+          reader.onload = function () {
+            var imageDataUrl = reader.result
+            vm.src = imageDataUrl
+          }
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
