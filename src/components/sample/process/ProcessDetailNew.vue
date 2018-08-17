@@ -115,9 +115,7 @@ export default {
     },
     getAgreementInfo (agreementId) {
       let vm = this
-      console.log('getAgreementInfo ' + agreementId)
       this.staticOptions.agreements.forEach(agreement => {
-        console.log('getAgreementInfo ' + agreement.id)
         if (agreement.id === agreementId) {
           vm.processForm.sampleName = agreement.sampleName
           vm.processForm.materialNumber = agreement.materialNumber

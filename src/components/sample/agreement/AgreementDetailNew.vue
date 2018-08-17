@@ -41,7 +41,8 @@ export default {
         experimentalCategoryOther: '',
         privacyDeclaim: '',
         customerId: '',
-        receiverId: ''
+        receiverId: '',
+        imageNameList: []
       },
       agreementResetForm: {
         id: '',
@@ -62,7 +63,8 @@ export default {
         experimentalCategoryOther: '',
         privacyDeclaim: '',
         customerId: '',
-        receiverId: ''
+        receiverId: '',
+        imageNameList: []
       },
       customerForm: {},
       userForm: {},

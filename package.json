@@ -32,6 +32,7 @@
     "vue-clipboard2": "^0.1.0",
     "vue-dynamic-forms": "^1.1.0",
     "vue-fullcalendar": "^1.0.9",
+    "vue-images": "^1.1.0",
     "vue-jwt-decode": "^0.1.0",
     "vue-router": "^3.0.1",
     "vue-schedule": "^2.0.4",

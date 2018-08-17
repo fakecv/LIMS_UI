@@ -182,27 +182,41 @@
       </el-container>
     <el-container direction="vertical">
       <el-row>
-        <el-upload
+        <el-upload ref="upload"
           class="upload-demo"
           drag
           action="dummy"
+          :before-remove="beforeRemove"
           :file-list="fileList"
-          :auto-upload="true"
+          :auto-upload="false"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :on-change="handleChange"
           :http-request="uploadPics"
           list-type="picture"
           multiple>
           <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击选取文件</em></div>
           <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
-        <el-button @click="downloadImage">下载图片</el-button>
+        <el-button @click="downloadImage">上传图片</el-button>
       </el-row>
-      <el-row>
+      <div id="demo" v-if="src.length>0">
+        <el-row>
         <label style="width: 180px;">来样状态图片</label>
-      </el-row>
-
-        <img :src="src" class="img-rounded img-responsive" alt="JSA-About Image" style="width: 100%;height: 100px;display: block;"/>
-
+        <el-tag v-for="(item,index) in src" :key="index" :closable="true" @close="removeImage(item)">{{item.caption}}</el-tag>
+        </el-row>
+        <vue-images :imgs="src"
+                    :modalclose="modalclose"
+                    :keyinput="keyinput"
+                    :mousescroll="mousescroll"
+                    :showclosebutton="showclosebutton"
+                    :showcaption="showcaption"
+                    :imagecountseparator="imagecountseparator"
+                    :showimagecount="showimagecount"
+                    :showthumbnails="showthumbnails">
+        </vue-images>
+      </div>
     </el-container>
     </el-container>
     <el-dialog title="客户列表" :visible.sync="customerDialogFormVisible" :modal-append-to-body="false">
@@ -293,6 +307,8 @@
 </template>
 
 <script>
+
+import vueImages from 'vue-images'
 export default {
   name: 'agreementDetail',
   props: ['agreementForm', 'staticOptions', 'customerForm', 'userForm'],
@@ -323,41 +339,91 @@ export default {
       reportTransferModeOtherDisable: true,
       experimentalCategoryOtherDisable: true,
       src: [],
-      fileList: []
+      fileList: [],
+      modalclose: true,
+      keyinput: true,
+      mousescroll: true,
+      showclosebutton: true,
+      showcaption: true,
+      imagecountseparator: 'of',
+      showimagecount: true,
+      showthumbnails: true
     }
   },
+  components: {
+    vueImages: vueImages
+  },
   methods: {
-    uploadPics (content) {
+    removeImage (item) {
+      console.log(item.caption)
+      // this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
+    },
+    uploadPics () {
       var formData = new FormData()
       let config = {
         headers: {'Content-Type': 'multipart/form-data'}
       }
-      formData.append('files', content.file)
+      // console.log(content)
+      console.log(this.fileList)
+      // formData.append('files', content.file)
+      // formData.append('files', this.fileList[0].raw)
+      this.fileList.forEach(file => {
+        formData.append('files', file.raw)
+      })
+      formData.append('agreementNumber', this.agreementForm.agreementNumber)
       let vm = this
+      // vm.$ajax.post('/api/sample/agreement/uploadMultipleFiles', this.fileList)
       this.$ajax.post('/api/sample/agreement/uploadMultipleFiles', formData, config)
         .then(function (res) {
-          console.log(res.data)
+          // console.log(res.data)
           // vm.src = res.data
           vm.$message('已经成功保存到服务器!')
+          vm.loading = false
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
+    handleChange (file, fileList) {
+      console.log('handleChange')
+      console.log(file, fileList)
+      this.fileList = fileList
+    },
+    handleRemove (file, fileList) {
+      console.log('handleRemove')
+      console.log(file, fileList)
+    },
+    handlePreview (file) {
+      console.log('handlePreview')
+      console.log(file)
+    },
+    beforeRemove (file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`)
+    },
     downloadImage () {
-      let vm = this
-      var reader = new FileReader()
-      console.log(reader)
-      this.$ajax.get('/api/sample/agreement/downloadFile/' + 'auth0login.PNG', { responseType: 'blob' })
-        .then(function (res) {
-          vm.$message('已经成功保存到服务器!')
-          reader.readAsDataURL(res.data)
-          reader.onload = function () {
-            var imageDataUrl = reader.result
-            vm.src = imageDataUrl
-          }
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
+      if (this.agreementForm.agreementNumber === '') {
+        this.$alert('请先输入委托协议书编号', '错误信息', {
+          confirmButtonText: '确定'
         })
+      } else {
+        this.uploadPics()
+        this.loading = true
+        // this.$refs.upload.submit()
+        this.$refs.upload.clearFiles()
+      }
+      // let vm = this
+      // var reader = new FileReader()
+      // this.$ajax.get('/api/sample/agreement/downloadFile/' + 'auth0login.PNG', { responseType: 'blob' })
+      //   .then(function (res) {
+      //     vm.$message('已经成功保存到服务器!')
+      //     reader.readAsDataURL(res.data)
+      //     reader.onload = function () {
+      //       var imageCP = {}
+      //       imageCP.imageUrl = reader.result
+      //       imageCP.caption = '<a href="#">Photo by 1</a>'
+      //     }
+      //   }).catch(function (error) {
+      //     vm.$message(error.response.data.message)
+      //   })
     },
     actionHandle (action) {
       // var vm = this
