@@ -369,12 +369,12 @@ export default {
           vm.fileList.forEach(file => {
             vm.downloadToFrontEnd(file.raw)
           })
+          vm.fileList = []
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
     handleChange (file, fileList) {
-      console.log('handleChange')
       this.fileList = fileList
     },
     downloadToFrontEnd (file) {
@@ -400,8 +400,10 @@ export default {
           confirmButtonText: '确定'
         })
       } else {
-        this.uploadPics()
-        this.$refs.upload.clearFiles()
+        if (this.fileList.length > 0) {
+          this.uploadPics()
+          this.$refs.upload.clearFiles()
+        }
       }
     },
     actionHandle (action) {

@@ -56,7 +56,7 @@
         <el-table-column
           prop="agreementNumber"
           label="委托编号"
-          :fomatter="agreementFormatter"
+          :formatter="agreementFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -65,9 +65,15 @@
           width="180">
         </el-table-column>
         <el-table-column
+          prop="processingStatus"
+          label="当前流转状态"
+          :formatter="processingStatusFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
           prop="receiveSampleTime"
           label="接收样品时间"
-          :formatter="dateFormatter"
+          :formatter="receiveSampleTimeFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -78,7 +84,7 @@
         <el-table-column
           prop="expectedCompletionTime"
           label="要求完成时间"
-          :formatter="dateFormatter"
+          :formatter="expectedCompletionTimeFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -94,19 +100,13 @@
         <el-table-column
           prop="experimentalMethod"
           label="检测方法"
-          :fomatter="experimentalMethodFormatter"
+          :formatter="experimentalMethodFormatter"
           width="180">
         </el-table-column>
         <el-table-column
           prop="drawingDesign"
           label="加工图号"
-          :fomatter="drawingDesignFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="processingStatus"
-          label="当前流转状态"
-          :fomatter="processingStatusFormatter"
+          :formatter="drawingDesignFormatter"
           width="180">
         </el-table-column>
       </el-table>
@@ -145,7 +145,8 @@ export default {
       experimentalMethods: [],
       drawingDesigns: [],
       agreements: [],
-      processStatuses: [],
+      processingStatuses: [],
+      departments: [],
       columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 8 }
     }
   },
@@ -193,6 +194,25 @@ export default {
           vm.drawingDesigns = res.data
         })
     },
+    loadDepartment () {
+      let vm = this
+      this.$ajax.get('/api/sample/department/getDepartment')
+        .then(function (res) {
+          vm.departments = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadAgreement () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/getAgreement')
+        .then(function (res) {
+          vm.agreements = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
     loadProcessingStatusData () {
       let vm = this
       this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
@@ -211,9 +231,9 @@ export default {
     },
     processingStatusFormatter (row, column) {
       let name = ''
-      this.processStatuses.forEach(item => {
-        if (row.processStatus === item.id) {
-          name = item.processStatusName
+      this.processingStatuses.forEach(item => {
+        if (row.processingStatus === item.id) {
+          name = item.processingStatusName
         }
       })
       return name
@@ -227,16 +247,6 @@ export default {
       })
       return name
     },
-    loadAgreement () {
-      let vm = this
-      this.$ajax.get('/api/sample/agreement/getAgreement')
-        .then(function (res) {
-          vm.agreements = res.data
-        }).catch(function (error) {
-          console.log(error.message)
-          vm.$message(error.response.data.message)
-        })
-    },
     drawingDesignFormatter (row, column) {
       let name = ''
       this.drawingDesigns.forEach(item => {
@@ -249,15 +259,20 @@ export default {
     agreementFormatter (row, column) {
       let name = ''
       this.agreements.forEach(item => {
-        if (row.agreement === item.id) {
-          name = item.agreementName
+        if (row.agreementNumber === item.id) {
+          name = item.agreementNumber
         }
       })
       return name
     },
-    dateFormatter (row, column) {
-      if (row.graduateOn) {
-        return row.graduateOn.slice(0, 10)
+    receiveSampleTimeFormatter (row, column) {
+      if (row.receiveSampleTime) {
+        return row.receiveSampleTime.slice(0, 10)
+      }
+    },
+    expectedCompletionTimeFormatter (row, column) {
+      if (row.expectedCompletionTime) {
+        return row.expectedCompletionTime.slice(0, 10)
       }
     }
   },
@@ -265,6 +280,9 @@ export default {
     this.onSubmit()
     this.loadExperimentalMethodData()
     this.loadDrawingDesignData()
+    this.loadDepartment()
+    this.loadAgreement()
+    this.loadProcessingStatusData()
   }
 }
 </script>

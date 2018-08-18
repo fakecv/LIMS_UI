@@ -61,12 +61,18 @@
         <el-table-column
           prop="agreementNumber"
           label="委托编号"
-          :fomatter="agreementFormatter"
+          :formatter="agreementFormatter"
           width="180">
         </el-table-column>
         <el-table-column
           prop="sampleName"
           label="样品名称"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="processingStatus"
+          label="流转状态"
+          :formatter="processingStatusFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -87,19 +93,13 @@
         <el-table-column
           prop="submitFrom"
           label="提交人"
-          :fomatter="departmentFormatter"
+          :formatter="submitFromFormatter"
           width="180">
         </el-table-column>
         <el-table-column
           prop="submitTo"
-          :fomatter="departmentFormatter"
+          :formatter="submitToFormatter"
           label="提交至"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="processingStatus"
-          label="流转状态"
-          :fomatter="processingStatusFormatter"
           width="180">
         </el-table-column>
       </el-table>
@@ -139,7 +139,7 @@ export default {
       drawingDesigns: [],
       departments: [],
       agreements: [],
-      processStatuses: [],
+      processingStatuses: [],
       columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 8 }
     }
   },
@@ -211,10 +211,19 @@ export default {
           vm.processingStatuses = res.data
         })
     },
-    departmentFormatter (row, column) {
+    submitFromFormatter (row, column) {
       let name = ''
       this.departments.forEach(item => {
-        if (row.department === item.id) {
+        if (row.submitFrom === item.id) {
+          name = item.departmentName
+        }
+      })
+      return name
+    },
+    submitToFormatter (row, column) {
+      let name = ''
+      this.departments.forEach(item => {
+        if (row.submitTo === item.id) {
           name = item.departmentName
         }
       })
@@ -240,9 +249,9 @@ export default {
     },
     processingStatusFormatter (row, column) {
       let name = ''
-      this.processStatuses.forEach(item => {
-        if (row.processStatus === item.id) {
-          name = item.processStatusName
+      this.processingStatuses.forEach(item => {
+        if (row.processingStatus === item.id) {
+          name = item.processingStatusName
         }
       })
       return name
@@ -250,15 +259,20 @@ export default {
     agreementFormatter (row, column) {
       let name = ''
       this.agreements.forEach(item => {
-        if (row.agreement === item.id) {
-          name = item.agreementName
+        if (row.agreementNumber === item.id) {
+          name = item.agreementNumber
         }
       })
       return name
     },
-    dateFormatter (row, column) {
-      if (row.graduateOn) {
-        return row.graduateOn.slice(0, 10)
+    receiveSampleTimeFormatter (row, column) {
+      if (row.receiveSampleTime) {
+        return row.receiveSampleTime.slice(0, 10)
+      }
+    },
+    expectedCompletionTimeFormatter (row, column) {
+      if (row.expectedCompletionTime) {
+        return row.expectedCompletionTime.slice(0, 10)
       }
     }
   },
@@ -266,6 +280,9 @@ export default {
     this.onSubmit()
     this.loadExperimentalMethodData()
     this.loadDrawingDesignData()
+    this.loadDepartment()
+    this.loadAgreement()
+    this.loadProcessingStatusData()
   }
 }
 </script>
