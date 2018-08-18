@@ -12,6 +12,8 @@
     v-on:deleteAgreementForm="resetAgreementForm"
     v-on:new="resetAgreementForm"
     v-on:copy="resetAgreementId"
+    v-on:removeImage="removeImage"
+    v-on:addImage="addImage"
     />
 </template>
 
@@ -73,7 +75,8 @@ export default {
         customers: [],
         users: [],
         totalCustomers: 0,
-        totalUsers: 0
+        totalUsers: 0,
+        images: []
       },
       customerRequestForm: {
         name: '',
@@ -151,6 +154,29 @@ export default {
       this.userForm.fax = row.fax
       this.userForm.email = row.email
       this.userForm.address = row.address
+    },
+    addImage (imageCP) {
+      console.log('addImage')
+      console.log(imageCP.caption)
+      this.agreementForm.imageNameList.push(imageCP.caption)
+      this.staticOptions.images.push(imageCP)
+    },
+    removeImage (item) {
+      console.log('removeImage')
+      let vm = this
+      let downloadFormTemp = {agreementNumber: this.agreementForm.agreementNumber, fileName: item.caption}
+      this.$ajax.post('/api/sample/agreement/deleteFile', downloadFormTemp)
+        .then(function (res) {
+          vm.staticOptions.images.forEach(image => {
+            console.log(image.caption)
+            if (image.caption === item.caption) {
+              vm.staticOptions.images.splice(vm.staticOptions.images.indexOf(image), 1)
+              vm.agreementForm.imageNameList.splice(vm.agreementForm.imageNameList.indexOf(item.caption), 1)
+            }
+          })
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     }
   },
   mounted () {

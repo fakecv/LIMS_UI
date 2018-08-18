@@ -11,6 +11,8 @@
     v-on:deleteAgreement="resetAgreementForm"
     v-on:new="resetAgreementForm"
     v-on:copy="resetAgreementId"
+    v-on:removeImage="removeImage"
+    v-on:addImage="addImage"
     />
 </template>
 
@@ -74,7 +76,8 @@ export default {
         customers: [],
         users: [],
         totalCustomers: 0,
-        totalUsers: 0
+        totalUsers: 0,
+        images: []
       },
       customerRequestForm: {
         name: '',
@@ -107,6 +110,11 @@ export default {
           if (res.data.receiverId !== '') {
             vm.loadReceiver(res.data.receiverId)
           }
+          if (res.data.imageNameList.length > 0) {
+            vm.agreementForm.imageNameList.forEach(image => {
+              vm.downloadToFrontEnd(image, vm.agreementForm.agreementNumber)
+            })
+          }
         }).catch(function (error) {
           console.log(error.message)
           vm.$message(error.response.data.message)
@@ -129,6 +137,23 @@ export default {
           vm.userForm = res.data
         }).catch(function (error) {
           console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
+    downloadToFrontEnd (fileName, agreementId) {
+      let vm = this
+      let downloadFormTemp = {agreementNumber: agreementId, fileName: fileName}
+      var reader = new FileReader()
+      this.$ajax.post('/api/sample/agreement/downloadFile', downloadFormTemp, { responseType: 'blob' })
+        .then(function (res) {
+          reader.readAsDataURL(res.data)
+          reader.onload = function () {
+            var imageCP = {}
+            imageCP.imageUrl = reader.result
+            imageCP.caption = fileName
+            vm.staticOptions.images.push(imageCP)
+          }
+        }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
@@ -185,6 +210,29 @@ export default {
       this.userForm.fax = row.fax
       this.userForm.email = row.email
       this.userForm.address = row.address
+    },
+    addImage (imageCP) {
+      console.log('addImage')
+      console.log(imageCP.caption)
+      this.agreementForm.imageNameList.push(imageCP.caption)
+      this.staticOptions.images.push(imageCP)
+    },
+    removeImage (item) {
+      console.log('removeImage')
+      let vm = this
+      let downloadFormTemp = {agreementNumber: this.agreementForm.agreementNumber, fileName: item.caption}
+      this.$ajax.post('/api/sample/agreement/deleteFile', downloadFormTemp)
+        .then(function (res) {
+          vm.staticOptions.images.forEach(image => {
+            console.log(image.caption)
+            if (image.caption === item.caption) {
+              vm.staticOptions.images.splice(vm.staticOptions.images.indexOf(image), 1)
+              vm.agreementForm.imageNameList.splice(vm.agreementForm.imageNameList.indexOf(item.caption), 1)
+            }
+          })
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     }
   },
   mounted () {
