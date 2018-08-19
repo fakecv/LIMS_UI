@@ -102,18 +102,18 @@ export default {
   methods: {
     actionHandle (action) {
       if (action.id === '1') {
-        this.saveToDB()
+        // this.saveToDB()
       } else if (action.id === '2') {
         console.log(action.id)
-        this.delete()
+        // this.delete()
       } else if (action.id === '3') {
         console.log(action.id)
       } else if (action.id === '4') {
         console.log(action.id)
       } else if (action.id === '5') {
-        this.new()
+        // this.new()
       } else if (action.id === '6') {
-        this.copy()
+        // this.copy()
       } else if (action.id === '7') {
         console.log(action.id)
       }

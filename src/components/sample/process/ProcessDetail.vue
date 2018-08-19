@@ -138,7 +138,7 @@ export default {
         {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false},
         {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
         {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
-        {'name': '数据库保存并提交', '8': '1', 'icon': 'el-icon-check', 'loading': false},
+        {'name': '数据库保存并提交', 'id': '8', 'icon': 'el-icon-check', 'loading': false},
         {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false},
         {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
         {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
@@ -150,7 +150,7 @@ export default {
   methods: {
     actionHandle (action) {
       if (action.id === '1') {
-        this.saveToDB()
+        console.log(action.id)
       } else if (action.id === '2') {
         console.log(action.id)
         this.delete()
@@ -200,9 +200,10 @@ export default {
     },
     submit () {
       let vm = this
-      this.$ajax.post('/api/sample/processing', this.processForm)
+      this.$ajax.post('/api/sample/process/submitProcess', this.processForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
+          vm.$emit('updateProcessForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

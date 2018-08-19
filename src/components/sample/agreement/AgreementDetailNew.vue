@@ -10,7 +10,7 @@
     v-on:reloadUserData="reloadUserData"
     v-on:updateAgreementForm="updateAgreementForm"
     v-on:deleteAgreementForm="resetAgreementForm"
-    v-on:new="resetAgreementForm"
+    v-on:new="newAgreementForm"
     v-on:copy="resetAgreementId"
     v-on:removeImage="removeImage"
     v-on:addImage="addImage"
@@ -103,9 +103,23 @@ export default {
     },
     resetAgreementId () {
       this.agreementForm.id = ''
+      this.staticOptions.images.length = 0
+    },
+    newAgreementForm () {
+      // it's better than vm.staticOptions.images = [], any reference will be also cleared.
+      this.agreementForm = JSON.parse(JSON.stringify(this.agreementResetForm))
+      this.staticOptions.images.length = 0
     },
     resetAgreementForm () {
-      this.agreementForm = JSON.parse(JSON.stringify(this.agreementResetForm))
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/deleteFileFolder/' + this.agreementForm.agreementNumber)
+        .then(function (res) {
+          // it's better than vm.staticOptions.images = [], any reference will be also cleared.
+          vm.agreementForm = JSON.parse(JSON.stringify(vm.agreementResetForm))
+          vm.staticOptions.images.length = 0
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     reloadCustomerData () {
       let vm = this

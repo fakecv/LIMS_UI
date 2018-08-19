@@ -375,6 +375,33 @@ export default {
         })
     },
     handleChange (file, fileList) {
+      // console.log('handleChange')
+      // if (this.agreementForm.imageNameList.indexOf(file.name) !== -1) {
+      //   this.$confirm('此操作将覆盖原有' + file.name + '文件, 是否继续?', '提示', {
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //     type: 'warning'
+      //   }).then(() => {
+      //     this.$message({
+      //       type: 'success',
+      //       message: '添加成功!'
+      //     })
+      //   }).catch(() => {
+      //     fileList.splice(fileList.indexOf(file), 1)
+      //     this.$message({
+      //       type: 'info',
+      //       message: '已取消添加'
+      //     })
+      //   })
+      // }
+      // if (fileList.indexOf(file) !== -1) {
+      //   this.$alert('不可重复添加！', '提示', {
+      //     confirmButtonText: '确定',
+      //     callback: action => {
+      //       fileList.splice(fileList.indexOf(file), 1)
+      //     }
+      //   })
+      // }
       this.fileList = fileList
     },
     downloadToFrontEnd (file) {
@@ -396,7 +423,7 @@ export default {
     },
     uploadToServer () {
       if (this.agreementForm.agreementNumber === '') {
-        this.$alert('请先输入委托协议书编号', '错误信息', {
+        this.$alert('请先输入委托协议书编号', '提示', {
           confirmButtonText: '确定'
         })
       } else {

@@ -29,21 +29,16 @@
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目">
-              <el-input name="experimentalItem" v-model="processRequestForm.experimentalItem"></el-input>
+            <el-form-item label="流转状态">
+              <el-select name="processingStatus" filterable default-first-option v-model="processRequestForm.processingStatus">
+              <el-option v-for="item in processingStatuses"
+                :key="item.Id"
+                :label="item.processingStatusName"
+                :value="item.id">
+              </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="检测方法">
-                <el-select name="createUserId" filterable default-first-option v-model="processRequestForm.experimentalMethod">
-                <el-option v-for="item in experimentalMethods"
-                  :key="item.Id"
-                  :label="item.experimentalMethodNumber"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-form-item>

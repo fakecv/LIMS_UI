@@ -28,25 +28,48 @@
               <el-input name="experimentalItem" v-model="processingRequestForm.experimentalItem"></el-input>
             </el-form-item>
           </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="检测方法">
-                <el-select name="createUserId" filterable default-first-option v-model="processingRequestForm.experimentalMethod">
-                <el-option v-for="item in experimentalMethods"
-                  :key="item.Id"
-                  :label="item.experimentalMethodNumber"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="检测方法">
+              <el-select name="experimentalMethod" filterable default-first-option v-model="processingRequestForm.experimentalMethod">
+              <el-option v-for="item in experimentalMethods"
+                :key="item.Id"
+                :label="item.experimentalMethodNumber"
+                :value="item.id">
+              </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="流转状态">
+              <el-select name="processingStatus" filterable default-first-option v-model="processingRequestForm.processingStatus">
+              <el-option v-for="item in processingStatuses"
+                :key="item.Id"
+                :label="item.processingStatusName"
+                :value="item.id">
+              </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="提交人">
-              <el-input name="submitFrom" v-model="processingRequestForm.experimentalItem"></el-input>
+              <el-select name="submitFrom" filterable default-first-option v-model="processingRequestForm.submitFrom">
+              <el-option v-for="item in departments"
+                :key="item.Id"
+                :label="item.departmentName"
+                :value="item.id">
+              </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="提交至">
-              <el-input name="submitTo" v-model="processingRequestForm.experimentalItem"></el-input>
+              <el-select name="submitTo" filterable default-first-option v-model="processingRequestForm.submitTo">
+              <el-option v-for="item in departments"
+                :key="item.Id"
+                :label="item.departmentName"
+                :value="item.id">
+              </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
