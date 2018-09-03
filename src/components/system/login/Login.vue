@@ -1,5 +1,5 @@
 <template>
-<div class="app">
+<div class="login">
   <el-container class="login-container">
     <el-header class="login-header" style="height: 150px">
       登录系统
@@ -144,9 +144,6 @@ export default {
 }
 </script>
 <style scoped>
-  body {
-    background: #37373f;
-  }
   .login-container {
     border-radius: 5px;
     background-clip: padding-box;
@@ -179,7 +176,7 @@ export default {
     padding: 30px 10px 10px 0px;
     background: #e38335
   }
-  .app {
+  .login {
     position: fixed;
     width: 100%;
     height: 100%;

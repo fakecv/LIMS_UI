@@ -27,11 +27,6 @@ export default {
       appClass: ''
     }
   },
-  watch: {
-    authenticated: function (val) {
-      this.appClass = val ? 'appDefault' : 'app'
-    }
-  },
   methods: {
     login,
     logout
@@ -44,6 +39,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow-y:scroll;
+  background: white;
 }
 .container {
   min-height: 100%;

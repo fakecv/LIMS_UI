@@ -27,7 +27,7 @@ export default class AuthService {
   }
 
   handleAuthentication () {
-    console.log('handleAuthentication')
+    // console.log('handleAuthentication')
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult)
@@ -44,7 +44,6 @@ export default class AuthService {
     var jwtDec = require('jwt-decode')
     var token = (authResult).substring(7)
     var decoded = jwtDec(token)
-    console.log(decoded)
     // Set the time that the access token will expire at
     let expiresAt = JSON.stringify(
       decoded.exp * 1000 + new Date().getTime()
@@ -56,7 +55,7 @@ export default class AuthService {
     // localStorage.setItem('userProfile', decoded.sub)
     this.authNotifier.emit('authChange', { authenticated: true })
     // 正式上线应该跳转至欢迎页面，或者流转状态列表
-    router.replace({name: 'userDetailNew'})
+    router.replace({name: 'processMaintenance'})
   }
 
   logout () {
