@@ -18,6 +18,9 @@ import DrawingDesignMaintenance from '@/components/sample/drawingdesign/DrawingD
 import ExperimentalMethodDetailNew from '@/components/sample/experimentalmethod/ExperimentalMethodDetailNew'
 import ExperimentalMethodDetailEdit from '@/components/sample/experimentalmethod/ExperimentalMethodDetailEdit'
 import ExperimentalMethodMaintenance from '@/components/sample/experimentalmethod/ExperimentalMethodMaintenance'
+import ExperimentalItemDetailNew from '@/components/sample/experimentalitem/ExperimentalItemDetailNew'
+import ExperimentalItemDetailEdit from '@/components/sample/experimentalitem/ExperimentalItemDetailEdit'
+import ExperimentalItemMaintenance from '@/components/sample/experimentalitem/ExperimentalItemMaintenance'
 import EditorFormAside from '@/views/editor/form/aside'
 import EditorFormMain from '@/views/editor/form/main'
 import EditorTableAside from '@/views/editor/table/aside'
@@ -217,6 +220,21 @@ const router = new Router({
           path: 'experimentalMethodDetailNew',
           name: 'experimentalMethodDetailNew',
           component: ExperimentalMethodDetailNew
+        },
+        {
+          path: 'experimentalItemDetailEdit/:id',
+          name: 'experimentalItemDetailEdit',
+          component: ExperimentalItemDetailEdit
+        },
+        {
+          path: 'experimentalItemMaintenance',
+          name: 'experimentalItemMaintenance',
+          component: ExperimentalItemMaintenance
+        },
+        {
+          path: 'experimentalItemDetailNew',
+          name: 'experimentalItemDetailNew',
+          component: ExperimentalItemDetailNew
         },
         {
           path: 'processDetailEdit/:id',

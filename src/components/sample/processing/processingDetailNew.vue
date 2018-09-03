@@ -39,6 +39,7 @@ export default {
       },
       staticOptions: {
         experimentalMethods: [],
+        experimentalItems: [],
         drawingDesigns: [],
         processingStatuses: [],
         departments: [],
@@ -52,6 +53,15 @@ export default {
       this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
         .then(function (res) {
           vm.staticOptions.experimentalMethods = res.data
+        })
+    },
+    loadExperimentalItemData () {
+      let vm = this
+      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+        .then(function (res) {
+          vm.staticOptions.experimentalItems = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     },
     loadDrawingDesignData () {
@@ -108,6 +118,7 @@ export default {
   },
   mounted () {
     this.loadExperimentalMethodData()
+    this.loadExperimentalItemData()
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()
     this.loadDepartment()

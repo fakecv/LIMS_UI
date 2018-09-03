@@ -56,9 +56,20 @@
                 <el-input name="sampleSubNumber" v-model="processForm.sampleSubNumber" autoComplete="sampleSubNumber"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="24">
+            <!-- <el-col :span="24">
               <el-form-item label="检测项目">
                 <el-input type="textarea" name="experimentalItem" v-model="processForm.experimentalItem" autoComplete="experimentalItem"></el-input>
+              </el-form-item>
+            </el-col> -->
+            <el-col  :span="24">
+              <el-form-item label="检测项目">
+                <el-select name="experimentalItem" filterable default-first-option v-model="processForm.experimentalItem">
+                <el-option v-for="item in staticOptions.experimentalItems"
+                  :key="item.Id"
+                  :label="item.experimentalItemName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -150,7 +161,7 @@ export default {
   methods: {
     actionHandle (action) {
       if (action.id === '1') {
-        console.log(action.id)
+        this.saveToDB()
       } else if (action.id === '2') {
         console.log(action.id)
         this.delete()

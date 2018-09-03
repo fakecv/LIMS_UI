@@ -36,9 +36,15 @@
                 <el-input name="sampleSubNumber" v-model="processingForm.sampleSubNumber" autoComplete="sampleSubNumber"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-col>
               <el-form-item label="检测项目">
-                <el-input name="experimentalItem" v-model="processingForm.experimentalItem" autoComplete="experimentalItem"></el-input>
+                <el-select name="experimentalItem" filterable default-first-option v-model="processingForm.experimentalItem">
+                <el-option v-for="item in staticOptions.experimentalItems"
+                  :key="item.Id"
+                  :label="item.experimentalItemName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">

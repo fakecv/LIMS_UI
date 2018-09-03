@@ -111,6 +111,7 @@
         <el-table-column
           prop="experimentalItem"
           label="检测项目"
+          :formatter="experimentalItemFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -159,6 +160,7 @@ export default {
         currentPage: 1
       },
       experimentalMethods: [],
+      experimentalItems: [],
       drawingDesigns: [],
       departments: [],
       agreements: [],
@@ -199,6 +201,14 @@ export default {
         .get('/api/sample/experimentalMethod/getExperimentalMethod')
         .then(function (res) {
           vm.experimentalMethods = res.data
+        })
+    },
+    loadExperimentalItemData () {
+      let vm = this
+      this.$ajax
+        .get('/api/sample/experimentalItem/getExperimentalItem')
+        .then(function (res) {
+          vm.experimentalItems = res.data
         })
     },
     loadDrawingDesignData () {
@@ -284,6 +294,15 @@ export default {
       this.agreements.forEach(item => {
         if (row.agreementNumber === item.id) {
           name = item.agreementNumber
+        }
+      })
+      return name
+    },
+    experimentalItemFormatter (row, column) {
+      let name = ''
+      this.experimentalItems.forEach(item => {
+        if (row.experimentalItem === item.id) {
+          name = item.experimentalItemName
         }
       })
       return name

@@ -195,7 +195,7 @@ export default {
         })
     },
     sexFormatter (row, column) {
-      if (row.set === 'male') {
+      if (row.sex === 'male') {
         return '男'
       } else {
         return '女'
