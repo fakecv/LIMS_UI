@@ -121,7 +121,7 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    reloadCustomerData () {
+    reloadCustomerData (event) {
       let vm = this
       this.$ajax.post('/api/customer/queryCustomer', event)
         .then(function (res) {
@@ -145,7 +145,7 @@ export default {
       this.customerForm.email = row.email
       this.customerForm.address = row.address
     },
-    reloadUserData () {
+    reloadUserData (event) {
       let vm = this
       this.$ajax.post('/api/users/queryApplicationUser', event)
         .then(function (res) {

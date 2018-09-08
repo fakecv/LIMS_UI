@@ -333,7 +333,7 @@ const router = new Router({
     // 正式上线后要改为 /login/first 或者错误信息提示页面，跳转后需要用户重新登录系统, 当出现问题后跳转至该页面，提示问题
     {
       path: '*',
-      redirect: '/lims/menuDetailNew'
+      redirect: '/login/first'
     }
   ]
 })

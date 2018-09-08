@@ -108,7 +108,8 @@ export default {
             .then(function (res) {
               vm.auth.login(res.headers.authorization)
             }).catch(function (error) {
-              vm.$message(error.response.data.message)
+              vm.$message('密码不正确！')
+              console.log(error.response.data.message)
             })
         } else {
           console.log('error submit!!')
