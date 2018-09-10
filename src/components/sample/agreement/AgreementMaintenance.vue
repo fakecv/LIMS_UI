@@ -79,12 +79,10 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.agreementRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.agreementRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     dblclick (row, event) {

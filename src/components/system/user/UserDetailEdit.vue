@@ -88,6 +88,7 @@ export default {
     },
     modifyPassword () {
       this.userForm.modifiable = false
+      this.userForm.password = ''
     },
     loadDepartment () {
       let vm = this
