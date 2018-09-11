@@ -185,7 +185,7 @@ export default {
     /* Equal to height of footer */
     /* But also accounting for potential margin-bottom of last child */
     margin-bottom: -50px;
-    background: #636371
+    background: #404040
   }
    @media (max-width: 575.98px) {
     .login-container {
