@@ -4,6 +4,7 @@ import ActionHeader from '@/components/frame/ActionHeader'
 import AgreementDetailNew from '@/components/sample/agreement/AgreementDetailNew'
 import AgreementDetailEdit from '@/components/sample/agreement/AgreementDetailEdit'
 import AgreementMaintenance from '@/components/sample/agreement/AgreementMaintenance'
+import AgreementReport from '@/components/sample/agreement/AgreementReport'
 import CheckableTable from '@/components/reference/CheckableTable'
 import ComposeSchedule from '@/components/equipment/ComposeSchedule'
 import CustomerDetailNew from '@/components/customer/CustomerDetailNew'
@@ -185,6 +186,11 @@ const router = new Router({
           path: 'agreementMaintenance',
           name: 'agreementMaintenance',
           component: AgreementMaintenance
+        },
+        {
+          path: 'agreementReport/:id',
+          name: 'agreementReport',
+          component: AgreementReport
         },
         {
           path: 'agreementDetailNew',

@@ -7,6 +7,7 @@
       </div>
       <input type="file" @change="handleFileChange"/>
     </label>
+    <el-button @click="downloadToFrontEnd">下载</el-button>
     <pdf
       v-for="i in numPages"
       :key="i"
@@ -18,7 +19,7 @@
 </template>
 <script>
 import pdf from 'vue-pdf'
-var loadingTask = pdf.createLoadingTask('/api/sample/agreement/downloadPdfFile/5b78251d34cb682670b68ad1')
+
 export default {
   name: 'fileUpload',
   props: {
@@ -29,7 +30,7 @@ export default {
   },
   data () {
     return {
-      src: loadingTask,
+      src: {},
       numPages: undefined
     }
   },
@@ -37,22 +38,38 @@ export default {
     handleFileChange (e) {
       this.$emit('input', e.target.files[0])
     },
-    downloadToFrontEnd (fileName, agreementId) {
+    downloadToFrontEnd () {
       let vm = this
-      let downloadFormTemp = {agreementNumber: agreementId, fileName: fileName}
+      // let downloadFormTemp = {agreementNumber: agreementId, fileName: fileName}
 
       // const fileURL = URL.createObjectURL(file);
-      this.$ajax.post('/api/sample/agreement/downloadPdfFile', downloadFormTemp, { responseType: 'blob' })
+      this.$ajax.get('/api/sample/agreement/downloadPdfFile/5b78251d34cb682670b68ad1', {responseType: 'blob'})
         .then(function (res) {
-          vm.src = new Blob([res.data], {type: 'application/pdf'})
-          console.log(vm.src)
+          // vm.src = new Blob([res.data], {type: 'application/pdf'})
+          // console.log(vm.src)
+          vm.download(res.data)
         }
         ).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    download (data) {
+      if (!data) {
+        return
+      }
+      let url = window.URL.createObjectURL(new Blob([data]), {type: 'application/pdf'})
+      let link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = url
+      link.setAttribute('download', 'report.pdf')
+
+      document.body.appendChild(link)
+      link.click()
     }
   },
   mounted () {
+    var loadingTask = pdf.createLoadingTask('/api/sample/agreement/downloadPdfFile/5b78251d34cb682670b68ad1')
+    this.src = loadingTask
     let vm = this
     // this.downloadToFrontEnd('augur', '5b78251d34cb682670b68ad1')
     this.src.then(pdf => {
