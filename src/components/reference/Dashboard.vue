@@ -1,17 +1,22 @@
 <template>
  <div >
-<div style="width:130px;margin-top:20px;float:left">
+<div style="width:130px;margin-top:20px;">
   <el-steps :space="100" direction="vertical" :active="step" process-status="process" finish-status="wait">
       <el-step @click.native="on_click(1)" title="xxx" id="one"></el-step>
       <el-step @click.native="on_click(2)" title="xx" id="two"></el-step>
       <el-step @click.native="on_click(3)" title="xx" id="three"></el-step>
 </el-steps>
 </div>
- <div style="float:left;width: 600px;margin-left:10px;margin-top:20px">
-   <el-collapse  v-model="selectActiveName" @change="foldNode">
+ <div style="width: 600px;margin-left:10px;margin-top:20px">
+   <el-collapse  v-model="selectActiveName" @change="foldNode" accordion>
   <el-collapse-item title="一致性 Consistency" name="1">
-    <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-    <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
+    <div style="width:130px;margin-top:20px;">
+      <el-steps :space="300" :active="step" process-status="process" finish-status="wait">
+          <el-step @click.native="on_click(1)" title="xxx" id="step"></el-step>
+          <el-step @click.native="on_click(2)" title="xx" id="two"></el-step>
+          <el-step @click.native="on_click(3)" title="xx" id="three"></el-step>
+    </el-steps>
+    </div>
   </el-collapse-item>
   <el-collapse-item title="反馈 Feedback" name="2">
     <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
@@ -34,9 +39,15 @@
 export default {
   name: 'dashboard',
   data () {
-    return {}
+    return {
+      step: 0
+    }
   },
+  methods: {
+    foldNode () {
 
+    }
+  },
   mounted () {
   }
 }

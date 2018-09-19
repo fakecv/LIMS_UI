@@ -64,7 +64,7 @@ export default {
         this.saveToDB()
       } else if (action.id === '2') {
         console.log(action.id)
-        this.delete()
+        this.confirmDelete()
       } else if (action.id === '3') {
         console.log(action.id)
       } else if (action.id === '4') {
@@ -92,6 +92,23 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    confirmDelete () {
+      let vm = this
+      if (this.customerForm.id && this.customerForm.id !== '') {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          vm.delete()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      }
     },
     delete () {
       let vm = this
