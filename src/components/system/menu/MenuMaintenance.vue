@@ -5,7 +5,7 @@
           <el-row :gutter="20">
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="上级菜单序号">
-                <el-cascader :options="parentMenu" v-model="menuItemRequestForm.parentMenuId" :change-on-select="true"></el-cascader>
+                <el-cascader :options="parentMenu" v-model="menuItemRequestForm.parentMenuId" clearable :change-on-select="true"></el-cascader>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -18,11 +18,12 @@
                 <el-switch name="switch" v-model="menuItemRequestForm.state"></el-switch>
               </el-form-item>
             </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="菜单类型">
                 <el-radio-group v-model="menuItemRequestForm.type">
                   <el-radio label="OPTIONS">选项</el-radio>
                   <el-radio label="LINK">链接</el-radio>
+                  <el-radio label="">二者</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>

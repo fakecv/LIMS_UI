@@ -440,7 +440,7 @@ export default {
         this.saveToDB()
       } else if (action.id === '2') {
         console.log(action.id)
-        this.delete()
+        this.confirmDelete()
       } else if (action.id === '3') {
         console.log(this.agreementForm.agreementNumber)
         if (this.agreementForm.agreementNumber && this.agreementForm.agreementNumber !== '') {
@@ -452,7 +452,7 @@ export default {
         this.new()
       } else if (action.id === '6') {
         this.copy()
-        this.$message('复制成功，注意保存!')
+        this.$message('复制成功!')
       } else if (action.id === '7') {
         console.log(action.id)
       }
@@ -472,6 +472,21 @@ export default {
         this.experimentalCategoryOtherDisable = true
         this.agreementForm.experimentalCategoryOther = ''
       }
+    },
+    confirmDelete () {
+      let vm = this
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        vm.delete()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
     new () {
       this.$emit('new')
@@ -493,7 +508,10 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/agreement/delete/' + this.agreementForm.id)
         .then(function (res) {
-          vm.$message('已经成功删除！')
+          vm.$message({
+            type: 'success',
+            message: '已经成功删除！'
+          })
           vm.$emit('deleteAgreement')
         }).catch(function (error) {
           vm.$message(error.response.data.message)

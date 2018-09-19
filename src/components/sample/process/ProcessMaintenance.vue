@@ -30,7 +30,7 @@
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="流转状态">
-              <el-select name="processingStatus" filterable default-first-option v-model="processRequestForm.processingStatus">
+              <el-select name="processingStatus" filterable clearable default-first-option v-model="processRequestForm.processingStatus">
               <el-option v-for="item in processingStatuses"
                 :key="item.Id"
                 :label="item.processingStatusName"

@@ -10,6 +10,7 @@ import ComposeSchedule from '@/components/equipment/ComposeSchedule'
 import CustomerDetailNew from '@/components/customer/CustomerDetailNew'
 import CustomerDetailEdit from '@/components/customer/CustomerDetailEdit'
 import CustomerMaintenance from '@/components/customer/CustomerMaintenance'
+import Dashboard from '@/components/reference/Dashboard'
 import DepartmentDetailNew from '@/components/sample/department/DepartmentDetailNew'
 import DepartmentDetailEdit from '@/components/sample/department/DepartmentDetailEdit'
 import DepartmentMaintenance from '@/components/sample/department/DepartmentMaintenance'
@@ -78,34 +79,29 @@ const router = new Router({
       component: Lims,
       children: [
         {
+          path: 'agreementDetailEdit/:id',
+          name: 'agreementDetailEdit',
+          component: AgreementDetailEdit
+        },
+        {
+          path: 'agreementDetailNew',
+          name: 'agreementDetailNew',
+          component: AgreementDetailNew
+        },
+        {
+          path: 'agreementMaintenance',
+          name: 'agreementMaintenance',
+          component: AgreementMaintenance
+        },
+        {
+          path: 'agreementReport/:id',
+          name: 'agreementReport',
+          component: AgreementReport
+        },
+        {
           path: 'checkableTable',
           name: 'checkableTable',
           component: CheckableTable
-        },
-        {
-          path: 'userDetailNew',
-          name: 'userDetailNew',
-          component: UserDetailNew
-        },
-        {
-          path: 'userDetailEdit/:id',
-          name: 'userDetailEdit',
-          component: UserDetailEdit
-        },
-        {
-          path: 'userMaintenance',
-          name: 'userMaintenance',
-          component: UserMaintenance
-        },
-        {
-          path: 'schedule',
-          name: 'schedule',
-          component: Schedule
-        },
-        {
-          path: 'tableSchedule',
-          name: 'tableSchedule',
-          component: TableSchedule
         },
         {
           path: 'composeSchedule',
@@ -113,19 +109,159 @@ const router = new Router({
           component: ComposeSchedule
         },
         {
+          path: 'customerDetailEdit/:id',
+          name: 'customerDetailEdit',
+          component: CustomerDetailEdit
+        },
+        {
+          path: 'customerDetailNew',
+          name: 'customerDetailNew',
+          component: CustomerDetailNew
+        },
+        {
+          path: 'customerMaintenance',
+          name: 'customerMaintenance',
+          component: CustomerMaintenance
+        },
+        {
+          path: 'dashboard',
+          name: 'dashboard',
+          component: Dashboard
+        },
+        {
+          path: 'departmentDetailEdit/:id',
+          name: 'departmentDetailEdit',
+          component: DepartmentDetailEdit
+        },
+        {
+          path: 'departmentMaintenance',
+          name: 'departmentMaintenance',
+          component: DepartmentMaintenance
+        },
+        {
+          path: 'departmentDetailNew',
+          name: 'departmentDetailNew',
+          component: DepartmentDetailNew
+        },
+        {
+          path: 'drawingDesignDetailEdit/:id',
+          name: 'drawingDesignDetailEdit',
+          component: DrawingDesignDetailEdit
+        },
+        {
+          path: 'drawingDesignMaintenance',
+          name: 'drawingDesignMaintenance',
+          component: DrawingDesignMaintenance
+        },
+        {
+          path: 'drawingDesignDetailNew',
+          name: 'drawingDesignDetailNew',
+          component: DrawingDesignDetailNew
+        },
+        {
+          path: 'experimentalItemDetailEdit/:id',
+          name: 'experimentalItemDetailEdit',
+          component: ExperimentalItemDetailEdit
+        },
+        {
+          path: 'experimentalItemDetailNew',
+          name: 'experimentalItemDetailNew',
+          component: ExperimentalItemDetailNew
+        },
+        {
+          path: 'experimentalItemMaintenance',
+          name: 'experimentalItemMaintenance',
+          component: ExperimentalItemMaintenance
+        },
+        {
+          path: 'experimentalMethodDetailEdit/:id',
+          name: 'experimentalMethodDetailEdit',
+          component: ExperimentalMethodDetailEdit
+        },
+        {
+          path: 'experimentalMethodDetailNew',
+          name: 'experimentalMethodDetailNew',
+          component: ExperimentalMethodDetailNew
+        },
+        {
+          path: 'experimentalMethodMaintenance',
+          name: 'experimentalMethodMaintenance',
+          component: ExperimentalMethodMaintenance
+        },
+        {
+          path: 'fileUpload',
+          name: 'fileUpload',
+          component: FileUpload
+        },
+        {
+          path: 'menuDetailEdit/:id',
+          name: 'menuDetailEdit',
+          component: MenuDetailEdit
+        },
+        {
           path: 'menuDetailNew',
           name: 'menuDetailNew',
           component: MenuDetailNew
         },
         {
-          path: 'roleDetailNew',
-          name: 'roleDetailNew',
-          component: RoleDetailNew
+          path: 'menuMaintenance',
+          name: 'menuMaintenance',
+          component: MenuMaintenance
+        },
+        {
+          path: 'processDetailEdit/:id',
+          name: 'processDetailEdit',
+          component: ProcessDetailEdit
+        },
+        {
+          path: 'processDetailNew',
+          name: 'processDetailNew',
+          component: ProcessDetailNew
+        },
+        {
+          path: 'processMaintenance',
+          name: 'processMaintenance',
+          component: ProcessMaintenance
+        },
+        {
+          path: 'processingDetailEdit/:id',
+          name: 'processingDetailEdit',
+          component: ProcessingDetailEdit
+        },
+        {
+          path: 'processingDetailNew',
+          name: 'processingDetailNew',
+          component: ProcessingDetailNew
+        },
+        {
+          path: 'processingMaintenance',
+          name: 'processingMaintenance',
+          component: ProcessingMaintenance
+        },
+        {
+          path: 'processingStatusDetailEdit/:id',
+          name: 'processingStatusDetailEdit',
+          component: ProcessingStatusDetailEdit
+        },
+        {
+          path: 'processingStatusDetailNew',
+          name: 'processingStatusDetailNew',
+          component: ProcessingStatusDetailNew
+        },
+        {
+          path: 'processingStatusMaintenance',
+          name: 'processingStatusMaintenance',
+          component: ProcessingStatusMaintenance
         },
         {
           path: 'roleDetailEdit/:id',
           name: 'roleDetailEdit',
           component: RoleDetailEdit
+        },
+        {
+          path: 'roleDetailNew',
+          name: 'roleDetailNew',
+          component: RoleDetailNew
         },
         {
           path: 'roleMaintenance',
@@ -148,159 +284,19 @@ const router = new Router({
           component: RoleGroupMaintenance
         },
         {
-          path: 'customerDetailEdit/:id',
-          name: 'customerDetailEdit',
-          component: CustomerDetailEdit
+          path: 'schedule',
+          name: 'schedule',
+          component: Schedule
         },
         {
-          path: 'customerMaintenance',
-          name: 'customerMaintenance',
-          component: CustomerMaintenance
+          path: 'tableSchedule',
+          name: 'tableSchedule',
+          component: TableSchedule
         },
         {
-          path: 'customerDetailNew',
-          name: 'customerDetailNew',
-          component: CustomerDetailNew
-        },
-        {
-          path: 'departmentDetailEdit/:id',
-          name: 'departmentDetailEdit',
-          component: DepartmentDetailEdit
-        },
-        {
-          path: 'departmentMaintenance',
-          name: 'departmentMaintenance',
-          component: DepartmentMaintenance
-        },
-        {
-          path: 'departmentDetailNew',
-          name: 'departmentDetailNew',
-          component: DepartmentDetailNew
-        },
-        {
-          path: 'agreementDetailEdit/:id',
-          name: 'agreementDetailEdit',
-          component: AgreementDetailEdit
-        },
-        {
-          path: 'agreementMaintenance',
-          name: 'agreementMaintenance',
-          component: AgreementMaintenance
-        },
-        {
-          path: 'agreementReport/:id',
-          name: 'agreementReport',
-          component: AgreementReport
-        },
-        {
-          path: 'agreementDetailNew',
-          name: 'agreementDetailNew',
-          component: AgreementDetailNew
-        },
-        {
-          path: 'drawingDesignDetailEdit/:id',
-          name: 'drawingDesignDetailEdit',
-          component: DrawingDesignDetailEdit
-        },
-        {
-          path: 'drawingDesignMaintenance',
-          name: 'drawingDesignMaintenance',
-          component: DrawingDesignMaintenance
-        },
-        {
-          path: 'drawingDesignDetailNew',
-          name: 'drawingDesignDetailNew',
-          component: DrawingDesignDetailNew
-        },
-        {
-          path: 'experimentalMethodDetailEdit/:id',
-          name: 'experimentalMethodDetailEdit',
-          component: ExperimentalMethodDetailEdit
-        },
-        {
-          path: 'experimentalMethodMaintenance',
-          name: 'experimentalMethodMaintenance',
-          component: ExperimentalMethodMaintenance
-        },
-        {
-          path: 'experimentalMethodDetailNew',
-          name: 'experimentalMethodDetailNew',
-          component: ExperimentalMethodDetailNew
-        },
-        {
-          path: 'experimentalItemDetailEdit/:id',
-          name: 'experimentalItemDetailEdit',
-          component: ExperimentalItemDetailEdit
-        },
-        {
-          path: 'experimentalItemMaintenance',
-          name: 'experimentalItemMaintenance',
-          component: ExperimentalItemMaintenance
-        },
-        {
-          path: 'experimentalItemDetailNew',
-          name: 'experimentalItemDetailNew',
-          component: ExperimentalItemDetailNew
-        },
-        {
-          path: 'processDetailEdit/:id',
-          name: 'processDetailEdit',
-          component: ProcessDetailEdit
-        },
-        {
-          path: 'processMaintenance',
-          name: 'processMaintenance',
-          component: ProcessMaintenance
-        },
-        {
-          path: 'processDetailNew',
-          name: 'processDetailNew',
-          component: ProcessDetailNew
-        },
-        {
-          path: 'processingDetailEdit/:id',
-          name: 'processingDetailEdit',
-          component: ProcessingDetailEdit
-        },
-        {
-          path: 'processingMaintenance',
-          name: 'processingMaintenance',
-          component: ProcessingMaintenance
-        },
-        {
-          path: 'processingDetailNew',
-          name: 'processingDetailNew',
-          component: ProcessingDetailNew
-        },
-        {
-          path: 'processingStatusDetailEdit/:id',
-          name: 'processingStatusDetailEdit',
-          component: ProcessingStatusDetailEdit
-        },
-        {
-          path: 'processingStatusMaintenance',
-          name: 'processingStatusMaintenance',
-          component: ProcessingStatusMaintenance
-        },
-        {
-          path: 'processingStatusDetailNew',
-          name: 'processingStatusDetailNew',
-          component: ProcessingStatusDetailNew
-        },
-        {
-          path: 'menuDetailEdit/:id',
-          name: 'menuDetailEdit',
-          component: MenuDetailEdit
-        },
-        {
-          path: 'menuMaintenance',
-          name: 'menuMaintenance',
-          component: MenuMaintenance
-        },
-        {
-          path: 'fileUpload',
-          name: 'fileUpload',
-          component: FileUpload
+          path: 'themePicker',
+          name: 'themePicker',
+          component: ThemePicker
         },
         {
           path: 'UIGenerator',
@@ -329,9 +325,19 @@ const router = new Router({
           ]
         },
         {
-          path: 'themePicker',
-          name: 'themePicker',
-          component: ThemePicker
+          path: 'userDetailEdit/:id',
+          name: 'userDetailEdit',
+          component: UserDetailEdit
+        },
+        {
+          path: 'userDetailNew',
+          name: 'userDetailNew',
+          component: UserDetailNew
+        },
+        {
+          path: 'userMaintenance',
+          name: 'userMaintenance',
+          component: UserMaintenance
         }
       ]
 
