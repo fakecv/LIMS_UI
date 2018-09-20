@@ -27,6 +27,7 @@ export default {
     return {
       src: {},
       numPages: undefined,
+      fullscreenLoading: false,
       agreementNumber: ''
     }
   },
@@ -54,6 +55,21 @@ export default {
       document.body.appendChild(link)
       link.click()
     },
+    openFullScreen2 () {
+      let vm = this
+      const loading = this.$loading({
+        lock: true,
+        text: '正在努力生成报告，报告编号为：' + vm.agreementNumber,
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      var loadingTask = pdf.createLoadingTask('/api/sample/agreement/downloadPdfFile/' + this.agreementNumber)
+      this.src = loadingTask
+      this.src.then(pdf => {
+        vm.numPages = pdf.numPages
+        loading.close()
+      })
+    },
     goBackAgreement () {
       this.$router.go(-1)
     }
@@ -62,12 +78,7 @@ export default {
     console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.agreementNumber = this.$route.params.id
-      var loadingTask = pdf.createLoadingTask('/api/sample/agreement/downloadPdfFile/' + this.agreementNumber)
-      this.src = loadingTask
-      let vm = this
-      this.src.then(pdf => {
-        vm.numPages = pdf.numPages
-      })
+      this.openFullScreen2()
     }
   }
 }

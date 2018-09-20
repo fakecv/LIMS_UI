@@ -1,37 +1,31 @@
 <template>
- <div >
-<div style="width:130px;margin-top:20px;">
-  <el-steps :space="100" direction="vertical" :active="step" process-status="process" finish-status="wait">
-      <el-step @click.native="on_click(1)" title="xxx" id="one"></el-step>
-      <el-step @click.native="on_click(2)" title="xx" id="two"></el-step>
-      <el-step @click.native="on_click(3)" title="xx" id="three"></el-step>
-</el-steps>
-</div>
+ <div>
+   <div id="myChart" :style="{width: '300px', height: '300px'}"></div>
  <div style="width: 600px;margin-left:10px;margin-top:20px">
    <el-collapse  v-model="selectActiveName" @change="foldNode" accordion>
-  <el-collapse-item title="一致性 Consistency" name="1">
-    <div style="width:130px;margin-top:20px;">
-      <el-steps :space="300" :active="step" process-status="process" finish-status="wait">
-          <el-step @click.native="on_click(1)" title="xxx" id="step"></el-step>
-          <el-step @click.native="on_click(2)" title="xx" id="two"></el-step>
-          <el-step @click.native="on_click(3)" title="xx" id="three"></el-step>
-    </el-steps>
-    </div>
-  </el-collapse-item>
-  <el-collapse-item title="反馈 Feedback" name="2">
-    <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
-    <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
-  </el-collapse-item>
-  <el-collapse-item title="效率 Efficiency" name="3">
-    <div>简化流程：设计简洁直观的操作流程；</div>
-    <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>
-    <div>帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。</div>
-  </el-collapse-item>
-  <el-collapse-item title="可控 Controllability" name="4">
-    <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
-    <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>
-  </el-collapse-item>
-</el-collapse>
+    <el-collapse-item title="一致性 Consistency" name="1">
+      <div>
+        <el-steps :space="200" :active="1" finish-status="success">
+          <el-step title="已完成"></el-step>
+          <el-step title="进行中"></el-step>
+          <el-step title="步骤 3"></el-step>
+        </el-steps>
+      </div>
+    </el-collapse-item>
+    <el-collapse-item title="反馈 Feedback" name="2">
+      <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
+      <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
+    </el-collapse-item>
+    <el-collapse-item title="效率 Efficiency" name="3">
+      <div>简化流程：设计简洁直观的操作流程；</div>
+      <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>
+      <div>帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。</div>
+    </el-collapse-item>
+    <el-collapse-item title="可控 Controllability" name="4">
+      <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
+      <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>
+    </el-collapse-item>
+  </el-collapse>
  </div>
  </div>
 </template>
@@ -40,15 +34,36 @@ export default {
   name: 'dashboard',
   data () {
     return {
-      step: 0
+      step: 0,
+      selectActiveName: '1',
+      msg: 'Welcome to Your Vue.js App'
     }
   },
   methods: {
     foldNode () {
 
+    },
+    drawLine () {
+      // 基于准备好的dom，初始化echarts实例
+      let myChart = this.$echarts.init(document.getElementById('myChart'))
+      // 绘制图表
+      myChart.setOption({
+        title: { text: '样品检测完成情况一览' },
+        tooltip: {},
+        xAxis: {
+          data: ['已完成', '未完成', '全部', '状态1', '状态2', '状态3']
+        },
+        yAxis: {},
+        series: [{
+          name: '数量',
+          type: 'bar',
+          data: [5, 20, 36, 10, 10, 20]
+        }]
+      })
     }
   },
   mounted () {
+    this.drawLine()
   }
 }
 </script>
