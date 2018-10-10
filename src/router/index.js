@@ -5,6 +5,9 @@ import AgreementDetailNew from '@/components/sample/agreement/AgreementDetailNew
 import AgreementDetailEdit from '@/components/sample/agreement/AgreementDetailEdit'
 import AgreementMaintenance from '@/components/sample/agreement/AgreementMaintenance'
 import AgreementReport from '@/components/sample/agreement/AgreementReport'
+import AuditDepartmentDetailNew from '@/components/internalaudit/auditdepartment/AuditDepartmentDetailNew'
+import AuditDepartmentDetailEdit from '@/components/internalaudit/auditdepartment/AuditDepartmentDetailEdit'
+import AuditDepartmentMaintenance from '@/components/internalaudit/auditdepartment/AuditDepartmentMaintenance'
 import CheckableTable from '@/components/reference/CheckableTable'
 import ComposeSchedule from '@/components/equipment/ComposeSchedule'
 import CustomerDetailNew from '@/components/customer/CustomerDetailNew'
@@ -29,6 +32,12 @@ import EditorTableAside from '@/views/editor/table/aside'
 import EditorTableMain from '@/views/editor/table/main'
 import ForgetPassword from '@/components/system/login/ForgetPassword'
 import FileUpload from '@/components/reference/FileUpload'
+import InternalAuditCheckListDetailNew from '@/components/internalaudit/internalauditchecklist/InternalAuditCheckListDetailNew'
+import InternalAuditCheckListDetailEdit from '@/components/internalaudit/internalauditchecklist/InternalAuditCheckListDetailEdit'
+import InternalAuditCheckListMaintenance from '@/components/internalaudit/internalauditchecklist/InternalAuditCheckListMaintenance'
+import InternalAuditorDetailNew from '@/components/internalaudit/internalauditor/InternalAuditorDetailNew'
+import InternalAuditorDetailEdit from '@/components/internalaudit/internalauditor/InternalAuditorDetailEdit'
+import InternalAuditorMaintenance from '@/components/internalaudit/internalauditor/InternalAuditorMaintenance'
 import login from '@/components/system/login/Login'
 import Lims from '@/components/frame/LimsNew'
 import MenuDetailNew from '@/components/system/menu/MenuDetailNew'
@@ -97,6 +106,21 @@ const router = new Router({
           path: 'agreementReport/:id',
           name: 'agreementReport',
           component: AgreementReport
+        },
+        {
+          path: 'auditDepartmentDetailEdit/:id',
+          name: 'auditDepartmentDetailEdit',
+          component: AuditDepartmentDetailEdit
+        },
+        {
+          path: 'auditDepartmentDetailNew',
+          name: 'auditDepartmentDetailNew',
+          component: AuditDepartmentDetailNew
+        },
+        {
+          path: 'auditDepartmentMaintenance',
+          name: 'auditDepartmentMaintenance',
+          component: AuditDepartmentMaintenance
         },
         {
           path: 'checkableTable',
@@ -192,6 +216,36 @@ const router = new Router({
           path: 'fileUpload',
           name: 'fileUpload',
           component: FileUpload
+        },
+        {
+          path: 'internalAuditCheckListDetailEdit/:id',
+          name: 'internalAuditorDetailEdit',
+          component: InternalAuditCheckListDetailEdit
+        },
+        {
+          path: 'internalAuditCheckListDetailNew',
+          name: 'internalAuditCheckListDetailNew',
+          component: InternalAuditCheckListDetailNew
+        },
+        {
+          path: 'internalAuditCheckListMaintenance',
+          name: 'internalAuditCheckListMaintenance',
+          component: InternalAuditCheckListMaintenance
+        },
+        {
+          path: 'internalAuditorDetailEdit/:id',
+          name: 'internalAuditorDetailEdit',
+          component: InternalAuditorDetailEdit
+        },
+        {
+          path: 'internalAuditorDetailNew',
+          name: 'internalAuditorDetailNew',
+          component: InternalAuditorDetailNew
+        },
+        {
+          path: 'internalAuditorMaintenance',
+          name: 'internalAuditorMaintenance',
+          component: InternalAuditorMaintenance
         },
         {
           path: 'menuDetailEdit/:id',

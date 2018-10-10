@@ -10,7 +10,7 @@
       el-dialog(title="提示" :visible.sync="dialogVisible")
         el-upload(:on-change="loadJsonFromFileConfirmed" :file-list="fileList" action="alert" :auto-upload="false")
           el-button(size="small" type="primary") 点击上传...
-          div(slot="tip") 只能上传jpg/png文件，且不超过500kb
+          div(slot="tip") 只能上传json文件，且不超过500kb
         span(slot="footer")
           el-button(@click="dialogVisible = false") cancel
           el-button(type="primary" @click="dialogVisible = false") confirm
@@ -21,10 +21,11 @@ export default {
   data () {
     return {
       actions: [
-        {'name': '保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
-        {'name': '导入', 'id': '2', 'icon': 'el-icon-upload2', 'loading': false},
-        {'name': '导出', 'id': '3', 'icon': 'el-icon-download', 'loading': false},
-        {'name': '数据库导入', 'id': '4', 'icon': 'el-icon-upload', 'loading': false}
+        {'name': '创建', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
+        {'name': '保存', 'id': '2', 'icon': 'el-icon-document', 'loading': false},
+        {'name': '导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
+        {'name': '导出', 'id': '4', 'icon': 'el-icon-download', 'loading': false},
+        {'name': '数据库导入', 'id': '5', 'icon': 'el-icon-upload', 'loading': false}
       ],
       // data for upload files
       uploadFilename: null,
@@ -41,15 +42,16 @@ export default {
   methods: {
     actionHandler (action) {
       var vm = this
-      console.log(action.id)
-      if (action.id === '2') {
-        this.dialogVisible = true
-      } else if (action.id === '3') {
-        console.log('Export File')
-        this.downloadJsonToFile()
-      } else if (action.id === '1') {
+      if (action.id === '1') {
+        this.jsonContent = ''
+        this.$store.state.forms[this.$route.params.fid].formItemList = []
+      } else if (action.id === '2') {
         this.submit(this.$store.state.forms[this.$route.params.fid])
+      } else if (action.id === '3') {
+        this.dialogVisible = true
       } else if (action.id === '4') {
+        this.downloadJsonToFile()
+      } else if (action.id === '5') {
         this.$ajax.get('/api/formTemplate')
           .then(function (res) {
             console.log(res)
