@@ -1,10 +1,10 @@
     <template>
     <div>
       <el-container style="padding: 10px">
-        <el-form :model="internalAuditCheckListRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-form :model="numberGeneratorRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
-            <el-form-item label="条款">
-              <el-input name="terms" v-model="internalAuditCheckListRequestForm.terms"></el-input>
+            <el-form-item label="部门名称">
+              <el-input name="numberGeneratorName" v-model="numberGeneratorRequestForm.numberGeneratorName"></el-input>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -16,28 +16,28 @@
       </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
-          prop="terms"
-          label="条款"
+          prop="numberGeneratorName"
+          label="编号名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="auditContent"
-          label="审核内容"
+          prop="numberGeneratorPrifix"
+          label="编号前缀"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="auditMethod"
-          label="审核方法"
+          prop="numberGeneratorPostfix"
+          label="编号后缀"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="auditNote"
-          label="审核说明"
+          prop="numberGeneratorValue"
+          label="编号当前值"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="auditResult"
-          label="审核结果"
+          prop="numberGeneratorDescription"
+          label="编号描述"
           width="180">
         </el-table-column>
       </el-table>
@@ -45,11 +45,11 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="internalAuditCheckListRequestForm.currentPage"
+          :current-page.sync="numberGeneratorRequestForm.currentPage"
           :page-sizes="[10, 20, 50]"
           :page-size="20"
           layout="sizes, prev, pager, next"
-          :total="totalInternalAuditCheckLists">
+          :total="totalNumberGenerators">
         </el-pagination>
       </div>
     </div>
@@ -57,13 +57,13 @@
 
 <script>
 export default {
-  name: 'internalAuditCheckListMaintenance',
+  name: 'numberGeneratorMaintenance',
   data () {
     return {
       tableData: [],
-      totalInternalAuditCheckLists: 0,
-      internalAuditCheckListRequestForm: {
-        terms: '',
+      totalNumberGenerators: 0,
+      numberGeneratorRequestForm: {
+        numberGeneratorName: '',
         itemsPerPage: 20,
         currentPage: 1
       }
@@ -71,35 +71,35 @@ export default {
   },
   methods: {
     handleSizeChange (val) {
-      this.internalAuditCheckListRequestForm.itemsPerPage = val
+      this.numberGeneratorRequestForm.itemsPerPage = val
       console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
-      this.internalAuditCheckListRequestForm.currentPage = val
+      this.numberGeneratorRequestForm.currentPage = val
       console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
       let vm = this
-      this.$ajax.get('/api/internalauditchecklist/internalAuditCheckList/getInternalAuditCheckList')
+      this.$ajax.get('/api/sample/numberGenerator/getNumberGenerator')
         .then(function (res) {
-          console.log('internalAuditCheckListMaintenance')
+          console.log('numberGeneratorMaintenance')
           console.log(res)
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
       console.log(row.id)
-      this.$router.push('/lims/internalAuditCheckListDetailEdit/' + row.id)
+      this.$router.push('/lims/numberGeneratorDetailEdit/' + row.id)
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/internalauditchecklist/internalAuditCheckList/queryInternalAuditCheckList', this.internalAuditCheckListRequestForm)
+      this.$ajax.post('/api/sample/numberGenerator/queryNumberGenerator', this.numberGeneratorRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
-          vm.totalInternalAuditCheckLists = res.data.totalInternalAuditCheckLists || 0
-          console.log('totalDeparts is: ' + vm.totalInternalAuditCheckLists)
+          vm.totalNumberGenerators = res.data.totalNumberGenerators || 0
+          console.log('totalDeparts is: ' + vm.totalNumberGenerators)
         })
     }
   },

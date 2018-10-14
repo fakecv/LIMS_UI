@@ -7,6 +7,7 @@ export default {
       size: 'small', // 尺寸
       statusIcon: true, // 显示验证图标
       domain: '',
+      packageName: '',
       formItemList: []
     }
   },
@@ -22,6 +23,9 @@ export default {
     },
     FORM_UPDATE_WITH_FID_DOMAIN (state, { fid, domain }) {
       state[fid].domain = domain
+    },
+    FORM_UPDATE_WITH_FID_PACKAGENAME (state, { fid, packageName }) {
+      state[fid].packageName = packageName
     }
   }
   // actions: {

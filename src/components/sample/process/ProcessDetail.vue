@@ -28,7 +28,7 @@
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品接收时间">
-                <el-date-picker type="date" placeholder="选择日期" readonly v-model="processForm.receiveSampleTime" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="datetime" placeholder="选择日期" readonly v-model="processForm.receiveSampleTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -38,7 +38,7 @@
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="要求完成时间">
-                <el-date-picker type="date" placeholder="选择日期" readonly v-model="processForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="datetime" placeholder="选择日期" readonly v-model="processForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -46,9 +46,10 @@
                 <el-input name="sampleClientNumber" v-model="processForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-col :span="24">
               <el-form-item label="样品编号">
                 <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input>
+                <el-button  @click="sampleNumberGenerator">生成样品编号</el-button>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -122,6 +123,17 @@
                 <el-option v-for="item in staticOptions.processingStatuses"
                   :key="item.Id"
                   :label="item.processingStatusName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="优先级">
+                <el-select name="processPriority" filterable default-first-option v-model="processForm.processPriority">
+                <el-option v-for="item in staticOptions.processPriorities"
+                  :key="item.Id"
+                  :label="item.processPriorityName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -225,6 +237,9 @@ export default {
     },
     getAgreementNumber  (val) {
       this.$emit('getAgreementInfo', val)
+    },
+    sampleNumberGenerator () {
+      this.$emit('sampleNumberGenerator')
     },
     submit () {
       let vm = this

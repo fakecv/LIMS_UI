@@ -7,18 +7,31 @@
       </el-button-group>
     </el-header>
     <el-container style="padding: 10px">
-      <el-form :model="auditDepartmentForm" label-width="120px" label-position="left" size="mini">
+      <el-form :model="numberGeneratorForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-col >
-            <el-form-item label="被审核岗位名称">
-              <el-input name="auditDepartmentName" v-model="auditDepartmentForm.auditDepartmentName" autoComplete="auditDepartmentName"></el-input>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="编号名称">
+              <el-input name="numberGeneratorName" v-model="numberGeneratorForm.numberGeneratorName" autoComplete="numberGeneratorName"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col>
-            <el-form-item label="被审核岗位描述">
-              <el-input type="textarea" name="auditDepartmentDescription" v-model="auditDepartmentForm.auditDepartmentDescription" autoComplete="auditDepartmentDescription"></el-input>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="编号前缀">
+              <el-input name="numberGeneratorPrifix" v-model="numberGeneratorForm.numberGeneratorPrifix" autoComplete="numberGeneratorPrifix"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="编号后缀">
+              <el-input name="numberGeneratorPostfix" v-model="numberGeneratorForm.numberGeneratorPostfix" autoComplete="numberGeneratorPostfix"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="当前编号值">
+              <el-input name="numberGeneratorValue" v-model="numberGeneratorForm.numberGeneratorValue" autoComplete="numberGeneratorValue"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="编号描述">
+              <el-input type="textarea" name="numberGeneratorDescription" v-model="numberGeneratorForm.numberGeneratorDescription" autoComplete="numberGeneratorDescription"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -29,8 +42,8 @@
 
 <script>
 export default {
-  name: 'auditDepartmentDetail',
-  props: ['auditDepartmentForm'],
+  name: 'numberGeneratorDetail',
+  props: ['numberGeneratorForm'],
   data () {
     return {
       actions: [
@@ -42,7 +55,7 @@ export default {
         {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
       ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 12}
     }
   },
   methods: {
@@ -74,17 +87,17 @@ export default {
     },
     saveToDB () {
       let vm = this
-      this.$ajax.post('/api/internalauditchecklist/auditDepartment', this.auditDepartmentForm)
+      this.$ajax.post('/api/sample/numberGenerator', this.numberGeneratorForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
-          vm.$emit('updateAuditDepartmentForm', res.data)
+          vm.$emit('updateNumberGeneratorForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
     confirmDelete () {
       let vm = this
-      if (this.auditDepartmentForm.id && this.auditDepartmentForm.id !== '') {
+      if (this.numberGeneratorForm.id && this.numberGeneratorForm.id !== '') {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -101,10 +114,10 @@ export default {
     },
     delete () {
       let vm = this
-      this.$ajax.get('/api/internalauditchecklist/auditDepartment/delete/' + this.auditDepartmentForm.id)
+      this.$ajax.get('/api/sample/numberGenerator/delete/' + this.numberGeneratorForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteAuditDepartment')
+          vm.$emit('deleteNumberGenerator')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

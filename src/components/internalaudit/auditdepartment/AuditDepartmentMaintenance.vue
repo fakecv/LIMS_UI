@@ -67,10 +67,8 @@ export default {
     },
     loadData () {
       let vm = this
-      this.$ajax.get('/api/auditdepartment/auditDepartment/getAuditDepartment')
+      this.$ajax.get('/api/internalauditchecklist/auditDepartment/getAuditDepartment')
         .then(function (res) {
-          console.log('auditDepartmentMaintenance')
-          console.log(res)
           vm.tableData = res.data
         })
     },
@@ -80,7 +78,7 @@ export default {
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/auditdepartment/auditDepartment/queryAuditDepartment', this.auditDepartmentRequestForm)
+      this.$ajax.post('/api/internalauditchecklist/auditDepartment/queryAuditDepartment', this.auditDepartmentRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalAuditDepartments = res.data.totalAuditDepartments || 0

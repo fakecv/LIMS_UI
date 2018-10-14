@@ -1,9 +1,10 @@
 <template>
   <AuditDepartmentDetail :auditDepartmentForm="auditDepartmentForm"
-  v-on:updateAuditDepartmentForm="updateAuditDepartmentForm"
-  v-on:deleteAuditDepartmentForm="resetAuditDepartmentForm"
-  v-on:new="resetAuditDepartmentForm"
-  v-on:copy="resetAuditDepartmentId"/>
+    v-on:updateAuditDepartmentForm="updateAuditDepartmentForm"
+    v-on:deleteAuditDepartmentForm="resetAuditDepartmentForm"
+    v-on:new="resetAuditDepartmentForm"
+    v-on:copy="resetAuditDepartmentId"
+  />
 </template>
 
 <script>

@@ -1,9 +1,10 @@
 <template>
   <AuditDepartmentDetail
-   :auditDepartmentForm="auditDepartmentForm"
-   v-on:deleteAuditDepartment="resetAuditDepartmentForm"
-   v-on:new="resetAuditDepartmentForm"
-   v-on:copy="resetAuditDepartmentId"/>
+    :auditDepartmentForm="auditDepartmentForm"
+    v-on:deleteAuditDepartment="resetAuditDepartmentForm"
+    v-on:new="resetAuditDepartmentForm"
+    v-on:copy="resetAuditDepartmentId"
+   />
 </template>
 
 <script>
@@ -28,7 +29,7 @@ export default {
   methods: {
     loadAuditDepartment (auditDepartmentId) {
       let vm = this
-      this.$ajax.get('/api/auditdepartment/auditDepartment/' + auditDepartmentId)
+      this.$ajax.get('/api/internalauditchecklist/auditDepartment/' + auditDepartmentId)
         .then(function (res) {
           vm.auditDepartmentForm = res.data
         }).catch(function (error) {

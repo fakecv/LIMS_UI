@@ -55,7 +55,7 @@ export default class AuthService {
     // localStorage.setItem('userProfile', decoded.sub)
     this.authNotifier.emit('authChange', { authenticated: true })
     // 正式上线应该跳转至欢迎页面，或者流转状态列表
-    router.replace({name: 'processMaintenance'})
+    router.replace({name: 'lims'})
   }
 
   logout () {

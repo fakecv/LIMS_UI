@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="limsnavmenu">
     <template v-for="navMenu in menuData">
         <el-menu-item v-if="navMenu.children==null&&navMenu&&((showEnableOnly&&navMenu.state)||(!showEnableOnly))"
                       :key="navMenu.id" :data="navMenu" :index="navMenu.value">
@@ -29,4 +29,7 @@ export default {
 }
 </script>
 <style scoped>
+#limsnavmenu {
+  background-color: #15DDE0;
+}
 </style>

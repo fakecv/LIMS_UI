@@ -1,10 +1,10 @@
     <template>
     <div>
       <el-container style="padding: 10px">
-        <el-form :model="internalAuditorRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-form :model="processPriorityRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
-            <el-form-item label="内部审核员名称">
-              <el-input name="internalAuditorName" v-model="internalAuditorRequestForm.internalAuditorName"></el-input>
+            <el-form-item label="优先级名称">
+              <el-input name="processPriorityName" v-model="processPriorityRequestForm.processPriorityName"></el-input>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -16,13 +16,13 @@
       </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
-          prop="internalAuditorName"
-          label="内部审核员名称"
+          prop="processPriorityName"
+          label="优先级名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="internalAuditorDescription"
-          label="内部审核员描述"
+          prop="processPriorityDescription"
+          label="优先级描述"
           width="180">
         </el-table-column>
       </el-table>
@@ -30,11 +30,11 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="internalAuditorRequestForm.currentPage"
+          :current-page.sync="processPriorityRequestForm.currentPage"
           :page-sizes="[10, 20, 50]"
           :page-size="20"
           layout="sizes, prev, pager, next"
-          :total="totalInternalAuditors">
+          :total="totalProcessPrioritys">
         </el-pagination>
       </div>
     </div>
@@ -42,13 +42,13 @@
 
 <script>
 export default {
-  name: 'internalAuditorMaintenance',
+  name: 'processPriorityMaintenance',
   data () {
     return {
       tableData: [],
-      totalInternalAuditors: 0,
-      internalAuditorRequestForm: {
-        internalAuditorName: '',
+      totalProcessPrioritys: 0,
+      processPriorityRequestForm: {
+        processPriorityName: '',
         itemsPerPage: 20,
         currentPage: 1
       }
@@ -56,33 +56,35 @@ export default {
   },
   methods: {
     handleSizeChange (val) {
-      this.internalAuditorRequestForm.itemsPerPage = val
+      this.processPriorityRequestForm.itemsPerPage = val
       console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
-      this.internalAuditorRequestForm.currentPage = val
+      this.processPriorityRequestForm.currentPage = val
       console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
       let vm = this
-      this.$ajax.get('/api/internalauditchecklist/internalAuditor/getInternalAuditor')
+      this.$ajax.get('/api/sample/processPriority/getProcessPriority')
         .then(function (res) {
+          console.log('processPriorityMaintenance')
+          console.log(res)
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
       console.log(row.id)
-      this.$router.push('/lims/internalAuditorDetailEdit/' + row.id)
+      this.$router.push('/lims/processPriorityDetailEdit/' + row.id)
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/internalauditchecklist/internalAuditor/queryInternalAuditor', this.internalAuditorRequestForm)
+      this.$ajax.post('/api/sample/processPriority/queryProcessPriority', this.processPriorityRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
-          vm.totalInternalAuditors = res.data.totalInternalAuditors || 0
-          console.log('totalDeparts is: ' + vm.totalInternalAuditors)
+          vm.totalProcessPrioritys = res.data.totalProcessPrioritys || 0
+          console.log('totalDeparts is: ' + vm.totalProcessPrioritys)
         })
     }
   },

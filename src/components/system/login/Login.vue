@@ -104,7 +104,7 @@ export default {
       var vm = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          vm.$ajax.post('/api/login', credentials)
+          vm.$ajax.post('/login', credentials)
             .then(function (res) {
               vm.auth.login(res.headers.authorization)
             }).catch(function (error) {

@@ -7,16 +7,18 @@
       </el-button-group>
     </el-header>
     <el-container style="padding: 10px">
-      <el-form :model="internalAuditorForm" label-width="100px" label-position="left" size="mini">
+      <el-form :model="internalAuditorForm" label-width="120px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <el-col>
             <el-form-item label="内部审核员名称">
               <el-input name="internalAuditorName" v-model="internalAuditorForm.internalAuditorName" autoComplete="internalAuditorName"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+        </el-row>
+        <el-row>
+          <el-col>
             <el-form-item label="内部审核员描述">
-              <el-input name="internalAuditerDescription" v-model="internalAuditorForm.internalAuditerDescription" autoComplete="internalAuditerDescription"></el-input>
+              <el-input type="textarea" name="internalAuditorDescription" v-model="internalAuditorForm.internalAuditorDescription" autoComplete="internalAuditerDescription"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -72,7 +74,7 @@ export default {
     },
     saveToDB () {
       let vm = this
-      this.$ajax.post('/api/internalauditor/internalAuditor', this.internalAuditorForm)
+      this.$ajax.post('/api/internalauditchecklist/internalAuditor', this.internalAuditorForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateInternalAuditorForm', res.data)
@@ -99,7 +101,7 @@ export default {
     },
     delete () {
       let vm = this
-      this.$ajax.get('/api/internalauditor/internalAuditor/delete/' + this.internalAuditorForm.id)
+      this.$ajax.get('/api/internalauditchecklist/internalAuditor/delete/' + this.internalAuditorForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
           vm.$emit('deleteInternalAuditor')

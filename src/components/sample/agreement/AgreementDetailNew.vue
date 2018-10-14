@@ -14,6 +14,7 @@
     v-on:copy="resetAgreementId"
     v-on:removeImage="removeImage"
     v-on:addImage="addImage"
+    v-on:agreementNumberGenerator="agreementNumberGenerator"
     />
 </template>
 
@@ -39,6 +40,7 @@ export default {
         reportTransferModeOther: '',
         noOfReport: '1',
         sampleCheckResult: 'yes',
+        sampleCheckResultNotes: '',
         experimentalCategory: ['委托检测'],
         experimentalCategoryOther: '',
         privacyDeclaim: '',
@@ -61,6 +63,7 @@ export default {
         reportTransferModeOther: '',
         noOfReport: '1',
         sampleCheckResult: 'yes',
+        sampleCheckResultNotes: '',
         experimentalCategory: ['委托检测'],
         experimentalCategoryOther: '',
         privacyDeclaim: '',
@@ -91,6 +94,15 @@ export default {
     }
   },
   methods: {
+    agreementNumberGenerator () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/generateAgreeNumber')
+        .then(function (res) {
+          vm.agreementForm.agreementNumber = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     loadExperimentalMethodData () {
       let vm = this
       this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')

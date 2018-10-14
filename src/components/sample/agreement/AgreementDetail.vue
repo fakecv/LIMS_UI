@@ -10,9 +10,10 @@
       <el-container style="padding: 10px">
         <el-form :model="agreementForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-col :span="24">
               <el-form-item label="委托编号">
                 <el-input name="agreementNumber" v-model="agreementForm.agreementNumber" autoComplete="agreementNumber"></el-input>
+                <el-button  @click="agreementNumberGenerator">生成委托编号</el-button>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -32,12 +33,12 @@
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品接收时间">
-                <el-date-picker type="date" placeholder="选择样品接收日期" v-model="agreementForm.receiveSampleTime" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="datetime" placeholder="选择样品接收日期" v-model="agreementForm.receiveSampleTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="要求完成时间">
-                <el-date-picker type="date" placeholder="选择要求完成日期" v-model="agreementForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="datetime" placeholder="选择要求完成日期" default-time="12:00:00" v-model="agreementForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -89,6 +90,11 @@
                   <el-radio label="yes">符合检测要求</el-radio>
                   <el-radio label="no">不符合检测要求</el-radio>
                 </el-radio-group>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="样品检查偏离说明" label-width="150px">
+                <el-input type="textarea" name="sampleCheckResultNotes" v-model="agreementForm.sampleCheckResultNotes" autoComplete="sampleCheckResultNotes"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -318,7 +324,7 @@ export default {
         {'name': '文件预览', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
       ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 12},
       customerDialogFormVisible: false,
       userDialogFormVisible: false,
       customerRequestForm: {
@@ -350,6 +356,9 @@ export default {
     vueImages: vueImages
   },
   methods: {
+    agreementNumberGenerator () {
+      this.$emit('agreementNumberGenerator')
+    },
     removeImage (item) {
       this.$emit('removeImage', item)
     },

@@ -14,6 +14,9 @@ module.exports = {
         '/api': {
         target: 'http://localhost:9000',
           pathRewrite: {"^/api" : "api"}
+                },
+        '/login': {
+        target: 'http://localhost:9000'
                 }
     },
     // Various Dev Server settings

@@ -192,8 +192,8 @@ export default {
         OPT.optionsUrl = '/api/some/options'
       } else {
         OPT.options = [{
-          'value': 'yaogao',
-          'label': '蒸羊羔',
+          'value': '1',
+          'label': '选项一',
           'disabled': false
         }]
       }

@@ -4,7 +4,8 @@
     <el-header class="lims-header" style="height: 69px">
       <el-row type="flex" justify="space-between">
         <el-col :span="8">
-          <el-button type="primary" icon="el-icon-menu" @click="collapseChange"></el-button>
+          <el-button icon="el-icon-menu" style="background: c3c3c3;" @click="collapseChange">{{menuStatus}}</el-button>
+          <img :src="companyImageSource" class="image" alt=""/>
         </el-col>
         <el-col :span="8" class="hidden-md-and-down">
           <el-row type="flex" justify="center">
@@ -41,7 +42,7 @@
     <el-main>
       <el-container class="frame">
         <el-aside v-bind:style="{marginBottom: '20px', width: elAside + 'px'}">
-          <el-menu :default-active="$route.path" @open="handleOpen" @close="handleClose" @select="menuSelected" class="lims-el-menu-vertical">
+          <el-menu :default-active="$route.path" @open="handleOpen" @close="handleClose" @select="menuSelected" class="lims-el-menu-vertical" :unique-opened="true">
             <NavMenu :menuData="leftMenus" :showEnableOnly="showEnableOnly" :iconSize="'10px'"></NavMenu>
           </el-menu>
         </el-aside>
@@ -68,6 +69,7 @@
 import 'font-awesome/css/font-awesome.min.css'
 import NavMenu from './NavMenu'
 import Position from './position'
+const companyImageSource = require('../../../static/image/hairui.png')
 export default {
   name: 'lims',
   props: ['auth'],
@@ -88,7 +90,9 @@ export default {
       instruction: '暂无使用说明',
       restaurants: [],
       state1: '',
-      state2: ''
+      state2: '',
+      menuStatus: '收起菜单',
+      companyImageSource: companyImageSource
     }
   },
   mounted: function () {
@@ -110,6 +114,7 @@ export default {
   methods: {
     collapseChange () {
       this.elAside = this.isCollapse ? 235 : 0
+      this.menuStatus = this.isCollapse ? '收起菜单' : '展开菜单'
       this.isCollapse = !this.isCollapse
     },
     loadData () {
@@ -268,7 +273,7 @@ export default {
     top: 0;
     left: -15px;
     height: 24px;
-    background-color: #e3d7d3;
+    background-color: #c3c3c3;
     border-bottom: 1px solid #A9A9A9;
     padding: 5px;
     overflow: hidden;
@@ -278,5 +283,9 @@ export default {
   }
   .lims {
     background: white;
+  }
+  .image {
+    height: 30px;
+    width: 80px;
   }
 </style>

@@ -28,7 +28,7 @@ export default {
   methods: {
     loadInternalAuditor (internalAuditorId) {
       let vm = this
-      this.$ajax.get('/api/internalauditor/internalAuditor/' + internalAuditorId)
+      this.$ajax.get('/api/internalauditchecklist/internalAuditor/' + internalAuditorId)
         .then(function (res) {
           vm.internalAuditorForm = res.data
         }).catch(function (error) {

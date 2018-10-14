@@ -6,28 +6,34 @@
         </el-button>
       </el-button-group>
     </el-header>
-    <el-container style="padding: 10px">
+    <el-container id="auditContainer" style="padding: 10px">
       <el-form :model="internalAuditCheckListForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="被审核岗位">
-              <el-select name="createUserId" v-model=internalAuditCheckListForm.createUserId>
-               <el-option label="张秀梅" value="zxm"></el-option>
-               <el-option label="关锋" value="augur"></el-option>
-              </el-select>
+                <el-select name="auditDepartment" filterable default-first-option v-model="internalAuditCheckListForm.auditDepartment">
+                <el-option v-for="item in staticOptions.auditDepartments"
+                  :key="item.Id"
+                  :label="item.auditDepartmentName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="内部审核员">
-              <el-select name="createUserId" v-model=internalAuditCheckListForm.createUserId>
-               <el-option label="张秀梅" value="zxm"></el-option>
-               <el-option label="关锋" value="augur"></el-option>
-              </el-select>
+                <el-select name="internalAuditor" filterable default-first-option v-model="internalAuditCheckListForm.internalAuditor">
+                <el-option v-for="item in staticOptions.internalAuditors"
+                  :key="item.Id"
+                  :label="item.internalAuditorName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="审核日期">
-              <el-date-picker type="date" placeholder="选择日期" v-model="internalAuditCheckListForm.date" style="width: 100%;"></el-date-picker>
+              <el-date-picker type="date" placeholder="选择日期" v-model="internalAuditCheckListForm.auditDate" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -35,27 +41,38 @@
               <el-input name="terms" v-model="internalAuditCheckListForm.terms" autoComplete="terms"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <el-col :span="24">
             <el-form-item label="审核内容">
-              <el-input name="auditContent" v-model="internalAuditCheckListForm.auditContent" autoComplete="auditContent"></el-input>
+              <el-input type="textarea" name="auditContent" v-model="internalAuditCheckListForm.auditContent" autoComplete="auditContent"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <el-col :span="24">
             <el-form-item label="审核方法">
               <el-input name="auditMethod" v-model="internalAuditCheckListForm.auditMethod" autoComplete="auditMethod"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <el-col :span="24">
             <el-form-item label="审核说明">
-              <el-input name="auditNote" v-model="internalAuditCheckListForm.auditNote" autoComplete="auditNote"></el-input>
+              <el-input type="textarea" name="auditNote" v-model="internalAuditCheckListForm.auditNote" autoComplete="auditNote"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="审核结果">
-              <el-select name="createUserId" v-model=internalAuditCheckListForm.createUserId>
+              <el-select name="auditResult" v-model="internalAuditCheckListForm.auditResult">
                <el-option label="Yes" value="Yes"></el-option>
                <el-option label="No" value="No"></el-option>
               </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="审批人">
+              <el-select name="checker" filterable default-first-option v-model="internalAuditCheckListForm.checker">
+                <el-option v-for="item in staticOptions.internalAuditors"
+                  :key="item.Id"
+                  :label="item.internalAuditorName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -67,7 +84,7 @@
 <script>
 export default {
   name: 'internalAuditCheckListDetail',
-  props: ['internalAuditCheckListForm'],
+  props: ['internalAuditCheckListForm', 'staticOptions'],
   data () {
     return {
       actions: [
@@ -150,4 +167,7 @@ export default {
 }
 </script>
 <style lang="less">
+#auditContainer {
+  margin-top: 10px;
+}
 </style>

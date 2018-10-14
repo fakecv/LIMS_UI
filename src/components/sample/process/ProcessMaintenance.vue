@@ -5,7 +5,13 @@
         <el-row :gutter="20">
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="委托编号">
-              <el-input name="agreementNumber" v-model="processRequestForm.agreementNumber"></el-input>
+              <el-select name="agreementNumber" filterable default-first-option v-model="processRequestForm.agreementNumber">
+                <el-option v-for="item in agreements"
+                  :key="item.Id"
+                  :label="item.agreementNumber"
+                  :value="item.id">
+                </el-option>
+                </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -25,7 +31,7 @@
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="试样编号">
-              <el-input name="sampleNumber" v-model="processRequestForm.sampleNumber"></el-input>
+              <el-input name="sampleSubNumber" v-model="processRequestForm.sampleSubNumber"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -37,6 +43,17 @@
                 :value="item.id">
               </el-option>
               </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="优先级">
+              <el-select name="processPriority" filterable clearable default-first-option v-model="processRequestForm.processPriority">
+                <el-option v-for="item in processPriorities"
+                  :key="item.Id"
+                  :label="item.processPriorityName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -52,34 +69,40 @@
           prop="agreementNumber"
           label="委托编号"
           :formatter="agreementFormatter"
-          width="180">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="sampleName"
           label="样品名称"
-          width="180">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="processingStatus"
           label="当前流转状态"
           :formatter="processingStatusFormatter"
-          width="180">
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="processPriority"
+          label="优先级"
+          :formatter="processPriorityFormatter"
+          width="80">
         </el-table-column>
         <el-table-column
           prop="receiveSampleTime"
           label="接收样品时间"
           :formatter="receiveSampleTimeFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="materialNumber"
-          label="材质编号"
-          width="180">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="expectedCompletionTime"
           label="要求完成时间"
           :formatter="expectedCompletionTimeFormatter"
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="materialNumber"
+          label="材质编号"
           width="180">
         </el-table-column>
         <el-table-column
@@ -143,6 +166,7 @@ export default {
       drawingDesigns: [],
       agreements: [],
       processingStatuses: [],
+      processPriorities: [],
       departments: [],
       columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 8 }
     }
@@ -225,6 +249,15 @@ export default {
           vm.processingStatuses = res.data
         })
     },
+    loadProcessPriorityData () {
+      let vm = this
+      this.$ajax.get('/api/sample/processPriority/getProcessPriority')
+        .then(function (res) {
+          vm.processPriorities = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     departmentFormatter (row, column) {
       let name = ''
       this.departments.forEach(item => {
@@ -239,6 +272,15 @@ export default {
       this.processingStatuses.forEach(item => {
         if (row.processingStatus === item.id) {
           name = item.processingStatusName
+        }
+      })
+      return name
+    },
+    processPriorityFormatter (row, column) {
+      let name = ''
+      this.processPriorities.forEach(item => {
+        if (row.processPriority === item.id) {
+          name = item.processPriorityName
         }
       })
       return name
@@ -281,12 +323,18 @@ export default {
     },
     receiveSampleTimeFormatter (row, column) {
       if (row.receiveSampleTime) {
-        return row.receiveSampleTime.slice(0, 10)
+        let dateTT = new Date(row.receiveSampleTime)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
       }
     },
     expectedCompletionTimeFormatter (row, column) {
       if (row.expectedCompletionTime) {
-        return row.expectedCompletionTime.slice(0, 10)
+        let dateTT = new Date(row.expectedCompletionTime)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
       }
     }
   },
@@ -298,6 +346,7 @@ export default {
     this.loadDepartment()
     this.loadAgreement()
     this.loadProcessingStatusData()
+    this.loadProcessPriorityData()
   }
 }
 </script>

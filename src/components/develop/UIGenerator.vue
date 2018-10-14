@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     el-container
-      el-header
+      el-header(style="height: 100px")
         router-view(name="header" :actions="actions" @add="actionHandler")
       el-container(style="padding: 10px")
         router-view(name="aside" style="width:380px")
@@ -43,7 +43,7 @@ export default {
     actionHandler (action) {
       var vm = this
       if (action.id === '1') {
-        this.jsonContent = ''
+        // this.jsonContent = ''
         this.$store.state.forms[this.$route.params.fid].formItemList = []
       } else if (action.id === '2') {
         this.submit(this.$store.state.forms[this.$route.params.fid])

@@ -12,6 +12,9 @@
     <el-form-item label="表单名称">
       <el-input v-model="domain"></el-input>
     </el-form-item>
+    <el-form-item label="类包名称">
+      <el-input v-model="packageName"></el-input>
+    </el-form-item>
   </el-form>
 </el-col>
 </el-row>
@@ -32,6 +35,14 @@ export default {
       },
       set (domain) {
         this.$store.commit('FORM_UPDATE_WITH_FID_DOMAIN', { fid: this.$route.params.fid, domain })
+      }
+    },
+    packageName: {
+      get () {
+        return this.$store.state.forms[this.$route.params.fid].packageName
+      },
+      set (packageName) {
+        this.$store.commit('FORM_UPDATE_WITH_FID_PACKAGENAME', { fid: this.$route.params.fid, packageName })
       }
     }
   },

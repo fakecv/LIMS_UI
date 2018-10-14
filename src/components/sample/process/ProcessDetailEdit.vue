@@ -56,7 +56,9 @@ export default {
         experimentalItems: [],
         drawingDesigns: [],
         processingStatuses: [],
+        processPriorities: [],
         departments: [],
+        processTableData: [],
         agreements: []
       }
     }
@@ -98,6 +100,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadProcessPriorityData () {
+      let vm = this
+      this.$ajax.get('/api/sample/processPriority/getProcessPriority')
+        .then(function (res) {
+          vm.staticOptions.processPriorities = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     loadDepartment () {
       let vm = this
       this.$ajax.get('/api/sample/department/getDepartment')
@@ -125,6 +136,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadAgreementProcess (agreementId) {
+      let vm = this
+      this.$ajax.get('/api/sample/process/agreement/' + agreementId)
+        .then(function (res) {
+          vm.staticOptions.processTableData = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     resetProcessForm () {
       this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
     },
@@ -137,6 +157,7 @@ export default {
     this.loadExperimentalItemData()
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()
+    this.loadProcessPriorityData()
     this.loadDepartment()
     this.loadAgreement()
     console.log(this.$route.params.id)

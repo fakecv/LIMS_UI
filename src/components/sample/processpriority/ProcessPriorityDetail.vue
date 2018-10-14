@@ -7,18 +7,16 @@
       </el-button-group>
     </el-header>
     <el-container style="padding: 10px">
-      <el-form :model="auditDepartmentForm" label-width="120px" label-position="left" size="mini">
+      <el-form :model="processPriorityForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-col >
-            <el-form-item label="被审核岗位名称">
-              <el-input name="auditDepartmentName" v-model="auditDepartmentForm.auditDepartmentName" autoComplete="auditDepartmentName"></el-input>
+          <el-col :span="12">
+            <el-form-item label="优先级名称">
+              <el-input name="processPriorityName" v-model="processPriorityForm.processPriorityName" autoComplete="priorityName"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col>
-            <el-form-item label="被审核岗位描述">
-              <el-input type="textarea" name="auditDepartmentDescription" v-model="auditDepartmentForm.auditDepartmentDescription" autoComplete="auditDepartmentDescription"></el-input>
+          <el-col :span="24">
+            <el-form-item label="优先级描述">
+              <el-input type="textarea" name="processPriorityDescription" v-model="processPriorityForm.processPriorityDescription" autoComplete="priorityDescription"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -29,8 +27,8 @@
 
 <script>
 export default {
-  name: 'auditDepartmentDetail',
-  props: ['auditDepartmentForm'],
+  name: 'processPriorityDetail',
+  props: ['processPriorityForm'],
   data () {
     return {
       actions: [
@@ -74,17 +72,17 @@ export default {
     },
     saveToDB () {
       let vm = this
-      this.$ajax.post('/api/internalauditchecklist/auditDepartment', this.auditDepartmentForm)
+      this.$ajax.post('/api/sample/processPriority', this.processPriorityForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
-          vm.$emit('updateAuditDepartmentForm', res.data)
+          vm.$emit('updateProcessPriorityForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
     confirmDelete () {
       let vm = this
-      if (this.auditDepartmentForm.id && this.auditDepartmentForm.id !== '') {
+      if (this.processPriorityForm.id && this.processPriorityForm.id !== '') {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -101,10 +99,10 @@ export default {
     },
     delete () {
       let vm = this
-      this.$ajax.get('/api/internalauditchecklist/auditDepartment/delete/' + this.auditDepartmentForm.id)
+      this.$ajax.get('/api/sample/processPriority/delete/' + this.processPriorityForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteAuditDepartment')
+          vm.$emit('deleteProcessPriority')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

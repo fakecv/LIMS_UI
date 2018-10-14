@@ -47,12 +47,18 @@ import Preview from '@/views/preview/preview'
 import ProcessDetailNew from '@/components/sample/process/ProcessDetailNew'
 import ProcessDetailEdit from '@/components/sample/process/ProcessDetailEdit'
 import ProcessMaintenance from '@/components/sample/process/ProcessMaintenance'
+import NumberGeneratorDetailNew from '@/components/sample/numbergenerator/NumberGeneratorDetailNew'
+import NumberGeneratorDetailEdit from '@/components/sample/numbergenerator/NumberGeneratorDetailEdit'
+import NumberGeneratorMaintenance from '@/components/sample/numbergenerator/NumberGeneratorMaintenance'
 import ProcessingDetailNew from '@/components/sample/processing/ProcessingDetailNew'
 import ProcessingDetailEdit from '@/components/sample/processing/ProcessingDetailEdit'
 import ProcessingMaintenance from '@/components/sample/processing/ProcessingMaintenance'
 import ProcessingStatusDetailNew from '@/components/sample/processingstatus/ProcessingStatusDetailNew'
 import ProcessingStatusDetailEdit from '@/components/sample/processingstatus/ProcessingStatusDetailEdit'
 import ProcessingStatusMaintenance from '@/components/sample/processingstatus/ProcessingStatusMaintenance'
+import ProcessPriorityDetailNew from '@/components/sample/processpriority/ProcessPriorityDetailNew'
+import ProcessPriorityDetailEdit from '@/components/sample/processpriority/ProcessPriorityDetailEdit'
+import ProcessPriorityMaintenance from '@/components/sample/processpriority/ProcessPriorityMaintenance'
 import RoleDetailNew from '@/components/system/role/RoleDetailNew'
 import RoleDetailEdit from '@/components/system/role/RoleDetailEdit'
 import RoleGroupDetailNew from '@/components/system/rolegroup/RoleGroupDetailNew'
@@ -263,6 +269,21 @@ const router = new Router({
           component: MenuMaintenance
         },
         {
+          path: 'numberGeneratorDetailEdit/:id',
+          name: 'numberGeneratorDetailEdit',
+          component: NumberGeneratorDetailEdit
+        },
+        {
+          path: 'numberGeneratorDetailNew',
+          name: 'numberGeneratorDetailNew',
+          component: NumberGeneratorDetailNew
+        },
+        {
+          path: 'numberGeneratorMaintenance',
+          name: 'numberGeneratorMaintenance',
+          component: NumberGeneratorMaintenance
+        },
+        {
           path: 'processDetailEdit/:id',
           name: 'processDetailEdit',
           component: ProcessDetailEdit
@@ -306,6 +327,21 @@ const router = new Router({
           path: 'processingStatusMaintenance',
           name: 'processingStatusMaintenance',
           component: ProcessingStatusMaintenance
+        },
+        {
+          path: 'processPriorityDetailEdit/:id',
+          name: 'processPriorityDetailEdit',
+          component: ProcessPriorityDetailEdit
+        },
+        {
+          path: 'processPriorityDetailNew',
+          name: 'processPriorityDetailNew',
+          component: ProcessPriorityDetailNew
+        },
+        {
+          path: 'processPriorityMaintenance',
+          name: 'processPriorityMaintenance',
+          component: ProcessPriorityMaintenance
         },
         {
           path: 'roleDetailEdit/:id',
