@@ -1,18 +1,18 @@
 <template>
   <div id="limsnavmenu">
     <template v-for="navMenu in menuData">
-        <el-menu-item v-if="navMenu.children==null&&navMenu&&((showEnableOnly&&navMenu.state)||(!showEnableOnly))"
+        <el-menu-item class="mainmenu" v-if="navMenu.children==null&&navMenu&&((showEnableOnly&&navMenu.state)||(!showEnableOnly))"
                       :key="navMenu.id" :data="navMenu" :index="navMenu.value">
           <i :class="navMenu.icon" :style="{fontSize:iconSize}"></i>
           <span slot="title" style="font-size: 12px">{{navMenu.alias}}</span>
         </el-menu-item>
-        <el-submenu v-if="navMenu.children&&navMenu&&((showEnableOnly&&navMenu.state)||(!showEnableOnly))"
+        <el-submenu class="submenu" v-if="navMenu.children&&navMenu&&((showEnableOnly&&navMenu.state)||(!showEnableOnly))"
                     :key="navMenu.id" :data="navMenu" :index="navMenu.name" :popper-append-to-body="true">
           <template slot="title">
             <i :class="navMenu.icon" :style="{fontSize:iconSize}"></i>
             <span> {{navMenu.alias}}</span>
           </template>
-          <NavMenu :menuData="navMenu.children" :showEnableOnly="showEnableOnly" :iconSize="iconSize"></NavMenu>
+          <NavMenu class="navmenu" :menuData="navMenu.children" :showEnableOnly="showEnableOnly" :iconSize="iconSize"></NavMenu>
         </el-submenu>
     </template>
   </div>
@@ -30,6 +30,6 @@ export default {
 </script>
 <style scoped>
 #limsnavmenu {
-  background-color: #15DDE0;
+  background-color: rgb(236, 236, 236);
 }
 </style>

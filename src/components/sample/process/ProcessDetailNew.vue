@@ -4,17 +4,43 @@
       :processForm="processForm"
       :staticOptions="staticOptions"
       v-on:getAgreementInfo="getAgreementInfo"
+      v-on:getExperimentalMethod="getExperimentalMethod"
       v-on:updateProcessForm="updateProcessForm"
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
       v-on:copy="resetProcessId"
       v-on:sampleNumberGenerator="sampleNumberGenerator"
       />
-      <el-table :data="staticOptions.processTableData" style="width: 100%">
+      <el-table :data="staticOptions.processTableData" style="width: 100%" @row-dblclick=dblclick>
+        <el-table-column
+          prop="sampleNumber"
+          label="样品编号"
+          fixed
+          width="100">
+        </el-table-column>
         <el-table-column
           prop="sampleSubNumber"
           label="试样编号"
+          fixed
           width="100">
+        </el-table-column>
+        <el-table-column
+          prop="experimentalItem"
+          label="检测项目"
+          :formatter="experimentalItemFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="experimentalMethod"
+          label="检测方法"
+          :formatter="experimentalMethodFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="drawingDesign"
+          label="加工图号"
+          :formatter="drawingDesignFormatter"
+          width="180">
         </el-table-column>
         <el-table-column
           prop="processingStatus"
@@ -39,24 +65,6 @@
           label="要求完成时间"
           :formatter="expectedCompletionTimeFormatter"
           width="150">
-        </el-table-column>
-        <el-table-column
-          prop="experimentalItem"
-          label="检测项目"
-          :formatter="experimentalItemFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="experimentalMethod"
-          label="检测方法"
-          :formatter="experimentalMethodFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="drawingDesign"
-          label="加工图号"
-          :formatter="drawingDesignFormatter"
-          width="180">
         </el-table-column>
       </el-table>
   </div>
@@ -85,7 +93,8 @@ export default {
         comment: '',
         submitFrom: '',
         submitTo: '',
-        processingStatus: ''
+        processingStatus: '',
+        processingStatues: []
       },
       processResetForm: {
         id: '',
@@ -103,10 +112,12 @@ export default {
         comment: '',
         submitFrom: '',
         submitTo: '',
-        processingStatus: ''
+        processingStatus: '',
+        processingStatues: []
       },
       staticOptions: {
         experimentalMethods: [],
+        filteredExperimentalMethods: [],
         experimentalItems: [],
         drawingDesigns: [],
         processingStatuses: [],
@@ -118,6 +129,9 @@ export default {
     }
   },
   methods: {
+    dblclick (row, event) {
+      this.$router.push('/lims/processDetailEdit/' + row.id)
+    },
     sampleNumberGenerator () {
       let vm = this
       this.$ajax.get('/api/sample/process/generateSampleNumber')
@@ -215,6 +229,12 @@ export default {
         }
       })
       this.loadAgreementProcess(agreementId)
+    },
+    getExperimentalMethod (experimentalItemId) {
+      this.staticOptions.filteredExperimentalMethods =
+        this.staticOptions.experimentalMethods.filter(function (val) {
+          return val.experimentalItem === experimentalItemId
+        })
     },
     processPriorityFormatter (row, column) {
       let name = ''

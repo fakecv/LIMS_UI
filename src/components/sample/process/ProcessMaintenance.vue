@@ -66,10 +66,35 @@
     </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
+          fixed
           prop="agreementNumber"
           label="委托编号"
           :formatter="agreementFormatter"
           width="150">
+        </el-table-column>
+        <el-table-column
+          prop="sampleSubNumber"
+          fixed
+          label="试样编号"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="experimentalItem"
+          label="检测项目"
+          :formatter="experimentalItemFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="experimentalMethod"
+          label="检测方法"
+          :formatter="experimentalMethodFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="drawingDesign"
+          label="加工图号"
+          :formatter="drawingDesignFormatter"
+          width="180">
         </el-table-column>
         <el-table-column
           prop="sampleName"
@@ -105,29 +130,6 @@
           label="材质编号"
           width="180">
         </el-table-column>
-        <el-table-column
-          prop="sampleSubNumber"
-          label="试样编号"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="experimentalItem"
-          label="检测项目"
-          :formatter="experimentalItemFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="experimentalMethod"
-          label="检测方法"
-          :formatter="experimentalMethodFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="drawingDesign"
-          label="加工图号"
-          :formatter="drawingDesignFormatter"
-          width="180">
-        </el-table-column>
       </el-table>
       <div class="block text-right">
         <el-pagination
@@ -158,6 +160,7 @@ export default {
         experimentalMethod: '',
         drawingDesign: '',
         processingStatus: '',
+        processingStatues: [],
         itemsPerPage: 20,
         currentPage: 1
       },
@@ -168,7 +171,7 @@ export default {
       processingStatuses: [],
       processPriorities: [],
       departments: [],
-      columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 8 }
+      columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }
     }
   },
   methods: {

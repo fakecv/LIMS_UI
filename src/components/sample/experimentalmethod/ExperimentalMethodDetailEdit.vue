@@ -1,6 +1,7 @@
 <template>
   <ExperimentalMethodDetail
    :experimentalMethodForm="experimentalMethodForm"
+   :staticOptions="staticOptions"
    v-on:new="resetExperimentalMethodForm"
    v-on:copy="resetExperimentalMethodId"
    v-on:deleteExperimentalMethod="resetExperimentalMethodForm"
@@ -17,12 +18,17 @@ export default {
       experimentalMethodForm: {
         id: '',
         experimentalMethodName: '',
-        experimentalMethodNumber: ''
+        experimentalMethodNumber: '',
+        experimentalItem: ''
       },
       experimentalMethodResetForm: {
         id: '',
         experimentalMethodName: '',
-        experimentalMethodNumber: ''
+        experimentalMethodNumber: '',
+        experimentalItem: ''
+      },
+      staticOptions: {
+        experimentalItems: []
       }
     }
   },
@@ -37,6 +43,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadExperimentalItemData () {
+      let vm = this
+      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+        .then(function (res) {
+          vm.staticOptions.experimentalItems = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     resetExperimentalMethodForm () {
       this.experimentalMethodForm = JSON.parse(JSON.stringify(this.experimentalMethodResetForm))
     },
@@ -45,6 +60,7 @@ export default {
     }
   },
   mounted () {
+    this.loadExperimentalItemData()
     console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadExperimentalMethod(this.$route.params.id)

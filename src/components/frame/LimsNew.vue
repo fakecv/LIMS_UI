@@ -273,7 +273,7 @@ export default {
     top: 0;
     left: -15px;
     height: 24px;
-    background-color: #c3c3c3;
+    background-color: rgb(236,236,236);
     border-bottom: 1px solid #A9A9A9;
     padding: 5px;
     overflow: hidden;

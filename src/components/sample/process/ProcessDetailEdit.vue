@@ -2,9 +2,12 @@
   <ProcessDetail
     :processForm="processForm"
     :staticOptions="staticOptions"
-    v-on:deleteProcess="resetProcessForm"
-    v-on:new="resetProcessForm"
-    v-on:copy="resetProcessId"
+      v-on:getAgreementInfo="getAgreementInfo"
+      v-on:getExperimentalMethod="getExperimentalMethod"
+      v-on:deleteProcessForm="resetProcessForm"
+      v-on:new="resetProcessForm"
+      v-on:copy="resetProcessId"
+      v-on:sampleNumberGenerator="sampleNumberGenerator"
     />
 </template>
 
@@ -31,7 +34,8 @@ export default {
         comment: '',
         submitFrom: '',
         submitTo: '',
-        processingStatus: ''
+        processingStatus: '',
+        processingStatues: []
       },
       processResetForm: {
         id: '',
@@ -49,10 +53,12 @@ export default {
         comment: '',
         submitFrom: '',
         submitTo: '',
-        processingStatus: ''
+        processingStatus: '',
+        processingStatues: []
       },
       staticOptions: {
         experimentalMethods: [],
+        filteredExperimentalMethods: [],
         experimentalItems: [],
         drawingDesigns: [],
         processingStatuses: [],
@@ -69,6 +75,15 @@ export default {
       this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
         .then(function (res) {
           vm.staticOptions.experimentalMethods = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    sampleNumberGenerator () {
+      let vm = this
+      this.$ajax.get('/api/sample/process/generateSampleNumber')
+        .then(function (res) {
+          vm.processForm.sampleNumber = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -132,6 +147,7 @@ export default {
       this.$ajax.get('/api/sample/process/' + processId)
         .then(function (res) {
           vm.processForm = res.data
+          vm.getExperimentalMethod(vm.processForm.experimentalItem)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -144,6 +160,24 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    getExperimentalMethod (experimentalItemId) {
+      this.staticOptions.filteredExperimentalMethods =
+        this.staticOptions.experimentalMethods.filter(function (val) {
+          return val.experimentalItem === experimentalItemId
+        })
+    },
+    getAgreementInfo (agreementId) {
+      let vm = this
+      this.staticOptions.agreements.forEach(agreement => {
+        if (agreement.id === agreementId) {
+          vm.processForm.sampleName = agreement.sampleName
+          vm.processForm.materialNumber = agreement.materialNumber
+          vm.processForm.receiveSampleTime = agreement.receiveSampleTime
+          vm.processForm.expectedCompletionTime = agreement.expectedCompletionTime
+        }
+      })
+      this.loadAgreementProcess(agreementId)
     },
     resetProcessForm () {
       this.processForm = JSON.parse(JSON.stringify(this.processResetForm))

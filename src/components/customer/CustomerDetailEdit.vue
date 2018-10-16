@@ -16,6 +16,7 @@ export default {
       customerForm: {
         id: '',
         name: '',
+        company: '',
         mobileNumber: '',
         fax: '',
         email: '',
@@ -24,6 +25,7 @@ export default {
       customerResetForm: {
         id: '',
         name: '',
+        company: '',
         mobileNumber: '',
         fax: '',
         email: '',

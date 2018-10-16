@@ -46,7 +46,7 @@
                 <el-input name="noOfSample" v-model="agreementForm.noOfSample" autoComplete="noOfSample"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-col :span="24">
               <el-form-item label="其他信息">
                 <el-input type="textarea" name="comment" v-model="agreementForm.comment" autoComplete="comment"></el-input>
               </el-form-item>

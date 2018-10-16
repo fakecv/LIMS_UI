@@ -9,8 +9,13 @@
     <el-container style="padding: 10px" direction="vertical">
       <el-form :model="customerForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-form-item label="客户名称">
+          <el-form-item label="联系人">
             <el-input name="name" v-model="customerForm.name" autoComplete="name"></el-input>
+          </el-form-item>
+        </el-row>
+        <el-row :gutter="20">
+          <el-form-item label="客户单位">
+            <el-input name="name" v-model="customerForm.company" autoComplete="company"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="20">

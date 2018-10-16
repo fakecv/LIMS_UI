@@ -39,7 +39,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow-y:scroll;
-  background: #c3c3c3;
+  background: rgb(0,128,128);
 }
 .container {
   min-height: 100%;

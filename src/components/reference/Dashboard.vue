@@ -1,32 +1,39 @@
 <template>
  <div>
-   <div id="myChart" :style="{width: '300px', height: '300px'}"></div>
- <div style="width: 600px;margin-left:10px;margin-top:20px">
-   <el-collapse  v-model="selectActiveName" @change="foldNode" accordion>
-    <el-collapse-item title="一致性 Consistency" name="1">
-      <div>
-        <el-steps :space="200" :active="1" finish-status="success">
-          <el-step title="已完成"></el-step>
-          <el-step title="进行中"></el-step>
-          <el-step title="步骤 3"></el-step>
-        </el-steps>
-      </div>
-    </el-collapse-item>
-    <el-collapse-item title="反馈 Feedback" name="2">
-      <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
-      <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
-    </el-collapse-item>
-    <el-collapse-item title="效率 Efficiency" name="3">
-      <div>简化流程：设计简洁直观的操作流程；</div>
-      <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>
-      <div>帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。</div>
-    </el-collapse-item>
-    <el-collapse-item title="可控 Controllability" name="4">
-      <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
-      <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>
-    </el-collapse-item>
-  </el-collapse>
- </div>
+  <div id="myChart" :style="{width: '300px', height: '300px'}"></div>
+  <div class="block text-right">
+  <el-pagination
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+    :current-page.sync="processRequestForm.currentPage"
+    :page-sizes="[10, 20, 50]"
+    :page-size="20"
+    layout="sizes, prev, pager, next"
+    :total="totalProcesss">
+  </el-pagination>
+</div>
+  <div style="width: 600px;margin-left:10px;margin-top:20px">
+    <el-collapse  v-model="selectActiveName" @change="foldNode" accordion>
+      <el-collapse-item v-for="value in tableData" :key="value.id" :title="value.agreementNumber" name="1">
+        <div>
+          <el-steps :space="200" :active="1" finish-status="success">
+            <el-step v-for="(step, index) in value.processingStatues" :key="index" :title="step"></el-step>
+          </el-steps>
+        </div>
+      </el-collapse-item>
+    </el-collapse>
+  </div>
+  <div class="block text-right">
+  <el-pagination
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+    :current-page.sync="processRequestForm.currentPage"
+    :page-sizes="[10, 20, 50]"
+    :page-size="20"
+    layout="sizes, prev, pager, next"
+    :total="totalProcesss">
+  </el-pagination>
+</div>
  </div>
 </template>
 <script>
@@ -36,12 +43,46 @@ export default {
     return {
       step: 0,
       selectActiveName: '1',
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      tableData: [],
+      totalProcesss: 0,
+      processRequestForm: {
+        agreementNumber: '',
+        sampleName: '',
+        materialNumber: '',
+        sampleSubNumber: '',
+        experimentalMethod: '',
+        drawingDesign: '',
+        processingStatus: '',
+        processingStatues: [],
+        itemsPerPage: 20,
+        currentPage: 1
+      }
     }
   },
   methods: {
     foldNode () {
 
+    },
+    handleSizeChange (val) {
+      this.processRequestForm.itemsPerPage = val
+      console.log(`每页 ${val} 条`)
+      this.onSubmit()
+    },
+    handleCurrentChange (val) {
+      this.processRequestForm.currentPage = val
+      console.log(`当前页: ${val}`)
+      this.onSubmit()
+    },
+    onSubmit () {
+      let vm = this
+      this.$ajax
+        .post('/api/sample/process/queryProcess', this.processRequestForm)
+        .then(function (res) {
+          vm.tableData = res.data.pageResult || []
+          vm.totalProcesss = res.data.totalProcesss || 0
+          console.log(vm.tableData)
+        })
     },
     drawLine () {
       // 基于准备好的dom，初始化echarts实例
@@ -63,7 +104,9 @@ export default {
     }
   },
   mounted () {
+    console.log('mounted')
     this.drawLine()
+    this.onSubmit()
   }
 }
 </script>

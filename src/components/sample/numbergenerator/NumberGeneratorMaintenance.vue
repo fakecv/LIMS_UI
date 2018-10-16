@@ -3,7 +3,7 @@
       <el-container style="padding: 10px">
         <el-form :model="numberGeneratorRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
-            <el-form-item label="部门名称">
+            <el-form-item label="编号名称">
               <el-input name="numberGeneratorName" v-model="numberGeneratorRequestForm.numberGeneratorName"></el-input>
             </el-form-item>
           </el-row>

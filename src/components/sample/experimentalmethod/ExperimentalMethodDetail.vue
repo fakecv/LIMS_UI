@@ -6,15 +6,27 @@
         </el-button>
       </el-button-group>
     </el-header>
+
     <el-container style="padding: 10px" direction="vertical">
       <el-form :model="experimentalMethodForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-form-item label="实验方法名称">
-            <el-input name="experimentalMethodName" v-model="experimentalMethodForm.experimentalMethodName"></el-input>
+          <el-form-item label="检测项目名称">
+              <el-select name="experimentalItem" filterable default-first-option v-model="experimentalMethodForm.experimentalItem">
+                <el-option v-for="item in staticOptions.experimentalItems"
+                  :key="item.Id"
+                  :label="item.experimentalItemName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
           <el-form-item label="实验方法编号">
+            <el-input name="experimentalMethodName" v-model="experimentalMethodForm.experimentalMethodName"></el-input>
+          </el-form-item>
+        </el-row>
+        <el-row :gutter="20">
+          <el-form-item label="实验方法描述">
             <el-input type="textarea" name="experimentalMethodNumber" v-model="experimentalMethodForm.experimentalMethodNumber"></el-input>
           </el-form-item>
         </el-row>
@@ -26,7 +38,7 @@
 <script>
 export default {
   name: 'experimentalMethodDetail',
-  props: ['experimentalMethodForm'],
+  props: ['experimentalMethodForm', 'staticOptions'],
   data () {
     return {
       actions: [

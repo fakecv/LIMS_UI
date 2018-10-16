@@ -64,7 +64,7 @@
             </el-col> -->
             <el-col  :span="24">
               <el-form-item label="检测项目">
-                <el-select name="experimentalItem" filterable default-first-option v-model="processForm.experimentalItem">
+                <el-select name="experimentalItem" filterable default-first-option v-model="processForm.experimentalItem" @change="getExperimentalMethod">
                 <el-option v-for="item in staticOptions.experimentalItems"
                   :key="item.Id"
                   :label="item.experimentalItemName"
@@ -76,9 +76,9 @@
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="检测方法">
                 <el-select name="experimentalMethod" filterable default-first-option v-model="processForm.experimentalMethod">
-                <el-option v-for="item in staticOptions.experimentalMethods"
+                <el-option v-for="item in staticOptions.filteredExperimentalMethods"
                   :key="item.Id"
-                  :label="item.experimentalMethodNumber"
+                  :label="item.experimentalMethodName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -237,6 +237,9 @@ export default {
     },
     getAgreementNumber  (val) {
       this.$emit('getAgreementInfo', val)
+    },
+    getExperimentalMethod  (val) {
+      this.$emit('getExperimentalMethod', val)
     },
     sampleNumberGenerator () {
       this.$emit('sampleNumberGenerator')
