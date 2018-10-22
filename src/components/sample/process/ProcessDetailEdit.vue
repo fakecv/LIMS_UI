@@ -4,6 +4,7 @@
     :staticOptions="staticOptions"
       v-on:getAgreementInfo="getAgreementInfo"
       v-on:getExperimentalMethod="getExperimentalMethod"
+      v-on:getExperimentItemsParameter="getExperimentItemsParameter"
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
       v-on:copy="resetProcessId"
@@ -59,6 +60,8 @@ export default {
       staticOptions: {
         experimentalMethods: [],
         filteredExperimentalMethods: [],
+        experimentItemsParameters: [],
+        filteredExperimentItemsParameters: [],
         experimentalItems: [],
         drawingDesigns: [],
         processingStatuses: [],
@@ -86,6 +89,13 @@ export default {
           vm.processForm.sampleNumber = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
+        })
+    },
+    loadExperimentItemsParameterData () {
+      let vm = this
+      this.$ajax.get('/api/sample/experimentItemsParameter/getExperimentItemsParameter')
+        .then(function (res) {
+          vm.staticOptions.experimentItemsParameters = res.data
         })
     },
     loadExperimentalItemData () {
@@ -167,6 +177,12 @@ export default {
           return val.experimentalItem === experimentalItemId
         })
     },
+    getExperimentItemsParameter (experimentalItemId) {
+      this.staticOptions.filteredExperimentItemsParameters =
+        this.staticOptions.experimentItemsParameters.filter(function (val) {
+          return val.experimentalItem === experimentalItemId
+        })
+    },
     getAgreementInfo (agreementId) {
       let vm = this
       this.staticOptions.agreements.forEach(agreement => {
@@ -188,6 +204,7 @@ export default {
   },
   mounted () {
     this.loadExperimentalMethodData()
+    this.loadExperimentItemsParameterData()
     this.loadExperimentalItemData()
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()

@@ -49,7 +49,7 @@
             <el-col :span="24">
               <el-form-item label="样品编号">
                 <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input>
-                <el-button  @click="sampleNumberGenerator">生成样品编号</el-button>
+                <el-button  :disabled="sampleNumberButton" @click="sampleNumberGenerator">生成样品编号</el-button>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -69,6 +69,17 @@
                   :key="item.Id"
                   :label="item.experimentalItemName"
                   :value="item.id">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="检测项目参数">
+                <el-select name="experimentItemsParameter" filterable allow-create clearable default-first-option v-model="processForm.experimentItemsParameter">
+                <el-option v-for="item in staticOptions.filteredExperimentItemsParameters"
+                  :key="item.Id"
+                  :label="item.experimentItemsParameterName"
+                  :value="item.experimentItemsParameterName">
                 </el-option>
                 </el-select>
               </el-form-item>
@@ -157,6 +168,7 @@ export default {
   props: ['processForm', 'staticOptions', 'customerForm', 'userForm'],
   data () {
     return {
+      sampleNumberButton: false,
       actions: [
         {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false},
         {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
@@ -194,9 +206,11 @@ export default {
     },
     new () {
       this.$emit('new')
+      this.sampleNumberButton = false
     },
     copy () {
       this.$emit('copy')
+      this.sampleNumberButton = false
     },
     saveToDB () {
       let vm = this
@@ -204,6 +218,7 @@ export default {
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateProcessForm', res.data)
+          vm.sampleNumberButton = false
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -230,7 +245,8 @@ export default {
       this.$ajax.get('/api/sample/process/delete/' + this.processForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteProcess')
+          vm.$emit('deleteProcessForm')
+          vm.sampleNumberButton = false
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -240,9 +256,18 @@ export default {
     },
     getExperimentalMethod  (val) {
       this.$emit('getExperimentalMethod', val)
+      this.$emit('getExperimentItemsParameter', val)
     },
     sampleNumberGenerator () {
-      this.$emit('sampleNumberGenerator')
+      let vm = this
+      this.$ajax.get('/api/sample/process/generateSampleNumber')
+        .then(function (res) {
+          vm.processForm.sampleNumber = res.data
+          vm.processForm.sampleSubNumber = res.data
+          vm.sampleNumberButton = true
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     submit () {
       let vm = this
@@ -250,6 +275,7 @@ export default {
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateProcessForm', res.data)
+          vm.sampleNumberButton = false
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

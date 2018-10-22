@@ -114,6 +114,7 @@ export default {
           }
           if (res.data.imageNameList.length > 0) {
             vm.agreementForm.imageNameList.forEach(image => {
+              console.log('dowload' + image)
               vm.downloadToFrontEnd(image, vm.agreementForm.agreementNumber)
             })
           }

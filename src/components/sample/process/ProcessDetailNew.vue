@@ -5,6 +5,7 @@
       :staticOptions="staticOptions"
       v-on:getAgreementInfo="getAgreementInfo"
       v-on:getExperimentalMethod="getExperimentalMethod"
+      v-on:getExperimentItemsParameter="getExperimentItemsParameter"
       v-on:updateProcessForm="updateProcessForm"
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
@@ -118,6 +119,8 @@ export default {
       staticOptions: {
         experimentalMethods: [],
         filteredExperimentalMethods: [],
+        experimentItemsParameters: [],
+        filteredExperimentItemsParameters: [],
         experimentalItems: [],
         drawingDesigns: [],
         processingStatuses: [],
@@ -146,6 +149,13 @@ export default {
       this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
         .then(function (res) {
           vm.staticOptions.experimentalMethods = res.data
+        })
+    },
+    loadExperimentItemsParameterData () {
+      let vm = this
+      this.$ajax.get('/api/sample/experimentItemsParameter/getExperimentItemsParameter')
+        .then(function (res) {
+          vm.staticOptions.experimentItemsParameters = res.data
         })
     },
     loadExperimentalItemData () {
@@ -236,6 +246,12 @@ export default {
           return val.experimentalItem === experimentalItemId
         })
     },
+    getExperimentItemsParameter (experimentalItemId) {
+      this.staticOptions.filteredExperimentItemsParameters =
+        this.staticOptions.experimentItemsParameters.filter(function (val) {
+          return val.experimentalItem === experimentalItemId
+        })
+    },
     processPriorityFormatter (row, column) {
       let name = ''
       this.staticOptions.processPriorities.forEach(item => {
@@ -300,6 +316,7 @@ export default {
   },
   mounted () {
     this.loadExperimentalMethodData()
+    this.loadExperimentItemsParameterData()
     this.loadExperimentalItemData()
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()

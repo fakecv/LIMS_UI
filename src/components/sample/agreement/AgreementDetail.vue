@@ -13,7 +13,7 @@
             <el-col :span="24">
               <el-form-item label="委托编号">
                 <el-input name="agreementNumber" v-model="agreementForm.agreementNumber" autoComplete="agreementNumber"></el-input>
-                <el-button  @click="agreementNumberGenerator">生成委托编号</el-button>
+                <el-button :disabled="agreementNumberButton" @click="agreementNumberGenerator">生成委托编号</el-button>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -315,6 +315,7 @@ export default {
   props: ['agreementForm', 'staticOptions', 'customerForm', 'userForm'],
   data () {
     return {
+      agreementNumberButton: false,
       actions: [
         {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false},
         {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
@@ -358,6 +359,7 @@ export default {
   methods: {
     agreementNumberGenerator () {
       this.$emit('agreementNumberGenerator')
+      this.agreementNumberButton = true
     },
     removeImage (item) {
       this.$emit('removeImage', item)
@@ -447,6 +449,7 @@ export default {
       console.log(action.id)
       if (action.id === '1') {
         this.saveToDB()
+        this.agreementNumberButton = false
       } else if (action.id === '2') {
         console.log(action.id)
         this.confirmDelete()
@@ -459,9 +462,11 @@ export default {
         console.log(action.id)
       } else if (action.id === '5') {
         this.new()
+        this.agreementNumberButton = false
       } else if (action.id === '6') {
         this.copy()
         this.$message('复制成功!')
+        this.agreementNumberButton = false
       } else if (action.id === '7') {
         console.log(action.id)
       }
@@ -524,6 +529,7 @@ export default {
             message: '已经成功删除！'
           })
           vm.$emit('deleteAgreement')
+          vm.agreementNumberButton = false
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
