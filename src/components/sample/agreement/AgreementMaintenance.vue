@@ -9,8 +9,11 @@
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="委托单位">
-              <el-input name="client" v-model="agreementRequestForm.client"></el-input>
+            <el-form-item label="完成状态">
+              <el-select name="done" clearable v-model="agreementRequestForm.done">
+               <el-option label="未完成" value="false"></el-option>
+               <el-option label="已完成" value="true"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -33,13 +36,31 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="client"
-          label="委托单位"
+          prop="sampleName"
+          label="样品名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="sampletName"
-          label="样品名称"
+          prop="receiveSampleTime"
+          label="样品接收时间"
+          :formatter="receiveSampleTimeFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="expectedCompletionTime"
+          label="要求完成时间"
+          :formatter="expectedCompletionTimeFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="comment"
+          label="其他信息"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="done"
+          label="完成状态"
+          :formatter="doneFormatter"
           width="180">
         </el-table-column>
       </el-table>
@@ -66,7 +87,7 @@ export default {
       totalAgreements: 0,
       agreementRequestForm: {
         agreementNumber: '',
-        client: '',
+        done: 'false',
         sampleName: '',
         experimentalCategory: [],
         itemsPerPage: 20,
@@ -95,7 +116,31 @@ export default {
           vm.tableData = res.data.pageResult || []
           vm.totalAgreements = res.data.totalAgreements || 0
         })
+    },
+    receiveSampleTimeFormatter (row, column) {
+      if (row.receiveSampleTime) {
+        let dateTT = new Date(row.receiveSampleTime)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
+      }
+    },
+    expectedCompletionTimeFormatter (row, column) {
+      if (row.expectedCompletionTime) {
+        let dateTT = new Date(row.expectedCompletionTime)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
+      }
+    },
+    doneFormatter (row, column) {
+      if (row.done === 'true') {
+        return '已完成'
+      } else {
+        return '未完成'
+      }
     }
+
   },
   mounted () {
     this.onSubmit()

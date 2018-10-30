@@ -320,6 +320,7 @@ export default {
   },
   mounted () {
     this.onSubmit()
+    this.loadExperimentalItemData()
     this.loadExperimentalMethodData()
     this.loadDrawingDesignData()
     this.loadDepartment()

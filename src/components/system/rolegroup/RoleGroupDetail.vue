@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container>
-      <el-header>
+      <el-header style="min-width:400px;">
         <el-button-group>
           <el-button type="info" v-for="(action,index) in actions" :key="index" size="mini" :icon="action.icon" :loading="action.loading" @click="actionHandle(action)">{{action.name}}
           </el-button>

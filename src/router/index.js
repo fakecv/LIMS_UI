@@ -46,13 +46,14 @@ import Lims from '@/components/frame/LimsNew'
 import MenuDetailNew from '@/components/system/menu/MenuDetailNew'
 import MenuDetailEdit from '@/components/system/menu/MenuDetailEdit'
 import MenuMaintenance from '@/components/system/menu/MenuMaintenance'
+import NavPage from '@/components/frame/NavPage'
+import NumberGeneratorDetailNew from '@/components/sample/numbergenerator/NumberGeneratorDetailNew'
+import NumberGeneratorDetailEdit from '@/components/sample/numbergenerator/NumberGeneratorDetailEdit'
+import NumberGeneratorMaintenance from '@/components/sample/numbergenerator/NumberGeneratorMaintenance'
 import Preview from '@/views/preview/preview'
 import ProcessDetailNew from '@/components/sample/process/ProcessDetailNew'
 import ProcessDetailEdit from '@/components/sample/process/ProcessDetailEdit'
 import ProcessMaintenance from '@/components/sample/process/ProcessMaintenance'
-import NumberGeneratorDetailNew from '@/components/sample/numbergenerator/NumberGeneratorDetailNew'
-import NumberGeneratorDetailEdit from '@/components/sample/numbergenerator/NumberGeneratorDetailEdit'
-import NumberGeneratorMaintenance from '@/components/sample/numbergenerator/NumberGeneratorMaintenance'
 import ProcessingDetailNew from '@/components/sample/processing/ProcessingDetailNew'
 import ProcessingDetailEdit from '@/components/sample/processing/ProcessingDetailEdit'
 import ProcessingMaintenance from '@/components/sample/processing/ProcessingMaintenance'
@@ -285,6 +286,11 @@ const router = new Router({
           path: 'menuMaintenance',
           name: 'menuMaintenance',
           component: MenuMaintenance
+        },
+        {
+          path: 'navPage',
+          name: 'navPage',
+          component: NavPage
         },
         {
           path: 'numberGeneratorDetailEdit/:id',

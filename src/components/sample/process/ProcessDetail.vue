@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container>
-      <el-header>
+      <el-header style="min-width:500px;">
         <el-button-group>
           <el-button type="info" v-for="(action,index) in actions" :key="index" size="mini" :icon="action.icon" :loading="action.loading" @click="actionHandle(action)">{{action.name}}
           </el-button>
@@ -57,11 +57,6 @@
                 <el-input name="sampleSubNumber" v-model="processForm.sampleSubNumber" autoComplete="sampleSubNumber"></el-input>
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="24">
-              <el-form-item label="检测项目">
-                <el-input type="textarea" name="experimentalItem" v-model="processForm.experimentalItem" autoComplete="experimentalItem"></el-input>
-              </el-form-item>
-            </el-col> -->
             <el-col  :span="24">
               <el-form-item label="检测项目">
                 <el-select name="experimentalItem" filterable default-first-option v-model="processForm.experimentalItem" @change="getExperimentalMethod">
@@ -161,7 +156,6 @@
     </el-container>
   </div>
 </template>
-
 <script>
 export default {
   name: 'processDetail',
@@ -170,14 +164,14 @@ export default {
     return {
       sampleNumberButton: false,
       actions: [
-        {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false},
-        {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
-        {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
-        {'name': '数据库保存并提交', 'id': '8', 'icon': 'el-icon-check', 'loading': false},
-        {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false},
-        {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
-        {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
-        {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
+        {'name': '新建', 'id': '1', 'icon': 'el-icon-circle-plus', 'loading': false},
+        {'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
+        {'name': '数据库保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false},
+        {'name': '数据库保存并提交', 'id': '4', 'icon': 'el-icon-check', 'loading': false},
+        {'name': '解锁', 'id': '5', 'icon': 'el-icon-edit', 'loading': false},
+        {'name': '删除', 'id': '6', 'icon': 'el-icon-upload', 'loading': false},
+        {'name': '文件导入', 'id': '7', 'icon': 'el-icon-upload2', 'loading': false},
+        {'name': '文件保存', 'id': '8', 'icon': 'el-icon-download', 'loading': false}
       ],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
     }
@@ -185,23 +179,21 @@ export default {
   methods: {
     actionHandle (action) {
       if (action.id === '1') {
-        this.saveToDB()
-      } else if (action.id === '2') {
-        console.log(action.id)
-        this.confirmDelete()
-      } else if (action.id === '3') {
-        console.log(action.id)
-      } else if (action.id === '4') {
-        console.log(action.id)
-      } else if (action.id === '5') {
         this.new()
-      } else if (action.id === '6') {
+      } else if (action.id === '2') {
         this.copy()
+      } else if (action.id === '3') {
+        this.saveToDB()
+      } else if (action.id === '4') {
+        this.submit()
+      } else if (action.id === '5') {
+        console.log(action.id)
+      } else if (action.id === '6') {
+        this.confirmDelete()
       } else if (action.id === '7') {
         console.log(action.id)
       } else if (action.id === '8') {
         console.log(action.id)
-        this.submit()
       }
     },
     new () {
@@ -215,6 +207,17 @@ export default {
     saveToDB () {
       let vm = this
       this.$ajax.post('/api/sample/process', this.processForm)
+        .then(function (res) {
+          vm.$message('已经成功保存到数据库!')
+          vm.$emit('updateProcessForm', res.data)
+          vm.sampleNumberButton = false
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    submit () {
+      let vm = this
+      this.$ajax.post('/api/sample/process/submitProcess', this.processForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateProcessForm', res.data)
@@ -265,17 +268,6 @@ export default {
           vm.processForm.sampleNumber = res.data
           vm.processForm.sampleSubNumber = res.data
           vm.sampleNumberButton = true
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    submit () {
-      let vm = this
-      this.$ajax.post('/api/sample/process/submitProcess', this.processForm)
-        .then(function (res) {
-          vm.$message('已经成功保存到数据库!')
-          vm.$emit('updateProcessForm', res.data)
-          vm.sampleNumberButton = false
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

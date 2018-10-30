@@ -26,12 +26,12 @@ export default {
       agreementForm: {
         id: '',
         agreementNumber: '',
-        client: '',
         sampleName: '',
         receiveSampleTime: '',
         expectedCompletionTime: '',
         materialNumber: '',
         noOfSample: '',
+        done: 'false',
         comment: '',
         finishedSampleHandlingMethod: '',
         reportTransferMode: ['取'],
@@ -49,12 +49,12 @@ export default {
       agreementResetForm: {
         id: '',
         agreementNumber: '',
-        client: '',
         sampleName: '',
         receiveSampleTime: '',
         expectedCompletionTime: '',
         materialNumber: '',
         noOfSample: '',
+        done: 'false',
         comment: '',
         finishedSampleHandlingMethod: '2',
         reportTransferMode: ['取'],
@@ -193,6 +193,7 @@ export default {
     updateCustomer (row) {
       this.agreementForm.customerId = row.id
       this.customerForm.name = row.name
+      this.customerForm.company = row.company
       this.customerForm.mobileNumber = row.mobileNumber
       this.customerForm.fax = row.fax
       this.customerForm.email = row.email

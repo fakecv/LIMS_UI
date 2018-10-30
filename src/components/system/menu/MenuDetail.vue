@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container id="menudetail" direction="vertical">
-      <el-row>
+      <el-row style="min-width:400px;">
         <el-button-group>
           <el-button  class="actionButton" type="info" v-for="(action,index) in actions" :key="index" size="mini" :icon="action.icon" :loading="action.loading" @click="actionHandle(action)">{{action.name}}
           </el-button>

@@ -54,7 +54,6 @@ export default {
       } else if (action.id === '5') {
         this.$ajax.get('/api/formTemplate')
           .then(function (res) {
-            console.log(res)
             let document = res.data
             vm.$store.commit('FORM_IMPORT_WITH_FID_G', {fid: vm.$route.params.fid, initV: document})
           }).catch(function (error) {
@@ -67,11 +66,9 @@ export default {
       var vm = this
       this.$ajax.post('/api/formTemplate', formTemplateJason)
         .then(function (res) {
-          console.log('formTemplateJason')
           vm.$message('Data has been uploaded successfully!')
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Something wrong happen!')
+          vm.$message(error.response.data.message)
         })
     },
     downloadJsonToFile () {

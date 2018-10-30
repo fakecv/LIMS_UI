@@ -16,6 +16,11 @@
       </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
+          prop="company"
+          label="客户单位"
+          width="180">
+        </el-table-column>
+        <el-table-column
           prop="name"
           label="客户名称"
           width="180">
@@ -26,8 +31,8 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="fax"
-          label="客户传真"
+          prop="address"
+          label="客户地址"
           width="180">
         </el-table-column>
         <el-table-column
@@ -36,8 +41,8 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="address"
-          label="客户地址"
+          prop="fax"
+          label="客户传真"
           width="180">
         </el-table-column>
       </el-table>

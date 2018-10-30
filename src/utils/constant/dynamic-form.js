@@ -1,6 +1,7 @@
 /* eslint-disable */
 export default {
   "input": {
+    "name": 'name',
     "type": 'input', // 必要, String
     // "subtype": 'text',
     "label": '文本', // 必要, String
@@ -19,6 +20,7 @@ export default {
     ],
   },
   "number": {
+    "name": 'name',
     "type": 'number', // number 类型目前采用的是"输入前"限制, 使用rules验证会出现bug
     "label": '数字',
     "value": 16,
@@ -29,12 +31,14 @@ export default {
     "append": '元', // String, 后缀（单位）
   },
   "switch": {
+    "name": 'name',
     "type": 'switch',
     "label": '开关',
     "appearance": "switch", // 外观, 'switch'开关(默认) / checkbox勾选
     "value": true
   },
   "radio": {
+    "name": 'name',
     "type": 'radio',
     "label": '单选',
     "value": '',
@@ -52,6 +56,7 @@ export default {
     ],
   },
   "checkbox": {
+    "name": 'name',
     "type": 'checkbox',
     "label": '多选',
     "value": [],
@@ -65,6 +70,7 @@ export default {
     ],
   },
   "select": {
+    "name": 'name',
     "type": 'select',
     "label": '下拉',
     "value": '',
@@ -75,6 +81,7 @@ export default {
     "rules": [],
   },
   "date": {
+    "name": 'name',
     "type": 'date',
     // "subtype": 'year',
     // "label": '年',
@@ -88,6 +95,7 @@ export default {
     "placeholder": '请选择'
   },
   "cascader": {
+    "name": 'name',
     "type": 'cascader',
     "label": '级联选择',
     "disabled": false,

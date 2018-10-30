@@ -115,7 +115,11 @@ export default {
     deleteUserRoleGroups (event) {
       let vm = this
       event.forEach(row => {
-        vm.staticOptions.selectedUserRoleGroups.splice(row, 1)
+        for (var i = 0; i < vm.staticOptions.selectedUserRoleGroups.length; i++) {
+          if (vm.staticOptions.selectedUserRoleGroups[i].id === row.id) {
+            vm.staticOptions.selectedUserRoleGroups.splice(i, 1)
+          }
+        }
       })
       this.userForm.roleGroups = []
       this.staticOptions.selectedUserRoleGroups.forEach(row => {

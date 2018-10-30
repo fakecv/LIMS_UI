@@ -71,7 +71,6 @@ export default {
         callback()
       }
     }
-
     return {
       activeName: 'first',
       loginForm: {
@@ -213,6 +212,7 @@ export default {
     .login-main {
       background: #ffffff;
       margin: -100px 0px auto;
+      min-height: 300px;
       width: 100%;
       text-align: center;
     }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container>
-      <el-header>
+      <el-header style="min-width:400px;">
         <el-button-group>
           <el-button type="info" v-for="(action,index) in actions" :key="index" size="mini" :icon="action.icon" :loading="action.loading" @click="actionHandle(action)">{{action.name}}
           </el-button>
@@ -14,11 +14,6 @@
               <el-form-item label="委托编号">
                 <el-input name="agreementNumber" v-model="agreementForm.agreementNumber" autoComplete="agreementNumber"></el-input>
                 <el-button :disabled="agreementNumberButton" @click="agreementNumberGenerator">生成委托编号</el-button>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="委托单位">
-                <el-input name="client" v-model="agreementForm.client" autoComplete="client"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -44,6 +39,11 @@
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品数量">
                 <el-input name="noOfSample" v-model="agreementForm.noOfSample" autoComplete="noOfSample"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="已经完成">
+                <el-switch name="done" v-model="agreementForm.done" autoComplete="done"></el-switch>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -99,12 +99,12 @@
             </el-col>
             <el-col :span="24">
               <el-form-item label="检测类别">
-                <el-checkbox-group v-model="agreementForm.experimentalCategory">
-                  <el-checkbox label="委托检测" name="experimentalCategory"></el-checkbox>
-                  <el-checkbox label="委托检验" name="experimentalCategory"></el-checkbox>
-                  <el-checkbox label="现场检测" name="experimentalCategory"></el-checkbox>
-                  <el-checkbox label="其它" name="experimentalCategory" @change="experimentalCategoryOther"></el-checkbox>
-                </el-checkbox-group>
+                <el-radio-group v-model="agreementForm.experimentalCategory">
+                  <el-radio label="委托检测" name="experimentalCategory"></el-radio>
+                  <el-radio label="委托检验" name="experimentalCategory"></el-radio>
+                  <el-radio label="现场检测" name="experimentalCategory"></el-radio>
+                  <el-radio label="其它" name="experimentalCategory" @change="experimentalCategoryOther"></el-radio>
+                </el-radio-group>
                 <el-input name="experimentalCategoryOther"
                   :disabled="experimentalCategoryOtherDisable"
                   v-model="agreementForm.experimentalCategoryOther"
@@ -128,6 +128,11 @@
                 <el-input name="clientName" v-model="customerForm.name" autoComplete="clientName">
                   <el-button slot="append" icon="el-icon-search" @click.native="openCustomer"></el-button>
                 </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="委托单位">
+                <el-input name="client" v-model="customerForm.company" autoComplete="company"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -240,11 +245,12 @@
         @row-click="handleCustomerRowClick"
         @row-dbclick="handleCustomerRowDLClick"
        >
+        <el-table-column prop="company" label="客户单位" width="180"></el-table-column>
         <el-table-column prop="name" label="客户名称" width="180"></el-table-column>
         <el-table-column prop="mobileNumber" label="客户电话" width="180"></el-table-column>
-        <el-table-column prop="fax" label="客户传真" width="180"></el-table-column>
-        <el-table-column prop="email" label="客户邮箱" width="180"></el-table-column>
         <el-table-column prop="address" label="通讯地址" width="180"></el-table-column>
+        <el-table-column prop="email" label="客户邮箱" width="180"></el-table-column>
+        <el-table-column prop="fax" label="客户传真" width="180"></el-table-column>
       </el-table>
       <div class="block text-right">
         <el-pagination
@@ -557,8 +563,6 @@ export default {
       this.customerDialogFormVisible = false
     },
     handleCustomerRowClick (row, event, column) {
-      console.log('handleCustomerRowClick')
-      console.log(row.name)
       this.$emit('updateCustomer', row)
     },
     handleCustomerRowDLClick (row, event, column) {

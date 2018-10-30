@@ -1,6 +1,8 @@
 <template lang="pug">
   div
     el-form(v-on="$listeners" v-bind="$attrs")
+      el-form-item(label="名称")
+        el-input(v-model="formItem.name")
       el-form-item(label="标签名")
         el-input(v-model="formItem.label")
       el-form-item(label="键名")

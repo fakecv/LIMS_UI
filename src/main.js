@@ -9,16 +9,18 @@ import '@/components/dynamic-form'
 import echarts from 'echarts'
 import ElementUI from 'element-ui'
 import filter from '@/components/filter'
+// import * as formatter from '@/components/formatter'
 import Icon from 'vue2-svg-icon/Icon.vue'
 import store from './store'
 // import toastr from 'toastr'
 // 界面元素开发页面使用
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap/dist/js/bootstrap.bundle.js'
+import 'bootstrap/dist/css/bootstrap.min.css'
+// import 'bootstrap/dist/js/bootstrap.bundle.js'
 // import 'toastr/build/toastr.min.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
-import 'font-awesome/css/font-awesome.css'
+import 'font-awesome/css/font-awesome.min.css'
+import FormatterService from './auth/FormatterService'
 // import '@progress/kendo-ui'
 // import '@progress/kendo-theme-default/dist/all.css'
 // import Scheduler from '@progress/kendo-scheduler-vue-wrapper'
@@ -86,9 +88,13 @@ Axios.interceptors.response.use((response) => {
 })
 Vue.prototype.$ajax = Axios
 Vue.prototype.$echarts = echarts
+// Vue.prototype.$formatter = formatter
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  data: {
+    formatter: new FormatterService()
+  },
   router,
   store,
   components: { App },

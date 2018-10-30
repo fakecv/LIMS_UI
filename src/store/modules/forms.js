@@ -13,12 +13,9 @@ export default {
   },
   mutations: {
     FORM_UPDATE_WITH_FID_G (state, { fid, newV }) {
-      // console.log(fid, newV)
       state[fid] = {...newV}
     },
     FORM_IMPORT_WITH_FID_G (state, { fid, initV }) {
-      console.log('store')
-      console.log(initV)
       state[fid] = initV
     },
     FORM_UPDATE_WITH_FID_DOMAIN (state, { fid, domain }) {

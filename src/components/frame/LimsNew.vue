@@ -3,47 +3,51 @@
   <el-container>
     <el-header class="lims-header" style="height: 69px">
       <el-row type="flex" justify="space-between">
-        <el-col :span="8">
+        <el-col :span="3">
           <el-button icon="el-icon-menu" style="background: c3c3c3;" @click="collapseChange">{{menuStatus}}</el-button>
+        </el-col>
+        <el-col :span="5" class="hidden-md-and-down">
           <img :src="companyImageSource" class="image" alt=""/>
         </el-col>
-        <el-col :span="8" class="hidden-md-and-down">
-          <el-row type="flex" justify="center">
-          <el-autocomplete
-          class="inline-input"
-          v-model="state2"
-          prefix-icon="el-icon-search"
-          :fetch-suggestions="querySearch"
-          placeholder="请输入内容"
-          :trigger-on-focus="false"
-          @select="handleSelect"
-          ></el-autocomplete>
+        <el-col :span="10" class="hidden-md-and-down">
+          <el-row type="flex" justify="left">
+            <el-autocomplete
+              class="inline-input"
+              v-model="state2"
+              prefix-icon="el-icon-search"
+              :fetch-suggestions="querySearch"
+              placeholder="请输入内容"
+              :trigger-on-focus="false"
+              @select="handleSelect"
+            >
+            </el-autocomplete>
           </el-row>
         </el-col>
-        <el-col :span="8">
-          <el-row type="flex" justify="end">
-            <el-col :span="2">
-              <el-dropdown @command="handleCommand">
-                <i class="fa fa-user" aria-hidden="true" style="float:right"></i>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="a">查看</el-dropdown-item>
-                  <el-dropdown-item command="b">新增</el-dropdown-item>
-                  <el-dropdown-item command="c" divided>退出</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </el-col>
-            <el-col :span="8">
-              <span>{{userProfile.sub}}</span>
-            </el-col>
-          </el-row>
+        <el-col :span="6">
+          <el-dropdown split-button type="primary" @command="handleCommand">
+            <i class="fa fa-user" aria-hidden="true"><span style="margin: 10px;">{{userProfile.sub}}</span></i>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="a">导航</el-dropdown-item>
+              <el-dropdown-item command="b">快捷键一览</el-dropdown-item>
+              <el-dropdown-item command="c" divided>退出</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </el-col>
       </el-row>
     </el-header>
     <el-main>
       <el-container class="frame">
         <el-aside v-bind:style="{marginBottom: '20px', width: elAside + 'px'}">
-          <el-menu :default-active="$route.path" @open="handleOpen" @close="handleClose" @select="menuSelected" class="lims-el-menu-vertical" :unique-opened="true">
-            <NavMenu :menuData="leftMenus" :showEnableOnly="showEnableOnly" :iconSize="'10px'"></NavMenu>
+          <el-menu :default-active="$route.path"
+            @open="handleOpen" @close="handleClose"
+            @select="menuSelected"
+            class="lims-el-menu-vertical"
+            :unique-opened="true"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b"
+            >
+            <NavMenu :menuData="leftMenus" :showEnableOnly="showEnableOnly" :iconSize="'18px'"></NavMenu>
           </el-menu>
         </el-aside>
         <el-main style="margin-bottom: 30px;padding: 0px" :border="true">
@@ -55,7 +59,7 @@
             </el-header>
             <!--this div will add scroll bar for the el-main, don't remove it-->
             <el-main>
-              <!-- <blockquote class="minsx-quote">{{instruction}}</blockquote> -->
+              <blockquote class="minsx-quote">{{instruction}}</blockquote>
               <router-view></router-view>
             </el-main>
           </el-container>
@@ -69,6 +73,7 @@
 import 'font-awesome/css/font-awesome.min.css'
 import NavMenu from './NavMenu'
 import Position from './position'
+import router from '@/router'
 const companyImageSource = require('../../../static/image/hairui.png')
 export default {
   name: 'lims',
@@ -87,7 +92,7 @@ export default {
       leftMenus: [],
       positions: [],
       elAside: 235,
-      instruction: '暂无使用说明',
+      instruction: '导航页',
       restaurants: [],
       state1: '',
       state2: '',
@@ -129,7 +134,9 @@ export default {
     handleCommand (command) {
       switch (command) {
         case 'a' :
-          alert('a')
+          router.push({name: 'navPage'})
+          this.initialPosition()
+          this.instruction = '导航页'
           break
         case 'b' :
           alert('b')
@@ -139,7 +146,7 @@ export default {
       }
     },
     handleOpen (key, keyPath) {
-      // console.log(key)
+      console.log(key)
       // console.log(keyPath)
     },
     handleClose (key, keyPath) {
@@ -162,7 +169,7 @@ export default {
         } else {
           this.$notify.success({
             title: '温馨提示：',
-            message: '对不起[' + menu.alias + ']暂未开通  您可以关注Minsx主页[www.minsx.com]随时获取项目进度!',
+            message: '对不起[' + menu.alias + ']暂未开通',
             showClose: false
           })
         }
@@ -181,7 +188,6 @@ export default {
       // this.$ajax.get('/static/menu.json')
       this.$ajax.get('/api/systemMenu')
         .then(function (response) {
-          console.log('LimsNew')
           vm.leftMenus = response.data.children
         //  vm.leftMenus = response.data.childs
           // vm.leftMenus.forEach(child => {

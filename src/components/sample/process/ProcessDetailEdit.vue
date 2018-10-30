@@ -8,7 +8,6 @@
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
       v-on:copy="resetProcessId"
-      v-on:sampleNumberGenerator="sampleNumberGenerator"
     />
 </template>
 
@@ -30,6 +29,7 @@ export default {
         sampleNumber: '',
         sampleSubNumber: '',
         experimentalItem: '',
+        experimentItemsParameter: '',
         experimentalMethod: '',
         drawingDesign: '',
         comment: '',
@@ -49,6 +49,7 @@ export default {
         sampleNumber: '',
         sampleSubNumber: '',
         experimentalItem: '',
+        experimentItemsParameter: '',
         experimentalMethod: '',
         drawingDesign: '',
         comment: '',
@@ -73,29 +74,70 @@ export default {
     }
   },
   methods: {
-    loadExperimentalMethodData () {
+    getAgreementInfo (agreementId) {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+      this.staticOptions.agreements.forEach(agreement => {
+        if (agreement.id === agreementId) {
+          vm.processForm.sampleName = agreement.sampleName
+          vm.processForm.materialNumber = agreement.materialNumber
+          vm.processForm.receiveSampleTime = agreement.receiveSampleTime
+          vm.processForm.expectedCompletionTime = agreement.expectedCompletionTime
+        }
+      })
+      this.loadAgreementProcess(agreementId)
+    },
+    getExperimentItemsParameter (experimentalItemId) {
+      this.staticOptions.filteredExperimentItemsParameters =
+        this.staticOptions.experimentItemsParameters.filter(function (val) {
+          return val.experimentalItem === experimentalItemId
+        })
+    },
+    getExperimentalMethod (experimentalItemId) {
+      this.staticOptions.filteredExperimentalMethods =
+        this.staticOptions.experimentalMethods.filter(function (val) {
+          return val.experimentalItem === experimentalItemId
+        })
+    },
+    resetProcessForm () {
+      this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
+    },
+    resetProcessId () {
+      this.processForm.id = ''
+    },
+    loadAgreement () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/getAgreement')
         .then(function (res) {
-          vm.staticOptions.experimentalMethods = res.data
+          vm.staticOptions.agreements = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
-    sampleNumberGenerator () {
+    loadAgreementProcess (agreementId) {
       let vm = this
-      this.$ajax.get('/api/sample/process/generateSampleNumber')
+      this.$ajax.get('/api/sample/process/agreement/' + agreementId)
         .then(function (res) {
-          vm.processForm.sampleNumber = res.data
+          vm.staticOptions.processTableData = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentItemsParameterData () {
+    loadDepartment () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentItemsParameter/getExperimentItemsParameter')
+      this.$ajax.get('/api/sample/department/getDepartment')
         .then(function (res) {
-          vm.staticOptions.experimentItemsParameters = res.data
+          vm.staticOptions.departments = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadDrawingDesignData () {
+      let vm = this
+      this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
+        .then(function (res) {
+          vm.staticOptions.drawingDesigns = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     },
     loadExperimentalItemData () {
@@ -107,11 +149,29 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    loadDrawingDesignData () {
+    loadExperimentalMethodData () {
       let vm = this
-      this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
+      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
         .then(function (res) {
-          vm.staticOptions.drawingDesigns = res.data
+          vm.staticOptions.experimentalMethods = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadExperimentItemsParameterData () {
+      let vm = this
+      this.$ajax.get('/api/sample/experimentItemsParameter/getExperimentItemsParameter')
+        .then(function (res) {
+          vm.staticOptions.experimentItemsParameters = res.data
+        })
+    },
+    loadProcess (processId) {
+      let vm = this
+      this.$ajax.get('/api/sample/process/' + processId)
+        .then(function (res) {
+          vm.processForm = res.data
+          vm.getExperimentalMethod(vm.processForm.experimentalItem)
+          vm.getExperimentItemsParameter(vm.processForm.experimentalItem)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -133,73 +193,6 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
-    },
-    loadDepartment () {
-      let vm = this
-      this.$ajax.get('/api/sample/department/getDepartment')
-        .then(function (res) {
-          vm.staticOptions.departments = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    loadAgreement () {
-      let vm = this
-      this.$ajax.get('/api/sample/agreement/getAgreement')
-        .then(function (res) {
-          vm.staticOptions.agreements = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    loadProcess (processId) {
-      let vm = this
-      this.$ajax.get('/api/sample/process/' + processId)
-        .then(function (res) {
-          vm.processForm = res.data
-          vm.getExperimentalMethod(vm.processForm.experimentalItem)
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    loadAgreementProcess (agreementId) {
-      let vm = this
-      this.$ajax.get('/api/sample/process/agreement/' + agreementId)
-        .then(function (res) {
-          vm.staticOptions.processTableData = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    getExperimentalMethod (experimentalItemId) {
-      this.staticOptions.filteredExperimentalMethods =
-        this.staticOptions.experimentalMethods.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
-        })
-    },
-    getExperimentItemsParameter (experimentalItemId) {
-      this.staticOptions.filteredExperimentItemsParameters =
-        this.staticOptions.experimentItemsParameters.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
-        })
-    },
-    getAgreementInfo (agreementId) {
-      let vm = this
-      this.staticOptions.agreements.forEach(agreement => {
-        if (agreement.id === agreementId) {
-          vm.processForm.sampleName = agreement.sampleName
-          vm.processForm.materialNumber = agreement.materialNumber
-          vm.processForm.receiveSampleTime = agreement.receiveSampleTime
-          vm.processForm.expectedCompletionTime = agreement.expectedCompletionTime
-        }
-      })
-      this.loadAgreementProcess(agreementId)
-    },
-    resetProcessForm () {
-      this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
-    },
-    resetProcessId () {
-      this.processForm.id = ''
     }
   },
   mounted () {
@@ -211,7 +204,6 @@ export default {
     this.loadProcessPriorityData()
     this.loadDepartment()
     this.loadAgreement()
-    console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadProcess(this.$route.params.id)
     }

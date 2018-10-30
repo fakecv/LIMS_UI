@@ -10,7 +10,6 @@
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
       v-on:copy="resetProcessId"
-      v-on:sampleNumberGenerator="sampleNumberGenerator"
       />
       <el-table :data="staticOptions.processTableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
@@ -89,6 +88,7 @@ export default {
         sampleNumber: '',
         sampleSubNumber: '',
         experimentalItem: '',
+        experimentItemsParameter: '',
         experimentalMethod: '',
         drawingDesign: '',
         comment: '',
@@ -108,6 +108,7 @@ export default {
         sampleNumber: '',
         sampleSubNumber: '',
         experimentalItem: '',
+        experimentItemsParameter: '',
         experimentalMethod: '',
         drawingDesign: '',
         comment: '',
@@ -135,99 +136,6 @@ export default {
     dblclick (row, event) {
       this.$router.push('/lims/processDetailEdit/' + row.id)
     },
-    sampleNumberGenerator () {
-      let vm = this
-      this.$ajax.get('/api/sample/process/generateSampleNumber')
-        .then(function (res) {
-          vm.processForm.sampleNumber = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    loadExperimentalMethodData () {
-      let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
-        .then(function (res) {
-          vm.staticOptions.experimentalMethods = res.data
-        })
-    },
-    loadExperimentItemsParameterData () {
-      let vm = this
-      this.$ajax.get('/api/sample/experimentItemsParameter/getExperimentItemsParameter')
-        .then(function (res) {
-          vm.staticOptions.experimentItemsParameters = res.data
-        })
-    },
-    loadExperimentalItemData () {
-      let vm = this
-      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
-        .then(function (res) {
-          vm.staticOptions.experimentalItems = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    loadDrawingDesignData () {
-      let vm = this
-      this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
-        .then(function (res) {
-          vm.staticOptions.drawingDesigns = res.data
-        })
-    },
-    loadProcessingStatusData () {
-      let vm = this
-      this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
-        .then(function (res) {
-          vm.staticOptions.processingStatuses = res.data
-        })
-    },
-    loadProcessPriorityData () {
-      let vm = this
-      this.$ajax.get('/api/sample/processPriority/getProcessPriority')
-        .then(function (res) {
-          vm.staticOptions.processPriorities = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    loadDepartment () {
-      let vm = this
-      this.$ajax.get('/api/sample/department/getDepartment')
-        .then(function (res) {
-          vm.staticOptions.departments = res.data
-        }).catch(function (error) {
-          console.log(error.message)
-          vm.$message(error.response.data.message)
-        })
-    },
-    loadAgreement () {
-      let vm = this
-      this.$ajax.get('/api/sample/agreement/getAgreement')
-        .then(function (res) {
-          vm.staticOptions.agreements = res.data
-        }).catch(function (error) {
-          console.log(error.message)
-          vm.$message(error.response.data.message)
-        })
-    },
-    loadAgreementProcess (agreementId) {
-      let vm = this
-      this.$ajax.get('/api/sample/process/agreement/' + agreementId)
-        .then(function (res) {
-          vm.staticOptions.processTableData = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    updateProcessForm (event) {
-      this.processForm.id = event.id
-    },
-    resetProcessId () {
-      this.processForm.id = ''
-    },
-    resetProcessForm () {
-      this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
-    },
     getAgreementInfo (agreementId) {
       let vm = this
       this.staticOptions.agreements.forEach(agreement => {
@@ -252,11 +160,112 @@ export default {
           return val.experimentalItem === experimentalItemId
         })
     },
-    processPriorityFormatter (row, column) {
+    resetProcessId () {
+      this.processForm.id = ''
+    },
+    resetProcessForm () {
+      this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
+    },
+    updateProcessForm (event) {
+      this.processForm.id = event.id
+    },
+    loadAgreement () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/getAgreement')
+        .then(function (res) {
+          vm.staticOptions.agreements = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadAgreementProcess (agreementId) {
+      let vm = this
+      this.$ajax.get('/api/sample/process/agreement/' + agreementId)
+        .then(function (res) {
+          vm.staticOptions.processTableData = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadDepartment () {
+      let vm = this
+      this.$ajax.get('/api/sample/department/getDepartment')
+        .then(function (res) {
+          vm.staticOptions.departments = res.data
+        }).catch(function (error) {
+          console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadDrawingDesignData () {
+      let vm = this
+      this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
+        .then(function (res) {
+          vm.staticOptions.drawingDesigns = res.data
+        })
+    },
+    loadExperimentalItemData () {
+      let vm = this
+      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+        .then(function (res) {
+          vm.staticOptions.experimentalItems = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadExperimentalMethodData () {
+      let vm = this
+      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+        .then(function (res) {
+          vm.staticOptions.experimentalMethods = res.data
+        })
+    },
+    loadExperimentItemsParameterData () {
+      let vm = this
+      this.$ajax.get('/api/sample/experimentItemsParameter/getExperimentItemsParameter')
+        .then(function (res) {
+          vm.staticOptions.experimentItemsParameters = res.data
+        })
+    },
+    loadProcessingStatusData () {
+      let vm = this
+      this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
+        .then(function (res) {
+          vm.staticOptions.processingStatuses = res.data
+        })
+    },
+    loadProcessPriorityData () {
+      let vm = this
+      this.$ajax.get('/api/sample/processPriority/getProcessPriority')
+        .then(function (res) {
+          vm.staticOptions.processPriorities = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    drawingDesignFormatter (row, column) {
       let name = ''
-      this.staticOptions.processPriorities.forEach(item => {
-        if (row.processPriority === item.id) {
-          name = item.processPriorityName
+      this.staticOptions.drawingDesigns.forEach(item => {
+        if (row.drawingDesign === item.id) {
+          name = item.drawingDesignName
+        }
+      })
+      return name
+    },
+    expectedCompletionTimeFormatter (row, column) {
+      if (row.expectedCompletionTime) {
+        let dateTT = new Date(row.expectedCompletionTime)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
+      }
+    },
+    experimentalItemFormatter (row, column) {
+      let name = ''
+      this.staticOptions.experimentalItems.forEach(item => {
+        if (row.experimentalItem === item.id) {
+          name = item.experimentalItemName
         }
       })
       return name
@@ -270,20 +279,11 @@ export default {
       })
       return name
     },
-    experimentalItemFormatter (row, column) {
+    processPriorityFormatter (row, column) {
       let name = ''
-      this.staticOptions.experimentalItems.forEach(item => {
-        if (row.experimentalItem === item.id) {
-          name = item.experimentalItemName
-        }
-      })
-      return name
-    },
-    drawingDesignFormatter (row, column) {
-      let name = ''
-      this.staticOptions.drawingDesigns.forEach(item => {
-        if (row.drawingDesign === item.id) {
-          name = item.drawingDesignName
+      this.staticOptions.processPriorities.forEach(item => {
+        if (row.processPriority === item.id) {
+          name = item.processPriorityName
         }
       })
       return name
@@ -300,14 +300,6 @@ export default {
     receiveSampleTimeFormatter (row, column) {
       if (row.receiveSampleTime) {
         let dateTT = new Date(row.receiveSampleTime)
-        let hours = dateTT.getHours() < 10 ? '0' : ''
-        let min = dateTT.getMinutes() < 10 ? '0' : ''
-        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
-      }
-    },
-    expectedCompletionTimeFormatter (row, column) {
-      if (row.expectedCompletionTime) {
-        let dateTT = new Date(row.expectedCompletionTime)
         let hours = dateTT.getHours() < 10 ? '0' : ''
         let min = dateTT.getMinutes() < 10 ? '0' : ''
         return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
