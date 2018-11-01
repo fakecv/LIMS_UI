@@ -57,25 +57,20 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.processPriorityRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.processPriorityRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
       let vm = this
       this.$ajax.get('/api/sample/processPriority/getProcessPriority')
         .then(function (res) {
-          console.log('processPriorityMaintenance')
-          console.log(res)
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/processPriorityDetailEdit/' + row.id)
     },
     onSubmit () {
@@ -84,11 +79,9 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalProcessPrioritys = res.data.totalProcessPrioritys || 0
-          console.log('totalDeparts is: ' + vm.totalProcessPrioritys)
         })
     },
     processPriorityTableStyle ({row, rowIndex}) {
-      console.log(row.processPriorityColor)
       return 'background: ' + row.processPriorityColor + ';color: ' + row.processPriorityFontColor
     }
   },
