@@ -29,7 +29,7 @@
         </el-row>
       </el-form>
     </el-container>
-      <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
+      <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick :row-style="agreementTableStyle">
         <el-table-column
           prop="agreementNumber"
           label="委托编号"
@@ -40,6 +40,12 @@
           label="样品名称"
           width="180">
         </el-table-column>
+        <el-table-column
+          prop="processPriority"
+          label="优先级"
+          :formatter="processPriorityFormatter"
+          width="80">
+      </el-table-column>
         <el-table-column
           prop="receiveSampleTime"
           label="样品接收时间"
@@ -89,15 +95,27 @@ export default {
         agreementNumber: '',
         done: 'false',
         sampleName: '',
-        experimentalCategory: [],
+        experimentalCategory: '',
         itemsPerPage: 20,
         currentPage: 1
       },
       experimentalMethods: [],
+      processPriorities: [],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
     }
   },
   methods: {
+    agreementTableStyle ({row, rowIndex}) {
+      let backgroundColor = '#FFFFFF'
+      let color = '#000000'
+      this.processPriorities.forEach(item => {
+        if (row.processPriority === item.id) {
+          backgroundColor = item.processPriorityColor
+          color = item.processPriorityFontColor
+        }
+      })
+      return 'background: ' + backgroundColor + ';color: ' + color
+    },
     handleSizeChange (val) {
       this.agreementRequestForm.itemsPerPage = val
       this.onSubmit()
@@ -139,10 +157,28 @@ export default {
       } else {
         return '未完成'
       }
+    },
+    loadProcessPriorityData () {
+      let vm = this
+      this.$ajax.get('/api/sample/processPriority/getProcessPriority')
+        .then(function (res) {
+          vm.processPriorities = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    processPriorityFormatter (row, column) {
+      let name = ''
+      this.processPriorities.forEach(item => {
+        if (row.processPriority === item.id) {
+          name = item.processPriorityName
+        }
+      })
+      return name
     }
-
   },
   mounted () {
+    this.loadProcessPriorityData()
     this.onSubmit()
   }
 

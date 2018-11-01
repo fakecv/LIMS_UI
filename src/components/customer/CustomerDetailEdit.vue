@@ -40,7 +40,6 @@ export default {
         .then(function (res) {
           vm.customerForm = res.data
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },
@@ -52,7 +51,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadCustomer(this.$route.params.id)
     }

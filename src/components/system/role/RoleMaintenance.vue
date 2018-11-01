@@ -66,12 +66,10 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.roleRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.roleRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     formatter (row, column) {
@@ -81,13 +79,10 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/role/getRole')
         .then(function (res) {
-          console.log('roleMaintenance')
-          console.log(res)
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/roleDetailEdit/' + row.id)
     },
     onSubmit () {
@@ -96,7 +91,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalRoles = res.data.totalUserRoles || 0
-          console.log('totalRoles is: ' + vm.totalRoles)
         })
     },
     loadMenuLinks () {
@@ -105,8 +99,7 @@ export default {
         .then(function (res) {
           vm.linkMenus = res.data
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Somthing wrong happen in load menuLinks!')
+          vm.$message(error.response.data.message)
         })
     }
   },

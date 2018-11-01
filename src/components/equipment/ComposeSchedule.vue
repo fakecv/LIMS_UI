@@ -116,13 +116,10 @@ export default {
   },
   methods: {
     headerResize (newWidth, oldWidth, column, event) {
-      console.log('headerResize' + newWidth)
     },
     tableChange () {
-      console.log('tableChange')
     },
     cellStyleMethod ({row, column, rowIndex, columnIndex}) {
-      console.log('cellStyleMethod')
       if (columnIndex === 0) {
         return {
           fontWeight: 'bold',

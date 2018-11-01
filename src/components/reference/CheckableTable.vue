@@ -86,7 +86,6 @@ export default {
     }
   },
   mounted () {
-    console.log('run mounted')
     this.$refs.multipleTable.toggleRowSelection(this.tableData3[1])
   }
 }

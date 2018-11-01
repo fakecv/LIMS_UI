@@ -20,7 +20,6 @@ export default {
   },
   methods: {
     input1 (event) {
-      console.log('sample')
     }
   }
 }

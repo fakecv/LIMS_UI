@@ -68,7 +68,6 @@ let dateFunc = {
     }
 
     format = format.replace(/([yMdhmsqS])+/g, (all, t) => {
-            console.log('all', all, t, format)
             var v = map[t]
             if (v !== undefined) {
                 if (all === 'MMMM') {
@@ -87,7 +86,6 @@ let dateFunc = {
             }
         return all
     })
-    console.log('format res', format)
     return format
   }
 }

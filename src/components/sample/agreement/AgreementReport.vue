@@ -75,7 +75,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.agreementNumber = this.$route.params.id
       this.openFullScreen2()

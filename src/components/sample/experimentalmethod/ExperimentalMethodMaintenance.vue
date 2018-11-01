@@ -83,25 +83,20 @@ export default {
     },
     handleSizeChange (val) {
       this.experimentalMethodRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.experimentalMethodRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
       let vm = this
       this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
         .then(function (res) {
-          console.log('experimentalMethodMaintenance')
-          console.log(res)
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/experimentalMethodDetailEdit/' + row.id)
     },
     onSubmit () {
@@ -110,7 +105,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalExperimentalMethods = res.data.totalExperimentalMethods || 0
-          console.log('totalDeparts is: ' + vm.totalExperimentalMethods)
         })
     },
     experimentalItemFormatter (row, column) {

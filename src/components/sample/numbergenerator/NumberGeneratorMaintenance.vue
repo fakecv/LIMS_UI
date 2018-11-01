@@ -72,25 +72,20 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.numberGeneratorRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.numberGeneratorRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
       let vm = this
       this.$ajax.get('/api/sample/numberGenerator/getNumberGenerator')
         .then(function (res) {
-          console.log('numberGeneratorMaintenance')
-          console.log(res)
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/numberGeneratorDetailEdit/' + row.id)
     },
     onSubmit () {
@@ -99,7 +94,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalNumberGenerators = res.data.totalNumberGenerators || 0
-          console.log('totalDeparts is: ' + vm.totalNumberGenerators)
         })
     }
   },

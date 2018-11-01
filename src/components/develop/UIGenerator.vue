@@ -21,11 +21,11 @@ export default {
   data () {
     return {
       actions: [
-        {'name': '创建', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
-        {'name': '保存', 'id': '2', 'icon': 'el-icon-document', 'loading': false},
+        {'name': '新建', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
+        {'name': '数据库保存', 'id': '2', 'icon': 'el-icon-document', 'loading': false},
         {'name': '导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '导出', 'id': '4', 'icon': 'el-icon-download', 'loading': false},
-        {'name': '数据库导入', 'id': '5', 'icon': 'el-icon-upload', 'loading': false}
+        {'name': '删除', 'id': '5', 'icon': 'el-icon-upload', 'loading': false}
       ],
       // data for upload files
       uploadFilename: null,
@@ -36,12 +36,12 @@ export default {
       jsonContent: '',
       downloadLink: null,
       downloadFilename: null,
-      dialogVisible: false
+      dialogVisible: false,
+      formTemplateId: ''
     }
   },
   methods: {
     actionHandler (action) {
-      var vm = this
       if (action.id === '1') {
         // this.jsonContent = ''
         this.$store.state.forms[this.$route.params.fid].formItemList = []
@@ -52,15 +52,41 @@ export default {
       } else if (action.id === '4') {
         this.downloadJsonToFile()
       } else if (action.id === '5') {
-        this.$ajax.get('/api/formTemplate')
-          .then(function (res) {
-            let document = res.data
-            vm.$store.commit('FORM_IMPORT_WITH_FID_G', {fid: vm.$route.params.fid, initV: document})
-          }).catch(function (error) {
-            console.log(error.message)
-            vm.$message('Something wrong happen!')
-          })
+        this.confirmDelete()
       }
+    },
+    confirmDelete () {
+      let vm = this
+      if (this.formTemplateId && this.formTemplateId !== '') {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          vm.delete()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      }
+    },
+    delete () {
+      let vm = this
+      vm.$store.state.forms[this.$route.params.fid].formItemList = []
+      vm.$store.state.forms[this.$route.params.fid].domain = ''
+      vm.$store.state.forms[this.$route.params.fid].packageName = ''
+      this.$ajax.get('/api/system/formDevelopment/delete/' + this.formTemplateId)
+        .then(function (res) {
+          vm.$message({
+            type: 'success',
+            message: '已经成功删除！'
+          })
+          vm.formTemplateId = ''
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     submit (formTemplateJason) {
       var vm = this
@@ -93,12 +119,14 @@ export default {
           let document = JSON.parse(e.target.result)
           this.$store.commit('FORM_IMPORT_WITH_FID_G', {fid: this.$route.params.fid, initV: document})
         } catch (err) {
-          console.log(`load JSON document from file error: ${err.message}`)
           this.showSnackbar(`Load JSON document from file error: ${err.message}`, 4000)
         }
       }
       reader.readAsText(file.raw)
     }
+  },
+  mounted () {
+    this.formTemplateId = this.$route.params.id
   }
 }
 </script>

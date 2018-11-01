@@ -15,18 +15,20 @@
       <el-col :xl="6" :lg="8" :sm="12" :xs="24" style="margin-bottom:20px;">
         <div @click="taskList">
           <el-card class="box-card">
-            <el-badge :value="300" class="item">
+            <el-badge :value="task.uncompletedAgreement" class="item">
               <img src="@/../static/image/tasklist.png" class="image">
             </el-badge>
-            <el-button type="text">待完成任务</el-button>
+            <el-button type="text">待完成协议</el-button>
           </el-card>
         </div>
       </el-col>
       <el-col :xl="6" :lg="8" :sm="12" :xs="24" style="margin-bottom:20px;">
         <div @click="sampleChecker">
           <el-card class="box-card">
+            <el-badge :value="task.uncompletedProcess" class="item">
             <img src="@/../static/image/checker.png" class="image">
-            <el-button type="text">审核</el-button>
+            </el-badge>
+            <el-button type="text">待完成流转</el-button>
           </el-card>
         </div>
       </el-col>
@@ -40,19 +42,40 @@ export default {
   name: 'navPage',
   data () {
     return {
-      currentDate: new Date()
+      task: {
+        uncompletedAgreement: '',
+        uncompletedProcess: ''
+      }
     }
   },
   methods: {
+    getTaskStatistic () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/getNumberOfUncompletedAgreement')
+        .then(function (res) {
+          vm.task.uncompletedAgreement = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+      this.$ajax.get('/api/sample/process/getNumberOfUncompletedProcess')
+        .then(function (res) {
+          vm.task.uncompletedProcess = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     sampleReceive () {
       router.replace('agreementDetailNew')
     },
     taskList () {
-      router.replace('processMaintenance')
+      router.replace('agreementMaintenance')
     },
     sampleChecker () {
       router.replace('processMaintenance')
     }
+  },
+  mounted () {
+    this.getTaskStatistic()
   }
 }
 </script>

@@ -33,8 +33,11 @@ import EditorFormAside from '@/views/editor/form/aside'
 import EditorFormMain from '@/views/editor/form/main'
 import EditorTableAside from '@/views/editor/table/aside'
 import EditorTableMain from '@/views/editor/table/main'
-import ForgetPassword from '@/components/system/login/ForgetPassword'
 import FileUpload from '@/components/reference/FileUpload'
+import ForgetPassword from '@/components/system/login/ForgetPassword'
+import FormDevelopmentDetailNew from '@/components/system/formdevelopment/FormDevelopmentDetailNew'
+import FormDevelopmentDetailEdit from '@/components/system/formdevelopment/FormDevelopmentDetailEdit'
+import FormDevelopmentMaintenance from '@/components/system/formdevelopment/FormDevelopmentMaintenance'
 import InternalAuditCheckListDetailNew from '@/components/internalaudit/internalauditchecklist/InternalAuditCheckListDetailNew'
 import InternalAuditCheckListDetailEdit from '@/components/internalaudit/internalauditchecklist/InternalAuditCheckListDetailEdit'
 import InternalAuditCheckListMaintenance from '@/components/internalaudit/internalauditchecklist/InternalAuditCheckListMaintenance'
@@ -243,6 +246,21 @@ const router = new Router({
           component: FileUpload
         },
         {
+          path: 'formDevelopmentDetailEdit/:id',
+          name: 'formDevelopmentAuditorDetailEdit',
+          component: FormDevelopmentDetailEdit
+        },
+        {
+          path: 'formDevelopmentDetailNew',
+          name: 'formDevelopmentDetailNew',
+          component: FormDevelopmentDetailNew
+        },
+        {
+          path: 'formDevelopmentMaintenance',
+          name: 'formDevelopmentMaintenance',
+          component: FormDevelopmentMaintenance
+        },
+        {
           path: 'internalAuditCheckListDetailEdit/:id',
           name: 'internalAuditorDetailEdit',
           component: InternalAuditCheckListDetailEdit
@@ -418,7 +436,7 @@ const router = new Router({
           component: UIGenerator,
           children: [
             {
-              path: 'form/:fid',
+              path: 'form/:fid/:id',
               components: {
                 header: ActionHeader,
                 aside: EditorFormAside,

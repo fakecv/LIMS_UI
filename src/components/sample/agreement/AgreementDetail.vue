@@ -37,13 +37,27 @@
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="优先级">
+                <el-select name="processPriority" filterable default-first-option v-model="agreementForm.processPriority">
+                <el-option v-for="item in staticOptions.processPriorities"
+                  :key="item.Id"
+                  :label="item.processPriorityName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品数量">
                 <el-input name="noOfSample" v-model="agreementForm.noOfSample" autoComplete="noOfSample"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="已经完成">
-                <el-switch name="done" v-model="agreementForm.done" autoComplete="done"></el-switch>
+                  <el-radio-group name="done" v-model="agreementForm.done">
+                    <el-radio label="true">是</el-radio>
+                    <el-radio label="false">否</el-radio>
+                  </el-radio-group>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -100,10 +114,10 @@
             <el-col :span="24">
               <el-form-item label="检测类别">
                 <el-radio-group v-model="agreementForm.experimentalCategory">
-                  <el-radio label="委托检测" name="experimentalCategory"></el-radio>
-                  <el-radio label="委托检验" name="experimentalCategory"></el-radio>
-                  <el-radio label="现场检测" name="experimentalCategory"></el-radio>
-                  <el-radio label="其它" name="experimentalCategory" @change="experimentalCategoryOther"></el-radio>
+                  <el-radio label="委托检测"></el-radio>
+                  <el-radio label="委托检验"></el-radio>
+                  <el-radio label="现场检测"></el-radio>
+                  <el-radio label="其它" @change="experimentalCategoryOther"></el-radio>
                 </el-radio-group>
                 <el-input name="experimentalCategoryOther"
                   :disabled="experimentalCategoryOtherDisable"
@@ -228,9 +242,14 @@
     <el-dialog title="客户列表" :visible.sync="customerDialogFormVisible" :modal-append-to-body="false">
       <el-container style="padding: 10px">
         <el-form :model="customerRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-row :gutter="20">
+          <el-form-item label="客户单位">
+            <el-input name="company" v-model="customerRequestForm.company" autoComplete="company"></el-input>
+          </el-form-item>
+        </el-row>
           <el-row :gutter="20">
             <el-form-item label="客户名称">
-              <el-input name="name" v-model="customerRequestForm.name"></el-input>
+              <el-input name="name" v-model="customerRequestForm.name" autoComplete="name"></el-input>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -363,9 +382,146 @@ export default {
     vueImages: vueImages
   },
   methods: {
+    actionHandle (action) {
+      if (action.id === '1') {
+        this.saveToDB()
+        this.agreementNumberButton = false
+      } else if (action.id === '2') {
+        this.confirmDelete()
+      } else if (action.id === '3') {
+        if (this.agreementForm.agreementNumber && this.agreementForm.agreementNumber !== '') {
+          this.previewReport(this.agreementForm.agreementNumber)
+        }
+      } else if (action.id === '4') {
+      } else if (action.id === '5') {
+        this.new()
+        this.agreementNumberButton = false
+      } else if (action.id === '6') {
+        this.copy()
+        this.agreementNumberButton = false
+      } else if (action.id === '7') {
+      }
+    },
+    new () {
+      this.$emit('new')
+    },
+    copy () {
+      this.$message('复制成功!')
+      this.$emit('copy')
+    },
+    saveToDB () {
+      let vm = this
+      this.$ajax.post('/api/sample/agreement', this.agreementForm)
+        .then(function (res) {
+          vm.$message('已经成功保存到数据库!')
+          vm.$emit('updateAgreementForm', res.data)
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    confirmDelete () {
+      let vm = this
+      if (this.agreementForm.id && this.agreementForm.id !== '') {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          vm.delete()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      }
+    },
+    delete () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/delete/' + this.agreementForm.id)
+        .then(function (res) {
+          vm.$message({
+            type: 'success',
+            message: '已经成功删除！'
+          })
+          vm.$emit('deleteAgreement')
+          vm.agreementNumberButton = false
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     agreementNumberGenerator () {
       this.$emit('agreementNumberGenerator')
       this.agreementNumberButton = true
+    },
+    reportTransferModeOther (val) {
+      if (val) {
+        this.reportTransferModeOtherDisable = false
+      } else {
+        this.reportTransferModeOtherDisable = true
+        this.agreementForm.reportTransferModeOther = ''
+      }
+    },
+    experimentalCategoryOther (val) {
+      if (val) {
+        this.experimentalCategoryOtherDisable = false
+      } else {
+        this.experimentalCategoryOtherDisable = true
+        this.agreementForm.experimentalCategoryOther = ''
+      }
+    },
+    handleCustomerSizeChange (val) {
+      this.customerRequestForm.itemsPerPage = val
+      this.$emit('reloadCustomerData', this.customerRequestForm)
+    },
+    handleCustomerCurrentChange (val) {
+      this.customerRequestForm.currentPage = val
+      this.$emit('reloadCustomerData', this.customerRequestForm)
+    },
+    reloadCustomers () {
+      this.$emit('reloadCustomerData', this.customerRequestForm)
+    },
+    openCustomer () {
+      this.customerDialogFormVisible = true
+    },
+    confirmCustomer () {
+      this.customerDialogFormVisible = false
+    },
+    handleCustomerRowClick (row, event, column) {
+      this.$emit('updateCustomer', row)
+    },
+    handleCustomerRowDLClick (row, event, column) {
+      this.$emit('updateCustomer', row)
+      this.customerDialogFormVisible = false
+    },
+    handleUserSizeChange (val) {
+      this.userRequestForm.itemsPerPage = val
+      this.$emit('reloadUserData', this.userRequestForm)
+    },
+    handleUserCurrentChange (val) {
+      this.userRequestForm.currentPage = val
+      this.$emit('reloadUserData', this.userRequestForm)
+    },
+    reloadUsers () {
+      this.$emit('reloadUserData', this.userRequestForm)
+    },
+    openUser () {
+      this.userDialogFormVisible = true
+    },
+    confirmUser () {
+      this.userDialogFormVisible = false
+    },
+    handleUserRowClick (row, event, column) {
+      this.$emit('updateUser', row)
+    },
+    handleUserRowDLClick (row, event, column) {
+      this.$emit('updateUser', row)
+      this.userDialogFormVisible = false
+    },
+    previewReport (agreementNumber) {
+      if (agreementNumber && agreementNumber !== '') {
+        this.$router.push('/lims/agreementReport/' + agreementNumber)
+      }
     },
     removeImage (item) {
       this.$emit('removeImage', item)
@@ -449,151 +605,6 @@ export default {
           this.$refs.upload.clearFiles()
         }
       }
-    },
-    actionHandle (action) {
-      // var vm = this
-      console.log(action.id)
-      if (action.id === '1') {
-        this.saveToDB()
-        this.agreementNumberButton = false
-      } else if (action.id === '2') {
-        console.log(action.id)
-        this.confirmDelete()
-      } else if (action.id === '3') {
-        console.log(this.agreementForm.agreementNumber)
-        if (this.agreementForm.agreementNumber && this.agreementForm.agreementNumber !== '') {
-          this.previewReport(this.agreementForm.agreementNumber)
-        }
-      } else if (action.id === '4') {
-        console.log(action.id)
-      } else if (action.id === '5') {
-        this.new()
-        this.agreementNumberButton = false
-      } else if (action.id === '6') {
-        this.copy()
-        this.$message('复制成功!')
-        this.agreementNumberButton = false
-      } else if (action.id === '7') {
-        console.log(action.id)
-      }
-    },
-    reportTransferModeOther (val) {
-      if (val) {
-        this.reportTransferModeOtherDisable = false
-      } else {
-        this.reportTransferModeOtherDisable = true
-        this.agreementForm.reportTransferModeOther = ''
-      }
-    },
-    experimentalCategoryOther (val) {
-      if (val) {
-        this.experimentalCategoryOtherDisable = false
-      } else {
-        this.experimentalCategoryOtherDisable = true
-        this.agreementForm.experimentalCategoryOther = ''
-      }
-    },
-    confirmDelete () {
-      let vm = this
-      if (this.agreementForm.id && this.agreementForm.id !== '') {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          vm.delete()
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-      }
-    },
-    new () {
-      this.$emit('new')
-    },
-    copy () {
-      this.$emit('copy')
-    },
-    saveToDB () {
-      let vm = this
-      this.$ajax.post('/api/sample/agreement', this.agreementForm)
-        .then(function (res) {
-          vm.$message('已经成功保存到数据库!')
-          vm.$emit('updateAgreementForm', res.data)
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    delete () {
-      let vm = this
-      this.$ajax.get('/api/sample/agreement/delete/' + this.agreementForm.id)
-        .then(function (res) {
-          vm.$message({
-            type: 'success',
-            message: '已经成功删除！'
-          })
-          vm.$emit('deleteAgreement')
-          vm.agreementNumberButton = false
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    previewReport (agreementNumber) {
-      if (agreementNumber && agreementNumber !== '') {
-        this.$router.push('/lims/agreementReport/' + agreementNumber)
-      }
-    },
-    handleCustomerSizeChange (val) {
-      this.customerRequestForm.itemsPerPage = val
-      this.$emit('reloadCustomerData', this.customerRequestForm)
-    },
-    handleCustomerCurrentChange (val) {
-      this.customerRequestForm.currentPage = val
-      this.$emit('reloadCustomerData', this.customerRequestForm)
-    },
-    reloadCustomers () {
-      this.$emit('reloadCustomerData', this.customerRequestForm)
-    },
-    openCustomer () {
-      this.customerDialogFormVisible = true
-    },
-    confirmCustomer () {
-      this.customerDialogFormVisible = false
-    },
-    handleCustomerRowClick (row, event, column) {
-      this.$emit('updateCustomer', row)
-    },
-    handleCustomerRowDLClick (row, event, column) {
-      this.$emit('updateCustomer', row)
-      this.customerDialogFormVisible = false
-    },
-    handleUserSizeChange (val) {
-      this.userRequestForm.itemsPerPage = val
-      this.$emit('reloadUserData', this.userRequestForm)
-    },
-    handleUserCurrentChange (val) {
-      this.userRequestForm.currentPage = val
-      this.$emit('reloadUserData', this.userRequestForm)
-    },
-    reloadUsers () {
-      this.$emit('reloadUserData', this.userRequestForm)
-    },
-    openUser () {
-      this.userDialogFormVisible = true
-    },
-    confirmUser () {
-      this.userDialogFormVisible = false
-    },
-    handleUserRowClick (row, event, column) {
-      console.log('handleCustomerRowClick')
-      console.log(row.name)
-      this.$emit('updateUser', row)
-    },
-    handleUserRowDLClick (row, event, column) {
-      this.$emit('updateUser', row)
-      this.userDialogFormVisible = false
     }
   }
 }

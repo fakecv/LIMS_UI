@@ -57,25 +57,20 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.departmentRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.departmentRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
       let vm = this
       this.$ajax.get('/api/sample/department/getDepartment')
         .then(function (res) {
-          console.log('departmentMaintenance')
-          console.log(res)
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/departmentDetailEdit/' + row.id)
     },
     onSubmit () {
@@ -84,7 +79,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalDepartments = res.data.totalDepartments || 0
-          console.log('totalDeparts is: ' + vm.totalDepartments)
         })
     }
   },

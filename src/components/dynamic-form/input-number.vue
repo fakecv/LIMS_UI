@@ -45,10 +45,8 @@ export default {
       let v = result.value
       if (v < this.min) v = this.min
       if (v > this.max) v = this.max
-      // console.assert(!result.warning, result.warning)
       this.$emit('input', v)
       setTimeout(this.formatValue, 20)
-      // console.log('undated', v)
     },
     formatValue () {
       this.$el.querySelector('input').value = this.format(this.value)

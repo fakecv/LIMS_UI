@@ -88,7 +88,6 @@ export default {
         .then(function (res) {
           vm.staticOptions.departments = res.data
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },
@@ -98,7 +97,6 @@ export default {
         .then(function (res) {
           vm.staticOptions.agreements = res.data
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },
@@ -108,7 +106,6 @@ export default {
         .then(function (res) {
           vm.processingForm = res.data
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },
@@ -126,7 +123,6 @@ export default {
     this.loadProcessingStatusData()
     this.loadDepartment()
     this.loadAgreement()
-    console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadProcessing(this.$route.params.id)
     }

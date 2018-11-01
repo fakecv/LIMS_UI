@@ -233,7 +233,6 @@ export default {
         .then(function (res) {
           vm.agreements = res.data
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },

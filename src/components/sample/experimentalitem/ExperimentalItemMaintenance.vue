@@ -61,7 +61,6 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.experimentalItemRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {

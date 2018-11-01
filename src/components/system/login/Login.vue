@@ -7,7 +7,7 @@
     <el-main class="login-main">
       <el-tabs v-model="activeName" style="color::active: #005458">
         <el-tab-pane label="用户登录" name="first" style="{color: #005458, active: {color: #005458} width: 175px}">
-          <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="0px">
+          <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="0px" @keyup.enter.native="submitForm('loginForm')">
             <el-form-item prop="userName">
               <el-input v-model="loginForm.userName" placeholder="输入用户名">
                 <template slot="prepend"><i class="fa fa-user" aria-hidden="true"></i></template>
@@ -111,7 +111,6 @@ export default {
               console.log(error.response.data.message)
             })
         } else {
-          console.log('error submit!!')
           return false
         }
       })

@@ -3,6 +3,7 @@
     :processForm="processForm"
     :staticOptions="staticOptions"
       v-on:getAgreementInfo="getAgreementInfo"
+      v-on:getDrawingDesigns="getDrawingDesigns"
       v-on:getExperimentalMethod="getExperimentalMethod"
       v-on:getExperimentItemsParameter="getExperimentItemsParameter"
       v-on:deleteProcessForm="resetProcessForm"
@@ -36,7 +37,8 @@ export default {
         submitFrom: '',
         submitTo: '',
         processingStatus: '',
-        processingStatues: []
+        processingStatues: [],
+        processPriority: ''
       },
       processResetForm: {
         id: '',
@@ -56,7 +58,8 @@ export default {
         submitFrom: '',
         submitTo: '',
         processingStatus: '',
-        processingStatues: []
+        processingStatues: [],
+        processPriority: ''
       },
       staticOptions: {
         experimentalMethods: [],
@@ -65,6 +68,7 @@ export default {
         filteredExperimentItemsParameters: [],
         experimentalItems: [],
         drawingDesigns: [],
+        filteredDrawingDesigns: [],
         processingStatuses: [],
         processPriorities: [],
         departments: [],
@@ -82,9 +86,17 @@ export default {
           vm.processForm.materialNumber = agreement.materialNumber
           vm.processForm.receiveSampleTime = agreement.receiveSampleTime
           vm.processForm.expectedCompletionTime = agreement.expectedCompletionTime
+          vm.processForm.comment = agreement.comment
+          vm.processForm.processPriority = agreement.processPriority
         }
       })
       this.loadAgreementProcess(agreementId)
+    },
+    getDrawingDesigns (experimentalItemId) {
+      this.staticOptions.filteredDrawingDesigns =
+        this.staticOptions.drawingDesigns.filter(function (val) {
+          return val.experimentalItem === experimentalItemId
+        })
     },
     getExperimentItemsParameter (experimentalItemId) {
       this.staticOptions.filteredExperimentItemsParameters =
@@ -172,6 +184,7 @@ export default {
           vm.processForm = res.data
           vm.getExperimentalMethod(vm.processForm.experimentalItem)
           vm.getExperimentItemsParameter(vm.processForm.experimentalItem)
+          vm.getDrawingDesigns(vm.processForm.experimentalItem)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

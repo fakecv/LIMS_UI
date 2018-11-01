@@ -72,25 +72,20 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.internalAuditCheckListRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.internalAuditCheckListRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
       let vm = this
       this.$ajax.get('/api/internalauditchecklist/internalAuditCheckList/getInternalAuditCheckList')
         .then(function (res) {
-          console.log('internalAuditCheckListMaintenance')
-          console.log(res)
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/internalAuditCheckListDetailEdit/' + row.id)
     },
     onSubmit () {
@@ -99,7 +94,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalInternalAuditCheckLists = res.data.totalInternalAuditCheckLists || 0
-          console.log('totalDeparts is: ' + vm.totalInternalAuditCheckLists)
         })
     }
   },

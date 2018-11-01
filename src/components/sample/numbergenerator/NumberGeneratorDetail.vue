@@ -60,29 +60,24 @@ export default {
   },
   methods: {
     actionHandle (action) {
-      // var vm = this
-      console.log(action.id)
       if (action.id === '1') {
         this.saveToDB()
       } else if (action.id === '2') {
-        console.log(action.id)
         this.confirmDelete()
       } else if (action.id === '3') {
-        console.log(action.id)
       } else if (action.id === '4') {
-        console.log(action.id)
       } else if (action.id === '5') {
         this.new()
       } else if (action.id === '6') {
         this.copy()
       } else if (action.id === '7') {
-        console.log(action.id)
       }
     },
     new () {
       this.$emit('new')
     },
     copy () {
+      this.$message('复制成功!')
       this.$emit('copy')
     },
     saveToDB () {

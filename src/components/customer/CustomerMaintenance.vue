@@ -2,6 +2,11 @@
     <div>
       <el-container style="padding: 10px">
         <el-form :model="customerRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-row :gutter="20">
+          <el-form-item label="客户单位">
+            <el-input name="name" v-model="customerRequestForm.company" autoComplete="company"></el-input>
+          </el-form-item>
+        </el-row>
           <el-row :gutter="20">
             <el-form-item label="客户名称">
               <el-input name="name" v-model="customerRequestForm.name"></el-input>
@@ -77,12 +82,10 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.customerRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.customerRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
@@ -93,7 +96,6 @@ export default {
         })
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/customerDetailEdit/' + row.id)
     },
     onSubmit () {

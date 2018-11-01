@@ -29,6 +29,7 @@ export default {
         sampleName: '',
         receiveSampleTime: '',
         expectedCompletionTime: '',
+        processPriority: '',
         materialNumber: '',
         noOfSample: '',
         done: 'false',
@@ -39,7 +40,7 @@ export default {
         noOfReport: '1',
         sampleCheckResult: 'yes',
         sampleCheckResultNotes: '',
-        experimentalCategory: ['委托检测'],
+        experimentalCategory: '委托检测',
         experimentalCategoryOther: '',
         privacyDeclaim: '',
         customerId: '',
@@ -52,6 +53,7 @@ export default {
         sampleName: '',
         receiveSampleTime: '',
         expectedCompletionTime: '',
+        processPriority: '',
         materialNumber: '',
         noOfSample: '',
         done: 'false',
@@ -62,7 +64,7 @@ export default {
         noOfReport: '1',
         sampleCheckResult: 'yes',
         sampleCheckResultNotes: '',
-        experimentalCategory: ['委托检测'],
+        experimentalCategory: '委托检测',
         experimentalCategoryOther: '',
         privacyDeclaim: '',
         customerId: '',
@@ -70,11 +72,10 @@ export default {
         imageNameList: []
       },
       customerForm: {},
-      userForm: {
-
-      },
+      userForm: {},
       staticOptions: {
         experimentalMethods: [],
+        processPriorities: [],
         customers: [],
         users: [],
         totalCustomers: 0,
@@ -82,6 +83,7 @@ export default {
         images: []
       },
       customerRequestForm: {
+        company: '',
         name: '',
         itemsPerPage: 20,
         currentPage: 1
@@ -114,12 +116,10 @@ export default {
           }
           if (res.data.imageNameList.length > 0) {
             vm.agreementForm.imageNameList.forEach(image => {
-              console.log('dowload' + image)
               vm.downloadToFrontEnd(image, vm.agreementForm.agreementNumber)
             })
           }
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },
@@ -129,7 +129,15 @@ export default {
         .then(function (res) {
           vm.customerForm = res.data
         }).catch(function (error) {
-          console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadProcessPriorityData () {
+      let vm = this
+      this.$ajax.get('/api/sample/processPriority/getProcessPriority')
+        .then(function (res) {
+          vm.staticOptions.processPriorities = res.data
+        }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
@@ -139,7 +147,6 @@ export default {
         .then(function (res) {
           vm.userForm = res.data
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },
@@ -174,7 +181,7 @@ export default {
     resetAgreementId () {
       this.agreementForm.id = ''
     },
-    reloadCustomerData () {
+    reloadCustomerData (event) {
       let vm = this
       this.$ajax.post('/api/customer/queryCustomer', event)
         .then(function (res) {
@@ -224,19 +231,15 @@ export default {
       this.userForm.address = row.address
     },
     addImage (imageCP) {
-      console.log('addImage')
-      console.log(imageCP.caption)
       this.agreementForm.imageNameList.push(imageCP.caption)
       this.staticOptions.images.push(imageCP)
     },
     removeImage (item) {
-      console.log('removeImage')
       let vm = this
       let downloadFormTemp = {agreementNumber: this.agreementForm.agreementNumber, fileName: item.caption}
       this.$ajax.post('/api/sample/agreement/deleteFile', downloadFormTemp)
         .then(function (res) {
           vm.staticOptions.images.forEach(image => {
-            console.log(image.caption)
             if (image.caption === item.caption) {
               vm.staticOptions.images.splice(vm.staticOptions.images.indexOf(image), 1)
               vm.agreementForm.imageNameList.splice(vm.agreementForm.imageNameList.indexOf(item.caption), 1)
@@ -249,9 +252,9 @@ export default {
   },
   mounted () {
     this.loadExperimentalMethodData()
+    this.loadProcessPriorityData()
     this.initCustomerData()
     this.initUserData()
-    console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadAgreement(this.$route.params.id)
     }

@@ -66,12 +66,10 @@ export default {
     },
     handleSizeChange (val) {
       this.processRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.processRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     onSubmit () {
@@ -81,7 +79,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalProcesss = res.data.totalProcesss || 0
-          console.log(vm.tableData)
         })
     },
     drawLine () {
@@ -104,7 +101,6 @@ export default {
     }
   },
   mounted () {
-    console.log('mounted')
     this.drawLine()
     this.onSubmit()
   }

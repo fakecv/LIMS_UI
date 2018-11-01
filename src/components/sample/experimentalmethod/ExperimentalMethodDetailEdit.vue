@@ -39,7 +39,6 @@ export default {
         .then(function (res) {
           vm.experimentalMethodForm = res.data
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },
@@ -61,7 +60,6 @@ export default {
   },
   mounted () {
     this.loadExperimentalItemData()
-    console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadExperimentalMethod(this.$route.params.id)
     }

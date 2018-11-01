@@ -53,26 +53,15 @@
                 </el-radio-group>
               </el-form-item>
             </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-col :span="24">
               <el-form-item label="菜单描述">
-                <el-input name="description" v-model=menuForm.description></el-input>
+                <el-input type="textarea" name="description" v-model=menuForm.description></el-input>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
       </el-row>
-  </el-container>
-      <el-row class="footer-row">
-        <el-form :model="menuForm" label-width="100px" label-position="left" size="mini">
-          <el-row :gutter="20">
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="菜单创建人:">
-                <span>{{menuForm.lastModifiedBy}}</span>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </el-row>
+    </el-container>
   </div>
 </template>
 
@@ -97,22 +86,17 @@ export default {
   methods: {
     actionHandle (action) {
       // var vm = this
-      console.log(action.id)
       if (action.id === '1') {
         this.saveToDB()
       } else if (action.id === '2') {
-        console.log(action.id)
         this.confirmDelete()
       } else if (action.id === '3') {
-        console.log(action.id)
       } else if (action.id === '4') {
-        console.log(action.id)
       } else if (action.id === '5') {
         this.new()
       } else if (action.id === '6') {
         this.copy()
       } else if (action.id === '7') {
-        console.log(action.id)
       }
     },
     new () {
@@ -120,16 +104,15 @@ export default {
     },
     copy () {
       this.$emit('copy')
+      this.$message('复制成功!')
     },
     saveToDB () {
       let vm = this
-      console.log('save to DB ' + this.selectedParentId)
       this.$ajax.post('/api/systemMenu', this.menuForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateMenuForm', res.data)
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },

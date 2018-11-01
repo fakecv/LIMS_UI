@@ -96,7 +96,6 @@ export default {
         .then(function (res) {
           vm.staticOptions.departments = res.data
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },
@@ -106,7 +105,6 @@ export default {
         .then(function (res) {
           vm.staticOptions.userRoleGroups = res.data.pageResult || []
           vm.staticOptions.totalUserRoleGroups = res.data.totalUserRoleGroups || 0
-          console.log('total user role group is: ' + vm.totalUserRoleGroups)
         })
     },
     reloadUserRoleGroups (event) {
@@ -154,14 +152,12 @@ export default {
       this.$ajax.get('/api/users/' + userId)
         .then(function (res) {
           vm.userForm = res.data
-          console.log('load user ' + vm.userForm.modifiable)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     }
   },
   mounted () {
-    console.log('user detail edit')
     this.initRoleGroups()
     this.loadDepartment()
     if (this.$route.params.id !== undefined) {

@@ -38,8 +38,7 @@ export default {
         .then(function (res) {
           vm.staticOptions.linkMenus = res.data
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Somthing wrong happen in loadParentMenu!')
+          vm.$message(error.response.data.message)
         })
     },
     loadUserRole (userRoleId) {
@@ -48,8 +47,7 @@ export default {
         .then(function (res) {
           vm.roleForm = res.data
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Somthing wrong happen in user role!')
+          vm.$message(error.response.data.message)
         })
     },
     resetRoleForm () {
@@ -61,7 +59,6 @@ export default {
   },
   mounted () {
     this.loadMenuLinks()
-    console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadUserRole(this.$route.params.id)
     }

@@ -64,7 +64,11 @@
       </el-row>
     </el-form>
   </el-container>
-    <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
+    <el-table :data="tableData"
+      style="width: 100%"
+      @row-dblclick=dblclick
+      :row-style="processTableStyle"
+      >
       <el-table-column
         fixed
         prop="agreementNumber"
@@ -180,26 +184,27 @@ export default {
     }
   },
   methods: {
+    processTableStyle ({row, rowIndex}) {
+      let backgroundColor = '#FFFFFF'
+      let color = '#000000'
+      this.processPriorities.forEach(item => {
+        if (row.processPriority === item.id) {
+          backgroundColor = item.processPriorityColor
+          color = item.processPriorityFontColor
+        }
+      })
+      return 'background: ' + backgroundColor + ';color: ' + color
+    },
     dblclick (row, event) {
       this.$router.push('/lims/processDetailEdit/' + row.id)
     },
     handleSizeChange (val) {
       this.processRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.processRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
-    },
-    loadData () {
-      let vm = this
-      this.$ajax.get('/api/sample/process/getProcess').then(function (res) {
-        vm.tableData = res.data
-      }).catch(function (error) {
-        vm.$message(error.response.data.message)
-      })
     },
     // load all the processes
     onSubmit () {
@@ -220,7 +225,6 @@ export default {
         .then(function (res) {
           vm.agreements = res.data
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },
@@ -286,7 +290,6 @@ export default {
     agreementFormatter (row, column) {
       let name = ''
       this.agreements.forEach(item => {
-        console.log('agreementFormatter')
         if (row.agreementNumber === item.id) {
           name = item.agreementNumber
         }

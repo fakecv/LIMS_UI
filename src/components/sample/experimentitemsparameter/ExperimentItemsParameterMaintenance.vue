@@ -82,25 +82,20 @@ export default {
     },
     handleSizeChange (val) {
       this.experimentItemsParameterRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.experimentItemsParameterRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
       let vm = this
       this.$ajax.get('/api/sample/experimentItemsParameter/getExperimentItemsParameter')
         .then(function (res) {
-          console.log('experimentItemsParameterMaintenance')
-          console.log(res)
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/experimentItemsParameterDetailEdit/' + row.id)
     },
     onSubmit () {
@@ -109,7 +104,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalExperimentItemsParameters = res.data.totalExperimentItemsParameters || 0
-          console.log('totalDeparts is: ' + vm.totalExperimentItemsParameters)
         })
     },
     experimentalItemFormatter (row, column) {

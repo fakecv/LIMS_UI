@@ -46,6 +46,22 @@
                 <el-input name="sampleClientNumber" v-model="processForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="优先级">
+                <el-select name="processPriority" filterable default-first-option v-model="processForm.processPriority">
+                <el-option v-for="item in staticOptions.processPriorities"
+                  :key="item.Id"
+                  :label="item.processPriorityName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="其他信息">
+                <el-input type="textarea" name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
+              </el-form-item>
+            </el-col>
             <el-col :span="24">
               <el-form-item label="样品编号">
                 <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input>
@@ -93,7 +109,7 @@
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="加工图号">
                 <el-select name="drawingDesign" filterable default-first-option v-model="processForm.drawingDesign">
-                <el-option v-for="item in staticOptions.drawingDesigns"
+                <el-option v-for="item in staticOptions.filteredDrawingDesigns"
                   :key="item.Id"
                   :label="item.drawingDesignName"
                   :value="item.id">
@@ -134,22 +150,6 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="优先级">
-                <el-select name="processPriority" filterable default-first-option v-model="processForm.processPriority">
-                <el-option v-for="item in staticOptions.processPriorities"
-                  :key="item.Id"
-                  :label="item.processPriorityName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col  :span="24">
-              <el-form-item label="其他信息">
-                <el-input type="textarea" name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
-              </el-form-item>
-            </el-col>
           </el-row>
         </el-form>
       </el-container>
@@ -187,13 +187,10 @@ export default {
       } else if (action.id === '4') {
         this.submit()
       } else if (action.id === '5') {
-        console.log(action.id)
       } else if (action.id === '6') {
         this.confirmDelete()
       } else if (action.id === '7') {
-        console.log(action.id)
       } else if (action.id === '8') {
-        console.log(action.id)
       }
     },
     new () {
@@ -202,6 +199,7 @@ export default {
     },
     copy () {
       this.$emit('copy')
+      this.$message('复制成功!')
       this.sampleNumberButton = false
     },
     saveToDB () {
@@ -258,8 +256,12 @@ export default {
       this.$emit('getAgreementInfo', val)
     },
     getExperimentalMethod  (val) {
+      this.processForm.drawingDesign = ''
+      this.processForm.experimentItemsParameter = ''
+      this.processForm.experimentalMethod = ''
       this.$emit('getExperimentalMethod', val)
       this.$emit('getExperimentItemsParameter', val)
+      this.$emit('getDrawingDesigns', val)
     },
     sampleNumberGenerator () {
       let vm = this

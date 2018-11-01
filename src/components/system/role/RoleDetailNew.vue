@@ -39,13 +39,10 @@ export default {
         .then(function (res) {
           vm.staticOptions.linkMenus = res.data
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },
     updateRoleForm (event) {
-      console.log('updateRoleForm' + event.id)
-
       this.roleForm.id = event.id
     },
     resetRoleForm () {

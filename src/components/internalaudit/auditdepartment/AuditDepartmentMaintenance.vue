@@ -57,12 +57,10 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.auditDepartmentRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.auditDepartmentRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
@@ -73,7 +71,6 @@ export default {
         })
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/auditDepartmentDetailEdit/' + row.id)
     },
     onSubmit () {
@@ -82,7 +79,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalAuditDepartments = res.data.totalAuditDepartments || 0
-          console.log('totalDeparts is: ' + vm.totalAuditDepartments)
         })
     }
   },

@@ -36,7 +36,6 @@ export default {
         .then(function (res) {
           vm.experimentItemsParameterForm = res.data
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },

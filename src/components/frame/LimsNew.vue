@@ -146,11 +146,8 @@ export default {
       }
     },
     handleOpen (key, keyPath) {
-      console.log(key)
-      // console.log(keyPath)
     },
     handleClose (key, keyPath) {
-      // console.log(key, keyPath)
     },
     menuSelected (key, keyPath, value) {
       let menu = value.$attrs.data
@@ -191,7 +188,6 @@ export default {
           vm.leftMenus = response.data.children
         //  vm.leftMenus = response.data.childs
           // vm.leftMenus.forEach(child => {
-          //   console.log(child.name)
           // })
           // vm.defaultOpeneds.push(child.entity.name)
         }).catch(function (error) {
@@ -231,7 +227,6 @@ export default {
       ]
     },
     handleSelect (item) {
-      // console.log(item)
     }
 
   }

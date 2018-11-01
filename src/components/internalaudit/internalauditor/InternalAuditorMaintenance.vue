@@ -57,12 +57,10 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.internalAuditorRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.internalAuditorRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     loadData () {
@@ -73,7 +71,6 @@ export default {
         })
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/internalAuditorDetailEdit/' + row.id)
     },
     onSubmit () {
@@ -82,7 +79,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalInternalAuditors = res.data.totalInternalAuditors || 0
-          console.log('totalDeparts is: ' + vm.totalInternalAuditors)
         })
     }
   },

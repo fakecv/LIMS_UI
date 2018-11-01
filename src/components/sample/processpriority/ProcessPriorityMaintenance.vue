@@ -14,7 +14,7 @@
           </el-row>
         </el-form>
       </el-container>
-      <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
+      <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick :row-style="processPriorityTableStyle">
         <el-table-column
           prop="processPriorityName"
           label="优先级名称"
@@ -86,6 +86,10 @@ export default {
           vm.totalProcessPrioritys = res.data.totalProcessPrioritys || 0
           console.log('totalDeparts is: ' + vm.totalProcessPrioritys)
         })
+    },
+    processPriorityTableStyle ({row, rowIndex}) {
+      console.log(row.processPriorityColor)
+      return 'background: ' + row.processPriorityColor + ';color: ' + row.processPriorityFontColor
     }
   },
   mounted () {

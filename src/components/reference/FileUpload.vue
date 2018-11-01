@@ -46,7 +46,6 @@ export default {
       this.$ajax.get('/api/sample/agreement/downloadPdfFile/5b78251d34cb682670b68ad1', {responseType: 'blob'})
         .then(function (res) {
           // vm.src = new Blob([res.data], {type: 'application/pdf'})
-          // console.log(vm.src)
           vm.download(res.data)
         }
         ).catch(function (error) {

@@ -1,6 +1,7 @@
 <template>
   <DrawingDesignDetail
    :drawingDesignForm="drawingDesignForm"
+   :staticOptions="staticOptions"
    v-on:deleteDrawingDesign="resetDrawingDesignForm"
    v-on:new="resetDrawingDesignForm"
    v-on:copy="resetDrawingDesignId"/>
@@ -15,13 +16,18 @@ export default {
     return {
       drawingDesignForm: {
         id: '',
+        experimentalItem: '',
         drawingDesignName: '',
         drawingDesignNumber: ''
       },
       drawingDesignResetForm: {
         id: '',
+        experimentalItem: '',
         drawingDesignName: '',
         drawingDesignNumber: ''
+      },
+      staticOptions: {
+        experimentalItems: []
       }
     }
   },
@@ -32,7 +38,15 @@ export default {
         .then(function (res) {
           vm.drawingDesignForm = res.data
         }).catch(function (error) {
-          console.log(error.message)
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadExperimentalItemData () {
+      let vm = this
+      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+        .then(function (res) {
+          vm.staticOptions.experimentalItems = res.data
+        }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
@@ -44,7 +58,7 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.params.id)
+    this.loadExperimentalItemData()
     if (this.$route.params.id !== undefined) {
       this.loadDrawingDesign(this.$route.params.id)
     }

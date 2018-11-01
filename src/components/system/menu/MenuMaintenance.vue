@@ -98,12 +98,10 @@ export default {
   methods: {
     handleSizeChange (val) {
       this.menuItemRequestForm.itemsPerPage = val
-      console.log(`每页 ${val} 条`)
       this.onSubmit()
     },
     handleCurrentChange (val) {
       this.menuItemRequestForm.currentPage = val
-      console.log(`当前页: ${val}`)
       this.onSubmit()
     },
     formatter (row, column) {
@@ -114,7 +112,6 @@ export default {
       }
     },
     dblclick (row, event) {
-      console.log(row.id)
       this.$router.push('/lims/menuDetailEdit/' + row.id)
     },
     onSubmit () {
@@ -123,7 +120,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalMenuItems = res.data.totalMenuItems || 0
-          console.log('totalMenuItems is: ' + vm.totalMenuItems)
         })
     },
     loadParentMenu () {
@@ -132,8 +128,7 @@ export default {
         .then(function (res) {
           vm.parentMenu = res.data
         }).catch(function (error) {
-          console.log(error.message)
-          vm.$message('Somthing wrong happen in loadParentMenu!')
+          vm.$message(error.response.data.message)
         })
     }
   },

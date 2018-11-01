@@ -110,18 +110,14 @@ export default {
       if (action.id === '1') {
         // this.saveToDB()
       } else if (action.id === '2') {
-        console.log(action.id)
         this.confirmDelete()
       } else if (action.id === '3') {
-        console.log(action.id)
       } else if (action.id === '4') {
-        console.log(action.id)
       } else if (action.id === '5') {
         // this.new()
       } else if (action.id === '6') {
         // this.copy()
       } else if (action.id === '7') {
-        console.log(action.id)
       }
     },
     new () {
@@ -129,6 +125,7 @@ export default {
     },
     copy () {
       this.$emit('copy')
+      this.$message('复制成功!')
     },
     saveToDB () {
       let vm = this

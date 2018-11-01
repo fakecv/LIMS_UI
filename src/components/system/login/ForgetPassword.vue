@@ -50,10 +50,8 @@ export default {
             .then(function (res) {
               alert('submit!')
             }.bind(this)).catch(function (err) {
-            // console.log(err.message)
             }.bind(this))
         } else {
-          console.log('error submit!!')
           return false
         }
       })

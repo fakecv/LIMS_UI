@@ -32,7 +32,6 @@ export default {
         .then(function (res) {
           vm.processingStatusForm = res.data
         }).catch(function (error) {
-          console.log(error.message)
           vm.$message(error.response.data.message)
         })
     },
@@ -44,7 +43,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.loadProcessingStatus(this.$route.params.id)
     }

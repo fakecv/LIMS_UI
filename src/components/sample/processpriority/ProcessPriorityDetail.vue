@@ -7,11 +7,21 @@
       </el-button-group>
     </el-header>
     <el-container style="padding: 10px">
-      <el-form :model="processPriorityForm" label-width="100px" label-position="left" size="mini">
+      <el-form :model="processPriorityForm" label-width="120px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="优先级名称">
               <el-input name="processPriorityName" v-model="processPriorityForm.processPriorityName" autoComplete="priorityName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="优先级背景颜色">
+              <el-color-picker v-model="processPriorityForm.processPriorityColor"></el-color-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="优先级文字颜色">
+              <el-color-picker v-model="processPriorityForm.processPriorityFontColor"></el-color-picker>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -46,22 +56,17 @@ export default {
   methods: {
     actionHandle (action) {
       // var vm = this
-      console.log(action.id)
       if (action.id === '1') {
         this.saveToDB()
       } else if (action.id === '2') {
-        console.log(action.id)
         this.confirmDelete()
       } else if (action.id === '3') {
-        console.log(action.id)
       } else if (action.id === '4') {
-        console.log(action.id)
       } else if (action.id === '5') {
         this.new()
       } else if (action.id === '6') {
         this.copy()
       } else if (action.id === '7') {
-        console.log(action.id)
       }
     },
     new () {
@@ -69,6 +74,7 @@ export default {
     },
     copy () {
       this.$emit('copy')
+      this.$message('复制成功!')
     },
     saveToDB () {
       let vm = this

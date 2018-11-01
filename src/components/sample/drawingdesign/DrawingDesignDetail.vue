@@ -9,6 +9,17 @@
     <el-container style="padding: 10px" direction="vertical">
       <el-form :model="drawingDesignForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
+          <el-form-item label="检测项目名称">
+              <el-select name="experimentalItem" filterable default-first-option v-model="drawingDesignForm.experimentalItem">
+                <el-option v-for="item in staticOptions.experimentalItems"
+                  :key="item.Id"
+                  :label="item.experimentalItemName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+          </el-form-item>
+        </el-row>
+        <el-row :gutter="20">
           <el-form-item label="图纸名称">
             <el-input name="drawingDesignName" v-model="drawingDesignForm.drawingDesignName"></el-input>
           </el-form-item>
@@ -26,7 +37,7 @@
 <script>
 export default {
   name: 'drawingDesignDetail',
-  props: ['drawingDesignForm'],
+  props: ['drawingDesignForm', 'staticOptions'],
   data () {
     return {
       actions: [
@@ -44,28 +55,24 @@ export default {
   methods: {
     actionHandle (action) {
       // var vm = this
-      console.log(action.id)
       if (action.id === '1') {
         this.saveToDB()
       } else if (action.id === '2') {
-        console.log(action.id)
         this.confirmDelete()
       } else if (action.id === '3') {
-        console.log(action.id)
       } else if (action.id === '4') {
-        console.log(action.id)
       } else if (action.id === '5') {
         this.new()
       } else if (action.id === '6') {
         this.copy()
       } else if (action.id === '7') {
-        console.log(action.id)
       }
     },
     new () {
       this.$emit('new')
     },
     copy () {
+      this.$message('复制成功!')
       this.$emit('copy')
     },
     saveToDB () {

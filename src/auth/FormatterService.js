@@ -25,11 +25,9 @@ export default class FormatterService {
   }
   loadAgreement () {
     let vm = this
-    console.log('loadAgreement method has been run')
     axios.get('/api/sample/agreement/getAgreement')
       .then(function (res) {
         vm.agreements = res.data
-        console.log(vm.agreements)
       }).catch(function (error) {
         vm.$message(error.response.data.message)
       })
@@ -153,9 +151,7 @@ export default class FormatterService {
   agreementFormatter (row, column) {
     let name = ''
     let agreements = this.agreements
-    console.log(agreements)
     agreements.forEach(item => {
-      console.log('agreementFormatter')
       if (row.agreementNumber === item.id) {
         name = item.agreementNumber
       }
