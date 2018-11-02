@@ -66,6 +66,9 @@ import ProcessingStatusMaintenance from '@/components/sample/processingstatus/Pr
 import ProcessPriorityDetailNew from '@/components/sample/processpriority/ProcessPriorityDetailNew'
 import ProcessPriorityDetailEdit from '@/components/sample/processpriority/ProcessPriorityDetailEdit'
 import ProcessPriorityMaintenance from '@/components/sample/processpriority/ProcessPriorityMaintenance'
+import ReportDevelopmentDetailNew from '@/components/report/reportdevelopment/ReportDevelopmentDetailNew'
+import ReportDevelopmentDetailEdit from '@/components/report/reportdevelopment/ReportDevelopmentDetailEdit'
+import ReportDevelopmentMaintenance from '@/components/report/reportdevelopment/ReportDevelopmentMaintenance'
 import RoleDetailNew from '@/components/system/role/RoleDetailNew'
 import RoleDetailEdit from '@/components/system/role/RoleDetailEdit'
 import RoleGroupDetailNew from '@/components/system/rolegroup/RoleGroupDetailNew'
@@ -73,6 +76,7 @@ import RoleGroupDetailEdit from '@/components/system/rolegroup/RoleGroupDetailEd
 import RoleGroupMaintenance from '@/components/system/rolegroup/RoleGroupMaintenance'
 import RoleMaintenance from '@/components/system/role/RoleMaintenance'
 import Schedule from '@/components/equipment/Schedule'
+import ShortCut from '@/components/frame/ShortCut'
 import TableSchedule from '@/components/equipment/MyTableSchedule'
 import ThemePicker from '@/components/frame/themePicker'
 import UIGenerator from '@/components/develop/UIGenerator'
@@ -391,6 +395,21 @@ const router = new Router({
           component: RoleDetailEdit
         },
         {
+          path: 'reportDevelopmentDetailEdit/:id',
+          name: 'reportDevelopmentAuditorDetailEdit',
+          component: ReportDevelopmentDetailEdit
+        },
+        {
+          path: 'reportDevelopmentDetailNew',
+          name: 'reportDevelopmentDetailNew',
+          component: ReportDevelopmentDetailNew
+        },
+        {
+          path: 'reportDevelopmentMaintenance',
+          name: 'reportDevelopmentMaintenance',
+          component: ReportDevelopmentMaintenance
+        },
+        {
           path: 'roleDetailNew',
           name: 'roleDetailNew',
           component: RoleDetailNew
@@ -419,6 +438,11 @@ const router = new Router({
           path: 'schedule',
           name: 'schedule',
           component: Schedule
+        },
+        {
+          path: 'shortCut',
+          name: 'shortCut',
+          component: ShortCut
         },
         {
           path: 'tableSchedule',

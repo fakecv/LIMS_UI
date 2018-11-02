@@ -13,11 +13,12 @@
           <el-row type="flex" justify="left">
             <el-autocomplete
               class="inline-input"
+              clearable
               v-model="state2"
               prefix-icon="el-icon-search"
               :fetch-suggestions="querySearch"
               placeholder="请输入内容"
-              :trigger-on-focus="false"
+              :trigger-on-focus="true"
               @select="handleSelect"
             >
             </el-autocomplete>
@@ -93,11 +94,12 @@ export default {
       positions: [],
       elAside: 235,
       instruction: '导航页',
-      restaurants: [],
       state1: '',
       state2: '',
       menuStatus: '收起菜单',
-      companyImageSource: companyImageSource
+      companyImageSource: companyImageSource,
+      menuItems: [],
+      shortCuts: []
     }
   },
   mounted: function () {
@@ -111,12 +113,30 @@ export default {
     this.userProfile = JSON.parse(localStorage.getItem('userProfile'))
     this.getTopMenus()
     this.initialPosition()
-    this.restaurants = this.loadAll()
+    this.getSystemMenu()
   },
   created () {
-    // this.loadData()
   },
   methods: {
+    getSystemMenu () {
+      let vm = this
+      this.$ajax.get('/api/systemMenu/displayedMenuItems')
+        .then(function (res) {
+          vm.menuItems = res.data
+          vm.fetchShortCuts(vm.menuItems)
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    fetchShortCuts (menuItems) {
+      let vm = this
+      menuItems.forEach(element => {
+        let shortCut = {}
+        shortCut.value = element.sort
+        shortCut.path = element.value
+        vm.shortCuts.push(shortCut)
+      })
+    },
     collapseChange () {
       this.elAside = this.isCollapse ? 235 : 0
       this.menuStatus = this.isCollapse ? '收起菜单' : '展开菜单'
@@ -139,7 +159,9 @@ export default {
           this.instruction = '导航页'
           break
         case 'b' :
-          alert('b')
+          router.push({name: 'shortCut'})
+          this.initialPosition()
+          this.instruction = '快捷键一览'
           break
         case 'c' :
           this.auth.logout()
@@ -210,23 +232,19 @@ export default {
       return positions.reverse()
     },
     querySearch (queryString, cb) {
-      var restaurants = this.restaurants
-      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
+      var shortCuts = this.shortCuts
+      var results = queryString ? shortCuts.filter(this.createFilter(queryString)) : shortCuts
       // 调用 callback 返回建议列表的数据
       cb(results)
     },
     createFilter (queryString) {
-      return (restaurant) => {
-        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      return (menuItem) => {
+        return (menuItem.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
       }
     },
-    loadAll () {
-      return [
-        { 'value': '三全鲜食（北新泾店）', 'address': '长宁区新渔路144号' },
-        { 'value': '南拳妈妈龙虾盖浇饭', 'address': '普陀区金沙江路1699号鑫乐惠美食广场A13' }
-      ]
-    },
     handleSelect (item) {
+      this.$router.push(item.path)
+      // this.$router.push(item.value)
     }
 
   }
