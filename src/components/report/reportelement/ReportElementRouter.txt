@@ -1,0 +1,18 @@
+import ReportElementDetailNew from '@/components/report/reportelement/ReportElementDetailNew'
+import ReportElementDetailEdit from '@/components/report/reportelement/ReportElementDetailEdit'
+import ReportElementMaintenance from '@/components/report/reportelement/ReportElementMaintenance'
+{
+  path: 'reportElementDetailEdit/:id',
+  name: 'reportElementAuditorDetailEdit',
+  component: ReportElementDetailEdit
+},
+{
+  path: 'reportElementDetailNew',
+  name: 'reportElementDetailNew',
+  component: ReportElementDetailNew
+},
+{
+  path: 'reportElementMaintenance',
+  name: 'reportElementMaintenance',
+  component: ReportElementMaintenance
+},

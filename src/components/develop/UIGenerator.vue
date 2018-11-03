@@ -43,8 +43,7 @@ export default {
   methods: {
     actionHandler (action) {
       if (action.id === '1') {
-        // this.jsonContent = ''
-        this.$store.state.forms[this.$route.params.fid].formItemList = []
+        this.reset()
       } else if (action.id === '2') {
         this.submit(this.$store.state.forms[this.$route.params.fid])
       } else if (action.id === '3') {
@@ -54,6 +53,12 @@ export default {
       } else if (action.id === '5') {
         this.confirmDelete()
       }
+    },
+    reset () {
+      this.$store.state.forms[this.$route.params.fid].packageName = ''
+      this.$store.state.forms[this.$route.params.fid].domain = ''
+      this.$store.state.forms[this.$route.params.fid].formItemList = []
+      this.formTemplateId = ''
     },
     confirmDelete () {
       let vm = this

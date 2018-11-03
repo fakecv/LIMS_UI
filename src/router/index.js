@@ -69,6 +69,9 @@ import ProcessPriorityMaintenance from '@/components/sample/processpriority/Proc
 import ReportDevelopmentDetailNew from '@/components/report/reportdevelopment/ReportDevelopmentDetailNew'
 import ReportDevelopmentDetailEdit from '@/components/report/reportdevelopment/ReportDevelopmentDetailEdit'
 import ReportDevelopmentMaintenance from '@/components/report/reportdevelopment/ReportDevelopmentMaintenance'
+import ReportElementDetailNew from '@/components/report/reportelement/ReportElementDetailNew'
+import ReportElementDetailEdit from '@/components/report/reportelement/ReportElementDetailEdit'
+import ReportElementMaintenance from '@/components/report/reportelement/ReportElementMaintenance'
 import RoleDetailNew from '@/components/system/role/RoleDetailNew'
 import RoleDetailEdit from '@/components/system/role/RoleDetailEdit'
 import RoleGroupDetailNew from '@/components/system/rolegroup/RoleGroupDetailNew'
@@ -408,6 +411,21 @@ const router = new Router({
           path: 'reportDevelopmentMaintenance',
           name: 'reportDevelopmentMaintenance',
           component: ReportDevelopmentMaintenance
+        },
+        {
+          path: 'reportElementDetailEdit/:id',
+          name: 'reportElementAuditorDetailEdit',
+          component: ReportElementDetailEdit
+        },
+        {
+          path: 'reportElementDetailNew',
+          name: 'reportElementDetailNew',
+          component: ReportElementDetailNew
+        },
+        {
+          path: 'reportElementMaintenance',
+          name: 'reportElementMaintenance',
+          component: ReportElementMaintenance
         },
         {
           path: 'roleDetailNew',
