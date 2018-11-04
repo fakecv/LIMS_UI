@@ -26,9 +26,9 @@ import ExperimentalMethodMaintenance from '@/components/sample/experimentalmetho
 import ExperimentalItemDetailNew from '@/components/sample/experimentalitem/ExperimentalItemDetailNew'
 import ExperimentalItemDetailEdit from '@/components/sample/experimentalitem/ExperimentalItemDetailEdit'
 import ExperimentalItemMaintenance from '@/components/sample/experimentalitem/ExperimentalItemMaintenance'
-import ExperimentalItemsParameterDetailNew from '@/components/sample/experimentitemsparameter/ExperimentItemsParameterDetailNew'
-import ExperimentalItemsParameterDetailEdit from '@/components/sample/experimentitemsparameter/ExperimentItemsParameterDetailEdit'
-import ExperimentalItemsParameterMaintenance from '@/components/sample/experimentitemsparameter/ExperimentItemsParameterMaintenance'
+import ExperimentalItemsParameterDetailNew from '@/components/sample/experimentalitemsparameter/ExperimentalItemsParameterDetailNew'
+import ExperimentalItemsParameterDetailEdit from '@/components/sample/experimentalitemsparameter/ExperimentalItemsParameterDetailEdit'
+import ExperimentalItemsParameterMaintenance from '@/components/sample/experimentalitemsparameter/ExperimentalItemsParameterMaintenance'
 import EditorFormAside from '@/views/editor/form/aside'
 import EditorFormMain from '@/views/editor/form/main'
 import EditorTableAside from '@/views/editor/table/aside'
@@ -81,6 +81,9 @@ import RoleMaintenance from '@/components/system/role/RoleMaintenance'
 import Schedule from '@/components/equipment/Schedule'
 import ShortCut from '@/components/frame/ShortCut'
 import TableSchedule from '@/components/equipment/MyTableSchedule'
+import TestedItemProductDetailNew from '@/components/sample/testeditemproduct/TestedItemProductDetailNew'
+import TestedItemProductDetailEdit from '@/components/sample/testeditemproduct/TestedItemProductDetailEdit'
+import TestedItemProductMaintenance from '@/components/sample/testeditemproduct/TestedItemProductMaintenance'
 import ThemePicker from '@/components/frame/themePicker'
 import UIGenerator from '@/components/develop/UIGenerator'
 import UserDetailNew from '@/components/system/user/UserDetailNew'
@@ -218,17 +221,17 @@ const router = new Router({
           component: ExperimentalItemMaintenance
         },
         {
-          path: 'experimentItemsParameterDetailEdit/:id',
-          name: 'experimentItemsParameterDetailEdit',
+          path: 'experimentalItemsParameterDetailEdit/:id',
+          name: 'experimentalItemsParameterDetailEdit',
           component: ExperimentalItemsParameterDetailEdit
         },
         {
-          path: 'experimentItemsParameterDetailNew',
-          name: 'experimentItemsParameterDetailNew',
+          path: 'experimentalItemsParameterDetailNew',
+          name: 'experimentalItemsParameterDetailNew',
           component: ExperimentalItemsParameterDetailNew
         },
         {
-          path: 'experimentItemsParameterMaintenance',
+          path: 'experimentalItemsParameterMaintenance',
           name: 'experimentalItemsParameterMaintenance',
           component: ExperimentalItemsParameterMaintenance
         },
@@ -269,7 +272,7 @@ const router = new Router({
         },
         {
           path: 'internalAuditCheckListDetailEdit/:id',
-          name: 'internalAuditorDetailEdit',
+          name: 'internalAuditorCheckListDetailEdit',
           component: InternalAuditCheckListDetailEdit
         },
         {
@@ -466,6 +469,21 @@ const router = new Router({
           path: 'tableSchedule',
           name: 'tableSchedule',
           component: TableSchedule
+        },
+        {
+          path: 'testedItemProductDetailEdit/:id',
+          name: 'testedItemProductAuditorDetailEdit',
+          component: TestedItemProductDetailEdit
+        },
+        {
+          path: 'testedItemProductDetailNew',
+          name: 'testedItemProductDetailNew',
+          component: TestedItemProductDetailNew
+        },
+        {
+          path: 'testedItemProductMaintenance',
+          name: 'testedItemProductMaintenance',
+          component: TestedItemProductMaintenance
         },
         {
           path: 'themePicker',

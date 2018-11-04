@@ -7,10 +7,10 @@
       </el-button-group>
     </el-header>
     <el-container style="padding: 10px">
-      <el-form :model="experimentItemsParameterForm" label-width="150px" label-position="left" size="mini">
+      <el-form :model="experimentalItemsParameterForm" label-width="150px" label-position="left" size="mini">
         <el-row>
           <el-form-item label="检测项目名称">
-              <el-select name="experimentalItem" filterable default-first-option v-model="experimentItemsParameterForm.experimentalItem">
+              <el-select name="experimentalItem" filterable default-first-option v-model="experimentalItemsParameterForm.experimentalItem">
                 <el-option v-for="item in staticOptions.experimentalItems"
                   :key="item.Id"
                   :label="item.experimentalItemName"
@@ -22,14 +22,14 @@
         <el-row>
           <el-col>
             <el-form-item label="检测项目参数">
-              <el-input name="experimentItemsParameterName" v-model="experimentItemsParameterForm.experimentItemsParameterName" autoComplete="experimentItemsParameterName"></el-input>
+              <el-input name="experimentalItemsParameterName" v-model="experimentalItemsParameterForm.experimentalItemsParameterName" autoComplete="experimentalItemsParameterName"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row >
           <el-col>
             <el-form-item label="检测项目参数描述">
-              <el-input type="textarea" name="experimentItemsParameterDescription" v-model="experimentItemsParameterForm.experimentItemsParameterDescription" autoComplete="experimentItemsParameterDescription"></el-input>
+              <el-input type="textarea" name="experimentalItemsParameterDescription" v-model="experimentalItemsParameterForm.experimentalItemsParameterDescription" autoComplete="experimentalItemsParameterDescription"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -40,8 +40,8 @@
 
 <script>
 export default {
-  name: 'experimentItemsParameterDetail',
-  props: ['experimentItemsParameterForm', 'staticOptions'],
+  name: 'experimentalItemsParameterDetail',
+  props: ['experimentalItemsParameterForm', 'staticOptions'],
   data () {
     return {
       actions: [
@@ -69,6 +69,7 @@ export default {
         this.new()
       } else if (action.id === '6') {
         this.copy()
+        this.$message('复制成功!')
       } else if (action.id === '7') {
       }
     },
@@ -81,17 +82,17 @@ export default {
     },
     saveToDB () {
       let vm = this
-      this.$ajax.post('/api/sample/experimentItemsParameter', this.experimentItemsParameterForm)
+      this.$ajax.post('/api/sample/experimentalItemsParameter', this.experimentalItemsParameterForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
-          vm.$emit('updateExperimentItemsParameterForm', res.data)
+          vm.$emit('updateExperimentalItemsParameterForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
     confirmDelete () {
       let vm = this
-      if (this.experimentItemsParameterForm.id && this.experimentItemsParameterForm.id !== '') {
+      if (this.experimentalItemsParameterForm.id && this.experimentalItemsParameterForm.id !== '') {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -108,10 +109,10 @@ export default {
     },
     delete () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentItemsParameter/delete/' + this.experimentItemsParameterForm.id)
+      this.$ajax.get('/api/sample/experimentalItemsParameter/delete/' + this.experimentalItemsParameterForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteExperimentItemsParameter')
+          vm.$emit('deleteExperimentalItemsParameter')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

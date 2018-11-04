@@ -55,6 +55,7 @@ export default {
       }
     },
     reset () {
+      this.$store.state.forms[this.$route.params.fid].id = ''
       this.$store.state.forms[this.$route.params.fid].packageName = ''
       this.$store.state.forms[this.$route.params.fid].domain = ''
       this.$store.state.forms[this.$route.params.fid].formItemList = []
