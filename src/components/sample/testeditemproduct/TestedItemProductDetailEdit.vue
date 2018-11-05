@@ -60,27 +60,23 @@ export default {
       this.testedItemProductForm.id = ''
     },
     getCascadeItems (itemId) {
-      console.log('getCascadeItems')
       this.getDrawingDesigns(itemId)
       this.getExperimentalMethod(itemId)
       this.getExperimentalItemsParameter(itemId)
     },
     getDrawingDesigns (experimentalItemId) {
-      console.log('getDrawingDesigns')
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
           return val.experimentalItem === experimentalItemId
         })
     },
     getExperimentalMethod (experimentalItemId) {
-      console.log('getExperimentalMethod')
       this.staticOptions.filteredExperimentalMethods =
         this.staticOptions.experimentalMethods.filter(function (val) {
           return val.experimentalItem === experimentalItemId
         })
     },
     getExperimentalItemsParameter (experimentalItemId) {
-      console.log('getExperimentalItemsParameter' + experimentalItemId)
       this.staticOptions.filteredExperimentalItemsParameters =
         this.staticOptions.experimentalItemsParameters.filter(function (val) {
           return val.experimentalItem === experimentalItemId
@@ -127,7 +123,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.params.id)
     this.loadExperimentalItemData()
     this.loadExperimentalMethodData()
     this.loadDrawingDesignData()
