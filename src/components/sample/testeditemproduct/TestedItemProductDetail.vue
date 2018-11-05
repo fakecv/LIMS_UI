@@ -18,7 +18,7 @@
             <el-form-item label="检测项目">
               <el-select name="experimentalItem" filterable default-first-option v-model="testedItemProductForm.experimentalItem" @change="getCascadeItems">
                 <el-option v-for="item in staticOptions.experimentalItems"
-                  :key="item.Id"
+                  :key="item.id"
                   :label="item.experimentalItemName"
                   :value="item.id">
                 </el-option>
@@ -29,7 +29,7 @@
             <el-form-item label="检测项目参数">
               <el-select name="experimentalParameter" filterable default-first-option v-model="testedItemProductForm.experimentalItemsParameter">
                 <el-option v-for="item in staticOptions.filteredExperimentalItemsParameters"
-                  :key="item.Id"
+                  :key="item.id"
                   :label="item.experimentalItemsParameterName"
                   :value="item.id">
                 </el-option>
@@ -40,7 +40,7 @@
             <el-form-item label="检测方法">
               <el-select name="experimentalMethod" filterable default-first-option v-model="testedItemProductForm.experimentalMethod">
                 <el-option v-for="item in staticOptions.filteredExperimentalMethods"
-                  :key="item.Id"
+                  :key="item.id"
                   :label="item.experimentalMethodName"
                   :value="item.id">
                 </el-option>
@@ -51,7 +51,7 @@
             <el-form-item label="加工图号">
               <el-select name="drawingDesign" filterable default-first-option v-model="testedItemProductForm.drawingDesign">
                 <el-option v-for="item in staticOptions.filteredDrawingDesigns"
-                  :key="item.Id"
+                  :key="item.id"
                   :label="item.drawingDesignName"
                   :value="item.id">
                 </el-option>

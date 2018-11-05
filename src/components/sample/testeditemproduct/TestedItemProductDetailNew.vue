@@ -109,42 +109,6 @@ export default {
         .then(function (res) {
           vm.staticOptions.experimentalItemsParameters = res.data
         })
-    },
-    drawingDesignFormatter (row, column) {
-      let name = ''
-      this.staticOptions.drawingDesigns.forEach(item => {
-        if (row.drawingDesign === item.id) {
-          name = item.drawingDesignName
-        }
-      })
-      return name
-    },
-    experimentalItemFormatter (row, column) {
-      let name = ''
-      this.staticOptions.experimentalItems.forEach(item => {
-        if (row.experimentalItem === item.id) {
-          name = item.experimentalItemName
-        }
-      })
-      return name
-    },
-    experimentalMethodFormatter (row, column) {
-      let name = ''
-      this.staticOptions.experimentalMethods.forEach(item => {
-        if (row.experimentalMethod === item.id) {
-          name = item.experimentalMethodName
-        }
-      })
-      return name
-    },
-    experimentalParameterFormatter (row, column) {
-      let name = ''
-      this.staticOptions.experimentalParameters.forEach(item => {
-        if (row.experimentalParameter === item.id) {
-          name = item.experimentalParameterName
-        }
-      })
-      return name
     }
   },
   mounted () {

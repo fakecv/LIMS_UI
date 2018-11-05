@@ -3,9 +3,6 @@
     :testedItemProductForm="testedItemProductForm"
     :staticOptions="staticOptions"
     v-on:getCascadeItems="getCascadeItems"
-    v-on:getDrawingDesigns="getDrawingDesigns"
-    v-on:getExperimentalMethod="getExperimentalMethod"
-    v-on:getExperimentalItemsParameter="getExperimentalItemsParameter"
     v-on:deleteTestedItemProduct="resetTestedItemProductForm"
     v-on:new="resetTestedItemProductForm"
     v-on:copy="resetTestedItemProductId"/>
@@ -51,10 +48,7 @@ export default {
       this.$ajax.get('/api/sample/testedItemProduct/' + testedItemProductId)
         .then(function (res) {
           vm.testedItemProductForm = res.data
-          vm.getDrawingDesigns(vm.testedItemProductForm.experimentalItem)
-          vm.$nextTick(() => {
-            vm.getCascadeItems(vm.testedItemProductForm.experimentalItem)
-          })
+          vm.getCascadeItems(vm.testedItemProductForm.experimentalItem)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -97,6 +91,7 @@ export default {
       this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
         .then(function (res) {
           vm.staticOptions.drawingDesigns = res.data
+          vm.staticOptions.filteredDrawingDesigns = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -115,6 +110,7 @@ export default {
       this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
         .then(function (res) {
           vm.staticOptions.experimentalMethods = res.data
+          vm.staticOptions.filteredExperimentalMethods = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -124,26 +120,21 @@ export default {
       this.$ajax.get('/api/sample/experimentalItemsParameter/getExperimentalItemsParameter')
         .then(function (res) {
           vm.staticOptions.experimentalItemsParameters = res.data
+          vm.staticOptions.filteredExperimentalItemsParameters = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
-    },
-    drawingDesignFormatter (row, column) {
-      let name = ''
-      this.staticOptions.drawingDesigns.forEach(item => {
-        if (row.drawingDesign === item.id) {
-          name = item.drawingDesignName
-        }
-      })
-      return name
     }
   },
   mounted () {
+    console.log(this.$route.params.id)
+    this.loadExperimentalItemData()
+    this.loadExperimentalMethodData()
+    this.loadDrawingDesignData()
+    this.loadExperimentalItemsParameterData()
     if (this.$route.params.id !== undefined) {
       this.loadTestedItemProduct(this.$route.params.id)
     }
-    this.loadExperimentalMethodData()
-    this.loadExperimentalItemData()
-    this.loadDrawingDesignData()
-    this.loadExperimentalItemsParameterData()
   }
 }
 </script>
