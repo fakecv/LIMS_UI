@@ -54,9 +54,15 @@ export default {
       this.testedItemProductForm = JSON.parse(JSON.stringify(this.testedItemProductResetForm))
     },
     getCascadeItems (itemId) {
+      this.resetCascadeForms()
       this.getDrawingDesigns(itemId)
       this.getExperimentalMethod(itemId)
       this.getExperimentalItemsParameter(itemId)
+    },
+    resetCascadeForms () {
+      this.testedItemProductForm.drawingDesign = ''
+      this.testedItemProductForm.experimentalMethod = ''
+      this.testedItemProductForm.experimentalItemsParameter = ''
     },
     getDrawingDesigns (experimentalItemId) {
       this.staticOptions.filteredDrawingDesigns =

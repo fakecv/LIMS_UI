@@ -48,7 +48,9 @@ export default {
       this.$ajax.get('/api/sample/testedItemProduct/' + testedItemProductId)
         .then(function (res) {
           vm.testedItemProductForm = res.data
-          vm.getCascadeItems(vm.testedItemProductForm.experimentalItem)
+          vm.getDrawingDesigns(vm.testedItemProductForm.experimentalItem)
+          vm.getExperimentalMethod(vm.testedItemProductForm.experimentalItem)
+          vm.getExperimentalItemsParameter(vm.testedItemProductForm.experimentalItem)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -60,27 +62,29 @@ export default {
       this.testedItemProductForm.id = ''
     },
     getCascadeItems (itemId) {
-      console.log('getCascadeItems')
+      this.resetCascadeForms()
       this.getDrawingDesigns(itemId)
       this.getExperimentalMethod(itemId)
       this.getExperimentalItemsParameter(itemId)
     },
+    resetCascadeForms () {
+      this.testedItemProductForm.drawingDesign = ''
+      this.testedItemProductForm.experimentalMethod = ''
+      this.testedItemProductForm.experimentalItemsParameter = ''
+    },
     getDrawingDesigns (experimentalItemId) {
-      console.log('getDrawingDesigns')
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
           return val.experimentalItem === experimentalItemId
         })
     },
     getExperimentalMethod (experimentalItemId) {
-      console.log('getExperimentalMethod')
       this.staticOptions.filteredExperimentalMethods =
         this.staticOptions.experimentalMethods.filter(function (val) {
           return val.experimentalItem === experimentalItemId
         })
     },
     getExperimentalItemsParameter (experimentalItemId) {
-      console.log('getExperimentalItemsParameter' + experimentalItemId)
       this.staticOptions.filteredExperimentalItemsParameters =
         this.staticOptions.experimentalItemsParameters.filter(function (val) {
           return val.experimentalItem === experimentalItemId
@@ -127,7 +131,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.params.id)
     this.loadExperimentalItemData()
     this.loadExperimentalMethodData()
     this.loadDrawingDesignData()
