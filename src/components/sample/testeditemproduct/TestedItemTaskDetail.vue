@@ -58,6 +58,39 @@
                 </el-select>
             </el-form-item>
           </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="提交部门">
+                <el-select name="submitFrom" filterable default-first-option v-model="processForm.submitFrom">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.Id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="提交至">
+                <el-select name="submitTo" filterable default-first-option v-model="processForm.submitTo">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.Id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="当前流转状态">
+                <el-select name="processingStatus" filterable default-first-option v-model="processForm.processingStatus">
+                <el-option v-for="item in staticOptions.processingStatuses"
+                  :key="item.Id"
+                  :label="item.processingStatusName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
         </el-row>
       </el-form>
     </el-container>
@@ -75,7 +108,7 @@ export default {
         {'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
         {'name': '数据库保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false},
         {'name': '解锁', 'id': '4', 'icon': 'el-icon-edit', 'loading': false},
-        {'name': '删除', 'id': '5', 'icon': 'el-icon-delete', 'loading': false},
+        {'name': '删除', 'id': '5', 'icon': 'el-icon-upload', 'loading': false},
         {'name': '文件导入', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '7', 'icon': 'el-icon-download', 'loading': false}
       ],

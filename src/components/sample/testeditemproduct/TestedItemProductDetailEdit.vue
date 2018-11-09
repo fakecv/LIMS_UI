@@ -29,9 +29,12 @@ export default {
         experimentalItemsParameter: '',
         experimentalMethod: '',
         drawingDesign: '',
-        id: ''
+        id: '',
+        processingStatuses: []
+
       },
       staticOptions: {
+        selectedTestedItemProducts: [],
         experimentalMethods: [],
         filteredExperimentalMethods: [],
         experimentalItemsParameters: [],

@@ -21,11 +21,12 @@ export default {
   data () {
     return {
       actions: [
-        {'name': '新建', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
-        {'name': '数据库保存', 'id': '2', 'icon': 'el-icon-document', 'loading': false},
-        {'name': '导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
-        {'name': '导出', 'id': '4', 'icon': 'el-icon-download', 'loading': false},
-        {'name': '删除', 'id': '5', 'icon': 'el-icon-upload', 'loading': false}
+        {'name': '新建', 'id': '1', 'icon': 'el-icon-circle-plus', 'loading': false},
+        {'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
+        {'name': '数据库保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false},
+        {'name': '导入', 'id': '4', 'icon': 'el-icon-upload2', 'loading': false},
+        {'name': '导出', 'id': '5', 'icon': 'el-icon-download', 'loading': false},
+        {'name': '删除', 'id': '6', 'icon': 'el-icon-delete', 'loading': false}
       ],
       // data for upload files
       uploadFilename: null,
@@ -45,12 +46,14 @@ export default {
       if (action.id === '1') {
         this.reset()
       } else if (action.id === '2') {
-        this.submit(this.$store.state.forms[this.$route.params.fid])
+        this.$store.state.forms[this.$route.params.fid].id = ''
       } else if (action.id === '3') {
-        this.dialogVisible = true
+        this.submit(this.$store.state.forms[this.$route.params.fid])
       } else if (action.id === '4') {
-        this.downloadJsonToFile()
+        this.dialogVisible = true
       } else if (action.id === '5') {
+        this.downloadJsonToFile()
+      } else if (action.id === '6') {
         this.confirmDelete()
       }
     },

@@ -33,12 +33,14 @@ export default {
         id: ''
       },
       staticOptions: {
+        selectedTestedItemProducts: [],
         experimentalMethods: [],
         filteredExperimentalMethods: [],
         experimentalItemsParameters: [],
         filteredExperimentalItemsParameters: [],
         experimentalItems: [],
         drawingDesigns: [],
+        processingStatuses: [],
         filteredDrawingDesigns: []
       }
     }

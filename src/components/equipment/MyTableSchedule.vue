@@ -194,9 +194,7 @@ export default {
       this.dialogFormVisible = true
     },
     toHtml (row, column, cellValue, index) {
-      console.log('toHtml')
       if (cellValue && cellValue !== '') {
-        console.log(cellValue)
         let cellTag = this.$createElement('el-tag', row[column.property], {attrs: {closable: true, type: 'warning'}})
         return cellTag
       } else {

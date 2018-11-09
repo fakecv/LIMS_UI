@@ -68,7 +68,6 @@
                 </el-form-item>
               </el-row>
             </el-form>
-
           </el-container>
           <el-table ref="userRoleTable" :data="staticOptions.userRoles" style="width: 100%" @select="handleSelect">
             <el-table-column
@@ -132,7 +131,7 @@ export default {
         {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
         {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
         {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false},
-        {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
+        {'name': '删除', 'id': '2', 'icon': 'el-icon-delete', 'loading': false},
         {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
       ],
@@ -186,12 +185,9 @@ export default {
       })
     },
     handleSelect (selection, row) {
-      console.log('handleSelect' + row.id)
-      console.log(selection)
       this.$emit('updateUserRoles', row.id)
     },
     handleUserRoleChange (val) {
-      console.log('handleUserRoleChange' + val.length)
       this.deletedUserRoles = val
     },
     deleteUserRoles () {

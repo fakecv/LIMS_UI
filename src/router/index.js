@@ -9,6 +9,7 @@ import AuditDepartmentDetailNew from '@/components/internalaudit/auditdepartment
 import AuditDepartmentDetailEdit from '@/components/internalaudit/auditdepartment/AuditDepartmentDetailEdit'
 import AuditDepartmentMaintenance from '@/components/internalaudit/auditdepartment/AuditDepartmentMaintenance'
 import CheckableTable from '@/components/reference/CheckableTable'
+import Child from '@/components/reference/Child'
 import ComposeSchedule from '@/components/equipment/ComposeSchedule'
 import CustomerDetailNew from '@/components/customer/CustomerDetailNew'
 import CustomerDetailEdit from '@/components/customer/CustomerDetailEdit'
@@ -84,6 +85,12 @@ import TableSchedule from '@/components/equipment/MyTableSchedule'
 import TestedItemProductDetailNew from '@/components/sample/testeditemproduct/TestedItemProductDetailNew'
 import TestedItemProductDetailEdit from '@/components/sample/testeditemproduct/TestedItemProductDetailEdit'
 import TestedItemProductMaintenance from '@/components/sample/testeditemproduct/TestedItemProductMaintenance'
+import TestedItemProductGroupDetailNew from '@/components/sample/testeditemproductgroup/TestedItemProductGroupDetailNew'
+import TestedItemProductGroupDetailEdit from '@/components/sample/testeditemproductgroup/TestedItemProductGroupDetailEdit'
+import TestedItemProductGroupMaintenance from '@/components/sample/testeditemproductgroup/TestedItemProductGroupMaintenance'
+import TestedItemTaskDetailNew from '@/components/sample/testeditemtask/TestedItemTaskDetailNew'
+import TestedItemTaskDetailEdit from '@/components/sample/testeditemtask/TestedItemTaskDetailEdit'
+import TestedItemTaskMaintenance from '@/components/sample/testeditemtask/TestedItemTaskMaintenance'
 import ThemePicker from '@/components/frame/themePicker'
 import UIGenerator from '@/components/develop/UIGenerator'
 import UserDetailNew from '@/components/system/user/UserDetailNew'
@@ -149,6 +156,11 @@ const router = new Router({
           path: 'checkableTable',
           name: 'checkableTable',
           component: CheckableTable
+        },
+        {
+          path: 'child',
+          name: 'child',
+          component: Child
         },
         {
           path: 'composeSchedule',
@@ -484,6 +496,36 @@ const router = new Router({
           path: 'testedItemProductMaintenance',
           name: 'testedItemProductMaintenance',
           component: TestedItemProductMaintenance
+        },
+        {
+          path: 'testedItemProductGroupDetailEdit/:id',
+          name: 'testedItemProductGroupAuditorDetailEdit',
+          component: TestedItemProductGroupDetailEdit
+        },
+        {
+          path: 'testedItemProductGroupDetailNew',
+          name: 'testedItemProductGroupDetailNew',
+          component: TestedItemProductGroupDetailNew
+        },
+        {
+          path: 'testedItemProductGroupMaintenance',
+          name: 'testedItemProductGroupMaintenance',
+          component: TestedItemProductGroupMaintenance
+        },
+        {
+          path: 'testedItemTaskDetailEdit/:id',
+          name: 'testedItemTaskAuditorDetailEdit',
+          component: TestedItemTaskDetailEdit
+        },
+        {
+          path: 'testedItemTaskDetailNew',
+          name: 'testedItemTaskDetailNew',
+          component: TestedItemTaskDetailNew
+        },
+        {
+          path: 'testedItemTaskMaintenance',
+          name: 'testedItemTaskMaintenance',
+          component: TestedItemTaskMaintenance
         },
         {
           path: 'themePicker',

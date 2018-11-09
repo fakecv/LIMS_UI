@@ -61,7 +61,7 @@
             <!--this div will add scroll bar for the el-main, don't remove it-->
             <el-main>
               <blockquote class="minsx-quote">{{instruction}}</blockquote>
-              <router-view></router-view>
+              <router-view :leftMenus="leftMenus" v-on:getTopMenus="getTopMenus"></router-view>
             </el-main>
           </el-container>
         </el-main>
@@ -118,6 +118,7 @@ export default {
   created () {
   },
   methods: {
+    // search input
     getSystemMenu () {
       let vm = this
       this.$ajax.get('/api/systemMenu/displayedMenuItems')

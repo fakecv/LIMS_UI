@@ -62,6 +62,7 @@ export default {
         })
     },
     resetMenuForm () {
+      this.loadParentMenu()
       this.menuForm = JSON.parse(JSON.stringify(this.menuResetForm))
     },
     resetMenuId () {
