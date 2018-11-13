@@ -16,18 +16,18 @@ export default {
     return {
       drawingDesignForm: {
         id: '',
-        experimentalItem: '',
+        testedItem: '',
         drawingDesignName: '',
         drawingDesignNumber: ''
       },
       drawingDesignResetForm: {
         id: '',
-        experimentalItem: '',
+        testedItem: '',
         drawingDesignName: '',
         drawingDesignNumber: ''
       },
       staticOptions: {
-        experimentalItems: []
+        testedItems: []
       }
     }
   },
@@ -41,11 +41,11 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalItemData () {
+    loadTestedItemData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+      this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.staticOptions.experimentalItems = res.data
+          vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -58,7 +58,7 @@ export default {
     }
   },
   mounted () {
-    this.loadExperimentalItemData()
+    this.loadTestedItemData()
     if (this.$route.params.id !== undefined) {
       this.loadDrawingDesign(this.$route.params.id)
     }

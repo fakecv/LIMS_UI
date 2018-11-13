@@ -8,13 +8,13 @@
     </el-header>
 
     <el-container style="padding: 10px" direction="vertical">
-      <el-form :model="experimentalMethodForm" label-width="100px" label-position="left" size="mini">
+      <el-form :model="testMethodForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-form-item label="检测项目名称">
-              <el-select name="experimentalItem" filterable default-first-option v-model="experimentalMethodForm.experimentalItem">
-                <el-option v-for="item in staticOptions.experimentalItems"
+              <el-select name="testedItem" filterable default-first-option v-model="testMethodForm.testedItem">
+                <el-option v-for="item in staticOptions.testedItems"
                   :key="item.Id"
-                  :label="item.experimentalItemName"
+                  :label="item.testedItemName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -22,12 +22,12 @@
         </el-row>
         <el-row :gutter="20">
           <el-form-item label="实验方法编号">
-            <el-input name="experimentalMethodName" v-model="experimentalMethodForm.experimentalMethodName"></el-input>
+            <el-input name="testMethodName" v-model="testMethodForm.testMethodName"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
           <el-form-item label="实验方法描述">
-            <el-input type="textarea" name="experimentalMethodNumber" v-model="experimentalMethodForm.experimentalMethodNumber"></el-input>
+            <el-input type="textarea" name="testMethodNumber" v-model="testMethodForm.testMethodNumber"></el-input>
           </el-form-item>
         </el-row>
       </el-form>
@@ -37,8 +37,8 @@
 
 <script>
 export default {
-  name: 'experimentalMethodDetail',
-  props: ['experimentalMethodForm', 'staticOptions'],
+  name: 'testMethodDetail',
+  props: ['testMethodForm', 'staticOptions'],
   data () {
     return {
       actions: [
@@ -77,17 +77,17 @@ export default {
     },
     saveToDB () {
       let vm = this
-      this.$ajax.post('/api/sample/experimentalMethod', this.experimentalMethodForm)
+      this.$ajax.post('/api/sample/testMethod', this.testMethodForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
-          vm.$emit('updateExperimentalMethodForm', res.data)
+          vm.$emit('updateTestMethodForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
     confirmDelete () {
       let vm = this
-      if (this.experimentalMethodForm.id && this.experimentalMethodForm.id !== '') {
+      if (this.testMethodForm.id && this.testMethodForm.id !== '') {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -104,10 +104,10 @@ export default {
     },
     delete () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/delete/' + this.experimentalMethodForm.id)
+      this.$ajax.get('/api/sample/testMethod/delete/' + this.testMethodForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteExperimentalMethod')
+          vm.$emit('deleteTestMethod')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

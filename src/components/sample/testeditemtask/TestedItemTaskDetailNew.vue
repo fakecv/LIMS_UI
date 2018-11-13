@@ -80,19 +80,19 @@ export default {
       console.log(this.drawingDesigns)
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
-          return val.experimentalItem === testedItemId
+          return val.testedItem === testedItemId
         })
     },
     getTestMethod (testedItemId) {
       this.staticOptions.filteredTestMethods =
         this.staticOptions.testMethods.filter(function (val) {
-          return val.experimentalItem === testedItemId
+          return val.testedItem === testedItemId
         })
     },
     getTestParameter (testedItemId) {
       this.staticOptions.filteredTestParameters =
         this.staticOptions.testParameters.filter(function (val) {
-          return val.experimentalItem === testedItemId
+          return val.testedItem === testedItemId
         })
     },
     loadDepartment () {
@@ -135,7 +135,7 @@ export default {
     },
     loadTestedItemData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+      this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
           console.log(res.data)
           vm.staticOptions.testedItems = res.data
@@ -145,7 +145,7 @@ export default {
     },
     loadTestMethodData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+      this.$ajax.get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
           vm.staticOptions.testMethods = res.data
         }).catch(function (error) {
@@ -154,7 +154,7 @@ export default {
     },
     loadTestParameterData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItemsParameter/getExperimentalItemsParameter')
+      this.$ajax.get('/api/sample/testParameter/getTestParameter')
         .then(function (res) {
           vm.staticOptions.testParameters = res.data
         })

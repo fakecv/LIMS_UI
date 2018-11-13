@@ -22,7 +22,7 @@ export default {
         agreementNumber: '',
         sampleName: '',
         sampleSubNumber: '',
-        experimentalItem: '',
+        testedItem: '',
         submitFrom: '',
         submitTo: '',
         processingStatus: ''
@@ -32,14 +32,14 @@ export default {
         agreementNumber: '',
         sampleName: '',
         sampleSubNumber: '',
-        experimentalItem: '',
+        testedItem: '',
         submitFrom: '',
         submitTo: '',
         processingStatus: ''
       },
       staticOptions: {
-        experimentalMethods: [],
-        experimentalItems: [],
+        testMethods: [],
+        testedItems: [],
         drawingDesigns: [],
         processingStatuses: [],
         departments: [],
@@ -48,18 +48,18 @@ export default {
     }
   },
   methods: {
-    loadExperimentalMethodData () {
+    loadTestMethodData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+      this.$ajax.get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
-          vm.staticOptions.experimentalMethods = res.data
+          vm.staticOptions.testMethods = res.data
         })
     },
-    loadExperimentalItemData () {
+    loadTestedItemData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+      this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.staticOptions.experimentalItems = res.data
+          vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -115,8 +115,8 @@ export default {
     }
   },
   mounted () {
-    this.loadExperimentalMethodData()
-    this.loadExperimentalItemData()
+    this.loadTestMethodData()
+    this.loadTestedItemData()
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()
     this.loadDepartment()

@@ -18,27 +18,27 @@ export default {
     return {
       testedItemProductForm: {
         testedItemProductName: '',
-        experimentalItem: '',
-        experimentalItemsParameter: '',
-        experimentalMethod: '',
+        testedItem: '',
+        testParameter: '',
+        testMethod: '',
         drawingDesign: '',
         id: ''
       },
       testedItemProductResetForm: {
         testedItemProductName: '',
-        experimentalItem: '',
-        experimentalItemsParameter: '',
-        experimentalMethod: '',
+        testedItem: '',
+        testParameter: '',
+        testMethod: '',
         drawingDesign: '',
         id: ''
       },
       staticOptions: {
         selectedTestedItemProducts: [],
-        experimentalMethods: [],
-        filteredExperimentalMethods: [],
-        experimentalItemsParameters: [],
-        filteredExperimentalItemsParameters: [],
-        experimentalItems: [],
+        testMethods: [],
+        filteredTestMethods: [],
+        testParameters: [],
+        filteredTestParameters: [],
+        testedItems: [],
         drawingDesigns: [],
         processingStatuses: [],
         filteredDrawingDesigns: []
@@ -58,30 +58,30 @@ export default {
     getCascadeItems (itemId) {
       this.resetCascadeForms()
       this.getDrawingDesigns(itemId)
-      this.getExperimentalMethod(itemId)
-      this.getExperimentalItemsParameter(itemId)
+      this.getTestMethod(itemId)
+      this.getTestParameter(itemId)
     },
     resetCascadeForms () {
       this.testedItemProductForm.drawingDesign = ''
-      this.testedItemProductForm.experimentalMethod = ''
-      this.testedItemProductForm.experimentalItemsParameter = ''
+      this.testedItemProductForm.testMethod = ''
+      this.testedItemProductForm.testParameter = ''
     },
-    getDrawingDesigns (experimentalItemId) {
+    getDrawingDesigns (testedItemId) {
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+          return val.testedItem === testedItemId
         })
     },
-    getExperimentalMethod (experimentalItemId) {
-      this.staticOptions.filteredExperimentalMethods =
-        this.staticOptions.experimentalMethods.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+    getTestMethod (testedItemId) {
+      this.staticOptions.filteredTestMethods =
+        this.staticOptions.testMethods.filter(function (val) {
+          return val.testedItem === testedItemId
         })
     },
-    getExperimentalItemsParameter (experimentalItemId) {
-      this.staticOptions.filteredExperimentalItemsParameters =
-        this.staticOptions.experimentalItemsParameters.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+    getTestParameter (testedItemId) {
+      this.staticOptions.filteredTestParameters =
+        this.staticOptions.testParameters.filter(function (val) {
+          return val.testedItem === testedItemId
         })
     },
     loadDrawingDesignData () {
@@ -93,37 +93,37 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalItemData () {
+    loadTestedItemData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+      this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.staticOptions.experimentalItems = res.data
+          vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalMethodData () {
+    loadTestMethodData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+      this.$ajax.get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
-          vm.staticOptions.experimentalMethods = res.data
+          vm.staticOptions.testMethods = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalItemsParameterData () {
+    loadTestParameterData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItemsParameter/getExperimentalItemsParameter')
+      this.$ajax.get('/api/sample/testParameter/getTestParameter')
         .then(function (res) {
-          vm.staticOptions.experimentalItemsParameters = res.data
+          vm.staticOptions.testParameters = res.data
         })
     }
   },
   mounted () {
-    this.loadExperimentalMethodData()
-    this.loadExperimentalItemData()
+    this.loadTestMethodData()
+    this.loadTestedItemData()
     this.loadDrawingDesignData()
-    this.loadExperimentalItemsParameterData()
+    this.loadTestParameterData()
   }
 }
 </script>

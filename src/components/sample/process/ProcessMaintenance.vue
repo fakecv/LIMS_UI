@@ -83,9 +83,9 @@
         width="180">
       </el-table-column>
       <el-table-column
-        prop="experimentalItem"
+        prop="testedItem"
         label="检测项目"
-        :formatter="experimentalItemFormatter"
+        :formatter="testedItemFormatter"
         width="180">
       </el-table-column>
       <el-table-column
@@ -94,9 +94,9 @@
         width="180">
       </el-table-column>
       <el-table-column
-        prop="experimentalMethod"
+        prop="testMethod"
         label="检测方法"
-        :formatter="experimentalMethodFormatter"
+        :formatter="testMethodFormatter"
         width="180">
       </el-table-column>
       <el-table-column
@@ -166,15 +166,15 @@ export default {
         sampleName: '',
         materialNumber: '',
         sampleSubNumber: '',
-        experimentalMethod: '',
+        testMethod: '',
         drawingDesign: '',
         processingStatus: '',
         processingStatues: [],
         itemsPerPage: 20,
         currentPage: 1
       },
-      experimentalMethods: [],
-      experimentalItems: [],
+      testMethods: [],
+      testedItems: [],
       drawingDesigns: [],
       agreements: [],
       processingStatuses: [],
@@ -246,22 +246,22 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalMethodData () {
+    loadTestMethodData () {
       let vm = this
       this.$ajax
-        .get('/api/sample/experimentalMethod/getExperimentalMethod')
+        .get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
-          vm.experimentalMethods = res.data
+          vm.testMethods = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalItemData () {
+    loadTestedItemData () {
       let vm = this
       this.$ajax
-        .get('/api/sample/experimentalItem/getExperimentalItem')
+        .get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.experimentalItems = res.data
+          vm.testedItems = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -322,20 +322,20 @@ export default {
         return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
       }
     },
-    experimentalItemFormatter (row, column) {
+    testedItemFormatter (row, column) {
       let name = ''
-      this.experimentalItems.forEach(item => {
-        if (row.experimentalItem === item.id) {
-          name = item.experimentalItemName
+      this.testedItems.forEach(item => {
+        if (row.testedItem === item.id) {
+          name = item.testedItemName
         }
       })
       return name
     },
-    experimentalMethodFormatter (row, column) {
+    testMethodFormatter (row, column) {
       let name = ''
-      this.experimentalMethods.forEach(item => {
-        if (row.experimentalMethod === item.id) {
-          name = item.experimentalMethodName
+      this.testMethods.forEach(item => {
+        if (row.testMethod === item.id) {
+          name = item.testMethodName
         }
       })
       return name
@@ -369,8 +369,8 @@ export default {
   },
   mounted () {
     this.onSubmit()
-    this.loadExperimentalMethodData()
-    this.loadExperimentalItemData()
+    this.loadTestMethodData()
+    this.loadTestedItemData()
     this.loadDrawingDesignData()
     this.loadDepartment()
     this.loadAgreement()

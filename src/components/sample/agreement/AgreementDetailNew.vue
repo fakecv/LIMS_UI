@@ -76,7 +76,6 @@ export default {
       customerForm: {},
       userForm: {},
       staticOptions: {
-        experimentalMethods: [],
         processPriorities: [],
         customers: [],
         users: [],
@@ -105,13 +104,6 @@ export default {
           vm.agreementForm.agreementNumber = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
-        })
-    },
-    loadExperimentalMethodData () {
-      let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
-        .then(function (res) {
-          vm.staticOptions.experimentalMethods = res.data
         })
     },
     loadProcessPriorityData () {
@@ -216,7 +208,6 @@ export default {
     }
   },
   mounted () {
-    this.loadExperimentalMethodData()
     this.loadProcessPriorityData()
     this.initCustomerData()
     this.initUserData()

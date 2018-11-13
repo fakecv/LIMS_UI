@@ -38,10 +38,10 @@
             </el-col>
             <el-col>
               <el-form-item label="检测项目">
-                <el-select name="experimentalItem" filterable default-first-option v-model="processingForm.experimentalItem">
-                <el-option v-for="item in staticOptions.experimentalItems"
+                <el-select name="testedItem" filterable default-first-option v-model="processingForm.testedItem">
+                <el-option v-for="item in staticOptions.testedItems"
                   :key="item.Id"
-                  :label="item.experimentalItemName"
+                  :label="item.testedItemName"
                   :value="item.id">
                 </el-option>
                 </el-select>

@@ -19,7 +19,7 @@
               <el-select name="testedItem" filterable default-first-option v-model="testedItemTaskForm.testedItem" @change="getCascadeItems">
                 <el-option v-for="item in staticOptions.testedItems"
                   :key="item.id"
-                  :label="item.experimentalItemName"
+                  :label="item.testedItemName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -30,7 +30,7 @@
               <el-select name="testParameter" filterable default-first-option v-model="testedItemTaskForm.testParameter">
                 <el-option v-for="item in staticOptions.filteredTestParameters"
                   :key="item.id"
-                  :label="item.experimentalItemsParameterName"
+                  :label="item.testParameterName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -41,7 +41,7 @@
               <el-select name="testMethod" filterable default-first-option v-model="testedItemTaskForm.testMethod">
                 <el-option v-for="item in staticOptions.filteredTestMethods"
                   :key="item.id"
-                  :label="item.experimentalMethodName"
+                  :label="item.testMethodName"
                   :value="item.id">
                 </el-option>
                 </el-select>

@@ -51,7 +51,7 @@ export default {
         sampleName: '',
         materialNumber: '',
         sampleSubNumber: '',
-        experimentalMethod: '',
+        testMethod: '',
         drawingDesign: '',
         processingStatus: '',
         processingStatues: [],

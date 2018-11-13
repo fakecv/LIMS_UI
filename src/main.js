@@ -20,7 +20,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import 'font-awesome/css/font-awesome.min.css'
-import FormatterService from './auth/FormatterService'
 // import '@progress/kendo-ui'
 // import '@progress/kendo-theme-default/dist/all.css'
 // import Scheduler from '@progress/kendo-scheduler-vue-wrapper'
@@ -91,9 +90,6 @@ Vue.prototype.$echarts = echarts
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  data: {
-    formatter: new FormatterService()
-  },
   router,
   store,
   components: { App },

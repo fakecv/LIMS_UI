@@ -99,7 +99,6 @@ export default {
         itemsPerPage: 20,
         currentPage: 1
       },
-      experimentalMethods: [],
       processPriorities: [],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
     }

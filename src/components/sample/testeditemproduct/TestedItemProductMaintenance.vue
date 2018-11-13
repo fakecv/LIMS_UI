@@ -10,10 +10,10 @@
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目">
-              <el-select name="experimentalItem" filterable default-first-option v-model="testedItemProductForm.experimentalItem" @change="getCascadeItems">
-                <el-option v-for="item in staticOptions.experimentalItems"
+              <el-select name="testedItem" filterable default-first-option v-model="testedItemProductForm.testedItem" @change="getCascadeItems">
+                <el-option v-for="item in staticOptions.testedItems"
                   :key="item.id"
-                  :label="item.experimentalItemName"
+                  :label="item.testedItemName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -21,10 +21,10 @@
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目参数">
-              <el-select name="experimentalItemsParameter" filterable default-first-option v-model="testedItemProductForm.experimentalItemsParameter">
-                <el-option v-for="item in staticOptions.filteredExperimentalItemsParameters"
+              <el-select name="testParameter" filterable default-first-option v-model="testedItemProductForm.testParameter">
+                <el-option v-for="item in staticOptions.filteredTestParameters"
                   :key="item.id"
-                  :label="item.experimentalItemsParameterName"
+                  :label="item.testParameterName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -32,10 +32,10 @@
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测方法">
-              <el-select name="experimentalMethod" filterable default-first-option v-model="testedItemProductForm.experimentalMethod">
-                <el-option v-for="item in staticOptions.filteredExperimentalMethods"
+              <el-select name="testMethod" filterable default-first-option v-model="testedItemProductForm.testMethod">
+                <el-option v-for="item in staticOptions.filteredTestMethods"
                   :key="item.id"
-                  :label="item.experimentalMethodName"
+                  :label="item.testMethodName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -67,21 +67,21 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="experimentalItem"
+          prop="testedItem"
           label="检测项目"
-          :formatter="experimentalItemFormatter"
+          :formatter="testedItemFormatter"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="experimentalItemsParameter"
+          prop="testParameter"
           label="检测项目参数"
-          :formatter="experimentalItemsParameterFormatter"
+          :formatter="testParameterFormatter"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="experimentalMethod"
+          prop="testMethod"
           label="检测方法"
-          :formatter="experimentalMethodFormatter"
+          :formatter="testMethodFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -114,19 +114,19 @@ export default {
       totalTestedItemProducts: 0,
       testedItemProductForm: {
         testedItemProductName: '',
-        experimentalItem: '',
-        experimentalItemsParameter: '',
-        experimentalMethod: '',
+        testedItem: '',
+        testParameter: '',
+        testMethod: '',
         drawingDesign: '',
         itemsPerPage: 20,
         currentPage: 1
       },
       staticOptions: {
-        experimentalMethods: [],
-        filteredExperimentalMethods: [],
-        experimentalItemsParameters: [],
-        filteredExperimentalItemsParameters: [],
-        experimentalItems: [],
+        testMethods: [],
+        filteredTestMethods: [],
+        testParameters: [],
+        filteredTestParameters: [],
+        testedItems: [],
         drawingDesigns: [],
         filteredDrawingDesigns: []
       },
@@ -140,30 +140,30 @@ export default {
     getCascadeItems (itemId) {
       this.resetCascadeForms()
       this.getDrawingDesigns(itemId)
-      this.getExperimentalMethod(itemId)
-      this.getExperimentalItemsParameter(itemId)
+      this.getTestMethod(itemId)
+      this.getTestParameter(itemId)
     },
     resetCascadeForms () {
       this.testedItemProductForm.drawingDesign = ''
-      this.testedItemProductForm.experimentalMethod = ''
-      this.testedItemProductForm.experimentalItemsParameter = ''
+      this.testedItemProductForm.testMethod = ''
+      this.testedItemProductForm.testParameter = ''
     },
-    getDrawingDesigns (experimentalItemId) {
+    getDrawingDesigns (testedItemId) {
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+          return val.testedItem === testedItemId
         })
     },
-    getExperimentalMethod (experimentalItemId) {
-      this.staticOptions.filteredExperimentalMethods =
-        this.staticOptions.experimentalMethods.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+    getTestMethod (testedItemId) {
+      this.staticOptions.filteredTestMethods =
+        this.staticOptions.testMethods.filter(function (val) {
+          return val.testedItem === testedItemId
         })
     },
-    getExperimentalItemsParameter (experimentalItemId) {
-      this.staticOptions.filteredExperimentalItemsParameters =
-        this.staticOptions.experimentalItemsParameters.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+    getTestParameter (testedItemId) {
+      this.staticOptions.filteredTestParameters =
+        this.staticOptions.testParameters.filter(function (val) {
+          return val.testedItem === testedItemId
         })
     },
     handleSizeChange (val) {
@@ -195,29 +195,29 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalItemData () {
+    loadTestedItemData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+      this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.staticOptions.experimentalItems = res.data
+          vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalMethodData () {
+    loadTestMethodData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+      this.$ajax.get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
-          vm.staticOptions.experimentalMethods = res.data
+          vm.staticOptions.testMethods = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalItemsParameterData () {
+    loadTestParameterData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItemsParameter/getExperimentalItemsParameter')
+      this.$ajax.get('/api/sample/testParameter/getTestParameter')
         .then(function (res) {
-          vm.staticOptions.experimentalItemsParameters = res.data
+          vm.staticOptions.testParameters = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -231,29 +231,29 @@ export default {
       })
       return name
     },
-    experimentalItemFormatter (row, column) {
+    testedItemFormatter (row, column) {
       let name = ''
-      this.staticOptions.experimentalItems.forEach(item => {
-        if (row.experimentalItem === item.id) {
-          name = item.experimentalItemName
+      this.staticOptions.testedItems.forEach(item => {
+        if (row.testedItem === item.id) {
+          name = item.testedItemName
         }
       })
       return name
     },
-    experimentalMethodFormatter (row, column) {
+    testMethodFormatter (row, column) {
       let name = ''
-      this.staticOptions.experimentalMethods.forEach(item => {
-        if (row.experimentalMethod === item.id) {
-          name = item.experimentalMethodName
+      this.staticOptions.testMethods.forEach(item => {
+        if (row.testMethod === item.id) {
+          name = item.testMethodName
         }
       })
       return name
     },
-    experimentalItemsParameterFormatter (row, column) {
+    testParameterFormatter (row, column) {
       let name = ''
-      this.staticOptions.experimentalItemsParameters.forEach(item => {
-        if (row.experimentalItemsParameter === item.id) {
-          name = item.experimentalItemsParameterName
+      this.staticOptions.testParameters.forEach(item => {
+        if (row.testParameter === item.id) {
+          name = item.testParameterName
         }
       })
       return name
@@ -261,10 +261,10 @@ export default {
   },
   mounted () {
     this.onSubmit()
-    this.loadExperimentalMethodData()
-    this.loadExperimentalItemData()
+    this.loadTestMethodData()
+    this.loadTestedItemData()
     this.loadDrawingDesignData()
-    this.loadExperimentalItemsParameterData()
+    this.loadTestParameterData()
   }
 }
 </script>

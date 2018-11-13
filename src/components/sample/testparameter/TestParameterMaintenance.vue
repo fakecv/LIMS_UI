@@ -1,19 +1,19 @@
     <template>
     <div>
       <el-container style="padding: 10px">
-        <el-form :model="experimentalMethodRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-form :model="testParameterRequestForm" label-width="150px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-form-item label="检测项目名称">
-              <el-select name="experimentalItem" filterable default-first-option v-model="experimentalMethodRequestForm.experimentalItem">
-                <el-option v-for="item in experimentalItems"
+              <el-select name="testedItem" filterable default-first-option v-model="testParameterRequestForm.testedItem">
+                <el-option v-for="item in testedItems"
                   :key="item.Id"
-                  :label="item.experimentalItemName"
+                  :label="item.testedItemName"
                   :value="item.id">
                 </el-option>
                 </el-select>
           </el-form-item>
-            <el-form-item label="实验方法编号">
-              <el-input name="experimentalMethodName" v-model="experimentalMethodRequestForm.experimentalMethodName"></el-input>
+            <el-form-item label="检测项目参数名称">
+              <el-input name="testParameterName" v-model="testParameterRequestForm.testParameterName"></el-input>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -25,19 +25,19 @@
       </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
-          prop="experimentalItem"
+          prop="testParameterName"
+          :formatter="testedItemFormatter"
           label="检测项目名称"
-          :formatter="experimentalItemFormatter"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="experimentalMethodName"
-          label="实验方法编号"
+          prop="testParameterName"
+          label="检测项目参数名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="experimentalMethodNumber"
-          label="实验方法描述"
+          prop="testParameterDescription"
+          label="检测项目参数描述"
           width="180">
         </el-table-column>
       </el-table>
@@ -45,11 +45,11 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="experimentalMethodRequestForm.currentPage"
+          :current-page.sync="testParameterRequestForm.currentPage"
           :page-sizes="[10, 20, 50]"
           :page-size="20"
           layout="sizes, prev, pager, next"
-          :total="totalExperimentalMethods">
+          :total="totalTestParameters">
         </el-pagination>
       </div>
     </div>
@@ -57,61 +57,60 @@
 
 <script>
 export default {
-  name: 'experimentalMethodMaintenance',
+  name: 'testParameterMaintenance',
   data () {
     return {
       tableData: [],
-      totalExperimentalMethods: 0,
-      experimentalMethodRequestForm: {
-        experimentalMethodName: '',
-        experimentalMethodNumber: '',
-        experimentalItem: '',
+      totalTestParameters: 0,
+      testParameterRequestForm: {
+        testParameterName: '',
+        testedItem: '',
         itemsPerPage: 20,
         currentPage: 1
       },
-      experimentalItems: []
+      testedItems: []
     }
   },
   methods: {
-    loadExperimentalItemData () {
+    loadTestedItemData () {
       let vm = this
       this.$ajax
-        .get('/api/sample/experimentalItem/getExperimentalItem')
+        .get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.experimentalItems = res.data
+          vm.testedItems = res.data
         })
     },
     handleSizeChange (val) {
-      this.experimentalMethodRequestForm.itemsPerPage = val
+      this.testParameterRequestForm.itemsPerPage = val
       this.onSubmit()
     },
     handleCurrentChange (val) {
-      this.experimentalMethodRequestForm.currentPage = val
+      this.testParameterRequestForm.currentPage = val
       this.onSubmit()
     },
     loadData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+      this.$ajax.get('/api/sample/testParameter/getTestParameter')
         .then(function (res) {
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
-      this.$router.push('/lims/experimentalMethodDetailEdit/' + row.id)
+      this.$router.push('/lims/testParameterDetailEdit/' + row.id)
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/sample/experimentalMethod/queryExperimentalMethod', this.experimentalMethodRequestForm)
+      this.$ajax.post('/api/sample/testParameter/queryTestParameter', this.testParameterRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
-          vm.totalExperimentalMethods = res.data.totalExperimentalMethods || 0
+          vm.totalTestParameters = res.data.totalTestParameters || 0
         })
     },
-    experimentalItemFormatter (row, column) {
+    testedItemFormatter (row, column) {
       let name = ''
-      this.experimentalItems.forEach(item => {
-        if (row.experimentalItem === item.id) {
-          name = item.experimentalItemName
+      this.testedItems.forEach(item => {
+        if (row.testedItem === item.id) {
+          name = item.testedItemName
         }
       })
       return name
@@ -119,7 +118,7 @@ export default {
   },
   mounted () {
     this.onSubmit()
-    this.loadExperimentalItemData()
+    this.loadTestedItemData()
   }
 
 }

@@ -16,10 +16,10 @@
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目">
-              <el-select name="experimentalItem" filterable default-first-option v-model="testedItemProductForm.experimentalItem" @change="getCascadeItems">
-                <el-option v-for="item in staticOptions.experimentalItems"
+              <el-select name="testedItem" filterable default-first-option v-model="testedItemProductForm.testedItem" @change="getCascadeItems">
+                <el-option v-for="item in staticOptions.testedItems"
                   :key="item.id"
-                  :label="item.experimentalItemName"
+                  :label="item.testedItemName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -27,10 +27,10 @@
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目参数">
-              <el-select name="experimentalParameter" filterable default-first-option v-model="testedItemProductForm.experimentalItemsParameter">
-                <el-option v-for="item in staticOptions.filteredExperimentalItemsParameters"
+              <el-select name="testParameter" filterable default-first-option v-model="testedItemProductForm.testParameter">
+                <el-option v-for="item in staticOptions.filteredTestParameters"
                   :key="item.id"
-                  :label="item.experimentalItemsParameterName"
+                  :label="item.testParameterName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -38,10 +38,10 @@
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测方法">
-              <el-select name="experimentalMethod" filterable default-first-option v-model="testedItemProductForm.experimentalMethod">
-                <el-option v-for="item in staticOptions.filteredExperimentalMethods"
+              <el-select name="testMethod" filterable default-first-option v-model="testedItemProductForm.testMethod">
+                <el-option v-for="item in staticOptions.filteredTestMethods"
                   :key="item.id"
-                  :label="item.experimentalMethodName"
+                  :label="item.testMethodName"
                   :value="item.id">
                 </el-option>
                 </el-select>

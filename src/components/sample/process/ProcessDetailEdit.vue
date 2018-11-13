@@ -4,7 +4,7 @@
     :staticOptions="staticOptions"
       v-on:getAgreementInfo="getAgreementInfo"
       v-on:getDrawingDesigns="getDrawingDesigns"
-      v-on:getExperimentalMethod="getExperimentalMethod"
+      v-on:getTestMethod="getTestMethod"
       v-on:getExperimentItemsParameter="getExperimentItemsParameter"
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
@@ -29,9 +29,9 @@ export default {
         sampleClientNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
-        experimentalItem: '',
+        testedItem: '',
         experimentItemsParameter: '',
-        experimentalMethod: '',
+        testMethod: '',
         drawingDesign: '',
         comment: '',
         submitFrom: '',
@@ -50,9 +50,9 @@ export default {
         sampleClientNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
-        experimentalItem: '',
+        testedItem: '',
         experimentItemsParameter: '',
-        experimentalMethod: '',
+        testMethod: '',
         drawingDesign: '',
         comment: '',
         submitFrom: '',
@@ -62,11 +62,11 @@ export default {
         processPriority: ''
       },
       staticOptions: {
-        experimentalMethods: [],
-        filteredExperimentalMethods: [],
+        testMethods: [],
+        filteredTestMethods: [],
         experimentItemsParameters: [],
         filteredExperimentItemsParameters: [],
-        experimentalItems: [],
+        testedItems: [],
         drawingDesigns: [],
         filteredDrawingDesigns: [],
         processingStatuses: [],
@@ -92,22 +92,22 @@ export default {
       })
       this.loadAgreementProcess(agreementId)
     },
-    getDrawingDesigns (experimentalItemId) {
+    getDrawingDesigns (testedItemId) {
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+          return val.testedItem === testedItemId
         })
     },
-    getExperimentItemsParameter (experimentalItemId) {
+    getExperimentItemsParameter (testedItemId) {
       this.staticOptions.filteredExperimentItemsParameters =
         this.staticOptions.experimentItemsParameters.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+          return val.testedItem === testedItemId
         })
     },
-    getExperimentalMethod (experimentalItemId) {
-      this.staticOptions.filteredExperimentalMethods =
-        this.staticOptions.experimentalMethods.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+    getTestMethod (testedItemId) {
+      this.staticOptions.filteredTestMethods =
+        this.staticOptions.testMethods.filter(function (val) {
+          return val.testedItem === testedItemId
         })
     },
     resetProcessForm () {
@@ -152,20 +152,20 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalItemData () {
+    loadTestedItemData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+      this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.staticOptions.experimentalItems = res.data
+          vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalMethodData () {
+    loadTestMethodData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+      this.$ajax.get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
-          vm.staticOptions.experimentalMethods = res.data
+          vm.staticOptions.testMethods = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -182,9 +182,9 @@ export default {
       this.$ajax.get('/api/sample/process/' + processId)
         .then(function (res) {
           vm.processForm = res.data
-          vm.getExperimentalMethod(vm.processForm.experimentalItem)
-          vm.getExperimentItemsParameter(vm.processForm.experimentalItem)
-          vm.getDrawingDesigns(vm.processForm.experimentalItem)
+          vm.getTestMethod(vm.processForm.testedItem)
+          vm.getExperimentItemsParameter(vm.processForm.testedItem)
+          vm.getDrawingDesigns(vm.processForm.testedItem)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -209,9 +209,9 @@ export default {
     }
   },
   mounted () {
-    this.loadExperimentalMethodData()
+    this.loadTestMethodData()
     this.loadExperimentItemsParameterData()
-    this.loadExperimentalItemData()
+    this.loadTestedItemData()
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()
     this.loadProcessPriorityData()

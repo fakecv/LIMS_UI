@@ -13,7 +13,7 @@
               <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemTaskForm.testedItem" @change="getCascadeItems">
                 <el-option v-for="item in staticOptions.testedItems"
                   :key="item.id"
-                  :label="item.experimentalItemName"
+                  :label="item.testedItemName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -24,7 +24,7 @@
               <el-select name="testParameter" filterable default-first-option v-model="testedItemTaskForm.testParameter">
                 <el-option v-for="item in staticOptions.filteredTestParameters"
                   :key="item.id"
-                  :label="item.experimentalItemsParameterName"
+                  :label="item.testParameterName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -35,7 +35,7 @@
               <el-select name="testMethod" filterable default-first-option v-model="testedItemTaskForm.testMethod">
                 <el-option v-for="item in staticOptions.filteredTestMethods"
                   :key="item.id"
-                  :label="item.experimentalMethodName"
+                  :label="item.testMethodName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -247,19 +247,19 @@ export default {
       console.log(this.drawingDesigns)
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
-          return val.experimentalItem === testedItemId
+          return val.testedItem === testedItemId
         })
     },
     getTestMethod (testedItemId) {
       this.staticOptions.filteredTestMethods =
         this.staticOptions.testMethods.filter(function (val) {
-          return val.experimentalItem === testedItemId
+          return val.testedItem === testedItemId
         })
     },
     getTestParameter (testedItemId) {
       this.staticOptions.filteredTestParameters =
         this.staticOptions.testParameters.filter(function (val) {
-          return val.experimentalItem === testedItemId
+          return val.testedItem === testedItemId
         })
     },
     loadDepartment () {
@@ -303,7 +303,7 @@ export default {
     },
     loadTestedItemData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+      this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
           console.log(res.data)
           vm.staticOptions.testedItems = res.data
@@ -313,7 +313,7 @@ export default {
     },
     loadTestMethodData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+      this.$ajax.get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
           vm.staticOptions.testMethods = res.data
           vm.staticOptions.filteredTestMethods = res.data
@@ -323,7 +323,7 @@ export default {
     },
     loadTestParameterData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItemsParameter/getExperimentalItemsParameter')
+      this.$ajax.get('/api/sample/testParameter/getTestParameter')
         .then(function (res) {
           vm.staticOptions.testParameters = res.data
           vm.staticOptions.filteredTestParameters = res.data
@@ -368,7 +368,7 @@ export default {
       let name = ''
       this.staticOptions.testedItems.forEach(item => {
         if (row.testedItem === item.id) {
-          name = item.experimentalItemName
+          name = item.testedItemName
         }
       })
       return name
@@ -377,7 +377,7 @@ export default {
       let name = ''
       this.staticOptions.testMethods.forEach(item => {
         if (row.testMethod === item.id) {
-          name = item.experimentalMethodName
+          name = item.testMethodName
         }
       })
       return name
@@ -386,7 +386,7 @@ export default {
       let name = ''
       this.staticOptions.testParameters.forEach(item => {
         if (row.testParameter === item.id) {
-          name = item.experimentalItemsParameterName
+          name = item.testParameterName
         }
       })
       return name

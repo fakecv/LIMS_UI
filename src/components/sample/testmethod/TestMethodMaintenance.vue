@@ -1,10 +1,10 @@
     <template>
     <div>
       <el-container style="padding: 10px">
-        <el-form :model="drawingDesignRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-form :model="testMethodRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-form-item label="检测项目名称">
-              <el-select name="testedItem" filterable default-first-option v-model="drawingDesignRequestForm.testedItem">
+              <el-select name="testedItem" filterable default-first-option v-model="testMethodRequestForm.testedItem">
                 <el-option v-for="item in testedItems"
                   :key="item.Id"
                   :label="item.testedItemName"
@@ -12,11 +12,8 @@
                 </el-option>
                 </el-select>
           </el-form-item>
-            <el-form-item label="图纸名称">
-              <el-input name="drawingDesignName" v-model="drawingDesignRequestForm.drawingDesignName"></el-input>
-            </el-form-item>
-            <el-form-item label="图纸编号">
-              <el-input name="drawingDesignNumber" v-model="drawingDesignRequestForm.drawingDesignNumber"></el-input>
+            <el-form-item label="实验方法编号">
+              <el-input name="testMethodName" v-model="testMethodRequestForm.testMethodName"></el-input>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -34,13 +31,13 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="drawingDesignName"
-          label="图纸名称"
+          prop="testMethodName"
+          label="实验方法编号"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="drawingDesignNumber"
-          label="图纸编号"
+          prop="testMethodNumber"
+          label="实验方法描述"
           width="180">
         </el-table-column>
       </el-table>
@@ -48,11 +45,11 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="drawingDesignRequestForm.currentPage"
+          :current-page.sync="testMethodRequestForm.currentPage"
           :page-sizes="[10, 20, 50]"
           :page-size="20"
           layout="sizes, prev, pager, next"
-          :total="totalDrawingDesigns">
+          :total="totalTestMethods">
         </el-pagination>
       </div>
     </div>
@@ -60,14 +57,15 @@
 
 <script>
 export default {
-  name: 'drawingDesignMaintenance',
+  name: 'testMethodMaintenance',
   data () {
     return {
       tableData: [],
-      totalDrawingDesigns: 0,
-      drawingDesignRequestForm: {
+      totalTestMethods: 0,
+      testMethodRequestForm: {
+        testMethodName: '',
+        testMethodNumber: '',
         testedItem: '',
-        drawingDesignName: '',
         itemsPerPage: 20,
         currentPage: 1
       },
@@ -84,29 +82,29 @@ export default {
         })
     },
     handleSizeChange (val) {
-      this.drawingDesignRequestForm.itemsPerPage = val
+      this.testMethodRequestForm.itemsPerPage = val
       this.onSubmit()
     },
     handleCurrentChange (val) {
-      this.drawingDesignRequestForm.currentPage = val
+      this.testMethodRequestForm.currentPage = val
       this.onSubmit()
     },
     loadData () {
       let vm = this
-      this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
+      this.$ajax.get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
-      this.$router.push('/lims/drawingDesignDetailEdit/' + row.id)
+      this.$router.push('/lims/testMethodDetailEdit/' + row.id)
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/sample/drawingDesign/queryDrawingDesign', this.drawingDesignRequestForm)
+      this.$ajax.post('/api/sample/testMethod/queryTestMethod', this.testMethodRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
-          vm.totalDrawingDesigns = res.data.totalDrawingDesigns || 0
+          vm.totalTestMethods = res.data.totalTestMethods || 0
         })
     },
     testedItemFormatter (row, column) {

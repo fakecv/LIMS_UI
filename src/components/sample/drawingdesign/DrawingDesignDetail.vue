@@ -10,10 +10,10 @@
       <el-form :model="drawingDesignForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-form-item label="检测项目名称">
-              <el-select name="experimentalItem" filterable default-first-option v-model="drawingDesignForm.experimentalItem">
-                <el-option v-for="item in staticOptions.experimentalItems"
+              <el-select name="testedItem" filterable default-first-option v-model="drawingDesignForm.testedItem">
+                <el-option v-for="item in staticOptions.testedItems"
                   :key="item.Id"
-                  :label="item.experimentalItemName"
+                  :label="item.testedItemName"
                   :value="item.id">
                 </el-option>
                 </el-select>

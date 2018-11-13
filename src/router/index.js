@@ -21,15 +21,6 @@ import DepartmentMaintenance from '@/components/sample/department/DepartmentMain
 import DrawingDesignDetailNew from '@/components/sample/drawingdesign/DrawingDesignDetailNew'
 import DrawingDesignDetailEdit from '@/components/sample/drawingdesign/DrawingDesignDetailEdit'
 import DrawingDesignMaintenance from '@/components/sample/drawingdesign/DrawingDesignMaintenance'
-import ExperimentalMethodDetailNew from '@/components/sample/experimentalmethod/ExperimentalMethodDetailNew'
-import ExperimentalMethodDetailEdit from '@/components/sample/experimentalmethod/ExperimentalMethodDetailEdit'
-import ExperimentalMethodMaintenance from '@/components/sample/experimentalmethod/ExperimentalMethodMaintenance'
-import ExperimentalItemDetailNew from '@/components/sample/experimentalitem/ExperimentalItemDetailNew'
-import ExperimentalItemDetailEdit from '@/components/sample/experimentalitem/ExperimentalItemDetailEdit'
-import ExperimentalItemMaintenance from '@/components/sample/experimentalitem/ExperimentalItemMaintenance'
-import ExperimentalItemsParameterDetailNew from '@/components/sample/experimentalitemsparameter/ExperimentalItemsParameterDetailNew'
-import ExperimentalItemsParameterDetailEdit from '@/components/sample/experimentalitemsparameter/ExperimentalItemsParameterDetailEdit'
-import ExperimentalItemsParameterMaintenance from '@/components/sample/experimentalitemsparameter/ExperimentalItemsParameterMaintenance'
 import EditorFormAside from '@/views/editor/form/aside'
 import EditorFormMain from '@/views/editor/form/main'
 import EditorTableAside from '@/views/editor/table/aside'
@@ -82,6 +73,15 @@ import RoleMaintenance from '@/components/system/role/RoleMaintenance'
 import Schedule from '@/components/equipment/Schedule'
 import ShortCut from '@/components/frame/ShortCut'
 import TableSchedule from '@/components/equipment/MyTableSchedule'
+import TestedItemDetailNew from '@/components/sample/testeditem/TestedItemDetailNew'
+import TestedItemDetailEdit from '@/components/sample/testeditem/TestedItemDetailEdit'
+import TestedItemMaintenance from '@/components/sample/testeditem/TestedItemMaintenance'
+import TestMethodDetailNew from '@/components/sample/testmethod/TestMethodDetailNew'
+import TestMethodDetailEdit from '@/components/sample/testmethod/TestMethodDetailEdit'
+import TestMethodMaintenance from '@/components/sample/testmethod/TestMethodMaintenance'
+import TestParameterDetailNew from '@/components/sample/testparameter/TestParameterDetailNew'
+import TestParameterDetailEdit from '@/components/sample/testparameter/TestParameterDetailEdit'
+import TestParameterMaintenance from '@/components/sample/testparameter/TestParameterMaintenance'
 import TestedItemProductDetailNew from '@/components/sample/testeditemproduct/TestedItemProductDetailNew'
 import TestedItemProductDetailEdit from '@/components/sample/testeditemproduct/TestedItemProductDetailEdit'
 import TestedItemProductMaintenance from '@/components/sample/testeditemproduct/TestedItemProductMaintenance'
@@ -216,51 +216,6 @@ const router = new Router({
           path: 'drawingDesignDetailNew',
           name: 'drawingDesignDetailNew',
           component: DrawingDesignDetailNew
-        },
-        {
-          path: 'experimentalItemDetailEdit/:id',
-          name: 'experimentalItemDetailEdit',
-          component: ExperimentalItemDetailEdit
-        },
-        {
-          path: 'experimentalItemDetailNew',
-          name: 'experimentalItemDetailNew',
-          component: ExperimentalItemDetailNew
-        },
-        {
-          path: 'experimentalItemMaintenance',
-          name: 'experimentalItemMaintenance',
-          component: ExperimentalItemMaintenance
-        },
-        {
-          path: 'experimentalItemsParameterDetailEdit/:id',
-          name: 'experimentalItemsParameterDetailEdit',
-          component: ExperimentalItemsParameterDetailEdit
-        },
-        {
-          path: 'experimentalItemsParameterDetailNew',
-          name: 'experimentalItemsParameterDetailNew',
-          component: ExperimentalItemsParameterDetailNew
-        },
-        {
-          path: 'experimentalItemsParameterMaintenance',
-          name: 'experimentalItemsParameterMaintenance',
-          component: ExperimentalItemsParameterMaintenance
-        },
-        {
-          path: 'experimentalMethodDetailEdit/:id',
-          name: 'experimentalMethodDetailEdit',
-          component: ExperimentalMethodDetailEdit
-        },
-        {
-          path: 'experimentalMethodDetailNew',
-          name: 'experimentalMethodDetailNew',
-          component: ExperimentalMethodDetailNew
-        },
-        {
-          path: 'experimentalMethodMaintenance',
-          name: 'experimentalMethodMaintenance',
-          component: ExperimentalMethodMaintenance
         },
         {
           path: 'fileUpload',
@@ -481,6 +436,51 @@ const router = new Router({
           path: 'tableSchedule',
           name: 'tableSchedule',
           component: TableSchedule
+        },
+        {
+          path: 'testedItemDetailEdit/:id',
+          name: 'testedItemDetailEdit',
+          component: TestedItemDetailEdit
+        },
+        {
+          path: 'testedItemDetailNew',
+          name: 'testedItemDetailNew',
+          component: TestedItemDetailNew
+        },
+        {
+          path: 'testedItemMaintenance',
+          name: 'testedItemMaintenance',
+          component: TestedItemMaintenance
+        },
+        {
+          path: 'testParameterDetailEdit/:id',
+          name: 'testParameterDetailEdit',
+          component: TestParameterDetailEdit
+        },
+        {
+          path: 'testParameterDetailNew',
+          name: 'testParameterDetailNew',
+          component: TestParameterDetailNew
+        },
+        {
+          path: 'testParameterMaintenance',
+          name: 'testParameterMaintenance',
+          component: TestParameterMaintenance
+        },
+        {
+          path: 'testMethodDetailEdit/:id',
+          name: 'testMethodDetailEdit',
+          component: TestMethodDetailEdit
+        },
+        {
+          path: 'testMethodDetailNew',
+          name: 'testMethodDetailNew',
+          component: TestMethodDetailNew
+        },
+        {
+          path: 'testMethodMaintenance',
+          name: 'testMethodMaintenance',
+          component: TestMethodMaintenance
         },
         {
           path: 'testedItemProductDetailEdit/:id',

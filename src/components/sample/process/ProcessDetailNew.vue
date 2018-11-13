@@ -5,7 +5,7 @@
       :staticOptions="staticOptions"
       v-on:getDrawingDesigns="getDrawingDesigns"
       v-on:getAgreementInfo="getAgreementInfo"
-      v-on:getExperimentalMethod="getExperimentalMethod"
+      v-on:getTestMethod="getTestMethod"
       v-on:getExperimentItemsParameter="getExperimentItemsParameter"
       v-on:updateProcessForm="updateProcessForm"
       v-on:deleteProcessForm="resetProcessForm"
@@ -26,15 +26,15 @@
           width="100">
         </el-table-column>
         <el-table-column
-          prop="experimentalItem"
+          prop="testedItem"
           label="检测项目"
-          :formatter="experimentalItemFormatter"
+          :formatter="testedItemFormatter"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="experimentalMethod"
+          prop="testMethod"
           label="检测方法"
-          :formatter="experimentalMethodFormatter"
+          :formatter="testMethodFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -88,9 +88,9 @@ export default {
         sampleClientNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
-        experimentalItem: '',
+        testedItem: '',
         experimentItemsParameter: '',
-        experimentalMethod: '',
+        testMethod: '',
         drawingDesign: '',
         comment: '',
         submitFrom: '',
@@ -109,9 +109,9 @@ export default {
         sampleClientNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
-        experimentalItem: '',
+        testedItem: '',
         experimentItemsParameter: '',
-        experimentalMethod: '',
+        testMethod: '',
         drawingDesign: '',
         comment: '',
         submitFrom: '',
@@ -121,11 +121,11 @@ export default {
         processPriority: ''
       },
       staticOptions: {
-        experimentalMethods: [],
-        filteredExperimentalMethods: [],
+        testMethods: [],
+        filteredTestMethods: [],
         experimentItemsParameters: [],
         filteredExperimentItemsParameters: [],
-        experimentalItems: [],
+        testedItems: [],
         drawingDesigns: [],
         filteredDrawingDesigns: [],
         processingStatuses: [],
@@ -154,22 +154,22 @@ export default {
       })
       this.loadAgreementProcess(agreementId)
     },
-    getDrawingDesigns (experimentalItemId) {
+    getDrawingDesigns (testedItemId) {
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+          return val.testedItem === testedItemId
         })
     },
-    getExperimentalMethod (experimentalItemId) {
-      this.staticOptions.filteredExperimentalMethods =
-        this.staticOptions.experimentalMethods.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+    getTestMethod (testedItemId) {
+      this.staticOptions.filteredTestMethods =
+        this.staticOptions.testMethods.filter(function (val) {
+          return val.testedItem === testedItemId
         })
     },
-    getExperimentItemsParameter (experimentalItemId) {
+    getExperimentItemsParameter (testedItemId) {
       this.staticOptions.filteredExperimentItemsParameters =
         this.staticOptions.experimentItemsParameters.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+          return val.testedItem === testedItemId
         })
     },
     resetProcessId () {
@@ -215,20 +215,20 @@ export default {
           vm.staticOptions.drawingDesigns = res.data
         })
     },
-    loadExperimentalItemData () {
+    loadTestedItemData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+      this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.staticOptions.experimentalItems = res.data
+          vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalMethodData () {
+    loadTestMethodData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+      this.$ajax.get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
-          vm.staticOptions.experimentalMethods = res.data
+          vm.staticOptions.testMethods = res.data
         })
     },
     loadExperimentItemsParameterData () {
@@ -271,20 +271,20 @@ export default {
         return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
       }
     },
-    experimentalItemFormatter (row, column) {
+    testedItemFormatter (row, column) {
       let name = ''
-      this.staticOptions.experimentalItems.forEach(item => {
-        if (row.experimentalItem === item.id) {
-          name = item.experimentalItemName
+      this.staticOptions.testedItems.forEach(item => {
+        if (row.testedItem === item.id) {
+          name = item.testedItemName
         }
       })
       return name
     },
-    experimentalMethodFormatter (row, column) {
+    testMethodFormatter (row, column) {
       let name = ''
-      this.staticOptions.experimentalMethods.forEach(item => {
-        if (row.experimentalMethod === item.id) {
-          name = item.experimentalMethodName
+      this.staticOptions.testMethods.forEach(item => {
+        if (row.testMethod === item.id) {
+          name = item.testMethodName
         }
       })
       return name
@@ -317,9 +317,9 @@ export default {
     }
   },
   mounted () {
-    this.loadExperimentalMethodData()
+    this.loadTestMethodData()
     this.loadExperimentItemsParameterData()
-    this.loadExperimentalItemData()
+    this.loadTestedItemData()
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()
     this.loadProcessPriorityData()

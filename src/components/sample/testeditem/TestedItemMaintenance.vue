@@ -1,13 +1,13 @@
     <template>
     <div>
       <el-container style="padding: 10px">
-        <el-form :model="experimentalItemRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-form :model="testedItemRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-form-item label="检测项目名称">
-              <el-input name="experimentalItemName" v-model="experimentalItemRequestForm.experimentalItemName"></el-input>
+              <el-input name="testedItemName" v-model="testedItemRequestForm.testedItemName"></el-input>
             </el-form-item>
             <el-form-item label="检测项目说明">
-              <el-input name="experimentalItemNumber" v-model="experimentalItemRequestForm.experimentalItemNumber"></el-input>
+              <el-input name="testedItemNumber" v-model="testedItemRequestForm.testedItemNumber"></el-input>
             </el-form-item>
           </el-row>
           <el-row :gutter="20">
@@ -19,12 +19,12 @@
       </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
-          prop="experimentalItemName"
+          prop="testedItemName"
           label="检测项目名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="experimentalItemNumber"
+          prop="testedItemNumber"
           label="检测项目说明"
           width="180">
         </el-table-column>
@@ -33,11 +33,11 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="experimentalItemRequestForm.currentPage"
+          :current-page.sync="testedItemRequestForm.currentPage"
           :page-sizes="[10, 20, 50]"
           :page-size="20"
           layout="sizes, prev, pager, next"
-          :total="totalExperimentalItems">
+          :total="totalTestedItems">
         </el-pagination>
       </div>
     </div>
@@ -45,14 +45,14 @@
 
 <script>
 export default {
-  name: 'experimentalItemMaintenance',
+  name: 'testedItemMaintenance',
   data () {
     return {
       tableData: [],
-      totalExperimentalItems: 0,
-      experimentalItemRequestForm: {
-        experimentalItemName: '',
-        experimentalItemNumber: '',
+      totalTestedItems: 0,
+      testedItemRequestForm: {
+        testedItemName: '',
+        testedItemNumber: '',
         itemsPerPage: 20,
         currentPage: 1
       }
@@ -60,29 +60,29 @@ export default {
   },
   methods: {
     handleSizeChange (val) {
-      this.experimentalItemRequestForm.itemsPerPage = val
+      this.testedItemRequestForm.itemsPerPage = val
       this.onSubmit()
     },
     handleCurrentChange (val) {
-      this.experimentalItemRequestForm.currentPage = val
+      this.testedItemRequestForm.currentPage = val
       this.onSubmit()
     },
     loadData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+      this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
           vm.tableData = res.data
         })
     },
     dblclick (row, event) {
-      this.$router.push('/lims/experimentalItemDetailEdit/' + row.id)
+      this.$router.push('/lims/testedItemDetailEdit/' + row.id)
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/sample/experimentalItem/queryExperimentalItem', this.experimentalItemRequestForm)
+      this.$ajax.post('/api/sample/testedItem/queryTestedItem', this.testedItemRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
-          vm.totalExperimentalItems = res.data.totalExperimentalItems || 0
+          vm.totalTestedItems = res.data.totalTestedItems || 0
         })
     }
   },

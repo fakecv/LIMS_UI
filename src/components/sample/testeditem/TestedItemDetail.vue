@@ -7,20 +7,20 @@
       </el-button-group>
     </el-header>
     <el-container style="padding: 10px" direction="vertical">
-      <el-form :model="experimentalItemForm" label-width="100px" label-position="left" size="mini">
+      <el-form :model="testedItemForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-form-item label="检测项目序号">
-            <el-input name="experimentalItemOrder" v-model="experimentalItemForm.experimentalItemOrder"></el-input>
+            <el-input name="testedItemOrder" v-model="testedItemForm.testedItemOrder"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
           <el-form-item label="检测项目名称">
-            <el-input name="experimentalItemName" v-model="experimentalItemForm.experimentalItemName"></el-input>
+            <el-input name="testedItemName" v-model="testedItemForm.testedItemName"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
           <el-form-item label="检测项目说明">
-            <el-input type="textarea" name="experimentalItemNumber" v-model="experimentalItemForm.experimentalItemNumber"></el-input>
+            <el-input type="textarea" name="testedItemNumber" v-model="testedItemForm.testedItemNumber"></el-input>
           </el-form-item>
         </el-row>
       </el-form>
@@ -30,8 +30,8 @@
 
 <script>
 export default {
-  name: 'experimentalItemDetail',
-  props: ['experimentalItemForm'],
+  name: 'testedItemDetail',
+  props: ['testedItemForm'],
   data () {
     return {
       actions: [
@@ -71,17 +71,17 @@ export default {
     },
     saveToDB () {
       let vm = this
-      this.$ajax.post('/api/sample/experimentalItem', this.experimentalItemForm)
+      this.$ajax.post('/api/sample/testedItem', this.testedItemForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
-          vm.$emit('updateExperimentalItemForm', res.data)
+          vm.$emit('updateTestedItemForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
     confirmDelete () {
       let vm = this
-      if (this.experimentalItemForm.id && this.experimentalItemForm.id !== '') {
+      if (this.testedItemForm.id && this.testedItemForm.id !== '') {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -98,10 +98,10 @@ export default {
     },
     delete () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItem/delete/' + this.experimentalItemForm.id)
+      this.$ajax.get('/api/sample/testedItem/delete/' + this.testedItemForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteExperimentalItem')
+          vm.$emit('deleteTestedItem')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

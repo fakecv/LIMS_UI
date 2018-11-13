@@ -21,9 +21,9 @@ export default {
     return {
       testedItemProductForm: {
         testedItemProductName: '',
-        experimentalItem: '',
-        experimentalItemsParameter: '',
-        experimentalMethod: '',
+        testedItem: '',
+        testParameter: '',
+        testMethod: '',
         drawingDesign: '',
         itemsPerPage: 20,
         currentPage: 1,
@@ -45,11 +45,11 @@ export default {
         selectedTestedItemProducts: [],
         testedItemProducts: [],
         totalTestedItemProducts: '',
-        experimentalMethods: [],
-        filteredExperimentalMethods: [],
-        experimentalItemsParameters: [],
-        filteredExperimentalItemsParameters: [],
-        experimentalItems: [],
+        testMethods: [],
+        filteredTestMethods: [],
+        testParameters: [],
+        filteredTestParameters: [],
+        testedItems: [],
         drawingDesigns: [],
         filteredDrawingDesigns: []
       }

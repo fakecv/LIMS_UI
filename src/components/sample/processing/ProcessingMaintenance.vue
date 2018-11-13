@@ -25,15 +25,15 @@
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目">
-              <el-input name="experimentalItem" v-model="processingRequestForm.experimentalItem"></el-input>
+              <el-input name="testedItem" v-model="processingRequestForm.testedItem"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测方法">
-              <el-select name="experimentalMethod" filterable default-first-option v-model="processingRequestForm.experimentalMethod">
-              <el-option v-for="item in experimentalMethods"
+              <el-select name="testMethod" filterable default-first-option v-model="processingRequestForm.testMethod">
+              <el-option v-for="item in testMethods"
                 :key="item.Id"
-                :label="item.experimentalMethodNumber"
+                :label="item.testMethodNumber"
                 :value="item.id">
               </el-option>
               </el-select>
@@ -109,9 +109,9 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="experimentalItem"
+          prop="testedItem"
           label="检测项目"
-          :formatter="experimentalItemFormatter"
+          :formatter="testedItemFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -152,15 +152,15 @@ export default {
         agreementNumber: '',
         sampleName: '',
         sampleSubNumber: '',
-        experimentalItem: '',
+        testedItem: '',
         submitFrom: '',
         submitTo: '',
         processingStatus: '',
         itemsPerPage: 20,
         currentPage: 1
       },
-      experimentalMethods: [],
-      experimentalItems: [],
+      testMethods: [],
+      testedItems: [],
       drawingDesigns: [],
       departments: [],
       agreements: [],
@@ -195,20 +195,20 @@ export default {
           vm.totalProcessings = res.data.totalProcessings || 0
         })
     },
-    loadExperimentalMethodData () {
+    loadTestMethodData () {
       let vm = this
       this.$ajax
-        .get('/api/sample/experimentalMethod/getExperimentalMethod')
+        .get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
-          vm.experimentalMethods = res.data
+          vm.testMethods = res.data
         })
     },
-    loadExperimentalItemData () {
+    loadTestedItemData () {
       let vm = this
       this.$ajax
-        .get('/api/sample/experimentalItem/getExperimentalItem')
+        .get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.experimentalItems = res.data
+          vm.testedItems = res.data
         })
     },
     loadDrawingDesignData () {
@@ -261,11 +261,11 @@ export default {
       })
       return name
     },
-    experimentalMethodFormatter (row, column) {
+    testMethodFormatter (row, column) {
       let name = ''
-      this.experimentalMethods.forEach(item => {
-        if (row.experimentalMethod === item.id) {
-          name = item.experimentalMethodName
+      this.testMethods.forEach(item => {
+        if (row.testMethod === item.id) {
+          name = item.testMethodName
         }
       })
       return name
@@ -297,11 +297,11 @@ export default {
       })
       return name
     },
-    experimentalItemFormatter (row, column) {
+    testedItemFormatter (row, column) {
       let name = ''
-      this.experimentalItems.forEach(item => {
-        if (row.experimentalItem === item.id) {
-          name = item.experimentalItemName
+      this.testedItems.forEach(item => {
+        if (row.testedItem === item.id) {
+          name = item.testedItemName
         }
       })
       return name
@@ -319,8 +319,8 @@ export default {
   },
   mounted () {
     this.onSubmit()
-    this.loadExperimentalItemData()
-    this.loadExperimentalMethodData()
+    this.loadTestedItemData()
+    this.loadTestMethodData()
     this.loadDrawingDesignData()
     this.loadDepartment()
     this.loadAgreement()
