@@ -1,11 +1,12 @@
 <template>
   <ProcessDetail
     :processForm="processForm"
+      :agreementForm="agreementForm"
     :staticOptions="staticOptions"
       v-on:getAgreementInfo="getAgreementInfo"
       v-on:getDrawingDesigns="getDrawingDesigns"
       v-on:getTestMethod="getTestMethod"
-      v-on:getExperimentItemsParameter="getExperimentItemsParameter"
+      v-on:getTestParameter="getTestParameter"
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
       v-on:copy="resetProcessId"
@@ -19,53 +20,36 @@ export default {
   components: {ProcessDetail},
   data () {
     return {
-      processForm: {
-        id: '',
-        agreementNumber: '',
+      agreementForm: {
         sampleName: '',
         receiveSampleTime: '',
         materialNumber: '',
         expectedCompletionTime: '',
-        sampleClientNumber: '',
+        sampleClientNumber: ''
+      },
+      processForm: {
+        id: '',
+        agreementNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
-        testedItem: '',
-        experimentItemsParameter: '',
-        testMethod: '',
-        drawingDesign: '',
         comment: '',
-        submitFrom: '',
-        submitTo: '',
-        processingStatus: '',
-        processingStatues: [],
+        testedItemTasks: [],
         processPriority: ''
       },
       processResetForm: {
         id: '',
         agreementNumber: '',
-        sampleName: '',
-        receiveSampleTime: '',
-        materialNumber: '',
-        expectedCompletionTime: '',
-        sampleClientNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
-        testedItem: '',
-        experimentItemsParameter: '',
-        testMethod: '',
-        drawingDesign: '',
         comment: '',
-        submitFrom: '',
-        submitTo: '',
-        processingStatus: '',
-        processingStatues: [],
+        testedItemTasks: [],
         processPriority: ''
       },
       staticOptions: {
         testMethods: [],
         filteredTestMethods: [],
-        experimentItemsParameters: [],
-        filteredExperimentItemsParameters: [],
+        testParameters: [],
+        filteredTestParameters: [],
         testedItems: [],
         drawingDesigns: [],
         filteredDrawingDesigns: [],
@@ -82,12 +66,10 @@ export default {
       let vm = this
       this.staticOptions.agreements.forEach(agreement => {
         if (agreement.id === agreementId) {
-          vm.processForm.sampleName = agreement.sampleName
-          vm.processForm.materialNumber = agreement.materialNumber
-          vm.processForm.receiveSampleTime = agreement.receiveSampleTime
-          vm.processForm.expectedCompletionTime = agreement.expectedCompletionTime
-          vm.processForm.comment = agreement.comment
-          vm.processForm.processPriority = agreement.processPriority
+          vm.agreementForm.sampleName = agreement.sampleName
+          vm.agreementForm.materialNumber = agreement.materialNumber
+          vm.agreementForm.receiveSampleTime = agreement.receiveSampleTime
+          vm.agreementForm.expectedCompletionTime = agreement.expectedCompletionTime
         }
       })
       this.loadAgreementProcess(agreementId)
@@ -98,9 +80,9 @@ export default {
           return val.testedItem === testedItemId
         })
     },
-    getExperimentItemsParameter (testedItemId) {
-      this.staticOptions.filteredExperimentItemsParameters =
-        this.staticOptions.experimentItemsParameters.filter(function (val) {
+    getTestParameter (testedItemId) {
+      this.staticOptions.filteredTestParameters =
+        this.staticOptions.testParameters.filter(function (val) {
           return val.testedItem === testedItemId
         })
     },
@@ -170,11 +152,11 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentItemsParameterData () {
+    loadTestParameterData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentItemsParameter/getExperimentItemsParameter')
+      this.$ajax.get('/api/sample/testParameter/getTestParameter')
         .then(function (res) {
-          vm.staticOptions.experimentItemsParameters = res.data
+          vm.staticOptions.testParameters = res.data
         })
     },
     loadProcess (processId) {
@@ -182,8 +164,9 @@ export default {
       this.$ajax.get('/api/sample/process/' + processId)
         .then(function (res) {
           vm.processForm = res.data
+          vm.getAgreementInfo(vm.processForm.agreementNumber)
           vm.getTestMethod(vm.processForm.testedItem)
-          vm.getExperimentItemsParameter(vm.processForm.testedItem)
+          vm.getTestParameter(vm.processForm.testedItem)
           vm.getDrawingDesigns(vm.processForm.testedItem)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
@@ -210,7 +193,7 @@ export default {
   },
   mounted () {
     this.loadTestMethodData()
-    this.loadExperimentItemsParameterData()
+    this.loadTestParameterData()
     this.loadTestedItemData()
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()

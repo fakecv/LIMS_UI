@@ -18,7 +18,7 @@ export default {
       testedItemProductForm: {
         testedItemProductName: '',
         testedItem: '',
-        testParameter: '',
+        testParameter: [],
         testMethod: '',
         drawingDesign: '',
         id: ''
@@ -26,7 +26,7 @@ export default {
       testedItemProductResetForm: {
         testedItemProductName: '',
         testedItem: '',
-        testParameter: '',
+        testParameter: [],
         testMethod: '',
         drawingDesign: '',
         id: '',
@@ -39,6 +39,7 @@ export default {
         filteredTestMethods: [],
         testParameters: [],
         filteredTestParameters: [],
+        checkedTestParameters: [],
         testedItems: [],
         drawingDesigns: [],
         filteredDrawingDesigns: []
@@ -51,6 +52,7 @@ export default {
       this.$ajax.get('/api/sample/testedItemProduct/' + testedItemProductId)
         .then(function (res) {
           vm.testedItemProductForm = res.data
+          vm.staticOptions.checkedTestParameters = vm.testedItemProductForm.testParameter.split(',')
           vm.getDrawingDesigns(vm.testedItemProductForm.testedItem)
           vm.getTestMethod(vm.testedItemProductForm.testedItem)
           vm.getTestParameter(vm.testedItemProductForm.testedItem)

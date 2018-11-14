@@ -3,7 +3,7 @@
     <el-container>
       <el-header style="min-width:500px;">
         <el-button-group>
-          <el-button :ref="action.name" type="info" v-for="(action,index) in actions"
+          <el-button :ref="action.ref" type="info" v-for="(action,index) in actions"
             :key="index" size="mini" :icon="action.icon"
             :loading="action.loading"
             @click="actionHandle(action)"
@@ -29,27 +29,27 @@
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品名称">
-                <el-input name="sampleName" v-model="processForm.sampleName" readonly autoComplete="sampleName"></el-input>
+                <el-input name="sampleName" v-model="agreementForm.sampleName" readonly autoComplete="sampleName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品接收时间">
-                <el-date-picker type="datetime" placeholder="选择日期" readonly v-model="processForm.receiveSampleTime" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="datetime" placeholder="选择日期" readonly v-model="agreementForm.receiveSampleTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="材质牌号">
-                <el-input name="materialNumber" v-model="processForm.materialNumber" readonly autoComplete="materialNumber"></el-input>
+                <el-input name="materialNumber" v-model="agreementForm.materialNumber" readonly autoComplete="materialNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="要求完成时间">
-                <el-date-picker type="datetime" placeholder="选择日期" readonly v-model="processForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="datetime" placeholder="选择日期" readonly v-model="agreementForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="来样编号">
-                <el-input name="sampleClientNumber" v-model="processForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
+                <el-input name="sampleClientNumber" v-model="agreementForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -86,13 +86,13 @@
   <div>
     <el-row type="flex" justify="end">
       <el-button-group style="min-width: 200px">
-        <el-button type="success" icon="el-icon-plus" circle @click="addTestedItemTask"></el-button>
+        <el-button type="success" icon="el-icon-plus" circle @click="addTestedItemProductGroup">添加检测项目组</el-button>
         <el-button type="danger" icon="el-icon-delete" circle @click="deleteTestedItemTask"></el-button>
       </el-button-group>
     </el-row>
-    <el-table :data="TestedItemTasks" style="width: 100%" @row-dblclick="dblclick">
+    <el-table :data="staticOptions.testedItemTaskTableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
-          prop="testedItemProductName"
+          prop="testedItemTaskName"
           label="检测项目名称"
           width="180">
         </el-table-column>
@@ -121,21 +121,21 @@
           width="180">
         </el-table-column>
         <el-table-column
+          prop="submitFrom"
+          label="提交部门"
+          :formatter="submitFromFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
           prop="processingStatus"
           label="当前流转状态"
           :formatter="processingStatusFormatter"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="submitFrom"
-          label="提交部门"
-          :formatter="departmentFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
           prop="submitTo"
           label="提交至"
-          :formatter="departmentFormatter"
+          :formatter="submitToFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -146,33 +146,103 @@
         </el-table-column>
       </el-table>
   </div>
-  <el-dialog :visible.sync="testedItemTaskFormVisible" :modal-append-to-body="false">
-    <TestedItemTask :staticOptions="staticOptions">
-    </TestedItemTask>
+  <el-dialog :visible.sync="testedItemProductGroupFormVisible" :modal-append-to-body="false">
+    <div>
+    <el-container style="padding: 10px">
+      <el-form :model="testedItemProductGroupForm" label-width="100px" label-position="left" size="mini">
+        <el-row :gutter="20">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="组名称">
+              <el-input name="testedItemProductGroupName" v-model="testedItemProductGroupForm.testedItemProductGroupName" autoComplete="testedItemProductGroupName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="组描述">
+              <el-input name="testedItemProductGroupDescription" v-model="testedItemProductGroupForm.testedItemProductGroupDescription" autoComplete="testedItemProductGroupDescription"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-form-item>
+            <el-button type="primary" @click="loadTestedItemProductGroupeData">查询</el-button>
+          </el-form-item>
+        </el-row>
+      </el-form>
+    </el-container>
+    <el-table ref="testedItemProductGroupTable" :data="testedItemProductGroupTableData" style="width: 100%" @selection-change="handleTestedItemProductGroupChange">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column
+          prop="testedItemProductGroupName"
+          label="组名称"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testedItemProductGroupDescription"
+          label="组描述"
+          width="180">
+        </el-table-column>
+      </el-table>
+      <div class="block text-right">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="testedItemProductGroupForm.currentPage"
+          :page-sizes="[10, 20, 50]"
+          :page-size="20"
+          layout="sizes, prev, pager, next"
+          :total="totalTestedItemProductGroups">
+        </el-pagination>
+      </div>
+    </div>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click.native="testedItemProductGroupFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click.native="updateTestedItemTasks">确 定</el-button>
+    </div>
   </el-dialog>
   </div>
 </template>
 <script>
-import TestedItemTask from '@/components/sample/testeditemproduct/TestedItemTaskDetail'
 export default {
   name: 'processDetail',
-  components: [TestedItemTask],
-  props: ['processForm', 'staticOptions', 'customerForm', 'userForm'],
+  props: ['agreementForm', 'processForm', 'staticOptions', 'customerForm', 'userForm'],
   data () {
     return {
       sampleNumberButton: false,
       actions: [
-        {'name': '新建', 'id': '1', 'icon': 'el-icon-circle-plus', 'loading': false, 'disabled': false},
-        {'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'disabled': false},
-        {'name': '数据库保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false, 'disabled': false},
-        {'name': '数据库保存并提交', 'id': '4', 'icon': 'el-icon-check', 'loading': false, 'disabled': false},
-        {'name': '解锁', 'id': '5', 'icon': 'el-icon-edit', 'loading': false, 'disabled': false},
-        {'name': '删除', 'id': '6', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false},
-        {'name': '文件导入', 'id': '7', 'icon': 'el-icon-upload2', 'loading': false, 'disabled': false},
-        {'name': '文件保存', 'id': '8', 'icon': 'el-icon-download', 'loading': false, 'disabled': false}
+        {'ref': 'new', 'name': '新建', 'id': '1', 'icon': 'el-icon-circle-plus', 'loading': false, 'disabled': false},
+        {'ref': 'copy', 'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'disabled': false},
+        {'ref': 'save', 'name': '数据库保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false, 'disabled': false},
+        {'ref': 'submit', 'name': '数据库保存并提交', 'id': '4', 'icon': 'el-icon-check', 'loading': false, 'disabled': false},
+        {'ref': 'unlock', 'name': '解锁', 'id': '5', 'icon': 'el-icon-edit', 'loading': false, 'disabled': false},
+        {'ref': 'delete', 'name': '删除', 'id': '6', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false}
       ],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
-      testedItemTaskFormVisible: false
+      testedItemTaskFormVisible: false,
+      testedItemProductGroupFormVisible: false,
+      testedItemProductGroupForm: {
+        testedItemProductGroupName: '',
+        testedItemProductGroupDescription: '',
+        itemsPerPage: 20,
+        currentPage: 1
+      },
+      testedItemTaskForm: {
+        testedItemTaskName: '',
+        testedItem: '',
+        testParameter: '',
+        testMethod: '',
+        drawingDesign: '',
+        submitFrom: '',
+        processingStatus: '',
+        submitTo: '',
+        processPriority: '',
+        itemsPerPage: 20,
+        currentPage: 1
+      },
+      testedItemProductGroupTableData: [],
+      totalTestedItemProductGroups: 0
     }
   },
   methods: {
@@ -189,9 +259,47 @@ export default {
         this.actions[3].disabled = false
       } else if (action.id === '6') {
         this.confirmDelete()
-      } else if (action.id === '7') {
-      } else if (action.id === '8') {
       }
+    },
+    addTestedItemProductGroup () {
+      this.loadTestedItemProductGroupeData()
+      this.testedItemProductGroupFormVisible = true
+    },
+    dblclick () {
+      this.testedItemTaskFormVisible = true
+    },
+    updateTestedItemTasks (val) {
+      this.$emit('updateTestedItemTasks', val)
+      this.testedItemProductGroupFormVisible = false
+    },
+    deleteTestedItemTask () {
+      console.log('deleteTestedItemTask')
+    },
+    handleSizeChange (val) {
+      this.testedItemProductGroupForm.itemsPerPage = val
+      this.loadTestedItemProductGroupeData()
+    },
+    handleCurrentChange (val) {
+      this.testedItemProductGroupForm.currentPage = val
+      this.loadTestedItemProductGroupeData()
+    },
+    handleTestedItemProductGroupChange (val) {
+      let vm = this
+      val.forEach(item => {
+        vm.staticOptions.testedItemProducts.push(item)
+      })
+    },
+    // load all the testedItemProductGroupes
+    loadTestedItemProductGroupeData () {
+      let vm = this
+      this.$ajax
+        .post('/api/sample/testedItemProductGroup/queryTestedItemProductGroup', this.testedItemProductGroupForm)
+        .then(function (res) {
+          vm.testedItemProductGroupTableData = res.data.pageResult || []
+          vm.totalTestedItemProductGroups = res.data.totalTestedItemProductGroups || 0
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     new () {
       this.$emit('new')
@@ -253,25 +361,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    addTestedItemTask () {
-      console.log('addTestedItemTask')
-      this.testedItemTaskFormVisible = true
-    },
-    dblclick () {
-      this.testedItemTaskFormVisible = true
-    },
-    deleteTestedItemTask () {
-      console.log('deleteTestedItemTask')
-    },
     getAgreementNumber  (val) {
       this.$emit('getAgreementInfo', val)
     },
     getTestMethod  (val) {
       this.processForm.drawingDesign = ''
-      this.processForm.experimentItemsParameter = ''
+      this.processForm.testParameter = ''
       this.processForm.testMethod = ''
       this.$emit('getTestMethod', val)
-      this.$emit('getExperimentItemsParameter', val)
+      this.$emit('getTestParameter', val)
       this.$emit('getDrawingDesigns', val)
     },
     sampleNumberGenerator () {
@@ -285,18 +383,9 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    departmentFormatter (row, column) {
-      let name = ''
-      this.departments.forEach(item => {
-        if (row.department === item.id) {
-          name = item.departmentName
-        }
-      })
-      return name
-    },
     drawingDesignFormatter (row, column) {
       let name = ''
-      this.drawingDesigns.forEach(item => {
+      this.staticOptions.drawingDesigns.forEach(item => {
         if (row.drawingDesign === item.id) {
           name = item.drawingDesignName
         }
@@ -311,9 +400,53 @@ export default {
         return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
       }
     },
+    processPriorityFormatter (row, column) {
+      let name = ''
+      this.staticOptions.processPriorities.forEach(item => {
+        if (row.processPriority === item.id) {
+          name = item.processPriorityName
+        }
+      })
+      return name
+    },
+    processingStatusFormatter (row, column) {
+      let name = ''
+      this.staticOptions.processingStatuses.forEach(item => {
+        if (row.processingStatus === item.id) {
+          name = item.processingStatusName
+        }
+      })
+      return name
+    },
+    receiveSampleTimeFormatter (row, column) {
+      if (row.receiveSampleTime) {
+        let dateTT = new Date(row.receiveSampleTime)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
+      }
+    },
+    submitFromFormatter (row, column) {
+      let name = ''
+      this.staticOptions.departments.forEach(item => {
+        if (row.submitFrom === item.id) {
+          name = item.departmentName
+        }
+      })
+      return name
+    },
+    submitToFormatter (row, column) {
+      let name = ''
+      this.staticOptions.departments.forEach(item => {
+        if (row.submitTo === item.id) {
+          name = item.departmentName
+        }
+      })
+      return name
+    },
     testedItemFormatter (row, column) {
       let name = ''
-      this.testedItems.forEach(item => {
+      this.staticOptions.testedItems.forEach(item => {
         if (row.testedItem === item.id) {
           name = item.testedItemName
         }
@@ -322,27 +455,18 @@ export default {
     },
     testMethodFormatter (row, column) {
       let name = ''
-      this.testMethods.forEach(item => {
+      this.staticOptions.testMethods.forEach(item => {
         if (row.testMethod === item.id) {
           name = item.testMethodName
         }
       })
       return name
     },
-    processingStatusFormatter (row, column) {
+    testParameterFormatter (row, column) {
       let name = ''
-      this.processingStatuses.forEach(item => {
-        if (row.processingStatus === item.id) {
-          name = item.processingStatusName
-        }
-      })
-      return name
-    },
-    processPriorityFormatter (row, column) {
-      let name = ''
-      this.processPriorities.forEach(item => {
-        if (row.processPriority === item.id) {
-          name = item.processPriorityName
+      this.staticOptions.testParameters.forEach(item => {
+        if (row.testParameter === item.id) {
+          name = item.testParameterName
         }
       })
       return name

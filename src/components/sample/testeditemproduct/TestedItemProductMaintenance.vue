@@ -10,7 +10,7 @@
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目">
-              <el-select name="testedItem" filterable default-first-option v-model="testedItemProductForm.testedItem" @change="getCascadeItems">
+              <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testedItem" @change="getCascadeItems">
                 <el-option v-for="item in staticOptions.testedItems"
                   :key="item.id"
                   :label="item.testedItemName"
@@ -75,7 +75,6 @@
         <el-table-column
           prop="testParameter"
           label="检测项目参数"
-          :formatter="testParameterFormatter"
           width="180">
         </el-table-column>
         <el-table-column

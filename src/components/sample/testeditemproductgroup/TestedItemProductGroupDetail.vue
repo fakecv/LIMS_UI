@@ -31,6 +31,10 @@
     <div>
       <el-table :data="staticOptions.selectedTestedItemProducts" style="width: 100%" @selection-change="handleTestedItemProductChange">
           <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
             prop="testedItemProductName"
             label="检测项目名称"
             width="180">

@@ -19,7 +19,7 @@ export default {
       testedItemProductForm: {
         testedItemProductName: '',
         testedItem: '',
-        testParameter: '',
+        testParameter: [],
         testMethod: '',
         drawingDesign: '',
         id: ''
@@ -27,7 +27,7 @@ export default {
       testedItemProductResetForm: {
         testedItemProductName: '',
         testedItem: '',
-        testParameter: '',
+        testParameter: [],
         testMethod: '',
         drawingDesign: '',
         id: ''
@@ -38,6 +38,7 @@ export default {
         filteredTestMethods: [],
         testParameters: [],
         filteredTestParameters: [],
+        checkedTestParameters: [],
         testedItems: [],
         drawingDesigns: [],
         processingStatuses: [],

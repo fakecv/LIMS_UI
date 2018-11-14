@@ -4,13 +4,13 @@
         <el-form :model="drawingDesignRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-form-item label="检测项目名称">
-              <el-select name="testedItem" filterable default-first-option v-model="drawingDesignRequestForm.testedItem">
+              <el-select name="testedItem" filterable clearable default-first-option v-model="drawingDesignRequestForm.testedItem">
                 <el-option v-for="item in testedItems"
                   :key="item.Id"
                   :label="item.testedItemName"
                   :value="item.id">
                 </el-option>
-                </el-select>
+              </el-select>
           </el-form-item>
             <el-form-item label="图纸名称">
               <el-input name="drawingDesignName" v-model="drawingDesignRequestForm.drawingDesignName"></el-input>

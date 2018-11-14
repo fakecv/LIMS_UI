@@ -5,23 +5,13 @@
       <el-row :gutter="20">
         <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
           <el-form-item label="委托编号">
-            <el-select name="agreementNumber" filterable default-first-option v-model="processRequestForm.agreementNumber">
+            <el-select name="agreementNumber" filterable clearable default-first-option v-model="processRequestForm.agreementNumber">
               <el-option v-for="item in agreements"
                 :key="item.Id"
                 :label="item.agreementNumber"
                 :value="item.id">
               </el-option>
               </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-          <el-form-item label="委托单位">
-            <el-input name="client" v-model="processRequestForm.client"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-          <el-form-item label="样品名称">
-            <el-input name="sampleName" v-model="processRequestForm.sampleName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -32,17 +22,6 @@
         <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
           <el-form-item label="试样编号">
             <el-input name="sampleSubNumber" v-model="processRequestForm.sampleSubNumber"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-          <el-form-item label="流转状态">
-            <el-select name="processingStatus" filterable clearable default-first-option v-model="processRequestForm.processingStatus">
-            <el-option v-for="item in processingStatuses"
-              :key="item.Id"
-              :label="item.processingStatusName"
-              :value="item.id">
-            </el-option>
-            </el-select>
           </el-form-item>
         </el-col>
         <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -77,44 +56,16 @@
         width="150">
       </el-table-column>
       <el-table-column
+        prop="sampleNumber"
+        fixed
+        label="样品编号"
+        width="180">
+      </el-table-column>
+      <el-table-column
         prop="sampleSubNumber"
         fixed
         label="试样编号"
         width="180">
-      </el-table-column>
-      <el-table-column
-        prop="testedItem"
-        label="检测项目"
-        :formatter="testedItemFormatter"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="experimentItemsParameter"
-        label="检测项目参数"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="testMethod"
-        label="检测方法"
-        :formatter="testMethodFormatter"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="drawingDesign"
-        label="加工图号"
-        :formatter="drawingDesignFormatter"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="sampleName"
-        label="样品名称"
-        width="150">
-      </el-table-column>
-      <el-table-column
-        prop="processingStatus"
-        label="当前流转状态"
-        :formatter="processingStatusFormatter"
-        width="150">
       </el-table-column>
       <el-table-column
         prop="processPriority"
@@ -123,20 +74,8 @@
         width="80">
       </el-table-column>
       <el-table-column
-        prop="receiveSampleTime"
-        label="接收样品时间"
-        :formatter="receiveSampleTimeFormatter"
-        width="150">
-      </el-table-column>
-      <el-table-column
-        prop="expectedCompletionTime"
-        label="要求完成时间"
-        :formatter="expectedCompletionTimeFormatter"
-        width="150">
-      </el-table-column>
-      <el-table-column
-        prop="materialNumber"
-        label="材质编号"
+        prop="comment"
+        label="其它"
         width="180">
       </el-table-column>
     </el-table>
@@ -163,13 +102,8 @@ export default {
       totalProcesss: 0,
       processRequestForm: {
         agreementNumber: '',
-        sampleName: '',
         materialNumber: '',
         sampleSubNumber: '',
-        testMethod: '',
-        drawingDesign: '',
-        processingStatus: '',
-        processingStatues: [],
         itemsPerPage: 20,
         currentPage: 1
       },
@@ -214,6 +148,7 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalProcesss = res.data.totalProcesss || 0
+          console.log(vm.totalProcesss)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -336,6 +271,15 @@ export default {
       this.testMethods.forEach(item => {
         if (row.testMethod === item.id) {
           name = item.testMethodName
+        }
+      })
+      return name
+    },
+    testParameterFormatter (row, column) {
+      let name = ''
+      this.staticOptions.testParameters.forEach(item => {
+        if (row.testParameter === item.id) {
+          name = item.testParameterName
         }
       })
       return name

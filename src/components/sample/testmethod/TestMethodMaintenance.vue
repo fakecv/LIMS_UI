@@ -4,7 +4,7 @@
         <el-form :model="testMethodRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-form-item label="检测项目名称">
-              <el-select name="testedItem" filterable default-first-option v-model="testMethodRequestForm.testedItem">
+              <el-select name="testedItem" filterable clearable default-first-option v-model="testMethodRequestForm.testedItem">
                 <el-option v-for="item in testedItems"
                   :key="item.Id"
                   :label="item.testedItemName"
@@ -105,6 +105,7 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalTestMethods = res.data.totalTestMethods || 0
+          console.log(vm.totalTestMethods)
         })
     },
     testedItemFormatter (row, column) {

@@ -2,12 +2,14 @@
 <div>
     <ProcessDetail
       :processForm="processForm"
+      :agreementForm="agreementForm"
       :staticOptions="staticOptions"
       v-on:getDrawingDesigns="getDrawingDesigns"
       v-on:getAgreementInfo="getAgreementInfo"
       v-on:getTestMethod="getTestMethod"
-      v-on:getExperimentItemsParameter="getExperimentItemsParameter"
+      v-on:getTestParameter="getTestParameter"
       v-on:updateProcessForm="updateProcessForm"
+      v-on:updateTestedItemTasks="updateTestedItemTasks"
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
       v-on:copy="resetProcessId"
@@ -26,46 +28,10 @@
           width="100">
         </el-table-column>
         <el-table-column
-          prop="testedItem"
-          label="检测项目"
-          :formatter="testedItemFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testMethod"
-          label="检测方法"
-          :formatter="testMethodFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="drawingDesign"
-          label="加工图号"
-          :formatter="drawingDesignFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="processingStatus"
-          label="当前流转状态"
-          :formatter="processingStatusFormatter"
-          width="150">
-        </el-table-column>
-        <el-table-column
           prop="processPriority"
           label="优先级"
           :formatter="processPriorityFormatter"
           width="80">
-        </el-table-column>
-        <el-table-column
-          prop="receiveSampleTime"
-          label="接收样品时间"
-          :formatter="receiveSampleTimeFormatter"
-          width="150">
-        </el-table-column>
-        <el-table-column
-          prop="expectedCompletionTime"
-          label="要求完成时间"
-          :formatter="expectedCompletionTimeFormatter"
-          width="150">
         </el-table-column>
       </el-table>
   </div>
@@ -78,53 +44,38 @@ export default {
   components: {ProcessDetail},
   data () {
     return {
-      processForm: {
-        id: '',
-        agreementNumber: '',
+      agreementForm: {
         sampleName: '',
         receiveSampleTime: '',
         materialNumber: '',
         expectedCompletionTime: '',
-        sampleClientNumber: '',
+        sampleClientNumber: ''
+      },
+      processForm: {
+        id: '',
+        agreementNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
-        testedItem: '',
-        experimentItemsParameter: '',
-        testMethod: '',
-        drawingDesign: '',
         comment: '',
-        submitFrom: '',
-        submitTo: '',
-        processingStatus: '',
-        processingStatues: [],
+        testedItemTasks: [],
         processPriority: ''
       },
       processResetForm: {
         id: '',
         agreementNumber: '',
-        sampleName: '',
-        receiveSampleTime: '',
-        materialNumber: '',
-        expectedCompletionTime: '',
-        sampleClientNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
-        testedItem: '',
-        experimentItemsParameter: '',
-        testMethod: '',
-        drawingDesign: '',
         comment: '',
-        submitFrom: '',
-        submitTo: '',
-        processingStatus: '',
-        processingStatues: [],
+        testedItemTasks: [],
         processPriority: ''
       },
       staticOptions: {
+        testedItemTaskTableData: [],
+        testedItemProducts: [],
         testMethods: [],
         filteredTestMethods: [],
-        experimentItemsParameters: [],
-        filteredExperimentItemsParameters: [],
+        testParameters: [],
+        filteredTestParameters: [],
         testedItems: [],
         drawingDesigns: [],
         filteredDrawingDesigns: [],
@@ -144,14 +95,15 @@ export default {
       let vm = this
       this.staticOptions.agreements.forEach(agreement => {
         if (agreement.id === agreementId) {
-          vm.processForm.sampleName = agreement.sampleName
-          vm.processForm.materialNumber = agreement.materialNumber
-          vm.processForm.receiveSampleTime = agreement.receiveSampleTime
-          vm.processForm.expectedCompletionTime = agreement.expectedCompletionTime
+          vm.agreementForm.sampleName = agreement.sampleName
+          vm.agreementForm.materialNumber = agreement.materialNumber
+          vm.agreementForm.receiveSampleTime = agreement.receiveSampleTime
+          vm.agreementForm.expectedCompletionTime = agreement.expectedCompletionTime
           vm.processForm.comment = agreement.comment
           vm.processForm.processPriority = agreement.processPriority
         }
       })
+      // to display other added processes within the same agreementId at the bottom of page.
       this.loadAgreementProcess(agreementId)
     },
     getDrawingDesigns (testedItemId) {
@@ -166,9 +118,9 @@ export default {
           return val.testedItem === testedItemId
         })
     },
-    getExperimentItemsParameter (testedItemId) {
-      this.staticOptions.filteredExperimentItemsParameters =
-        this.staticOptions.experimentItemsParameters.filter(function (val) {
+    getTestParameter (testedItemId) {
+      this.staticOptions.filteredTestParameters =
+        this.staticOptions.testParameters.filter(function (val) {
           return val.testedItem === testedItemId
         })
     },
@@ -180,6 +132,16 @@ export default {
     },
     updateProcessForm (event) {
       this.processForm.id = event.id
+    },
+    updateTestedItemTasks () {
+      console.log(this.staticOptions.testedItemProducts)
+      let vm = this
+      this.$ajax.get('/api/sample/process/agreement/')
+        .then(function (res) {
+          vm.staticOptions.processTableData = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     loadAgreement () {
       let vm = this
@@ -231,11 +193,11 @@ export default {
           vm.staticOptions.testMethods = res.data
         })
     },
-    loadExperimentItemsParameterData () {
+    loadTestParameterData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentItemsParameter/getExperimentItemsParameter')
+      this.$ajax.get('/api/sample/testParameter/getTestParameter')
         .then(function (res) {
-          vm.staticOptions.experimentItemsParameters = res.data
+          vm.staticOptions.testParameters = res.data
         })
     },
     loadProcessingStatusData () {
@@ -254,41 +216,6 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    drawingDesignFormatter (row, column) {
-      let name = ''
-      this.staticOptions.drawingDesigns.forEach(item => {
-        if (row.drawingDesign === item.id) {
-          name = item.drawingDesignName
-        }
-      })
-      return name
-    },
-    expectedCompletionTimeFormatter (row, column) {
-      if (row.expectedCompletionTime) {
-        let dateTT = new Date(row.expectedCompletionTime)
-        let hours = dateTT.getHours() < 10 ? '0' : ''
-        let min = dateTT.getMinutes() < 10 ? '0' : ''
-        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
-      }
-    },
-    testedItemFormatter (row, column) {
-      let name = ''
-      this.staticOptions.testedItems.forEach(item => {
-        if (row.testedItem === item.id) {
-          name = item.testedItemName
-        }
-      })
-      return name
-    },
-    testMethodFormatter (row, column) {
-      let name = ''
-      this.staticOptions.testMethods.forEach(item => {
-        if (row.testMethod === item.id) {
-          name = item.testMethodName
-        }
-      })
-      return name
-    },
     processPriorityFormatter (row, column) {
       let name = ''
       this.staticOptions.processPriorities.forEach(item => {
@@ -297,28 +224,11 @@ export default {
         }
       })
       return name
-    },
-    processingStatusFormatter (row, column) {
-      let name = ''
-      this.staticOptions.processingStatuses.forEach(item => {
-        if (row.processingStatus === item.id) {
-          name = item.processingStatusName
-        }
-      })
-      return name
-    },
-    receiveSampleTimeFormatter (row, column) {
-      if (row.receiveSampleTime) {
-        let dateTT = new Date(row.receiveSampleTime)
-        let hours = dateTT.getHours() < 10 ? '0' : ''
-        let min = dateTT.getMinutes() < 10 ? '0' : ''
-        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
-      }
     }
   },
   mounted () {
     this.loadTestMethodData()
-    this.loadExperimentItemsParameterData()
+    this.loadTestParameterData()
     this.loadTestedItemData()
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()

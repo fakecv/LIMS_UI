@@ -4,7 +4,7 @@
         <el-form :model="testParameterRequestForm" label-width="150px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-form-item label="检测项目名称">
-              <el-select name="testedItem" filterable default-first-option v-model="testParameterRequestForm.testedItem">
+              <el-select name="testedItem" filterable clearable default-first-option v-model="testParameterRequestForm.testedItem">
                 <el-option v-for="item in testedItems"
                   :key="item.Id"
                   :label="item.testedItemName"
