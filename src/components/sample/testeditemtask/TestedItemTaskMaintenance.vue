@@ -183,7 +183,7 @@ export default {
       testedItemTaskForm: {
         testedItemTaskName: '',
         testedItem: '',
-        testParameter: '',
+        testParameter: [],
         testMethod: '',
         drawingDesign: '',
         submitFrom: '',

@@ -129,19 +129,21 @@ export default {
     },
     resetProcessForm () {
       this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
+      this.staticOptions.testedItemTaskTableData = []
     },
     updateProcessForm (event) {
       this.processForm.id = event.id
     },
     updateTestedItemTasks () {
-      console.log(this.staticOptions.testedItemProducts)
       let vm = this
-      this.$ajax.get('/api/sample/process/agreement/')
-        .then(function (res) {
-          vm.staticOptions.processTableData = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
+      this.staticOptions.testedItemProducts.forEach(testItemProductGroup => {
+        vm.$ajax.post('/api/sample/testedItemProductGroup/getTestedItemTasks', testItemProductGroup)
+          .then(function (res) {
+            vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+          }).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      })
     },
     loadAgreement () {
       let vm = this

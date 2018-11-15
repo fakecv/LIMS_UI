@@ -27,7 +27,7 @@
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目参数">
-              <el-select name="testParameter" filterable default-first-option v-model="testedItemTaskForm.testParameter">
+              <el-select name="testParameter" filterable default-first-option multiple v-model="testedItemTaskForm.testParameter">
                 <el-option v-for="item in staticOptions.filteredTestParameters"
                   :key="item.id"
                   :label="item.testParameterName"
@@ -123,7 +123,8 @@ export default {
         {'name': '文件导入', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '7', 'icon': 'el-icon-download', 'loading': false}
       ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
+      options: []
     }
   },
   methods: {

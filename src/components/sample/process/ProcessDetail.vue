@@ -82,15 +82,17 @@
           </el-row>
         </el-form>
       </el-container>
-    </el-container>
-  <div>
     <el-row type="flex" justify="end">
       <el-button-group style="min-width: 200px">
         <el-button type="success" icon="el-icon-plus" circle @click="addTestedItemProductGroup">添加检测项目组</el-button>
         <el-button type="danger" icon="el-icon-delete" circle @click="deleteTestedItemTask"></el-button>
       </el-button-group>
     </el-row>
-    <el-table :data="staticOptions.testedItemTaskTableData" style="width: 100%" @row-dblclick=dblclick>
+    <el-table :data="staticOptions.testedItemTaskTableData" style="width: 100%" row-dblclick="dblclick" @selection-change="handleTestedItemTaskChange">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
         <el-table-column
           prop="testedItemTaskName"
           label="检测项目名称"
@@ -105,7 +107,6 @@
         <el-table-column
           prop="testParameter"
           label="检测项目参数"
-          :formatter="testParameterFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -121,31 +122,66 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="submitFrom"
           label="提交部门"
           :formatter="submitFromFormatter"
           width="180">
+          <template slot-scope="scope">
+              <el-select name="submitFrom" filterable default-first-option v-model="scope.row.submitFrom">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+          </template>
         </el-table-column>
         <el-table-column
           prop="processingStatus"
           label="当前流转状态"
           :formatter="processingStatusFormatter"
           width="180">
+            <template slot-scope="scope">
+              <el-select name="processingStatus" filterable default-first-option v-model="scope.row.processingStatus">
+                <el-option v-for="item in staticOptions.processingStatuses"
+                  :key="item.id"
+                  :label="item.processingStatusName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+            </template>
         </el-table-column>
         <el-table-column
           prop="submitTo"
           label="提交至"
           :formatter="submitToFormatter"
           width="180">
+            <template slot-scope="scope">
+              <el-select name="submitTo" filterable default-first-option v-model="scope.row.submitTo">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+            </template>
         </el-table-column>
         <el-table-column
           prop="processPriority"
           label="优先级"
           :formatter="processPriorityFormatter"
           width="180">
+            <template slot-scope="scope">
+              <el-select name="processPriority" filterable default-first-option v-model="scope.row.processPriority">
+                <el-option v-for="item in staticOptions.processPriorities"
+                  :key="item.id"
+                  :label="item.processPriorityName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+            </template>
         </el-table-column>
       </el-table>
-  </div>
+    </el-container>
   <el-dialog :visible.sync="testedItemProductGroupFormVisible" :modal-append-to-body="false">
     <div>
     <el-container style="padding: 10px">
@@ -220,7 +256,6 @@ export default {
         {'ref': 'delete', 'name': '删除', 'id': '6', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false}
       ],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
-      testedItemTaskFormVisible: false,
       testedItemProductGroupFormVisible: false,
       testedItemProductGroupForm: {
         testedItemProductGroupName: '',
@@ -242,6 +277,7 @@ export default {
         currentPage: 1
       },
       testedItemProductGroupTableData: [],
+      deletedTestedItemTasks: [],
       totalTestedItemProductGroups: 0
     }
   },
@@ -263,17 +299,23 @@ export default {
     },
     addTestedItemProductGroup () {
       this.loadTestedItemProductGroupeData()
+      this.staticOptions.testedItemProducts = []
       this.testedItemProductGroupFormVisible = true
-    },
-    dblclick () {
-      this.testedItemTaskFormVisible = true
     },
     updateTestedItemTasks (val) {
       this.$emit('updateTestedItemTasks', val)
       this.testedItemProductGroupFormVisible = false
     },
     deleteTestedItemTask () {
-      console.log('deleteTestedItemTask')
+      let vm = this
+      this.deletedTestedItemTasks.forEach(item => {
+        for (var i = 0; i < vm.staticOptions.testedItemTaskTableData.length; i++) {
+          if (vm.staticOptions.testedItemTaskTableData[i].id === item.id) {
+            vm.staticOptions.testedItemTaskTableData.splice(i, 1)
+          }
+        }
+      })
+      this.deletedTestedItemTasks = []
     },
     handleSizeChange (val) {
       this.testedItemProductGroupForm.itemsPerPage = val
@@ -288,6 +330,10 @@ export default {
       val.forEach(item => {
         vm.staticOptions.testedItemProducts.push(item)
       })
+    },
+    handleTestedItemTaskChange (val) {
+      console.log(val)
+      this.deletedTestedItemTasks = val
     },
     // load all the testedItemProductGroupes
     loadTestedItemProductGroupeData () {
@@ -312,6 +358,7 @@ export default {
     },
     saveToDB () {
       let vm = this
+      this.processForm.testedItemTasks = this.staticOptions.testedItemTaskTableData
       this.$ajax.post('/api/sample/process', this.processForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
@@ -323,6 +370,7 @@ export default {
     },
     submit () {
       let vm = this
+      this.processForm.testedItemTasks = this.staticOptions.testedItemTaskTableData
       this.$ajax.post('/api/sample/process/submitProcess', this.processForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')

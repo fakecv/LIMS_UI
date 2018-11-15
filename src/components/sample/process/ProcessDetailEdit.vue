@@ -10,6 +10,7 @@
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
       v-on:copy="resetProcessId"
+      v-on:updateTestedItemTasks="updateTestedItemTasks"
     />
 </template>
 
@@ -46,6 +47,8 @@ export default {
         processPriority: ''
       },
       staticOptions: {
+        testedItemTaskTableData: [],
+        testedItemProducts: [],
         testMethods: [],
         filteredTestMethods: [],
         testParameters: [],
@@ -97,6 +100,17 @@ export default {
     },
     resetProcessId () {
       this.processForm.id = ''
+    },
+    updateTestedItemTasks () {
+      let vm = this
+      this.staticOptions.testedItemProducts.forEach(testItemProductGroup => {
+        vm.$ajax.post('/api/sample/testedItemProductGroup/getTestedItemTasks', testItemProductGroup)
+          .then(function (res) {
+            vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+          }).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      })
     },
     loadAgreement () {
       let vm = this
@@ -164,6 +178,7 @@ export default {
       this.$ajax.get('/api/sample/process/' + processId)
         .then(function (res) {
           vm.processForm = res.data
+          vm.staticOptions.testedItemTaskTableData = vm.processForm.testedItemTasks
           vm.getAgreementInfo(vm.processForm.agreementNumber)
           vm.getTestMethod(vm.processForm.testedItem)
           vm.getTestParameter(vm.processForm.testedItem)

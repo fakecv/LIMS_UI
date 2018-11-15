@@ -20,7 +20,7 @@ export default {
       testedItemTaskForm: {
         testedItemTaskName: '',
         testedItem: '',
-        testParameter: '',
+        testParameter: [],
         testMethod: '',
         drawingDesign: '',
         submitFrom: '',
@@ -32,7 +32,7 @@ export default {
       testedItemTaskResetForm: {
         testedItemTaskName: '',
         testedItem: '',
-        testParameter: '',
+        testParameter: [],
         testMethod: '',
         drawingDesign: '',
         submitFrom: '',
