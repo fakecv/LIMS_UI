@@ -120,6 +120,12 @@
         <el-table-column
           prop="reportName"
           label="报告名称"
+          :formatter="reportFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="reportElementSort"
+          label="序號"
           width="180">
         </el-table-column>
         <el-table-column
@@ -202,6 +208,7 @@ export default {
       reportElementForm: {
         reportName: '',
         reportElementName: '',
+        reportElementSort: '',
         border: '',
         property: '',
         fontSize: '',
@@ -215,7 +222,38 @@ export default {
         itemsPerPage: 20,
         currentPage: 1
       },
-      columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }
+      columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 },
+      staticOptions: {
+        types: [
+          {id: 1, type: '字符串'},
+          {id: 2, type: '数组'}
+        ],
+        values: [
+          {id: 1, value: 'Property1'},
+          {id: 2, value: 'Property2'}
+        ],
+        textAligns: [
+          {id: 1, textAlign: '居中'},
+          {id: 2, textAlign: '靠左'},
+          {id: 3, textAlign: '靠右'}
+        ],
+        fontSizes: [
+          {id: 1, fontSize: '大号'},
+          {id: 2, fontSize: '中号'},
+          {id: 3, fontSize: '小号'}
+        ],
+        propertys: [
+          {id: 1, property: '表头'},
+          {id: 2, property: '文本'}
+        ],
+        borders: [
+          {id: 1, border: '普通'},
+          {id: 2, border: '无边框'},
+          {id: 3, border: '上边框'},
+          {id: 4, border: '下边框'}
+        ],
+        reports: []
+      }
     }
   },
   methods: {
@@ -241,10 +279,29 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    loadReportData () {
+      let vm = this
+      this.$ajax.get('/api/report/reportDevelopment/getReportDevelopment')
+        .then(function (res) {
+          vm.staticOptions.reports = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    reportFormatter (row, column) {
+      let name = ''
+      this.staticOptions.reports.forEach(item => {
+        if (row.reportName === item.id) {
+          name = item.reportName
+        }
+      })
+      return name
     }
   },
   mounted () {
     this.onSubmit()
+    this.loadReportData()
   }
 }
 </script>

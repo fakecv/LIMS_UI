@@ -1,6 +1,7 @@
 <template>
   <ReportDevelopmentDetail
    :reportDevelopmentForm="reportDevelopmentForm"
+   :staticOptions="staticOptions"
    v-on:deleteReportDevelopment="resetReportDevelopmentForm"
    v-on:new="resetReportDevelopmentForm"
    v-on:copy="resetReportDevelopmentId"/>
@@ -16,14 +17,19 @@ export default {
       reportDevelopmentForm: {
         reportName: '',
         pageSize: '',
+        collectionName: '',
         rotate: '',
         id: ''
       },
       reportDevelopmentResetForm: {
         reportName: '',
         pageSize: 'A4',
+        collectionName: '',
         rotate: 'false',
         id: ''
+      },
+      staticOptions: {
+        collectionNames: []
       }
     }
   },
@@ -37,6 +43,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadCollectionData () {
+      let vm = this
+      this.$ajax.get('/api/report/reportDevelopment/getCollectionNames')
+        .then(function (res) {
+          vm.staticOptions.collectionNames = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     resetReportDevelopmentForm () {
       this.reportDevelopmentForm = JSON.parse(JSON.stringify(this.reportDevelopmentResetForm))
     },
@@ -45,6 +60,7 @@ export default {
     }
   },
   mounted () {
+    this.loadCollectionData()
     if (this.$route.params.id !== undefined) {
       this.loadReportDevelopment(this.$route.params.id)
     }

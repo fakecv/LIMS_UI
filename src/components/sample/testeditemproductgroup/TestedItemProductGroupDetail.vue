@@ -65,7 +65,7 @@
           </el-table-column>
       </el-table>
     </div>
-    <el-dialog title="角色列表" :visible.sync="dialogFormVisible" :modal-append-to-body="false">
+    <el-dialog title="检测项目产品列表" :visible.sync="dialogFormVisible" :modal-append-to-body="false">
     <div>
     <el-container style="padding: 10px">
       <el-form :model="testedItemProductForm" label-width="100px" label-position="left" size="mini">

@@ -14,6 +14,17 @@
               <el-input name="reportName" v-model="reportDevelopmentForm.reportName" autoComplete="reportName"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="集合名称">
+              <el-select name="collectionName" filterable default-first-option v-model="reportDevelopmentForm.collectionName">
+                <el-option v-for="item in staticOptions.collectionNames"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="页面大小">
               <el-select name="pageSize" filterable default-first-option v-model="reportDevelopmentForm.pageSize">
@@ -42,7 +53,7 @@
 <script>
 export default {
   name: 'reportDevelopmentDetail',
-  props: ['reportDevelopmentForm'],
+  props: ['reportDevelopmentForm', 'staticOptions'],
   data () {
     return {
       actions: [
