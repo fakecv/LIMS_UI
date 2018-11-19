@@ -21,10 +21,6 @@ export default {
         testedItem: '',
         testParameter: [],
         testMethod: '',
-        drawingDesign: '',
-        submitFrom: '',
-        processingStatus: '',
-        submitTo: '',
         processPriority: '',
         id: ''
       },

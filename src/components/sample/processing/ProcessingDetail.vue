@@ -52,6 +52,50 @@
                 <el-input name="sampleClientNumber" v-model="agreementForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="加工图号">
+              <el-select name="drawingDesign" filterable default-first-option v-model="testedItemTaskForm.drawingDesign">
+                <el-option v-for="item in staticOptions.filteredDrawingDesigns"
+                  :key="item.id"
+                  :label="item.drawingDesignName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="提交部门">
+              <el-select name="submitFrom" filterable default-first-option v-model="testedItemTaskForm.submitFrom">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="当前流转状态">
+              <el-select name="processingStatus" filterable default-first-option v-model="testedItemTaskForm.processingStatus">
+                <el-option v-for="item in staticOptions.processingStatuses"
+                  :key="item.id"
+                  :label="item.processingStatusName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="提交至">
+              <el-select name="submitTo" filterable default-first-option v-model="testedItemTaskForm.submitTo">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="优先级">
                 <el-select name="processPriority" filterable default-first-option v-model="processForm.processPriority">

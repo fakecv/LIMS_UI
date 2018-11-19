@@ -20,7 +20,7 @@
                 <el-option v-for="item in staticOptions.testedItems"
                   :key="item.id"
                   :label="item.testedItemName"
-                  :value="item.id">
+                  :value="item.testedItemName">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -31,7 +31,7 @@
                 <el-option v-for="item in staticOptions.filteredTestParameters"
                   :key="item.id"
                   :label="item.testParameterName"
-                  :value="item.id">
+                  :value="item.testParameterName">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -42,51 +42,7 @@
                 <el-option v-for="item in staticOptions.filteredTestMethods"
                   :key="item.id"
                   :label="item.testMethodName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="加工图号">
-              <el-select name="drawingDesign" filterable default-first-option v-model="testedItemTaskForm.drawingDesign">
-                <el-option v-for="item in staticOptions.filteredDrawingDesigns"
-                  :key="item.id"
-                  :label="item.drawingDesignName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="提交部门">
-              <el-select name="submitFrom" filterable default-first-option v-model="testedItemTaskForm.submitFrom">
-                <el-option v-for="item in staticOptions.departments"
-                  :key="item.id"
-                  :label="item.departmentName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="当前流转状态">
-              <el-select name="processingStatus" filterable default-first-option v-model="testedItemTaskForm.processingStatus">
-                <el-option v-for="item in staticOptions.processingStatuses"
-                  :key="item.id"
-                  :label="item.processingStatusName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="提交至">
-              <el-select name="submitTo" filterable default-first-option v-model="testedItemTaskForm.submitTo">
-                <el-option v-for="item in staticOptions.departments"
-                  :key="item.id"
-                  :label="item.departmentName"
-                  :value="item.id">
+                  :value="item.testMethodName">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -97,7 +53,7 @@
                 <el-option v-for="item in staticOptions.processPriorities"
                   :key="item.id"
                   :label="item.processPriorityName"
-                  :value="item.id">
+                  :value="item.processPriorityName">
                 </el-option>
                 </el-select>
             </el-form-item>

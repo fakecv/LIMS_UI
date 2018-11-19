@@ -49,7 +49,11 @@ export default {
         receiveSampleTime: '',
         materialNumber: '',
         expectedCompletionTime: '',
-        sampleClientNumber: ''
+        sampleClientNumber: '',
+        drawingDesign: '',
+        submitFrom: '',
+        processingStatus: '',
+        submitTo: ''
       },
       processForm: {
         id: '',
@@ -58,7 +62,11 @@ export default {
         sampleSubNumber: '',
         comment: '',
         testedItemTasks: [],
-        processPriority: ''
+        processPriority: '',
+        drawingDesign: '',
+        submitFrom: '',
+        processingStatus: '',
+        submitTo: ''
       },
       processResetForm: {
         id: '',
@@ -94,7 +102,7 @@ export default {
     getAgreementInfo (agreementId) {
       let vm = this
       this.staticOptions.agreements.forEach(agreement => {
-        if (agreement.id === agreementId) {
+        if (agreement.agreementNumber === agreementId) {
           vm.agreementForm.sampleName = agreement.sampleName
           vm.agreementForm.materialNumber = agreement.materialNumber
           vm.agreementForm.receiveSampleTime = agreement.receiveSampleTime

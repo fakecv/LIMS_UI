@@ -22,7 +22,7 @@
                 <el-option v-for="item in staticOptions.agreements"
                   :key="item.Id"
                   :label="item.agreementNumber"
-                  :value="item.id">
+                  :value="item.agreementNumber">
                 </el-option>
                 </el-select>
               </el-form-item>
@@ -52,13 +52,57 @@
                 <el-input name="sampleClientNumber" v-model="agreementForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="加工图号">
+              <el-select name="drawingDesign" filterable default-first-option v-model="processForm.drawingDesign">
+                <el-option v-for="item in staticOptions.filteredDrawingDesigns"
+                  :key="item.id"
+                  :label="item.drawingDesignName"
+                  :value="item.drawingDesignName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="提交部门">
+              <el-select name="submitFrom" filterable default-first-option v-model="processForm.submitFrom">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.departmentName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="当前流转状态">
+              <el-select name="processingStatus" filterable default-first-option v-model="processForm.processingStatus">
+                <el-option v-for="item in staticOptions.processingStatuses"
+                  :key="item.id"
+                  :label="item.processingStatusName"
+                  :value="item.processingStatusName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="提交至">
+              <el-select name="submitTo" filterable default-first-option v-model="processForm.submitTo">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.departmentName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="优先级">
                 <el-select name="processPriority" filterable default-first-option v-model="processForm.processPriority">
                 <el-option v-for="item in staticOptions.processPriorities"
-                  :key="item.Id"
+                  :key="item.id"
                   :label="item.processPriorityName"
-                  :value="item.id">
+                  :value="item.processPriorityName">
                 </el-option>
                 </el-select>
               </el-form-item>
@@ -101,7 +145,6 @@
         <el-table-column
           prop="testedItem"
           label="检测项目"
-          :formatter="testedItemFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -112,58 +155,7 @@
         <el-table-column
           prop="testMethod"
           label="检测方法"
-          :formatter="testMethodFormatter"
           width="180">
-        </el-table-column>
-        <el-table-column
-          prop="drawingDesign"
-          label="加工图号"
-          :formatter="drawingDesignFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          label="提交部门"
-          :formatter="submitFromFormatter"
-          width="180">
-          <template slot-scope="scope">
-              <el-select name="submitFrom" filterable default-first-option v-model="scope.row.submitFrom">
-                <el-option v-for="item in staticOptions.departments"
-                  :key="item.id"
-                  :label="item.departmentName"
-                  :value="item.id">
-                </el-option>
-              </el-select>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="processingStatus"
-          label="当前流转状态"
-          :formatter="processingStatusFormatter"
-          width="180">
-            <template slot-scope="scope">
-              <el-select name="processingStatus" filterable default-first-option v-model="scope.row.processingStatus">
-                <el-option v-for="item in staticOptions.processingStatuses"
-                  :key="item.id"
-                  :label="item.processingStatusName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-            </template>
-        </el-table-column>
-        <el-table-column
-          prop="submitTo"
-          label="提交至"
-          :formatter="submitToFormatter"
-          width="180">
-            <template slot-scope="scope">
-              <el-select name="submitTo" filterable default-first-option v-model="scope.row.submitTo">
-                <el-option v-for="item in staticOptions.departments"
-                  :key="item.id"
-                  :label="item.departmentName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-            </template>
         </el-table-column>
         <el-table-column
           prop="processPriority"
@@ -175,7 +167,7 @@
                 <el-option v-for="item in staticOptions.processPriorities"
                   :key="item.id"
                   :label="item.processPriorityName"
-                  :value="item.id">
+                  :value="item.processPriorityName">
                 </el-option>
                 </el-select>
             </template>
@@ -328,11 +320,11 @@ export default {
     handleTestedItemProductGroupChange (val) {
       let vm = this
       val.forEach(item => {
+        item.processPriority = vm.processForm.processPriority
         vm.staticOptions.testedItemProducts.push(item)
       })
     },
     handleTestedItemTaskChange (val) {
-      console.log(val)
       this.deletedTestedItemTasks = val
     },
     // load all the testedItemProductGroupes

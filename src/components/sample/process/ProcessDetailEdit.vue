@@ -35,7 +35,11 @@ export default {
         sampleSubNumber: '',
         comment: '',
         testedItemTasks: [],
-        processPriority: ''
+        processPriority: '',
+        drawingDesign: '',
+        submitFrom: '',
+        processingStatus: '',
+        submitTo: ''
       },
       processResetForm: {
         id: '',
@@ -44,7 +48,11 @@ export default {
         sampleSubNumber: '',
         comment: '',
         testedItemTasks: [],
-        processPriority: ''
+        processPriority: '',
+        drawingDesign: '',
+        submitFrom: '',
+        processingStatus: '',
+        submitTo: ''
       },
       staticOptions: {
         testedItemTaskTableData: [],
