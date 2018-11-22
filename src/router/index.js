@@ -73,6 +73,9 @@ import RoleMaintenance from '@/components/system/role/RoleMaintenance'
 import Schedule from '@/components/equipment/Schedule'
 import ShortCut from '@/components/frame/ShortCut'
 import TableSchedule from '@/components/equipment/MyTableSchedule'
+import TestCategoryDetailNew from '@/components/sample/testcategory/TestCategoryDetailNew'
+import TestCategoryDetailEdit from '@/components/sample/testcategory/TestCategoryDetailEdit'
+import TestCategoryMaintenance from '@/components/sample/testcategory/TestCategoryMaintenance'
 import TestedItemDetailNew from '@/components/sample/testeditem/TestedItemDetailNew'
 import TestedItemDetailEdit from '@/components/sample/testeditem/TestedItemDetailEdit'
 import TestedItemMaintenance from '@/components/sample/testeditem/TestedItemMaintenance'
@@ -436,6 +439,21 @@ const router = new Router({
           path: 'tableSchedule',
           name: 'tableSchedule',
           component: TableSchedule
+        },
+        {
+          path: 'testCategoryDetailEdit/:id',
+          name: 'testCategoryAuditorDetailEdit',
+          component: TestCategoryDetailEdit
+        },
+        {
+          path: 'testCategoryDetailNew',
+          name: 'testCategoryDetailNew',
+          component: TestCategoryDetailNew
+        },
+        {
+          path: 'testCategoryMaintenance',
+          name: 'testCategoryMaintenance',
+          component: TestCategoryMaintenance
         },
         {
           path: 'testedItemDetailEdit/:id',

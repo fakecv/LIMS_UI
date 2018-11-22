@@ -43,7 +43,6 @@
         <el-table-column
           prop="processPriority"
           label="优先级"
-          :formatter="processPriorityFormatter"
           width="80">
       </el-table-column>
         <el-table-column

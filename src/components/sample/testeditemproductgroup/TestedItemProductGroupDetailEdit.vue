@@ -5,7 +5,7 @@
    v-on:updateTestedItemProducts="updateTestedItemProducts"
    v-on:reloadTestedItemProducts="reloadTestedItemProducts"
    v-on:deleteTestedItemProducts="deleteTestedItemProducts"
-   v-on:deleteTestedItemProductGroup="resetTestedItemProductGroupForm"
+   v-on:deleteTestedItemProductGroupForm="resetTestedItemProductGroupForm"
    v-on:new="resetTestedItemProductGroupForm"
    v-on:copy="resetTestedItemProductGroupId"
   />
@@ -41,16 +41,18 @@ export default {
         id: ''
       },
       staticOptions: {
+        testCategories: [],
         selectedTestedItemProducts: [],
-        testedItemProducts: [],
-        totalTestedItemProducts: '',
         testMethods: [],
         filteredTestMethods: [],
         testParameters: [],
         filteredTestParameters: [],
+        checkedTestParameters: [],
         testedItems: [],
+        filteredTestedItems: [],
         drawingDesigns: [],
-        filteredDrawingDesigns: []
+        filteredDrawingDesigns: [],
+        totalTestedItemProducts: ''
       }
     }
   },
@@ -63,12 +65,11 @@ export default {
       this.$ajax.post('/api/sample/testedItemProduct/queryTestedItemProduct', event)
         .then(function (res) {
           vm.staticOptions.testedItemProducts = res.data.pageResult || []
-          vm.staticOptions.totalRoles = res.data.totalTestedItemProducts || 0
+          vm.staticOptions.totalTestedItemProducts = res.data.totalTestedItemProducts || 0
           vm.$refs.testedItemProductGroupDetail.addTestedItemProducts()
         })
     },
     updateTestedItemProducts (id) {
-      console.log('new updateTestedItemProducts' + id)
       let vm = this
       var index = this.testedItemProductGroupForm.testedItemProducts.indexOf(id)
       if (index > -1) {
@@ -132,7 +133,6 @@ export default {
       let vm = this
       this.$ajax.post('/api/sample/testedItemProduct/queryTestedItemProduct', this.testedItemProductForm)
         .then(function (res) {
-          console.log(res.data.pageResult)
           vm.staticOptions.testedItemProducts = res.data.pageResult || []
           vm.staticOptions.totalTestedItemProducts = res.data.totalTestedItemProducts || 0
         })
@@ -145,6 +145,7 @@ export default {
     },
     resetTestedItemProductGroupForm () {
       this.testedItemProductGroupForm = JSON.parse(JSON.stringify(this.testedItemProductGroupResetForm))
+      this.staticOptions.selectedTestedItemProducts = []
     }
   },
   mounted () {

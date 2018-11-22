@@ -92,22 +92,50 @@
       tooltip-effect="dark"
       @row-dblclick=dblclick
       :row-style="processTableStyle"
+      default-expand-all
       >
       <el-table-column
-        fixed
+        type="expand">
+        <template slot-scope="scope">
+        <el-table :data="scope.row.testedItemTasks" size="mini">
+        <el-table-column
+          prop="testedItem"
+          label="检测项目"
+          :formatter="testedItemFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testParameter"
+          label="检测项目参数"
+          show-overflow-tooltip
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testMethod"
+          label="检测方法"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="processPriority"
+          label="优先级"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="rejectNote"
+          label="驳回原因"
+          show-overflow-tooltip
+          width="180">
+        </el-table-column>
+        </el-table>
+      </template>
+      </el-table-column>
+      <el-table-column
         prop="agreementNumber"
         label="委托编号"
         width="150">
       </el-table-column>
       <el-table-column
-        prop="sampleNumber"
-        fixed
-        label="样品编号"
-        width="80">
-      </el-table-column>
-      <el-table-column
         prop="sampleSubNumber"
-        fixed
         label="试样编号"
         width="80">
       </el-table-column>
@@ -343,7 +371,7 @@ export default {
     },
     testedItemFormatter (row, column) {
       let name = ''
-      this.testedItems.forEach(item => {
+      this.staticOptions.testedItems.forEach(item => {
         if (row.testedItem === item.id) {
           name = item.testedItemName
         }
@@ -352,7 +380,7 @@ export default {
     },
     testMethodFormatter (row, column) {
       let name = ''
-      this.testMethods.forEach(item => {
+      this.staticOptions.testMethods.forEach(item => {
         if (row.testMethod === item.id) {
           name = item.testMethodName
         }

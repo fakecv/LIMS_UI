@@ -52,6 +52,106 @@
                 <el-input name="sampleClientNumber" v-model="agreementForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="优先级">
+                <el-select name="processPriority" filterable default-first-option v-model="processForm.processPriority">
+                <el-option v-for="item in staticOptions.processPriorities"
+                  :key="item.id"
+                  :label="item.processPriorityName"
+                  :value="item.processPriorityName">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="其他信息">
+                <el-input type="textarea" name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="样品编号">
+                <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input>
+                <el-button  :disabled="sampleNumberButton" @click="sampleNumberGenerator">生成样品编号</el-button>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="试样编号">
+                <el-input name="sampleSubNumber" v-model="processForm.sampleSubNumber" autoComplete="sampleSubNumber"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+    <el-row type="flex" justify="end">
+      <el-button-group style="min-width: 200px">
+        <el-button type="success" icon="el-icon-plus" size="mini" circle @click="addTestedItemTask"></el-button>
+        <el-button type="success" icon="el-icon-plus" size="mini" circle @click="addTestedItemProduct">添加检测项目产品</el-button>
+        <el-button type="success" icon="el-icon-plus" size="mini" circle @click="addTestedItemProductGroup">添加检测项目组</el-button>
+        <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="deleteTestedItemTask"></el-button>
+      </el-button-group>
+    </el-row>
+        </el-form>
+    </el-container>
+    <el-row>
+      <el-col :span="24">
+    <el-table :data="staticOptions.testedItemTaskTableData" @row-dblclick="dblclick" @selection-change="handleTestedItemTaskChange" size="mini">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column
+          prop="testedItemTaskName"
+          label="检测项目名称"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testCategory"
+          label="检测类别"
+          :formatter="testCategoryFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testedItem"
+          label="检测项目"
+          :formatter="testedItemFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testParameter"
+          label="检测项目参数"
+          show-overflow-tooltip
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testMethod"
+          label="检测方法"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="processPriority"
+          label="优先级"
+          :formatter="processPriorityFormatter"
+          width="180">
+            <template slot-scope="scope">
+              <el-select name="processPriority" filterable default-first-option v-model="scope.row.processPriority" size="mini">
+                <el-option v-for="item in staticOptions.processPriorities"
+                  :key="item.id"
+                  :label="item.processPriorityName"
+                  :value="item.processPriorityName">
+                </el-option>
+                </el-select>
+            </template>
+        </el-table-column>
+        <el-table-column
+          prop="rejectNote"
+          label="驳回原因"
+          show-overflow-tooltip
+          width="180">
+        </el-table-column>
+      </el-table>
+      </el-col>
+    </el-row>
+    <el-container style="padding: 10px">
+      <el-form :model="processForm" label-width="100px" label-position="left" size="mini">
+      <el-row>
             <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="加工图号">
               <el-select name="drawingDesign" filterable default-first-option v-model="processForm.drawingDesign">
@@ -96,83 +196,9 @@
                 </el-select>
             </el-form-item>
           </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="优先级">
-                <el-select name="processPriority" filterable default-first-option v-model="processForm.processPriority">
-                <el-option v-for="item in staticOptions.processPriorities"
-                  :key="item.id"
-                  :label="item.processPriorityName"
-                  :value="item.processPriorityName">
-                </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="其他信息">
-                <el-input type="textarea" name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="样品编号">
-                <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input>
-                <el-button  :disabled="sampleNumberButton" @click="sampleNumberGenerator">生成样品编号</el-button>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="试样编号">
-                <el-input name="sampleSubNumber" v-model="processForm.sampleSubNumber" autoComplete="sampleSubNumber"></el-input>
-              </el-form-item>
-            </el-col>
           </el-row>
         </el-form>
       </el-container>
-    <el-row type="flex" justify="end">
-      <el-button-group style="min-width: 200px">
-        <el-button type="success" icon="el-icon-plus" circle @click="addTestedItemProductGroup">添加检测项目组</el-button>
-        <el-button type="danger" icon="el-icon-delete" circle @click="deleteTestedItemTask"></el-button>
-      </el-button-group>
-    </el-row>
-    <el-table :data="staticOptions.testedItemTaskTableData" style="width: 100%" row-dblclick="dblclick" @selection-change="handleTestedItemTaskChange">
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column
-          prop="testedItemTaskName"
-          label="检测项目名称"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testedItem"
-          label="检测项目"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testParameter"
-          label="检测项目参数"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testMethod"
-          label="检测方法"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="processPriority"
-          label="优先级"
-          :formatter="processPriorityFormatter"
-          width="180">
-            <template slot-scope="scope">
-              <el-select name="processPriority" filterable default-first-option v-model="scope.row.processPriority">
-                <el-option v-for="item in staticOptions.processPriorities"
-                  :key="item.id"
-                  :label="item.processPriorityName"
-                  :value="item.processPriorityName">
-                </el-option>
-                </el-select>
-            </template>
-        </el-table-column>
-      </el-table>
     </el-container>
   <el-dialog :visible.sync="testedItemProductGroupFormVisible" :modal-append-to-body="false">
     <div>
@@ -192,7 +218,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-form-item>
-            <el-button type="primary" @click="loadTestedItemProductGroupeData">查询</el-button>
+            <el-button type="primary" @click="loadTestedItemProductGroupData">查询</el-button>
           </el-form-item>
         </el-row>
       </el-form>
@@ -230,6 +256,211 @@
       <el-button type="primary" @click.native="updateTestedItemTasks">确 定</el-button>
     </div>
   </el-dialog>
+  <el-dialog :visible.sync="testedItemProductFormVisible" :modal-append-to-body="false">
+    <div>
+    <el-container style="padding: 10px">
+      <el-form :model="testedItemProductForm" label-width="100px" label-position="left" size="mini">
+        <el-row :gutter="20">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="检测项目名称">
+              <el-input name="testedItemProductName" v-model="testedItemProductForm.testedItemProductName" autoComplete="testedItemProductName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="检测项目类别">
+                <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testCategory" @change="handleTestCategoryChange">
+                  <el-option v-for="item in staticOptions.testCategories"
+                    :key="item.id"
+                    :label="item.testCategoryName"
+                    :value="item.id">
+                  </el-option>
+                  </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="检测项目">
+              <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testedItem" @change="handleTestedItemChange">
+                <el-option v-for="item in staticOptions.filteredTestedItems"
+                  :key="item.id"
+                  :label="item.testedItemName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="检测项目参数">
+              <el-select name="testParameter" filterable clearable default-first-option v-model="testedItemProductForm.testParameter">
+                <el-option v-for="item in staticOptions.filteredTestParameters"
+                  :key="item.id"
+                  :label="item.testParameterName"
+                  :value="item.testParameterName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="检测方法">
+              <el-select name="testMethod" filterable clearable default-first-option v-model="testedItemProductForm.testMethod">
+                <el-option v-for="item in staticOptions.filteredTestMethods"
+                  :key="item.id"
+                  :label="item.testMethodName"
+                  :value="item.testMethodName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="加工图号">
+              <el-select name="drawingDesign" filterable clearable default-first-option v-model="testedItemProductForm.drawingDesign">
+                <el-option v-for="item in staticOptions.filteredDrawingDesigns"
+                  :key="item.id"
+                  :label="item.drawingDesignName"
+                  :value="item.drawingDesignName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-form-item>
+            <el-button type="primary" @click="loadTestedItemProductData">查询</el-button>
+          </el-form-item>
+        </el-row>
+      </el-form>
+    </el-container>
+    <el-table :data="testedItemProductTableData" style="width: 100%"  @selection-change="handleTestedItemProductChange">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column
+          prop="testedItemProductName"
+          label="检测项目名称"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testCategory"
+          label="检测类别"
+          :formatter="testCategoryFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testedItem"
+          label="检测项目"
+          :formatter="testedItemFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testParameter"
+          label="检测项目参数"
+          show-overflow-tooltip
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testMethod"
+          label="检测方法"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="drawingDesign"
+          label="加工图号"
+          width="180">
+        </el-table-column>
+      </el-table>
+      <div class="block text-right">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="testedItemProductForm.currentPage"
+          :page-sizes="[10, 20, 50]"
+          :page-size="20"
+          layout="sizes, prev, pager, next"
+          :total="totalTestedItemProducts">
+        </el-pagination>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click.native="testedItemProductFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click.native="updateTestedItemProduct">确 定</el-button>
+      </div>
+    </div>
+  </el-dialog>
+  <el-dialog :visible.sync="testedItemTaskFormVisible" :modal-append-to-body="false">
+    <el-container style="padding: 10px">
+      <el-form :model="testedItemTaskForm" label-width="100px" label-position="left" size="mini">
+        <el-row :gutter="20">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="检测项目名称">
+              <el-input name="testedItemProductName" v-model="testedItemTaskForm.testedItemTaskName" autoComplete="testedItemTaskName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="检测项目类别">
+                <el-select name="testedItem" filterable default-first-option v-model="testedItemTaskForm.testCategory" @change="handleTestCategoryChange">
+                  <el-option v-for="item in staticOptions.testCategories"
+                    :key="item.id"
+                    :label="item.testCategoryName"
+                    :value="item.id">
+                  </el-option>
+                  </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="检测项目">
+              <el-select name="testedItem" filterable default-first-option v-model="testedItemTaskForm.testedItem" @change="handleTestedItemChange">
+                <el-option v-for="item in staticOptions.filteredTestedItems"
+                  :key="item.id"
+                  :label="item.testedItemName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="检测项目参数">
+              <el-input name="testParameter" v-model="testedItemTaskForm.testParameter" autoComplete="testParameter"></el-input>
+              <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+              <div style="margin: 15px 0;"></div>
+              <el-checkbox-group v-model="staticOptions.checkedTestParameters" @change="handleCheckedTestParametersChange">
+                <el-checkbox v-for="testParameter in staticOptions.filteredTestParameters" :label="testParameter.testParameterName" :key="testParameter.id">{{testParameter.testParameterName}}</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="检测方法">
+              <el-select name="testMethod" filterable default-first-option v-model="testedItemTaskForm.testMethod">
+                <el-option v-for="item in staticOptions.filteredTestMethods"
+                  :key="item.id"
+                  :label="item.testMethodName"
+                  :value="item.testMethodName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="优先级">
+                <el-select name="processPriority" filterable default-first-option v-model="testedItemTaskForm.processPriority">
+                <el-option v-for="item in staticOptions.processPriorities"
+                  :key="item.id"
+                  :label="item.processPriorityName"
+                  :value="item.processPriorityName">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="驳回原因">
+              <el-input name="rejectNote" v-model="testedItemTaskForm.rejectNote" autoComplete="rejectNote"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-container>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click.native="testedItemTaskFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click.native="updateTestedItemTask">确 定</el-button>
+    </div>
+  </el-dialog>
   </div>
 </template>
 <script>
@@ -248,7 +479,11 @@ export default {
         {'ref': 'delete', 'name': '删除', 'id': '6', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false}
       ],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
+      isIndeterminate: true,
+      checkAll: false,
       testedItemProductGroupFormVisible: false,
+      testedItemProductFormVisible: false,
+      testedItemTaskFormVisible: false,
       testedItemProductGroupForm: {
         testedItemProductGroupName: '',
         testedItemProductGroupDescription: '',
@@ -257,20 +492,28 @@ export default {
       },
       testedItemTaskForm: {
         testedItemTaskName: '',
+        testCategory: '',
         testedItem: '',
         testParameter: '',
         testMethod: '',
-        drawingDesign: '',
-        submitFrom: '',
-        processingStatus: '',
-        submitTo: '',
         processPriority: '',
+        rejectNote: ''
+      },
+      testedItemProductForm: {
+        testedItemProductName: '',
+        testCategory: '',
+        testedItem: '',
+        testParameter: '',
+        testMethod: '',
+        id: '',
         itemsPerPage: 20,
         currentPage: 1
       },
       testedItemProductGroupTableData: [],
+      testedItemProductTableData: [],
       deletedTestedItemTasks: [],
-      totalTestedItemProductGroups: 0
+      totalTestedItemProductGroups: 0,
+      totalTestedItemProducts: 0
     }
   },
   methods: {
@@ -289,10 +532,32 @@ export default {
         this.confirmDelete()
       }
     },
+    addTestedItemTask () {
+      this.staticOptions.testedItemProducts = []
+    },
     addTestedItemProductGroup () {
-      this.loadTestedItemProductGroupeData()
+      this.loadTestedItemProductGroupData()
       this.staticOptions.testedItemProducts = []
       this.testedItemProductGroupFormVisible = true
+    },
+    addTestedItemProduct () {
+      console.log('addTestedItemProduct')
+      this.loadTestedItemProductData()
+      this.staticOptions.testedItemProducts = []
+      this.testedItemProductFormVisible = true
+    },
+    dblclick (row, event) {
+      this.testedItemTaskFormVisible = true
+      this.testedItemTaskForm = row
+      this.getFilteredTestItems(this.testedItemTaskForm.testCategory)
+      this.getTestMethod(this.testedItemTaskForm.testedItem)
+    },
+    updateTestedItemProduct (val) {
+      this.$emit('updateTestedItemProduct', val)
+      this.testedItemProductFormVisible = false
+    },
+    updateTestedItemTask () {
+      this.testedItemTaskFormVisible = false
     },
     updateTestedItemTasks (val) {
       this.$emit('updateTestedItemTasks', val)
@@ -311,30 +576,72 @@ export default {
     },
     handleSizeChange (val) {
       this.testedItemProductGroupForm.itemsPerPage = val
-      this.loadTestedItemProductGroupeData()
+      this.loadTestedItemProductGroupData()
     },
     handleCurrentChange (val) {
       this.testedItemProductGroupForm.currentPage = val
-      this.loadTestedItemProductGroupeData()
+      this.loadTestedItemProductGroupData()
     },
     handleTestedItemProductGroupChange (val) {
       let vm = this
+      this.staticOptions.testedItemProducts = []
       val.forEach(item => {
-        item.processPriority = vm.processForm.processPriority
+        // item.processPriority = vm.processForm.processPriority
+        vm.staticOptions.testedItemProducts.push(item)
+      })
+    },
+    handleTestedItemProductChange (val) {
+      let vm = this
+      this.staticOptions.testedItemProducts = []
+      val.forEach(item => {
+        // item.processPriority = vm.processForm.processPriority
         vm.staticOptions.testedItemProducts.push(item)
       })
     },
     handleTestedItemTaskChange (val) {
       this.deletedTestedItemTasks = val
     },
-    // load all the testedItemProductGroupes
-    loadTestedItemProductGroupeData () {
+    handleCheckedTestParametersChange (value) {
+      let checkedCount = value.length
+      this.checkAll = checkedCount === this.staticOptions.filteredTestParameters.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.staticOptions.filteredTestParameters.length
+      this.testedItemTaskForm.testParameter = value.join(',')
+      // this.testedItemProductForm.testParameter = value
+    },
+    handleCheckAllChange (val) {
+      let vm = this
+      if (val) {
+        this.staticOptions.filteredTestParameters.forEach(testParameter => {
+          vm.staticOptions.checkedTestParameters.push(testParameter.testParameterName)
+        })
+        this.testedItemTaskForm.testParameter = this.staticOptions.checkedTestParameters.join(',')
+      } else {
+        this.staticOptions.checkedTestParameters = []
+        this.testedItemTaskForm.testParameter = ''
+      }
+      this.isIndeterminate = false
+    },
+    // load all the testedItemProductGroups
+    loadTestedItemProductGroupData () {
       let vm = this
       this.$ajax
         .post('/api/sample/testedItemProductGroup/queryTestedItemProductGroup', this.testedItemProductGroupForm)
         .then(function (res) {
           vm.testedItemProductGroupTableData = res.data.pageResult || []
           vm.totalTestedItemProductGroups = res.data.totalTestedItemProductGroups || 0
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    // load all the testedItemProductes
+    loadTestedItemProductData () {
+      let vm = this
+      this.$ajax
+        .post('/api/sample/testedItemProduct/queryTestedItemProduct', this.testedItemProductForm)
+        .then(function (res) {
+          vm.testedItemProductTableData = res.data.pageResult || []
+          console.log(vm.testedItemProductTableData)
+          vm.totalTestedItemProducts = res.data.totalTestedItemProducts || 0
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -404,13 +711,26 @@ export default {
     getAgreementNumber  (val) {
       this.$emit('getAgreementInfo', val)
     },
+    getFilteredTestItems (testCategoryId) {
+      this.staticOptions.filteredTestedItems =
+        this.staticOptions.testedItems.filter(function (val) {
+          return val.testCategory === testCategoryId
+        })
+    },
+    handleTestCategoryChange (testCategoryId) {
+      this.testedItemTaskForm.testedItem = ''
+      this.getFilteredTestItems(testCategoryId)
+    },
     getTestMethod  (val) {
-      this.processForm.drawingDesign = ''
-      this.processForm.testParameter = ''
-      this.processForm.testMethod = ''
       this.$emit('getTestMethod', val)
       this.$emit('getTestParameter', val)
-      this.$emit('getDrawingDesigns', val)
+      // this.$emit('getDrawingDesigns', val)
+    },
+    handleTestedItemChange (val) {
+      this.testedItemTaskForm.drawingDesign = ''
+      this.testedItemTaskForm.testParameter = ''
+      this.testedItemTaskForm.testMethod = ''
+      this.getTestMethod(val)
     },
     sampleNumberGenerator () {
       let vm = this
@@ -510,9 +830,21 @@ export default {
         }
       })
       return name
+    },
+    testCategoryFormatter (row, column) {
+      let name = ''
+      this.staticOptions.testCategories.forEach(item => {
+        if (row.testCategory === item.id) {
+          name = item.testCategoryName
+        }
+      })
+      return name
     }
   }
 }
 </script>
 <style lang="less">
+.testedItemTask {
+  overflow: auto;
+}
 </style>

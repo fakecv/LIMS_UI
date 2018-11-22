@@ -1,6 +1,7 @@
 <template>
   <TestedItemDetail
    :testedItemForm="testedItemForm"
+    :staticOptions="staticOptions"
     v-on:new="resetTestedItemForm"
     v-on:copy="resetTestedItemId"
     v-on:updateTestedItemForm="updateTestedItemForm"
@@ -24,10 +25,22 @@ export default {
         id: '',
         testedItemName: '',
         testedItemNumber: ''
+      },
+      staticOptions: {
+        testCategories: []
       }
     }
   },
   methods: {
+    loadTestCategory () {
+      let vm = this
+      this.$ajax.get('/api/sample/testCategory/getTestCategory')
+        .then(function (res) {
+          vm.staticOptions.testCategories = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     updateTestedItemForm (event) {
       this.testedItemForm.id = event.id
     },
@@ -39,6 +52,7 @@ export default {
     }
   },
   mounted () {
+    this.loadTestCategory()
   }
 }
 </script>

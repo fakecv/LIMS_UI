@@ -42,7 +42,7 @@
                 <el-option v-for="item in staticOptions.processPriorities"
                   :key="item.Id"
                   :label="item.processPriorityName"
-                  :value="item.id">
+                  :value="item.processPriorityName">
                 </el-option>
                 </el-select>
               </el-form-item>

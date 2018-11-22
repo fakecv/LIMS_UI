@@ -1,6 +1,7 @@
 <template>
   <TestedItemDetail
    :testedItemForm="testedItemForm"
+    :staticOptions="staticOptions"
    v-on:new="resetTestedItemForm"
    v-on:copy="resetTestedItemId"
    v-on:deleteTestedItem="resetTestedItemForm"
@@ -23,6 +24,9 @@ export default {
         id: '',
         testedItemName: '',
         testedItemNumber: ''
+      },
+      staticOptions: {
+        testCategories: []
       }
     }
   },
@@ -36,6 +40,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadTestCategory () {
+      let vm = this
+      this.$ajax.get('/api/sample/testCategory/getTestCategory')
+        .then(function (res) {
+          vm.staticOptions.testCategories = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     resetTestedItemForm () {
       this.testedItemForm = JSON.parse(JSON.stringify(this.testedItemResetForm))
     },
@@ -44,6 +57,7 @@ export default {
     }
   },
   mounted () {
+    this.loadTestCategory()
     if (this.$route.params.id !== undefined) {
       this.loadTestedItem(this.$route.params.id)
     }

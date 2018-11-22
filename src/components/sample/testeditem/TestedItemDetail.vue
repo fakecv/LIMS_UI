@@ -9,6 +9,17 @@
     <el-container style="padding: 10px" direction="vertical">
       <el-form :model="testedItemForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
+          <el-form-item label="检测项目类别">
+              <el-select name="testedItem" filterable default-first-option v-model="testedItemForm.testCategory">
+                <el-option v-for="item in staticOptions.testCategories"
+                  :key="item.id"
+                  :label="item.testCategoryName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+          </el-form-item>
+        </el-row>
+        <el-row :gutter="20">
           <el-form-item label="检测项目序号">
             <el-input name="testedItemOrder" v-model="testedItemForm.testedItemOrder"></el-input>
           </el-form-item>
@@ -31,7 +42,7 @@
 <script>
 export default {
   name: 'testedItemDetail',
-  props: ['testedItemForm'],
+  props: ['testedItemForm', 'staticOptions'],
   data () {
     return {
       actions: [

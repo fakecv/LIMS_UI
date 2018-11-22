@@ -3,6 +3,17 @@
       <el-container style="padding: 10px">
         <el-form :model="testedItemRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
+          <el-form-item label="检测项目类别">
+              <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemRequestForm.testCategory">
+                <el-option v-for="item in staticOptions.testCategories"
+                  :key="item.id"
+                  :label="item.testCategoryName"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+          </el-form-item>
+        </el-row>
+          <el-row :gutter="20">
             <el-form-item label="检测项目名称">
               <el-input name="testedItemName" v-model="testedItemRequestForm.testedItemName"></el-input>
             </el-form-item>
@@ -18,6 +29,17 @@
         </el-form>
       </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
+        <el-table-column
+          prop="testCategory"
+          label="检测项目类别"
+          :formatter="testCategoryFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testedItemOrder"
+          label="序号"
+          width="180">
+        </el-table-column>
         <el-table-column
           prop="testedItemName"
           label="检测项目名称"
@@ -55,10 +77,22 @@ export default {
         testedItemNumber: '',
         itemsPerPage: 20,
         currentPage: 1
+      },
+      staticOptions: {
+        testCategories: []
       }
     }
   },
   methods: {
+    loadTestCategory () {
+      let vm = this
+      this.$ajax.get('/api/sample/testCategory/getTestCategory')
+        .then(function (res) {
+          vm.staticOptions.testCategories = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     handleSizeChange (val) {
       this.testedItemRequestForm.itemsPerPage = val
       this.onSubmit()
@@ -84,10 +118,20 @@ export default {
           vm.tableData = res.data.pageResult || []
           vm.totalTestedItems = res.data.totalTestedItems || 0
         })
+    },
+    testCategoryFormatter (row, column) {
+      let name = ''
+      this.staticOptions.testCategories.forEach(item => {
+        if (row.testCategory === item.id) {
+          name = item.testCategoryName
+        }
+      })
+      return name
     }
   },
   mounted () {
     this.onSubmit()
+    this.loadTestCategory()
   }
 
 }

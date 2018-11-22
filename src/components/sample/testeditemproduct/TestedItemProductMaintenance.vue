@@ -9,9 +9,20 @@
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="检测项目类别">
+                <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testCategory" @change="getFilteredTestItems">
+                  <el-option v-for="item in staticOptions.testCategories"
+                    :key="item.id"
+                    :label="item.testCategoryName"
+                    :value="item.id">
+                  </el-option>
+                  </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目">
               <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testedItem" @change="getCascadeItems">
-                <el-option v-for="item in staticOptions.testedItems"
+                <el-option v-for="item in staticOptions.filteredTestedItems"
                   :key="item.id"
                   :label="item.testedItemName"
                   :value="item.id">
@@ -21,33 +32,33 @@
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目参数">
-              <el-select name="testParameter" filterable default-first-option v-model="testedItemProductForm.testParameter">
+              <el-select name="testParameter" filterable clearable default-first-option v-model="testedItemProductForm.testParameter">
                 <el-option v-for="item in staticOptions.filteredTestParameters"
                   :key="item.id"
                   :label="item.testParameterName"
-                  :value="item.id">
+                  :value="item.testParameterName">
                 </el-option>
                 </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测方法">
-              <el-select name="testMethod" filterable default-first-option v-model="testedItemProductForm.testMethod">
+              <el-select name="testMethod" filterable clearable default-first-option v-model="testedItemProductForm.testMethod">
                 <el-option v-for="item in staticOptions.filteredTestMethods"
                   :key="item.id"
                   :label="item.testMethodName"
-                  :value="item.id">
+                  :value="item.testMethodName">
                 </el-option>
                 </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="加工图号">
-              <el-select name="drawingDesign" filterable default-first-option v-model="testedItemProductForm.drawingDesign">
+              <el-select name="drawingDesign" filterable clearable default-first-option v-model="testedItemProductForm.drawingDesign">
                 <el-option v-for="item in staticOptions.filteredDrawingDesigns"
                   :key="item.id"
                   :label="item.drawingDesignName"
-                  :value="item.id">
+                  :value="item.drawingDesignName">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -67,6 +78,12 @@
           width="180">
         </el-table-column>
         <el-table-column
+          prop="testCategory"
+          label="检测类别"
+          :formatter="testCategoryFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
           prop="testedItem"
           label="检测项目"
           :formatter="testedItemFormatter"
@@ -75,18 +92,17 @@
         <el-table-column
           prop="testParameter"
           label="检测项目参数"
+          show-overflow-tooltip
           width="180">
         </el-table-column>
         <el-table-column
           prop="testMethod"
           label="检测方法"
-          :formatter="testMethodFormatter"
           width="180">
         </el-table-column>
         <el-table-column
           prop="drawingDesign"
           label="加工图号"
-          :formatter="drawingDesignFormatter"
           width="180">
         </el-table-column>
       </el-table>
@@ -113,6 +129,7 @@ export default {
       totalTestedItemProducts: 0,
       testedItemProductForm: {
         testedItemProductName: '',
+        testCategory: '',
         testedItem: '',
         testParameter: '',
         testMethod: '',
@@ -121,12 +138,17 @@ export default {
         currentPage: 1
       },
       staticOptions: {
+        testCategories: [],
+        selectedTestedItemProducts: [],
         testMethods: [],
         filteredTestMethods: [],
         testParameters: [],
         filteredTestParameters: [],
+        checkedTestParameters: [],
         testedItems: [],
+        filteredTestedItems: [],
         drawingDesigns: [],
+        processingStatuses: [],
         filteredDrawingDesigns: []
       },
       columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }
@@ -146,6 +168,13 @@ export default {
       this.testedItemProductForm.drawingDesign = ''
       this.testedItemProductForm.testMethod = ''
       this.testedItemProductForm.testParameter = ''
+    },
+    getFilteredTestItems (testCategoryId) {
+      this.testedItemProductForm.testedItem = ''
+      this.staticOptions.filteredTestedItems =
+        this.staticOptions.testedItems.filter(function (val) {
+          return val.testCategory === testCategoryId
+        })
     },
     getDrawingDesigns (testedItemId) {
       this.staticOptions.filteredDrawingDesigns =
@@ -190,6 +219,15 @@ export default {
       this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
         .then(function (res) {
           vm.staticOptions.drawingDesigns = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadTestCategory () {
+      let vm = this
+      this.$ajax.get('/api/sample/testCategory/getTestCategory')
+        .then(function (res) {
+          vm.staticOptions.testCategories = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -256,10 +294,20 @@ export default {
         }
       })
       return name
+    },
+    testCategoryFormatter (row, column) {
+      let name = ''
+      this.staticOptions.testCategories.forEach(item => {
+        if (row.testCategory === item.id) {
+          name = item.testCategoryName
+        }
+      })
+      return name
     }
   },
   mounted () {
     this.onSubmit()
+    this.loadTestCategory()
     this.loadTestMethodData()
     this.loadTestedItemData()
     this.loadDrawingDesignData()

@@ -1,0 +1,18 @@
+import TestCategoryDetailNew from '@/components/sample/testcategory/TestCategoryDetailNew'
+import TestCategoryDetailEdit from '@/components/sample/testcategory/TestCategoryDetailEdit'
+import TestCategoryMaintenance from '@/components/sample/testcategory/TestCategoryMaintenance'
+{
+  path: 'testCategoryDetailEdit/:id',
+  name: 'testCategoryAuditorDetailEdit',
+  component: TestCategoryDetailEdit
+},
+{
+  path: 'testCategoryDetailNew',
+  name: 'testCategoryDetailNew',
+  component: TestCategoryDetailNew
+},
+{
+  path: 'testCategoryMaintenance',
+  name: 'testCategoryMaintenance',
+  component: TestCategoryMaintenance
+},

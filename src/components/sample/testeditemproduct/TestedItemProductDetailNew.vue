@@ -2,6 +2,7 @@
   <TestedItemProductDetail :testedItemProductForm="testedItemProductForm"
     :staticOptions="staticOptions"
     v-on:getCascadeItems="getCascadeItems"
+    v-on:getFilteredTestItems="getFilteredTestItems"
     v-on:updateTestedItemProductForm="updateTestedItemProductForm"
     v-on:deleteTestedItemProductForm="resetTestedItemProductForm"
     v-on:new="resetTestedItemProductForm"
@@ -18,21 +19,22 @@ export default {
     return {
       testedItemProductForm: {
         testedItemProductName: '',
+        testCategory: '',
         testedItem: '',
-        testParameter: [],
+        testParameter: '',
         testMethod: '',
-        drawingDesign: '',
         id: ''
       },
       testedItemProductResetForm: {
         testedItemProductName: '',
+        testCategory: '',
         testedItem: '',
-        testParameter: [],
+        testParameter: '',
         testMethod: '',
-        drawingDesign: '',
         id: ''
       },
       staticOptions: {
+        testCategories: [],
         selectedTestedItemProducts: [],
         testMethods: [],
         filteredTestMethods: [],
@@ -40,6 +42,7 @@ export default {
         filteredTestParameters: [],
         checkedTestParameters: [],
         testedItems: [],
+        filteredTestedItems: [],
         drawingDesigns: [],
         processingStatuses: [],
         filteredDrawingDesigns: []
@@ -67,6 +70,13 @@ export default {
       this.testedItemProductForm.testMethod = ''
       this.testedItemProductForm.testParameter = ''
     },
+    getFilteredTestItems (testCategoryId) {
+      this.testedItemProductForm.testedItem = ''
+      this.staticOptions.filteredTestedItems =
+        this.staticOptions.testedItems.filter(function (val) {
+          return val.testCategory === testCategoryId
+        })
+    },
     getDrawingDesigns (testedItemId) {
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
@@ -90,6 +100,15 @@ export default {
       this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
         .then(function (res) {
           vm.staticOptions.drawingDesigns = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadTestCategory () {
+      let vm = this
+      this.$ajax.get('/api/sample/testCategory/getTestCategory')
+        .then(function (res) {
+          vm.staticOptions.testCategories = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -121,6 +140,7 @@ export default {
     }
   },
   mounted () {
+    this.loadTestCategory()
     this.loadTestMethodData()
     this.loadTestedItemData()
     this.loadDrawingDesignData()

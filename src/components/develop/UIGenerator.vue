@@ -136,6 +136,7 @@ export default {
   },
   mounted () {
     this.formTemplateId = this.$route.params.id
+    this.$store.state.forms[this.$route.params.fid].id = ''
   }
 }
 </script>

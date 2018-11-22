@@ -3,7 +3,8 @@
     :testedItemProductForm="testedItemProductForm"
     :staticOptions="staticOptions"
     v-on:getCascadeItems="getCascadeItems"
-    v-on:deleteTestedItemProduct="resetTestedItemProductForm"
+    v-on:getFilteredTestItems="getFilteredTestItems"
+    v-on:deleteTestedItemProductForm="resetTestedItemProductForm"
     v-on:new="resetTestedItemProductForm"
     v-on:copy="resetTestedItemProductId"/>
 </template>
@@ -17,23 +18,24 @@ export default {
     return {
       testedItemProductForm: {
         testedItemProductName: '',
+        testCategory: '',
         testedItem: '',
-        testParameter: [],
+        testParameter: '',
         testMethod: '',
-        drawingDesign: '',
         id: ''
       },
       testedItemProductResetForm: {
         testedItemProductName: '',
+        testCategory: '',
         testedItem: '',
-        testParameter: [],
+        testParameter: '',
         testMethod: '',
-        drawingDesign: '',
         id: '',
         processingStatuses: []
 
       },
       staticOptions: {
+        testCategories: [],
         selectedTestedItemProducts: [],
         testMethods: [],
         filteredTestMethods: [],
@@ -41,6 +43,7 @@ export default {
         filteredTestParameters: [],
         checkedTestParameters: [],
         testedItems: [],
+        filteredTestedItems: [],
         drawingDesigns: [],
         filteredDrawingDesigns: []
       }
@@ -52,7 +55,7 @@ export default {
       this.$ajax.get('/api/sample/testedItemProduct/' + testedItemProductId)
         .then(function (res) {
           vm.testedItemProductForm = res.data
-          vm.staticOptions.checkedTestParameters = vm.testedItemProductForm.testParameter.split(',')
+          // vm.staticOptions.checkedTestParameters = vm.testedItemProductForm.testParameter.split(',')
           vm.getDrawingDesigns(vm.testedItemProductForm.testedItem)
           vm.getTestMethod(vm.testedItemProductForm.testedItem)
           vm.getTestParameter(vm.testedItemProductForm.testedItem)
@@ -76,6 +79,13 @@ export default {
       this.testedItemProductForm.drawingDesign = ''
       this.testedItemProductForm.testMethod = ''
       this.testedItemProductForm.testParameter = ''
+    },
+    getFilteredTestItems (testCategoryId) {
+      this.testedItemProductForm.testedItem = ''
+      this.staticOptions.filteredTestedItems =
+        this.staticOptions.testedItems.filter(function (val) {
+          return val.testCategory === testCategoryId
+        })
     },
     getDrawingDesigns (testedItemId) {
       this.staticOptions.filteredDrawingDesigns =
@@ -105,11 +115,21 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadTestCategory () {
+      let vm = this
+      this.$ajax.get('/api/sample/testCategory/getTestCategory')
+        .then(function (res) {
+          vm.staticOptions.testCategories = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     loadTestedItemData () {
       let vm = this
       this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
           vm.staticOptions.testedItems = res.data
+          vm.staticOptions.filteredTestedItems = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -136,6 +156,7 @@ export default {
     }
   },
   mounted () {
+    this.loadTestCategory()
     this.loadTestedItemData()
     this.loadTestMethodData()
     this.loadDrawingDesignData()

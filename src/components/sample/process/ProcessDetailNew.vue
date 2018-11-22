@@ -10,6 +10,7 @@
       v-on:getTestParameter="getTestParameter"
       v-on:updateProcessForm="updateProcessForm"
       v-on:updateTestedItemTasks="updateTestedItemTasks"
+      v-on:updateTestedItemProduct="updateTestedItemProduct"
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
       v-on:copy="resetProcessId"
@@ -78,13 +79,16 @@ export default {
         processPriority: ''
       },
       staticOptions: {
+        testCategories: [],
         testedItemTaskTableData: [],
         testedItemProducts: [],
         testMethods: [],
         filteredTestMethods: [],
         testParameters: [],
         filteredTestParameters: [],
+        checkedTestParameters: [],
         testedItems: [],
+        filteredTestedItems: [],
         drawingDesigns: [],
         filteredDrawingDesigns: [],
         processingStatuses: [],
@@ -114,10 +118,10 @@ export default {
       // to display other added processes within the same agreementId at the bottom of page.
       this.loadAgreementProcess(agreementId)
     },
-    getDrawingDesigns (testedItemId) {
+    getDrawingDesigns (testedItemIds) {
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
-          return val.testedItem === testedItemId
+          return testedItemIds.indexOf(val.testedItem) >= 0
         })
     },
     getTestMethod (testedItemId) {
@@ -147,11 +151,39 @@ export default {
       this.staticOptions.testedItemProducts.forEach(testItemProductGroup => {
         vm.$ajax.post('/api/sample/testedItemProductGroup/getTestedItemTasks', testItemProductGroup)
           .then(function (res) {
-            vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+            res.data.forEach(item => {
+              item.processPriority = vm.processForm.processPriority
+              vm.staticOptions.testedItemTaskTableData.push(item)
+            })
+            // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+            vm.fetchDrawingDesign()
           }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       })
+    },
+    updateTestedItemProduct () {
+      let vm = this
+      this.staticOptions.testedItemProducts.forEach(testItemProduct => {
+        vm.$ajax.post('/api/sample/testedItemProduct/getTestedItemTasks', testItemProduct)
+          .then(function (res) {
+            res.data.forEach(item => {
+              item.processPriority = vm.processForm.processPriority
+              vm.staticOptions.testedItemTaskTableData.push(item)
+            })
+            // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+            vm.fetchDrawingDesign()
+          }).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      })
+    },
+    fetchDrawingDesign () {
+      let testedItemIds = []
+      this.staticOptions.testedItemTaskTableData.forEach(item => {
+        testedItemIds.push(item.testedItem)
+      })
+      this.getDrawingDesigns(testedItemIds)
     },
     loadAgreement () {
       let vm = this
@@ -187,11 +219,21 @@ export default {
           vm.staticOptions.drawingDesigns = res.data
         })
     },
+    loadTestCategory () {
+      let vm = this
+      this.$ajax.get('/api/sample/testCategory/getTestCategory')
+        .then(function (res) {
+          vm.staticOptions.testCategories = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     loadTestedItemData () {
       let vm = this
       this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
           vm.staticOptions.testedItems = res.data
+          vm.staticOptions.filteredTestedItems = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -237,6 +279,7 @@ export default {
     }
   },
   mounted () {
+    this.loadTestCategory()
     this.loadTestMethodData()
     this.loadTestParameterData()
     this.loadTestedItemData()

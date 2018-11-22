@@ -15,9 +15,20 @@
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="检测项目类别">
+                <el-select name="testedItem" filterable default-first-option v-model="testedItemProductForm.testCategory" @change="getFilteredTestItems">
+                  <el-option v-for="item in staticOptions.testCategories"
+                    :key="item.id"
+                    :label="item.testCategoryName"
+                    :value="item.id">
+                  </el-option>
+                  </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目">
               <el-select name="testedItem" filterable default-first-option v-model="testedItemProductForm.testedItem" @change="getCascadeItems">
-                <el-option v-for="item in staticOptions.testedItems"
+                <el-option v-for="item in staticOptions.filteredTestedItems"
                   :key="item.id"
                   :label="item.testedItemName"
                   :value="item.id">
@@ -27,6 +38,7 @@
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目参数">
+              <el-input name="testParameter" v-model="testedItemProductForm.testParameter" autoComplete="testParameter"></el-input>
               <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
               <div style="margin: 15px 0;"></div>
               <el-checkbox-group v-model="staticOptions.checkedTestParameters" @change="handleCheckedTestParametersChange">
@@ -40,18 +52,7 @@
                 <el-option v-for="item in staticOptions.filteredTestMethods"
                   :key="item.id"
                   :label="item.testMethodName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="加工图号">
-              <el-select name="drawingDesign" filterable default-first-option v-model="testedItemProductForm.drawingDesign">
-                <el-option v-for="item in staticOptions.filteredDrawingDesigns"
-                  :key="item.id"
-                  :label="item.drawingDesignName"
-                  :value="item.id">
+                  :value="item.testMethodName">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -136,11 +137,14 @@ export default {
       this.$ajax.get('/api/sample/testedItemProduct/delete/' + this.testedItemProductForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deletetestedItemProductForm')
+          vm.$emit('deleteTestedItemProductForm')
           vm.sampleNumberButton = false
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    getFilteredTestItems (val) {
+      this.$emit('getFilteredTestItems', val)
     },
     getCascadeItems (val) {
       this.$emit('getCascadeItems', val)
@@ -150,6 +154,7 @@ export default {
       this.checkAll = checkedCount === this.staticOptions.filteredTestParameters.length
       this.isIndeterminate = checkedCount > 0 && checkedCount < this.staticOptions.filteredTestParameters.length
       this.testedItemProductForm.testParameter = value.join(',')
+      // this.testedItemProductForm.testParameter = value
     },
     handleCheckAllChange (val) {
       let vm = this
@@ -157,8 +162,10 @@ export default {
         this.staticOptions.filteredTestParameters.forEach(testParameter => {
           vm.staticOptions.checkedTestParameters.push(testParameter.testParameterName)
         })
+        this.testedItemProductForm.testParameter = this.staticOptions.checkedTestParameters.join(',')
       } else {
         this.staticOptions.checkedTestParameters = []
+        this.testedItemProductForm.testParameter = ''
       }
       this.isIndeterminate = false
     }
