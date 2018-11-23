@@ -83,8 +83,8 @@
     <el-row type="flex" justify="end">
       <el-button-group style="min-width: 200px">
         <el-button type="success" icon="el-icon-plus" size="mini" circle @click="addTestedItemTask"></el-button>
-        <el-button type="success" icon="el-icon-plus" size="mini" circle @click="addTestedItemProduct">添加检测项目产品</el-button>
-        <el-button type="success" icon="el-icon-plus" size="mini" circle @click="addTestedItemProductGroup">添加检测项目组</el-button>
+        <el-button type="success" icon="el-icon-tickets" size="mini" circle @click="addTestedItemProduct">添加检测项目产品</el-button>
+        <el-button type="success" icon="el-icon-goods" size="mini" circle @click="addTestedItemProductGroup">添加检测项目组</el-button>
         <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="deleteTestedItemTask"></el-button>
       </el-button-group>
     </el-row>
@@ -310,17 +310,6 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="加工图号">
-              <el-select name="drawingDesign" filterable clearable default-first-option v-model="testedItemProductForm.drawingDesign">
-                <el-option v-for="item in staticOptions.filteredDrawingDesigns"
-                  :key="item.id"
-                  :label="item.drawingDesignName"
-                  :value="item.drawingDesignName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-form-item>
@@ -360,11 +349,6 @@
         <el-table-column
           prop="testMethod"
           label="检测方法"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="drawingDesign"
-          label="加工图号"
           width="180">
         </el-table-column>
       </el-table>
@@ -448,9 +432,9 @@
                 </el-select>
               </el-form-item>
             </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <el-col :span="24">
             <el-form-item label="驳回原因">
-              <el-input name="rejectNote" v-model="testedItemTaskForm.rejectNote" autoComplete="rejectNote"></el-input>
+              <el-input type="textarea" name="rejectNote" v-model="testedItemTaskForm.rejectNote" autoComplete="rejectNote"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -533,7 +517,7 @@ export default {
       }
     },
     addTestedItemTask () {
-      this.staticOptions.testedItemProducts = []
+      this.$emit('addTestedItemTask')
     },
     addTestedItemProductGroup () {
       this.loadTestedItemProductGroupData()
@@ -541,7 +525,6 @@ export default {
       this.testedItemProductGroupFormVisible = true
     },
     addTestedItemProduct () {
-      console.log('addTestedItemProduct')
       this.loadTestedItemProductData()
       this.staticOptions.testedItemProducts = []
       this.testedItemProductFormVisible = true
@@ -558,6 +541,7 @@ export default {
     },
     updateTestedItemTask () {
       this.testedItemTaskFormVisible = false
+      this.$emit('updateTestedItemTask')
     },
     updateTestedItemTasks (val) {
       this.$emit('updateTestedItemTasks', val)
@@ -595,6 +579,7 @@ export default {
       this.staticOptions.testedItemProducts = []
       val.forEach(item => {
         // item.processPriority = vm.processForm.processPriority
+        console.log(item)
         vm.staticOptions.testedItemProducts.push(item)
       })
     },

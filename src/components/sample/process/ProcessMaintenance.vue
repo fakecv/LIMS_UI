@@ -24,17 +24,6 @@
             <el-input name="sampleSubNumber" v-model="processRequestForm.sampleSubNumber"></el-input>
           </el-form-item>
         </el-col>
-            <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="加工图号">
-              <el-select name="drawingDesign" filterable clearable default-first-option v-model="processRequestForm.drawingDesign">
-                <el-option v-for="item in staticOptions.filteredDrawingDesigns"
-                  :key="item.id"
-                  :label="item.drawingDesignName"
-                  :value="item.drawingDesignName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="提交部门">
               <el-select name="submitFrom" filterable clearable default-first-option v-model="processRequestForm.submitFrom">
@@ -204,13 +193,6 @@ export default {
         itemsPerPage: 20,
         currentPage: 1
       },
-      testMethods: [],
-      testedItems: [],
-      drawingDesigns: [],
-      agreements: [],
-      processingStatuses: [],
-      processPriorities: [],
-      departments: [],
       columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 },
       staticOptions: {
         testedItemTaskTableData: [],

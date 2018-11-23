@@ -11,6 +11,8 @@
       v-on:new="resetProcessForm"
       v-on:copy="resetProcessId"
       v-on:updateTestedItemTasks="updateTestedItemTasks"
+      v-on:updateTestedItemTask="updateTestedItemTask"
+      v-on:addTestedItemTask="addTestedItemTask"
       v-on:updateTestedItemProduct="updateTestedItemProduct"
     />
 </template>
@@ -148,16 +150,29 @@ export default {
       this.staticOptions.testedItemProducts.forEach(testItemProduct => {
         vm.$ajax.post('/api/sample/testedItemProduct/getTestedItemTasks', testItemProduct)
           .then(function (res) {
-            res.data.forEach(item => {
-              item.processPriority = vm.processForm.processPriority
-              vm.staticOptions.testedItemTaskTableData.push(item)
-            })
+            res.data.processPriority = vm.processForm.processPriority
+            vm.staticOptions.testedItemTaskTableData.push(res.data)
             // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
             vm.fetchDrawingDesign()
           }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       })
+    },
+    addTestedItemTask () {
+      let vm = this
+      vm.$ajax.get('/api/sample/testedItemProduct/getTestedItemTask')
+        .then(function (res) {
+          res.data.processPriority = vm.processForm.processPriority
+          vm.staticOptions.testedItemTaskTableData.push(res.data)
+          // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+          // vm.fetchDrawingDesign()
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    updateTestedItemTask () {
+      this.fetchDrawingDesign()
     },
     fetchDrawingDesign () {
       let testedItemIds = []

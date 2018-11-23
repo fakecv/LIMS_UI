@@ -1,15 +1,15 @@
 <template>
   <div>
-    <el-container style="padding: 10px">
+     <el-container style="padding: 10px">
     <el-form :model="processRequestForm" label-width="100px" label-position="left" size="mini">
       <el-row :gutter="20">
         <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
           <el-form-item label="委托编号">
             <el-select name="agreementNumber" filterable clearable default-first-option v-model="processRequestForm.agreementNumber">
-              <el-option v-for="item in agreements"
+              <el-option v-for="item in staticOptions.agreements"
                 :key="item.Id"
                 :label="item.agreementNumber"
-                :value="item.id">
+                :value="item.agreementNumber">
               </el-option>
               </el-select>
           </el-form-item>
@@ -24,13 +24,46 @@
             <el-input name="sampleSubNumber" v-model="processRequestForm.sampleSubNumber"></el-input>
           </el-form-item>
         </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="提交部门">
+              <el-select name="submitFrom" filterable clearable default-first-option v-model="processRequestForm.submitFrom">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.departmentName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="当前流转状态">
+              <el-select name="processingStatus" filterable clearable default-first-option v-model="processRequestForm.processingStatus">
+                <el-option v-for="item in staticOptions.processingStatuses"
+                  :key="item.id"
+                  :label="item.processingStatusName"
+                  :value="item.processingStatusName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="提交至">
+              <el-select name="submitTo" filterable clearable default-first-option v-model="processRequestForm.submitTo">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.departmentName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
         <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
           <el-form-item label="优先级">
             <el-select name="processPriority" filterable clearable default-first-option v-model="processRequestForm.processPriority">
-              <el-option v-for="item in processPriorities"
+              <el-option v-for="item in staticOptions.processPriorities"
                 :key="item.Id"
                 :label="item.processPriorityName"
-                :value="item.id">
+                :value="item.processPriorityName">
               </el-option>
               </el-select>
           </el-form-item>
@@ -52,30 +85,43 @@
         fixed
         prop="agreementNumber"
         label="委托编号"
-        :formatter="agreementFormatter"
         width="150">
-      </el-table-column>
-      <el-table-column
-        prop="sampleNumber"
-        fixed
-        label="样品编号"
-        width="180">
       </el-table-column>
       <el-table-column
         prop="sampleSubNumber"
         fixed
         label="试样编号"
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="drawingDesign"
+        label="加工图号"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="submitFrom"
+        label="提交部门"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="processingStatus"
+        label="当前流转状态"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="submitTo"
+        label="提交至"
         width="180">
       </el-table-column>
       <el-table-column
         prop="processPriority"
         label="优先级"
-        :formatter="processPriorityFormatter"
         width="80">
       </el-table-column>
       <el-table-column
         prop="comment"
         label="其它"
+        show-overflow-tooltip
         width="180">
       </el-table-column>
     </el-table>
@@ -104,16 +150,29 @@ export default {
         agreementNumber: '',
         materialNumber: '',
         sampleSubNumber: '',
+        drawingDesign: '',
+        submitFrom: '',
+        processingStatus: '',
+        submitTo: '',
         itemsPerPage: 20,
         currentPage: 1
       },
-      testMethods: [],
-      testedItems: [],
-      drawingDesigns: [],
-      agreements: [],
-      processingStatuses: [],
-      processPriorities: [],
-      departments: [],
+      staticOptions: {
+        testedItemTaskTableData: [],
+        testedItemProducts: [],
+        testMethods: [],
+        filteredTestMethods: [],
+        testParameters: [],
+        filteredTestParameters: [],
+        testedItems: [],
+        drawingDesigns: [],
+        filteredDrawingDesigns: [],
+        processingStatuses: [],
+        processPriorities: [],
+        departments: [],
+        processTableData: [],
+        agreements: []
+      },
       columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }
     }
   },
@@ -121,8 +180,8 @@ export default {
     processTableStyle ({row, rowIndex}) {
       let backgroundColor = '#FFFFFF'
       let color = '#000000'
-      this.processPriorities.forEach(item => {
-        if (row.processPriority === item.id) {
+      this.staticOptions.processPriorities.forEach(item => {
+        if (row.processPriority === item.processPriorityName) {
           backgroundColor = item.processPriorityColor
           color = item.processPriorityFontColor
         }
@@ -151,13 +210,12 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
-    },
-    // loading configurable parameters start
+    }, // loading configurable parameters start
     loadAgreement () {
       let vm = this
       this.$ajax.get('/api/sample/agreement/getAgreement')
         .then(function (res) {
-          vm.agreements = res.data
+          vm.staticOptions.agreements = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -166,7 +224,7 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/department/getDepartment')
         .then(function (res) {
-          vm.departments = res.data
+          vm.staticOptions.departments = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -175,7 +233,7 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
         .then(function (res) {
-          vm.drawingDesigns = res.data
+          vm.staticOptions.drawingDesigns = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -185,7 +243,7 @@ export default {
       this.$ajax
         .get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
-          vm.testMethods = res.data
+          vm.staticOptions.testMethods = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -195,7 +253,7 @@ export default {
       this.$ajax
         .get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.testedItems = res.data
+          vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -204,7 +262,7 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
         .then(function (res) {
-          vm.processingStatuses = res.data
+          vm.staticOptions.processingStatuses = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -213,7 +271,7 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/processPriority/getProcessPriority')
         .then(function (res) {
-          vm.processPriorities = res.data
+          vm.staticOptions.processPriorities = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

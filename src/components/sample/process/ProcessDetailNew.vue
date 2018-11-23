@@ -10,31 +10,97 @@
       v-on:getTestParameter="getTestParameter"
       v-on:updateProcessForm="updateProcessForm"
       v-on:updateTestedItemTasks="updateTestedItemTasks"
+      v-on:updateTestedItemTask="updateTestedItemTask"
+      v-on:addTestedItemTask="addTestedItemTask"
       v-on:updateTestedItemProduct="updateTestedItemProduct"
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
       v-on:copy="resetProcessId"
       />
-      <el-table :data="staticOptions.processTableData" style="width: 100%" @row-dblclick=dblclick>
+      <el-table :data="staticOptions.processTableData"
+      style="width: 100%"
+      tooltip-effect="dark"
+      @row-dblclick=dblclick
+      default-expand-all
+      >
+      <el-table-column
+        type="expand">
+        <template slot-scope="scope">
+        <el-table :data="scope.row.testedItemTasks" size="mini">
         <el-table-column
-          prop="sampleNumber"
-          label="样品编号"
-          fixed
-          width="100">
+          prop="testedItem"
+          label="检测项目"
+          :formatter="testedItemFormatter"
+          width="180">
         </el-table-column>
         <el-table-column
-          prop="sampleSubNumber"
-          label="试样编号"
-          fixed
-          width="100">
+          prop="testParameter"
+          label="检测项目参数"
+          show-overflow-tooltip
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testMethod"
+          label="检测方法"
+          width="180">
         </el-table-column>
         <el-table-column
           prop="processPriority"
           label="优先级"
-          :formatter="processPriorityFormatter"
-          width="80">
+          width="180">
         </el-table-column>
-      </el-table>
+        <el-table-column
+          prop="rejectNote"
+          label="驳回原因"
+          show-overflow-tooltip
+          width="180">
+        </el-table-column>
+        </el-table>
+      </template>
+      </el-table-column>
+      <el-table-column
+        prop="agreementNumber"
+        label="委托编号"
+        width="150">
+      </el-table-column>
+      <el-table-column
+        prop="sampleSubNumber"
+        label="试样编号"
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="drawingDesign"
+        label="加工图号"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="submitFrom"
+        label="提交部门"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="processingStatus"
+        label="当前流转状态"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="submitTo"
+        label="提交至"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="processPriority"
+        label="优先级"
+        show-overflow-tooltip
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="comment"
+        label="其它"
+        show-overflow-tooltip
+        width="180">
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -79,6 +145,7 @@ export default {
         processPriority: ''
       },
       staticOptions: {
+        department: '',
         testCategories: [],
         testedItemTaskTableData: [],
         testedItemProducts: [],
@@ -167,16 +234,29 @@ export default {
       this.staticOptions.testedItemProducts.forEach(testItemProduct => {
         vm.$ajax.post('/api/sample/testedItemProduct/getTestedItemTasks', testItemProduct)
           .then(function (res) {
-            res.data.forEach(item => {
-              item.processPriority = vm.processForm.processPriority
-              vm.staticOptions.testedItemTaskTableData.push(item)
-            })
+            res.data.processPriority = vm.processForm.processPriority
+            vm.staticOptions.testedItemTaskTableData.push(res.data)
             // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
             vm.fetchDrawingDesign()
           }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       })
+    },
+    addTestedItemTask () {
+      let vm = this
+      vm.$ajax.get('/api/sample/testedItemProduct/getTestedItemTask')
+        .then(function (res) {
+          res.data.processPriority = vm.processForm.processPriority
+          vm.staticOptions.testedItemTaskTableData.push(res.data)
+          // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+          // vm.fetchDrawingDesign()
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    updateTestedItemTask () {
+      this.fetchDrawingDesign()
     },
     fetchDrawingDesign () {
       let testedItemIds = []
@@ -208,6 +288,15 @@ export default {
       this.$ajax.get('/api/sample/department/getDepartment')
         .then(function (res) {
           vm.staticOptions.departments = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    queryApplicationUserDepartment () {
+      let vm = this
+      this.$ajax.get('/api/users/queryApplicationUserDepartment')
+        .then(function (res) {
+          vm.processForm.submitFrom = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -276,9 +365,19 @@ export default {
         }
       })
       return name
+    },
+    testedItemFormatter (row, column) {
+      let name = ''
+      this.staticOptions.testedItems.forEach(item => {
+        if (row.testedItem === item.id) {
+          name = item.testedItemName
+        }
+      })
+      return name
     }
   },
   mounted () {
+    this.queryApplicationUserDepartment()
     this.loadTestCategory()
     this.loadTestMethodData()
     this.loadTestParameterData()

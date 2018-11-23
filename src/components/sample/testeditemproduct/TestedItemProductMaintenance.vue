@@ -52,17 +52,6 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="加工图号">
-              <el-select name="drawingDesign" filterable clearable default-first-option v-model="testedItemProductForm.drawingDesign">
-                <el-option v-for="item in staticOptions.filteredDrawingDesigns"
-                  :key="item.id"
-                  :label="item.drawingDesignName"
-                  :value="item.drawingDesignName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-form-item>
@@ -98,11 +87,6 @@
         <el-table-column
           prop="testMethod"
           label="检测方法"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="drawingDesign"
-          label="加工图号"
           width="180">
         </el-table-column>
       </el-table>

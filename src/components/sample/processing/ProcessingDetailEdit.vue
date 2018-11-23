@@ -2,15 +2,12 @@
   <ProcessDetail
     :processForm="processForm"
       :agreementForm="agreementForm"
-    :staticOptions="staticOptions"
+      :staticOptions="staticOptions"
       v-on:getAgreementInfo="getAgreementInfo"
       v-on:getDrawingDesigns="getDrawingDesigns"
       v-on:getTestMethod="getTestMethod"
       v-on:getTestParameter="getTestParameter"
       v-on:deleteProcessForm="resetProcessForm"
-      v-on:new="resetProcessForm"
-      v-on:copy="resetProcessId"
-      v-on:updateTestedItemTasks="updateTestedItemTasks"
     />
 </template>
 
@@ -28,6 +25,13 @@ export default {
         expectedCompletionTime: '',
         sampleClientNumber: ''
       },
+      agreementResetForm: {
+        sampleName: '',
+        receiveSampleTime: '',
+        materialNumber: '',
+        expectedCompletionTime: '',
+        sampleClientNumber: ''
+      },
       processForm: {
         id: '',
         agreementNumber: '',
@@ -35,7 +39,11 @@ export default {
         sampleSubNumber: '',
         comment: '',
         testedItemTasks: [],
-        processPriority: ''
+        processPriority: '',
+        drawingDesign: '',
+        submitFrom: '',
+        processingStatus: '',
+        submitTo: ''
       },
       processResetForm: {
         id: '',
@@ -44,16 +52,23 @@ export default {
         sampleSubNumber: '',
         comment: '',
         testedItemTasks: [],
-        processPriority: ''
+        processPriority: '',
+        drawingDesign: '',
+        submitFrom: '',
+        processingStatus: '',
+        submitTo: ''
       },
       staticOptions: {
+        testCategories: [],
         testedItemTaskTableData: [],
         testedItemProducts: [],
         testMethods: [],
         filteredTestMethods: [],
         testParameters: [],
         filteredTestParameters: [],
+        checkedTestParameters: [],
         testedItems: [],
+        filteredTestedItems: [],
         drawingDesigns: [],
         filteredDrawingDesigns: [],
         processingStatuses: [],
@@ -68,19 +83,23 @@ export default {
     getAgreementInfo (agreementId) {
       let vm = this
       this.staticOptions.agreements.forEach(agreement => {
-        if (agreement.id === agreementId) {
+        if (agreement.agreementNumber === agreementId) {
           vm.agreementForm.sampleName = agreement.sampleName
           vm.agreementForm.materialNumber = agreement.materialNumber
           vm.agreementForm.receiveSampleTime = agreement.receiveSampleTime
           vm.agreementForm.expectedCompletionTime = agreement.expectedCompletionTime
+          // comment is overrided by process, it can't be loaded from agreement again in edit form, same for processPriority
+          // vm.processForm.comment = agreement.comment
+          // vm.processForm.processPriority = agreement.processPriority
         }
       })
-      this.loadAgreementProcess(agreementId)
+      // to display other added processes within the same agreementId at the bottom of page.
+      // this.loadAgreementProcess(agreementId)
     },
-    getDrawingDesigns (testedItemId) {
+    getDrawingDesigns (testedItemIds) {
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
-          return val.testedItem === testedItemId
+          return testedItemIds.indexOf(val.testedItem) >= 0
         })
     },
     getTestParameter (testedItemId) {
@@ -97,9 +116,9 @@ export default {
     },
     resetProcessForm () {
       this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
-    },
-    resetProcessId () {
-      this.processForm.id = ''
+      this.agreementForm = JSON.parse(JSON.stringify(this.agreementResetForm))
+      this.staticOptions.testedItemTaskTableData = []
+      this.staticOptions.filteredDrawingDesigns = []
     },
     updateTestedItemTasks () {
       let vm = this
@@ -148,6 +167,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadTestCategory () {
+      let vm = this
+      this.$ajax.get('/api/sample/testCategory/getTestCategory')
+        .then(function (res) {
+          vm.staticOptions.testCategories = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     loadTestedItemData () {
       let vm = this
       this.$ajax.get('/api/sample/testedItem/getTestedItem')
@@ -182,7 +210,6 @@ export default {
           vm.getAgreementInfo(vm.processForm.agreementNumber)
           vm.getTestMethod(vm.processForm.testedItem)
           vm.getTestParameter(vm.processForm.testedItem)
-          vm.getDrawingDesigns(vm.processForm.testedItem)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -207,6 +234,7 @@ export default {
     }
   },
   mounted () {
+    this.loadTestCategory()
     this.loadTestMethodData()
     this.loadTestParameterData()
     this.loadTestedItemData()
