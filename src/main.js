@@ -64,6 +64,7 @@ Axios.interceptors.request.use(
     if (localStorage.getItem('id_token')) {
       config.headers.Authorization = localStorage.getItem('id_token')
     }
+    // config.baseURL = '/context'
     return config
   },
   err => {

@@ -104,6 +104,7 @@ Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
+  // base: '/context/',
   routes: [
     {
       path: '/login/:id',
