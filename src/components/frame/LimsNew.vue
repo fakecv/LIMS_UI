@@ -14,6 +14,7 @@
             <el-autocomplete
               class="inline-input"
               clearable
+              default-first-option
               v-model="state2"
               prefix-icon="el-icon-search"
               :fetch-suggestions="querySearch"

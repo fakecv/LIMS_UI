@@ -81,7 +81,6 @@
       tooltip-effect="dark"
       @row-dblclick=dblclick
       :row-style="processTableStyle"
-      default-expand-all
       >
       <el-table-column
         type="expand">
@@ -109,12 +108,6 @@
           label="优先级"
           width="180">
         </el-table-column>
-        <el-table-column
-          prop="rejectNote"
-          label="驳回原因"
-          show-overflow-tooltip
-          width="180">
-        </el-table-column>
         </el-table>
       </template>
       </el-table-column>
@@ -136,6 +129,12 @@
       <el-table-column
         prop="submitFrom"
         label="提交部门"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="submitTime"
+        label="提交时间"
+        :formatter="submitTimeFormatter"
         width="180">
       </el-table-column>
       <el-table-column
@@ -184,8 +183,11 @@ export default {
       totalProcesss: 0,
       processRequestForm: {
         agreementNumber: '',
-        materialNumber: '',
+        sampleNumber: '',
         sampleSubNumber: '',
+        comment: '',
+        processPriority: '',
+        submitTime: '',
         drawingDesign: '',
         submitFrom: '',
         processingStatus: '',
@@ -346,6 +348,14 @@ export default {
     expectedCompletionTimeFormatter (row, column) {
       if (row.expectedCompletionTime) {
         let dateTT = new Date(row.expectedCompletionTime)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
+      }
+    },
+    submitTimeFormatter (row, column) {
+      if (row.submitTime) {
+        let dateTT = new Date(row.submitTime)
         let hours = dateTT.getHours() < 10 ? '0' : ''
         let min = dateTT.getMinutes() < 10 ? '0' : ''
         return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`

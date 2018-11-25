@@ -14,7 +14,7 @@
                 <el-option v-for="item in staticOptions.testedItems"
                   :key="item.id"
                   :label="item.testedItemName"
-                  :value="item.testedItemName">
+                  :value="item.id">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -36,7 +36,7 @@
                 <el-option v-for="item in staticOptions.filteredTestMethods"
                   :key="item.id"
                   :label="item.testMethodName"
-                  :value="item.id">
+                  :value="item.testMethodName">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -47,7 +47,7 @@
                 <el-option v-for="item in staticOptions.filteredDrawingDesigns"
                   :key="item.id"
                   :label="item.drawingDesignName"
-                  :value="item.id">
+                  :value="item.drawingDesignName">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -69,7 +69,7 @@
                 <el-option v-for="item in staticOptions.processingStatuses"
                   :key="item.id"
                   :label="item.processingStatusName"
-                  :value="item.processingStatusName">
+                  :value="item.id">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -80,7 +80,7 @@
                 <el-option v-for="item in staticOptions.departments"
                   :key="item.id"
                   :label="item.departmentName"
-                  :value="item.departmentName">
+                  :value="item.id">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -91,7 +91,7 @@
                 <el-option v-for="item in staticOptions.processPriorities"
                   :key="item.id"
                   :label="item.processPriorityName"
-                  :value="item.processPriorityName">
+                  :value="item.id">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -118,6 +118,7 @@
         <el-table-column
           prop="testParameter"
           label="检测项目参数"
+          show-overflow-tooltip
           width="180">
         </el-table-column>
         <el-table-column
@@ -148,6 +149,7 @@
         <el-table-column
           prop="processPriority"
           label="优先级"
+          :formatter="processPriorityFormatter"
           width="180">
         </el-table-column>
       </el-table>

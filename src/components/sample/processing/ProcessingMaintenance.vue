@@ -104,6 +104,12 @@
         width="180">
       </el-table-column>
       <el-table-column
+        prop="submitTime"
+        label="提交时间"
+        :formatter="submitTimeFormatter"
+        width="180">
+      </el-table-column>
+      <el-table-column
         prop="processingStatus"
         label="当前流转状态"
         width="180">
@@ -148,8 +154,11 @@ export default {
       totalProcesss: 0,
       processRequestForm: {
         agreementNumber: '',
-        materialNumber: '',
+        sampleNumber: '',
         sampleSubNumber: '',
+        comment: '',
+        processPriority: '',
+        submitTime: '',
         drawingDesign: '',
         submitFrom: '',
         processingStatus: '',
@@ -309,6 +318,14 @@ export default {
     expectedCompletionTimeFormatter (row, column) {
       if (row.expectedCompletionTime) {
         let dateTT = new Date(row.expectedCompletionTime)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
+      }
+    },
+    submitTimeFormatter (row, column) {
+      if (row.submitTime) {
+        let dateTT = new Date(row.submitTime)
         let hours = dateTT.getHours() < 10 ? '0' : ''
         let min = dateTT.getMinutes() < 10 ? '0' : ''
         return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`

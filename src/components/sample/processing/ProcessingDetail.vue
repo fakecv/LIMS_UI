@@ -68,6 +68,11 @@
                 </el-select>
             </el-form-item>
           </el-col>
+            <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+              <el-form-item label="提交时间">
+                <el-date-picker type="datetime" placeholder="选择日期" v-model="processForm.submitTime" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="当前流转状态">
               <el-select name="processingStatus" filterable default-first-option v-model="processForm.processingStatus">

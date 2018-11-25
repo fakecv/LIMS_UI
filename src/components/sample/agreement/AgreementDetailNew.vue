@@ -111,6 +111,7 @@ export default {
       this.$ajax.get('/api/sample/processPriority/getProcessPriority')
         .then(function (res) {
           vm.staticOptions.processPriorities = res.data
+          vm.agreementForm.processPriority = vm.staticOptions.processPriorities[0].processPriorityName
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

@@ -21,7 +21,6 @@
       style="width: 100%"
       tooltip-effect="dark"
       @row-dblclick=dblclick
-      default-expand-all
       >
       <el-table-column
         type="expand">
@@ -130,6 +129,7 @@ export default {
         comment: '',
         testedItemTasks: [],
         processPriority: '',
+        submitTime: '',
         drawingDesign: '',
         submitFrom: '',
         processingStatus: '',
@@ -142,7 +142,12 @@ export default {
         sampleSubNumber: '',
         comment: '',
         testedItemTasks: [],
-        processPriority: ''
+        processPriority: '',
+        submitTime: '',
+        drawingDesign: '',
+        submitFrom: '',
+        processingStatus: '',
+        submitTo: ''
       },
       staticOptions: {
         department: '',

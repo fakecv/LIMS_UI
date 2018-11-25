@@ -98,17 +98,6 @@
           width="55">
         </el-table-column>
         <el-table-column
-          prop="testedItemTaskName"
-          label="检测项目名称"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testCategory"
-          label="检测类别"
-          :formatter="testCategoryFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
           prop="testedItem"
           label="检测项目"
           :formatter="testedItemFormatter"
@@ -152,7 +141,7 @@
     <el-container style="padding: 10px">
       <el-form :model="processForm" label-width="100px" label-position="left" size="mini">
       <el-row>
-            <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="加工图号">
               <el-select name="drawingDesign" filterable default-first-option v-model="processForm.drawingDesign">
                 <el-option v-for="item in staticOptions.filteredDrawingDesigns"
@@ -163,7 +152,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="提交部门">
               <el-select name="submitFrom" filterable default-first-option v-model="processForm.submitFrom">
                 <el-option v-for="item in staticOptions.departments"
@@ -174,7 +163,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="当前流转状态">
               <el-select name="processingStatus" filterable default-first-option v-model="processForm.processingStatus">
                 <el-option v-for="item in staticOptions.processingStatuses"
@@ -185,7 +174,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="提交至">
               <el-select name="submitTo" filterable default-first-option v-model="processForm.submitTo">
                 <el-option v-for="item in staticOptions.departments"
@@ -324,17 +313,6 @@
           width="55">
         </el-table-column>
         <el-table-column
-          prop="testedItemProductName"
-          label="检测项目名称"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testCategory"
-          label="检测类别"
-          :formatter="testCategoryFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
           prop="testedItem"
           label="检测项目"
           :formatter="testedItemFormatter"
@@ -462,7 +440,7 @@ export default {
         {'ref': 'unlock', 'name': '解锁', 'id': '5', 'icon': 'el-icon-edit', 'loading': false, 'disabled': false},
         {'ref': 'delete', 'name': '删除', 'id': '6', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false}
       ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 12},
       isIndeterminate: true,
       checkAll: false,
       testedItemProductGroupFormVisible: false,

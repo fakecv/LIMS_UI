@@ -21,6 +21,7 @@ import DepartmentMaintenance from '@/components/sample/department/DepartmentMain
 import DrawingDesignDetailNew from '@/components/sample/drawingdesign/DrawingDesignDetailNew'
 import DrawingDesignDetailEdit from '@/components/sample/drawingdesign/DrawingDesignDetailEdit'
 import DrawingDesignMaintenance from '@/components/sample/drawingdesign/DrawingDesignMaintenance'
+import '@/components/dynamic-form'
 import EditorFormAside from '@/views/editor/form/aside'
 import EditorFormMain from '@/views/editor/form/main'
 import EditorTableAside from '@/views/editor/table/aside'

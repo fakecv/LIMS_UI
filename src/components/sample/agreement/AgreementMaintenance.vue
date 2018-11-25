@@ -46,6 +46,18 @@
           width="80">
       </el-table-column>
         <el-table-column
+          prop="materialNumber"
+          label="材质牌号"
+          width="180">
+      </el-table-column>
+        <el-table-column
+          prop="customerId"
+          label="委托单位"
+          show-overflow-tooltip
+          :formatter="customerFormatter"
+          width="180">
+      </el-table-column>
+        <el-table-column
           prop="receiveSampleTime"
           label="样品接收时间"
           :formatter="receiveSampleTimeFormatter"
@@ -60,6 +72,7 @@
         <el-table-column
           prop="comment"
           label="其他信息"
+          show-overflow-tooltip
           width="180">
         </el-table-column>
         <el-table-column
@@ -99,6 +112,7 @@ export default {
         currentPage: 1
       },
       processPriorities: [],
+      customers: [],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
     }
   },
@@ -165,6 +179,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadCustomerData () {
+      let vm = this
+      this.$ajax.get('/api/customer/getCustomer')
+        .then(function (res) {
+          vm.customers = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     processPriorityFormatter (row, column) {
       let name = ''
       this.processPriorities.forEach(item => {
@@ -173,10 +196,20 @@ export default {
         }
       })
       return name
+    },
+    customerFormatter (row, column) {
+      let name = ''
+      this.customers.forEach(item => {
+        if (row.customerId === item.id) {
+          name = item.company
+        }
+      })
+      return name
     }
   },
   mounted () {
     this.loadProcessPriorityData()
+    this.loadCustomerData()
     this.onSubmit()
   }
 
