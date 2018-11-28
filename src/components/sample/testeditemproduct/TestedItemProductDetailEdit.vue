@@ -18,6 +18,7 @@ export default {
     return {
       testedItemProductForm: {
         testedItemProductName: '',
+        sort: '',
         testCategory: '',
         testedItem: '',
         testParameter: '',
@@ -26,6 +27,7 @@ export default {
       },
       testedItemProductResetForm: {
         testedItemProductName: '',
+        sort: '',
         testCategory: '',
         testedItem: '',
         testParameter: '',

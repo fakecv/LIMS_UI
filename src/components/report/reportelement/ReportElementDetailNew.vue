@@ -2,6 +2,7 @@
   <ReportElementDetail :reportElementForm="reportElementForm"
    :staticOptions="staticOptions"
   v-on:getCascadeItems="getCascadeItems"
+  v-on:handleInputChange="handleInputChange"
   v-on:updateReportElementForm="updateReportElementForm"
   v-on:deleteReportElementForm="resetReportElementForm"
   v-on:new="resetReportElementForm"
@@ -18,6 +19,9 @@ export default {
       reportElementForm: {
         reportName: '',
         reportElementName: '',
+        reportElementInput: 'no',
+        object: '',
+        indirectValue: '',
         reportElementSort: '',
         border: '',
         property: '',
@@ -34,6 +38,9 @@ export default {
       reportElementResetForm: {
         reportName: '',
         reportElementName: '',
+        reportElementInput: 'no',
+        object: '',
+        indirectValue: '',
         reportElementSort: '',
         border: '',
         property: '',
@@ -53,6 +60,8 @@ export default {
           {id: 2, type: '数组'}
         ],
         values: [],
+        indirectValues: [],
+        objects: [],
         textAligns: [
           {id: 1, textAlign: '居中'},
           {id: 2, textAlign: '靠左'},
@@ -101,6 +110,19 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    handleInputChange (event) {
+      switch (event) {
+        case 'no':
+          console.log('no')
+          break
+        case 'direct':
+          console.log('direct')
+          break
+        case 'indirect':
+          console.log('indirect')
+          break
+      }
     },
     updateReportElementForm (event) {
       this.reportElementForm.id = event.id

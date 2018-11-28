@@ -31,6 +31,53 @@
               <el-input name="reportElementName" v-model="reportElementForm.reportElementName" autoComplete="reportElementName"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="单元格标签">
+              <el-input name="reportElementLabel" v-model="reportElementForm.reportElementLabel" autoComplete="reportElementLabel"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="输入值特征">
+              <el-radio-group v-model="reportElementForm.reportElementInput" @change="handleInputChange">
+                <el-radio label="no">无</el-radio>
+                <el-radio label="direct">直接输入</el-radio>
+                <el-radio label="indirect">关联输入</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="reportElementForm.reportElementInput ==='direct'" :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="值内容">
+              <el-select name="value" filterable default-first-option v-model="reportElementForm.value">
+                <el-option v-for="item in staticOptions.values"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="reportElementForm.reportElementInput ==='indirect'" :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="关联对象">
+              <el-select name="value" filterable default-first-option v-model="reportElementForm.object">
+                <el-option v-for="item in staticOptions.objects"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="reportElementForm.reportElementInput ==='indirect'" :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="关联值内容">
+              <el-select name="value" filterable default-first-option v-model="reportElementForm.indirectValue">
+                <el-option v-for="item in staticOptions.indirectValues"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="边框特征">
               <el-select name="border" filterable default-first-option v-model="reportElementForm.border">
@@ -96,17 +143,6 @@
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="所占列数">
               <el-input name="column" v-model="reportElementForm.column" autoComplete="column"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="值内容">
-              <el-select name="value" filterable default-first-option v-model="reportElementForm.value">
-                <el-option v-for="item in staticOptions.values"
-                  :key="item"
-                  :label="item"
-                  :value="item">
-                </el-option>
-                </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
@@ -205,6 +241,10 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    handleInputChange (val) {
+      console.log('handleInputChange')
+      this.$emit('handleInputChange', val)
     },
     numberGenerator () {
       let vm = this

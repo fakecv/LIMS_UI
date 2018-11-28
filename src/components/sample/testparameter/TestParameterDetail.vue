@@ -20,6 +20,11 @@
           </el-form-item>
         </el-row>
         <el-row>
+          <el-form-item label="检测项目序号">
+            <el-input name="sort" v-model="testParameterForm.sort"></el-input>
+          </el-form-item>
+        </el-row>
+        <el-row>
           <el-col>
             <el-form-item label="检测项目参数">
               <el-input name="testParameterName" v-model="testParameterForm.testParameterName" autoComplete="testParameterName"></el-input>

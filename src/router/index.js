@@ -14,6 +14,9 @@ import ComposeSchedule from '@/components/equipment/ComposeSchedule'
 import CustomerDetailNew from '@/components/customer/CustomerDetailNew'
 import CustomerDetailEdit from '@/components/customer/CustomerDetailEdit'
 import CustomerMaintenance from '@/components/customer/CustomerMaintenance'
+import CustomerNoteDetailNew from '@/components/customer/customernote/CustomerNoteDetailNew'
+import CustomerNoteDetailEdit from '@/components/customer/customernote/CustomerNoteDetailEdit'
+import CustomerNoteMaintenance from '@/components/customer/customernote/CustomerNoteMaintenance'
 import Dashboard from '@/components/reference/Dashboard'
 import DepartmentDetailNew from '@/components/sample/department/DepartmentDetailNew'
 import DepartmentDetailEdit from '@/components/sample/department/DepartmentDetailEdit'
@@ -65,6 +68,9 @@ import ReportDevelopmentMaintenance from '@/components/report/reportdevelopment/
 import ReportElementDetailNew from '@/components/report/reportelement/ReportElementDetailNew'
 import ReportElementDetailEdit from '@/components/report/reportelement/ReportElementDetailEdit'
 import ReportElementMaintenance from '@/components/report/reportelement/ReportElementMaintenance'
+import ReportEnrichmentDetailNew from '@/components/report/reportenrichment/ReportEnrichmentDetailNew'
+import ReportEnrichmentDetailEdit from '@/components/report/reportenrichment/ReportEnrichmentDetailEdit'
+import ReportEnrichmentMaintenance from '@/components/report/reportenrichment/ReportEnrichmentMaintenance'
 import RoleDetailNew from '@/components/system/role/RoleDetailNew'
 import RoleDetailEdit from '@/components/system/role/RoleDetailEdit'
 import RoleGroupDetailNew from '@/components/system/rolegroup/RoleGroupDetailNew'
@@ -186,6 +192,21 @@ const router = new Router({
           path: 'customerMaintenance',
           name: 'customerMaintenance',
           component: CustomerMaintenance
+        },
+        {
+          path: 'customerNoteDetailEdit/:id',
+          name: 'customerNoteAuditorDetailEdit',
+          component: CustomerNoteDetailEdit
+        },
+        {
+          path: 'customerNoteDetailNew',
+          name: 'customerNoteDetailNew',
+          component: CustomerNoteDetailNew
+        },
+        {
+          path: 'customerNoteMaintenance',
+          name: 'customerNoteMaintenance',
+          component: CustomerNoteMaintenance
         },
         {
           path: 'dashboard',
@@ -401,6 +422,21 @@ const router = new Router({
           path: 'reportElementMaintenance',
           name: 'reportElementMaintenance',
           component: ReportElementMaintenance
+        },
+        {
+          path: 'reportEnrichmentDetailEdit/:id',
+          name: 'reportEnrichmentAuditorDetailEdit',
+          component: ReportEnrichmentDetailEdit
+        },
+        {
+          path: 'reportEnrichmentDetailNew',
+          name: 'reportEnrichmentDetailNew',
+          component: ReportEnrichmentDetailNew
+        },
+        {
+          path: 'reportEnrichmentMaintenance',
+          name: 'reportEnrichmentMaintenance',
+          component: ReportEnrichmentMaintenance
         },
         {
           path: 'roleDetailNew',

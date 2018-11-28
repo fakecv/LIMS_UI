@@ -31,7 +31,7 @@ export default {
         expectedCompletionTime: '',
         processPriority: '',
         materialNumber: '',
-        noOfSample: '',
+        noOfSample: '1组(2件)',
         done: 'false',
         comment: '',
         finishedSampleHandlingMethod: '',
@@ -55,7 +55,7 @@ export default {
         expectedCompletionTime: '',
         processPriority: '',
         materialNumber: '',
-        noOfSample: '',
+        noOfSample: '1组(2件)',
         done: 'false',
         comment: '',
         finishedSampleHandlingMethod: '2',
@@ -76,6 +76,7 @@ export default {
       staticOptions: {
         processPriorities: [],
         customers: [],
+        customerNotes: [],
         users: [],
         totalCustomers: 0,
         totalUsers: 0,
@@ -191,6 +192,7 @@ export default {
     },
     updateCustomer (row) {
       this.agreementForm.customerId = row.id
+      this.customerForm.id = row.id
       this.customerForm.name = row.name
       this.customerForm.company = row.company
       this.customerForm.mobileNumber = row.mobileNumber

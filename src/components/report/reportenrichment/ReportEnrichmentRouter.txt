@@ -1,0 +1,18 @@
+import ReportEnrichmentDetailNew from '@/components/report/reportenrichment/ReportEnrichmentDetailNew'
+import ReportEnrichmentDetailEdit from '@/components/report/reportenrichment/ReportEnrichmentDetailEdit'
+import ReportEnrichmentMaintenance from '@/components/report/reportenrichment/ReportEnrichmentMaintenance'
+{
+  path: 'reportEnrichmentDetailEdit/:id',
+  name: 'reportEnrichmentAuditorDetailEdit',
+  component: ReportEnrichmentDetailEdit
+},
+{
+  path: 'reportEnrichmentDetailNew',
+  name: 'reportEnrichmentDetailNew',
+  component: ReportEnrichmentDetailNew
+},
+{
+  path: 'reportEnrichmentMaintenance',
+  name: 'reportEnrichmentMaintenance',
+  component: ReportEnrichmentMaintenance
+},

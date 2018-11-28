@@ -60,11 +60,6 @@
                   </el-radio-group>
               </el-form-item>
             </el-col>
-            <el-col :span="24">
-              <el-form-item label="其他信息">
-                <el-input type="textarea" name="comment" v-model="agreementForm.comment" autoComplete="comment"></el-input>
-              </el-form-item>
-            </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="已验样品处置">
                 <el-select  filterable allow-create default-first-option
@@ -167,6 +162,18 @@
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="委托人通讯地址">
                 <el-input name="clientAddress" v-model="customerForm.address" autoComplete="clientAddress"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="其他信息">
+              <el-select name="customerNote" filterable clearable default-first-option v-model="agreementForm.comment">
+                <el-option v-for="item in staticOptions.customerNotes"
+                  :key="item.id"
+                  :label="item.customerNoteName"
+                  :value="item.customerNoteDescription">
+                </el-option>
+                </el-select>
+                <el-input type="textarea" name="comment" v-model="agreementForm.comment" autoComplete="comment"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -478,6 +485,9 @@ export default {
       this.customerRequestForm.currentPage = val
       this.$emit('reloadCustomerData', this.customerRequestForm)
     },
+    handleCustomerNoteChange (val) {
+      this.agreementForm.comment = val
+    },
     reloadCustomers () {
       this.$emit('reloadCustomerData', this.customerRequestForm)
     },
@@ -485,7 +495,14 @@ export default {
       this.customerDialogFormVisible = true
     },
     confirmCustomer () {
+      let vm = this
       this.customerDialogFormVisible = false
+      this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.customerForm.id)
+        .then(function (res) {
+          vm.staticOptions.customerNotes = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     handleCustomerRowClick (row, event, column) {
       this.$emit('updateCustomer', row)

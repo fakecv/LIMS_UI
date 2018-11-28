@@ -26,7 +26,7 @@
           </el-row>
         </el-col>
         <el-col :span="6">
-          <el-dropdown split-button type="primary" @command="handleCommand">
+          <el-dropdown split-button type="primary" @command="handleCommand" style="min-width: 200px;">
             <i class="fa fa-user" aria-hidden="true"><span style="margin: 10px;">{{userProfile.sub}}</span></i>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="a">导航</el-dropdown-item>

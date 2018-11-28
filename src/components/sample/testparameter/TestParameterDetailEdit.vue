@@ -17,12 +17,14 @@ export default {
       testParameterForm: {
         id: '',
         testParameterName: '',
-        testParameterDescription: ''
+        testParameterDescription: '',
+        sort: ''
       },
       testParameterResetForm: {
         id: '',
         testParameterName: '',
-        testParameterDescription: ''
+        testParameterDescription: '',
+        sort: ''
       },
       staticOptions: {
         testedItems: []

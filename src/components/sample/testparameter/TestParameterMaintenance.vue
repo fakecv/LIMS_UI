@@ -23,7 +23,23 @@
           </el-row>
         </el-form>
       </el-container>
-      <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
+      <el-row type="flex" justify="end">
+        <el-button-group size="mini">
+          <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveUp">上移</el-button>
+          <el-button type="primary" @click.native="moveDown">下移<i class="el-icon-arrow-down"></i></el-button>
+        </el-button-group>
+      </el-row>
+      <el-table ref="multipleTable"
+       :data="tableData"
+        style="width: 100%"
+        highlight-current-row
+        @row-dblclick=dblclick
+        @selection-change="handleSelectionChange"
+        @select="handleSelection">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
         <el-table-column
           prop="testParameterName"
           :formatter="testedItemFormatter"
@@ -34,6 +50,11 @@
           prop="testParameterName"
           label="检测项目参数名称"
           width="180">
+        </el-table-column>
+        <el-table-column
+          prop="sort"
+          label="序号"
+          width="80">
         </el-table-column>
         <el-table-column
           prop="testParameterDescription"
@@ -62,12 +83,15 @@ export default {
     return {
       tableData: [],
       totalTestParameters: 0,
+      indexArray: [],
       testParameterRequestForm: {
         testParameterName: '',
         testedItem: '',
         itemsPerPage: 20,
         currentPage: 1
       },
+      testParameterForm: {},
+      tempTestParameterForm: {},
       testedItems: []
     }
   },
@@ -88,15 +112,100 @@ export default {
       this.testParameterRequestForm.currentPage = val
       this.onSubmit()
     },
+    handleSelection (selection, row) {
+      if (selection.indexOf(row) > 0) {
+        selection.forEach(item => {
+          this.$refs.multipleTable.toggleRowSelection(item)
+        })
+      }
+    },
+    handleSelectionChange (selection) {
+      let vm = this
+      this.indexArray = []
+      selection.forEach(item => {
+        vm.indexArray.push(vm.tableData.indexOf(item))
+      })
+    },
+    moveUp () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveUpSingle(item)
+      })
+      this.indexArray = []
+    },
+    moveUpSingle (index) {
+      let vm = this
+      let tmp = ''
+      if (index > 0) {
+        this.tempTestParameterForm = this.tableData[(index - 1)]
+        this.testParameterForm = this.tableData[index]
+        tmp = this.tempTestParameterForm.sort
+        this.tempTestParameterForm.sort = this.testParameterForm.sort
+        this.testParameterForm.sort = tmp
+        this.$ajax.all([this.update(this.testParameterForm), this.update(this.tempTestParameterForm)])
+          .then(vm.$ajax.spread((res1, res2) => {
+            vm.reload(res1.data)
+          })).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      }
+    },
+    moveDown () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveDownSingle(item)
+      })
+      // this.$refs.multipleTable.clearSelection()
+      this.indexArray = []
+    },
+    moveDownSingle (index) {
+      let vm = this
+      let tmp = ''
+      if (index < this.tableData.length - 1) {
+        this.tempTestParameterForm = this.tableData[(index + 1)]
+        this.testParameterForm = this.tableData[index]
+        tmp = this.tempTestParameterForm.sort
+        this.tempTestParameterForm.sort = this.testParameterForm.sort
+        this.testParameterForm.sort = tmp
+        this.$ajax.all([this.update(this.testParameterForm), this.update(this.tempTestParameterForm)])
+          .then(vm.$ajax.spread((res1, res2) => {
+            vm.reload(res1.data)
+          })).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      }
+    },
+    update (val) {
+      return this.$ajax.post('/api/sample/testParameter', val)
+    },
     loadData () {
       let vm = this
       this.$ajax.get('/api/sample/testParameter/getTestParameter')
         .then(function (res) {
           vm.tableData = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     },
     dblclick (row, event) {
       this.$router.push('/lims/testParameterDetailEdit/' + row.id)
+    },
+    reload (val) {
+      let vm = this
+      this.$ajax.post('/api/sample/testParameter/queryTestParameter', this.testParameterRequestForm)
+        .then(function (res) {
+          vm.tableData = res.data.pageResult || []
+          vm.totalTestParameters = res.data.totalTestParameters || 0
+          vm.$nextTick(() => {
+            vm.tableData.forEach(row => {
+              if (row.id === val.id) {
+                vm.$refs.multipleTable.toggleRowSelection(row, true)
+              }
+            })
+          })
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     onSubmit () {
       let vm = this
@@ -104,6 +213,8 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalTestParameters = res.data.totalTestParameters || 0
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     },
     testedItemFormatter (row, column) {

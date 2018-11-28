@@ -557,7 +557,6 @@ export default {
       this.staticOptions.testedItemProducts = []
       val.forEach(item => {
         // item.processPriority = vm.processForm.processPriority
-        console.log(item)
         vm.staticOptions.testedItemProducts.push(item)
       })
     },
