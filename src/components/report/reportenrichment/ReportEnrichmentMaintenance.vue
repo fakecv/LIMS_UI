@@ -1,25 +1,14 @@
 <template>
   <div>
-    <el-container style="padding: 10px">
+   <el-container style="padding: 10px">
       <el-form :model="reportEnrichmentForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="报表名称">
               <el-select name="reportName" filterable clearable default-first-option v-model="reportEnrichmentForm.reportName">
-                <el-option v-for="item in staticOptions.reportNames"
+                <el-option v-for="item in staticOptions.reports"
                   :key="item.id"
                   :label="item.reportName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="关联字段">
-              <el-select name="enrichKey" filterable clearable default-first-option v-model="reportEnrichmentForm.enrichKey">
-                <el-option v-for="item in staticOptions.enrichKeys"
-                  :key="item.id"
-                  :label="item.enrichKey"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -29,22 +18,16 @@
             <el-form-item label="关联对象">
               <el-select name="enrichObject" filterable clearable default-first-option v-model="reportEnrichmentForm.enrichObject">
                 <el-option v-for="item in staticOptions.enrichObjects"
-                  :key="item.id"
-                  :label="item.enrichObject"
-                  :value="item.id">
+                  :key="item"
+                  :label="item"
+                  :value="item">
                 </el-option>
                 </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="关联值">
-              <el-checkbox-group v-model="reportEnrichmentForm.enrichValues">
-                  <el-checkbox label="lable1" name="name1"></el-checkbox>
-                  <el-checkbox label="lable2" name="name2"></el-checkbox>
-                  <el-checkbox label="lable3" name="name3"></el-checkbox>
-                  <el-checkbox label="lable4" name="name4"></el-checkbox>
-                  <el-checkbox label="lable5" name="name5" @change="optionChange"></el-checkbox>
-              </el-checkbox-group>
+            <el-form-item label="关联值" >
+              <el-input name="enrichValues" v-model="reportEnrichmentForm.enrichValues" autoComplete="enrichValues"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -59,6 +42,7 @@
         <el-table-column
           prop="reportName"
           label="报表名称"
+          :formatter="reportFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -74,6 +58,7 @@
         <el-table-column
           prop="enrichValues"
           label="关联值"
+          show-overflow-tooltip
           width="180">
         </el-table-column>
       </el-table>
@@ -106,6 +91,13 @@ export default {
         itemsPerPage: 20,
         currentPage: 1
       },
+      staticOptions: {
+        reports: [],
+        enrichKeys: [],
+        enrichObjects: [],
+        enrichValues: [],
+        checkedEnrichValues: []
+      },
       columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }
     }
   },
@@ -132,10 +124,39 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    loadReportData () {
+      let vm = this
+      this.$ajax.get('/api/report/reportDevelopment/getReportDevelopment')
+        .then(function (res) {
+          vm.staticOptions.reports = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadCollectionData () {
+      let vm = this
+      this.$ajax.get('/api/report/reportDevelopment/getCollectionNames')
+        .then(function (res) {
+          vm.staticOptions.enrichObjects = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    reportFormatter (row, column) {
+      let name = ''
+      this.staticOptions.reports.forEach(item => {
+        if (row.reportName === item.id) {
+          name = item.reportName
+        }
+      })
+      return name
     }
   },
   mounted () {
     this.onSubmit()
+    this.loadReportData()
+    this.loadCollectionData()
   }
 }
 </script>

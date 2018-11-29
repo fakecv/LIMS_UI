@@ -2,6 +2,7 @@
   <ReportElementDetail :reportElementForm="reportElementForm"
    :staticOptions="staticOptions"
   v-on:getCascadeItems="getCascadeItems"
+  v-on:loadReportEnrichmentData="loadReportEnrichmentData"
   v-on:handleInputChange="handleInputChange"
   v-on:updateReportElementForm="updateReportElementForm"
   v-on:deleteReportElementForm="resetReportElementForm"
@@ -22,6 +23,7 @@ export default {
         reportElementInput: 'no',
         object: '',
         indirectValue: '',
+        reportElementLabel: '',
         reportElementSort: '',
         border: '',
         property: '',
@@ -41,6 +43,7 @@ export default {
         reportElementInput: 'no',
         object: '',
         indirectValue: '',
+        reportElementLabel: '',
         reportElementSort: '',
         border: '',
         property: '',
@@ -55,6 +58,7 @@ export default {
         id: ''
       },
       staticOptions: {
+        input: true,
         types: [
           {id: 1, type: '字符串'},
           {id: 2, type: '数组'}
@@ -96,6 +100,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadReportEnrichmentData (reportId) {
+      let vm = this
+      this.$ajax.get('/api/report/reportEnrichment/getGroupReportEnrichment/' + reportId)
+        .then(function (res) {
+          vm.staticOptions.objects = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     getCascadeItems (event) {
       let vm = this
       let collectionName = ''
@@ -110,6 +123,7 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+      this.staticOptions.input = false
     },
     handleInputChange (event) {
       switch (event) {
@@ -117,10 +131,10 @@ export default {
           console.log('no')
           break
         case 'direct':
-          console.log('direct')
+          this.getCascadeItems(this.reportElementForm.reportName)
           break
         case 'indirect':
-          console.log('indirect')
+          this.loadReportEnrichmentData(this.reportElementForm.reportName)
           break
       }
     },

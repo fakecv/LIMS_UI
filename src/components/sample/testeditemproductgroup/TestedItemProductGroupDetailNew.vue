@@ -31,12 +31,14 @@ export default {
       },
       testedItemProductGroupForm: {
         testedItemProductGroupName: '',
+        sort: '',
         testedItemProductGroupDescription: '',
         testedItemProducts: [],
         id: ''
       },
       testedItemProductGroupResetForm: {
         testedItemProductGroupName: '',
+        sort: '',
         testedItemProductGroupDescription: '',
         testedItemProducts: [],
         id: ''

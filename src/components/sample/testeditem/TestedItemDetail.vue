@@ -21,7 +21,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-form-item label="检测项目序号">
-            <el-input name="testedItemOrder" v-model="testedItemForm.testedItemOrder"></el-input>
+            <el-input name="testedItemOrder" v-model="testedItemForm.sort"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="20">

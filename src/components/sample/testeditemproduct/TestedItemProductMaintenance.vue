@@ -227,12 +227,11 @@ export default {
       this.indexArray.forEach(item => {
         vm.moveUpSingle(item)
       })
-      this.indexArray = []
+      // this.indexArray = []
     },
     moveUpSingle (index) {
       let vm = this
       let tmp = ''
-      console.log(index)
       if (index > 0) {
         this.tempTestedItemProductForm = this.tableData[(index - 1)]
         this.testedItemProductForm = this.tableData[index]
@@ -252,7 +251,7 @@ export default {
       this.indexArray.forEach(item => {
         vm.moveDownSingle(item)
       })
-      this.indexArray = []
+      // this.indexArray = []
     },
     moveDownSingle (index) {
       let vm = this

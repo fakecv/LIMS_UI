@@ -15,7 +15,7 @@
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目产品序号" label-width="120px">
+            <el-form-item label="检测项目产品序号" label-width="140px">
               <el-input name="sort" v-model="testedItemProductForm.sort"></el-input>
             </el-form-item>
           </el-col>

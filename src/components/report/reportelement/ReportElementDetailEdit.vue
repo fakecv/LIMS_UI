@@ -2,8 +2,9 @@
   <ReportElementDetail
    :reportElementForm="reportElementForm"
    :staticOptions="staticOptions"
-  v-on:getCascadeItems="getCascadeItems"
-  v-on:handleInputChange="handleInputChange"
+   v-on:getCascadeItems="getCascadeItems"
+   v-on:loadReportEnrichmentData="loadReportEnrichmentData"
+   v-on:handleInputChange="handleInputChange"
    v-on:deleteReportElementForm="resetReportElementForm"
    v-on:new="resetReportElementForm"
    v-on:copy="resetReportElementId"/>
@@ -22,6 +23,7 @@ export default {
         reportElementInput: 'no',
         object: '',
         indirectValue: '',
+        reportElementLabel: '',
         reportElementSort: '',
         border: '',
         property: '',
@@ -41,6 +43,7 @@ export default {
         reportElementInput: 'no',
         object: '',
         indirectValue: '',
+        reportElementLabel: '',
         reportElementSort: '',
         border: '',
         property: '',
@@ -55,6 +58,7 @@ export default {
         id: ''
       },
       staticOptions: {
+        input: false,
         types: [
           {id: 1, type: '字符串'},
           {id: 2, type: '数组'}
@@ -92,6 +96,8 @@ export default {
       this.$ajax.get('/api/report/reportElement/' + reportElementId)
         .then(function (res) {
           vm.reportElementForm = res.data
+          vm.getCascadeItems(vm.reportElementForm.reportName)
+          vm.loadReportEnrichmentData(vm.reportElementForm.reportName)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -101,7 +107,15 @@ export default {
       this.$ajax.get('/api/report/reportDevelopment/getReportDevelopment')
         .then(function (res) {
           vm.staticOptions.reports = res.data
-          vm.getCascadeItems(vm.reportElementForm.reportName)
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadReportEnrichmentData (reportId) {
+      let vm = this
+      this.$ajax.get('/api/report/reportEnrichment/getGroupReportEnrichment/' + reportId)
+        .then(function (res) {
+          vm.staticOptions.objects = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -120,6 +134,7 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+      this.staticOptions.input = false
     },
     handleInputChange (event) {
       switch (event) {
@@ -127,15 +142,14 @@ export default {
           console.log('no')
           break
         case 'direct':
-          console.log('direct')
+          this.getCascadeItems(this.reportElementForm.reportName)
           break
         case 'indirect':
-          console.log('indirect')
+          this.loadReportEnrichmentData(this.reportElementForm.reportName)
           break
       }
     },
     resetReportElementForm () {
-      console.log('resetReportElementForm')
       this.reportElementForm = JSON.parse(JSON.stringify(this.reportElementResetForm))
     },
     resetReportElementId () {

@@ -18,11 +18,13 @@ export default {
       testedItemForm: {
         id: '',
         testedItemName: '',
+        sort: '',
         testedItemNumber: ''
       },
       testedItemResetForm: {
         id: '',
         testedItemName: '',
+        sort: '',
         testedItemNumber: ''
       },
       staticOptions: {

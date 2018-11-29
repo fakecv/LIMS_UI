@@ -26,6 +26,11 @@
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
+          <el-form-item label="检测项目序号">
+            <el-input name="testedItemOrder" v-model="testMethodForm.sort"></el-input>
+          </el-form-item>
+        </el-row>
+        <el-row :gutter="20">
           <el-form-item label="实验方法描述">
             <el-input type="textarea" name="testMethodNumber" v-model="testMethodForm.testMethodNumber"></el-input>
           </el-form-item>

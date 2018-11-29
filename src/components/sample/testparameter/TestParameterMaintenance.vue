@@ -131,7 +131,7 @@ export default {
       this.indexArray.forEach(item => {
         vm.moveUpSingle(item)
       })
-      this.indexArray = []
+      // this.indexArray = []
     },
     moveUpSingle (index) {
       let vm = this
@@ -156,7 +156,7 @@ export default {
         vm.moveDownSingle(item)
       })
       // this.$refs.multipleTable.clearSelection()
-      this.indexArray = []
+      // this.indexArray = []
     },
     moveDownSingle (index) {
       let vm = this
@@ -178,18 +178,6 @@ export default {
     update (val) {
       return this.$ajax.post('/api/sample/testParameter', val)
     },
-    loadData () {
-      let vm = this
-      this.$ajax.get('/api/sample/testParameter/getTestParameter')
-        .then(function (res) {
-          vm.tableData = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    dblclick (row, event) {
-      this.$router.push('/lims/testParameterDetailEdit/' + row.id)
-    },
     reload (val) {
       let vm = this
       this.$ajax.post('/api/sample/testParameter/queryTestParameter', this.testParameterRequestForm)
@@ -206,6 +194,18 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    loadData () {
+      let vm = this
+      this.$ajax.get('/api/sample/testParameter/getTestParameter')
+        .then(function (res) {
+          vm.tableData = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    dblclick (row, event) {
+      this.$router.push('/lims/testParameterDetailEdit/' + row.id)
     },
     onSubmit () {
       let vm = this

@@ -38,7 +38,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="输入值特征">
-              <el-radio-group v-model="reportElementForm.reportElementInput" @change="handleInputChange">
+              <el-radio-group v-model="reportElementForm.reportElementInput" :disabled="staticOptions.input" @change="handleInputChange">
                 <el-radio label="no">无</el-radio>
                 <el-radio label="direct">直接输入</el-radio>
                 <el-radio label="indirect">关联输入</el-radio>
@@ -58,11 +58,11 @@
           </el-col>
           <el-col v-if="reportElementForm.reportElementInput ==='indirect'" :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="关联对象">
-              <el-select name="value" filterable default-first-option v-model="reportElementForm.object">
+              <el-select name="value" filterable default-first-option v-model="reportElementForm.object" @change="handleObjectChange">
                 <el-option v-for="item in staticOptions.objects"
-                  :key="item"
-                  :label="item"
-                  :value="item">
+                  :key="item.id"
+                  :label="item.enrichObject"
+                  :value="item.id">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -242,8 +242,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    handleObjectChange (val) {
+      let vm = this
+      this.staticOptions.objects.forEach(item => {
+        if (item.id === val) {
+          vm.staticOptions.indirectValues = item.enrichValues.split(',')
+        }
+      })
+    },
     handleInputChange (val) {
-      console.log('handleInputChange')
       this.$emit('handleInputChange', val)
     },
     numberGenerator () {

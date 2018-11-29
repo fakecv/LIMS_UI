@@ -11,8 +11,8 @@
         <el-row :gutter="20">
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="报表名称">
-              <el-select name="reportName" filterable clearable default-first-option v-model="reportEnrichmentForm.reportName">
-                <el-option v-for="item in staticOptions.reportNames"
+              <el-select name="reportName" filterable clearable default-first-option v-model="reportEnrichmentForm.reportName" @change="getCascadeItems">
+                <el-option v-for="item in staticOptions.reports"
                   :key="item.id"
                   :label="item.reportName"
                   :value="item.id">
@@ -24,32 +24,32 @@
             <el-form-item label="关联字段">
               <el-select name="enrichKey" filterable clearable default-first-option v-model="reportEnrichmentForm.enrichKey">
                 <el-option v-for="item in staticOptions.enrichKeys"
-                  :key="item.id"
-                  :label="item.enrichKey"
-                  :value="item.id">
+                  :key="item"
+                  :label="item"
+                  :value="item">
                 </el-option>
                 </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="关联对象">
-              <el-select name="enrichObject" filterable clearable default-first-option v-model="reportEnrichmentForm.enrichObject">
+              <el-select name="enrichObject" filterable clearable default-first-option v-model="reportEnrichmentForm.enrichObject" @change="handleEnrichObjectChange">
                 <el-option v-for="item in staticOptions.enrichObjects"
-                  :key="item.id"
-                  :label="item.enrichObject"
-                  :value="item.id">
+                  :key="item"
+                  :label="item"
+                  :value="item">
                 </el-option>
                 </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="关联值">
-              <el-checkbox-group v-model="reportEnrichmentForm.enrichValues">
-                  <el-checkbox label="lable1" name="name1"></el-checkbox>
-                  <el-checkbox label="lable2" name="name2"></el-checkbox>
-                  <el-checkbox label="lable3" name="name3"></el-checkbox>
-                  <el-checkbox label="lable4" name="name4"></el-checkbox>
-                  <el-checkbox label="lable5" name="name5" @change="optionChange"></el-checkbox>
+            <el-form-item label="关联值" >
+              <el-input name="enrichValues" v-model="reportEnrichmentForm.enrichValues" autoComplete="enrichValues"></el-input>
+              <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+              <div style="margin: 15px 0;"></div>
+              <el-checkbox-group v-model="staticOptions.checkedEnrichValues" @change="handleReportEnrichmentValuesChange">
+                <el-checkbox v-for="reportEnrichment in staticOptions.enrichValues" :label="reportEnrichment" :key="reportEnrichment">
+                </el-checkbox>
               </el-checkbox-group>
             </el-form-item>
           </el-col>
@@ -74,7 +74,9 @@ export default {
         {'name': '文件导入', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '7', 'icon': 'el-icon-download', 'loading': false}
       ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
+      isIndeterminate: true,
+      checkAll: false
     }
   },
   methods: {
@@ -133,6 +135,39 @@ export default {
           vm.$message('已经成功删除！')
           vm.$emit('deleteReportEnrichmentForm')
           vm.sampleNumberButton = false
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    getCascadeItems (val) {
+      this.reportEnrichmentForm.enrichKey = ''
+      this.$emit('getCascadeItems', val)
+    },
+    handleReportEnrichmentValuesChange (value) {
+      let checkedCount = value.length
+      this.checkAll = checkedCount === this.staticOptions.enrichKeys.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.staticOptions.enrichKeys.length
+      this.reportEnrichmentForm.enrichValues = value.join(',')
+    },
+    handleCheckAllChange (val) {
+      let vm = this
+      if (val) {
+        this.staticOptions.enrichValues.forEach(enrichValue => {
+          vm.staticOptions.checkedEnrichValues.push(enrichValue)
+        })
+        this.reportEnrichmentForm.enrichValues = this.staticOptions.checkedEnrichValues.join(',')
+      } else {
+        this.staticOptions.checkedEnrichValues = []
+        this.reportEnrichmentForm.enrichValues = ''
+      }
+      this.isIndeterminate = false
+    },
+    handleEnrichObjectChange (val) {
+      let vm = this
+      this.staticOptions.enrichValues = []
+      this.$ajax.get('/api/report/reportElement/getFieldNames/' + val)
+        .then(function (res) {
+          vm.staticOptions.enrichValues = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

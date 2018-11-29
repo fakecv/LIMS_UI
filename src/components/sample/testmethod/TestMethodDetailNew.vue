@@ -19,12 +19,14 @@ export default {
       testMethodForm: {
         id: '',
         testMethodName: '',
+        sort: '',
         testMethodNumber: '',
         testedItem: ''
       },
       testMethodResetForm: {
         id: '',
         testMethodName: '',
+        sort: '',
         testMethodNumber: '',
         testedItem: ''
       },
