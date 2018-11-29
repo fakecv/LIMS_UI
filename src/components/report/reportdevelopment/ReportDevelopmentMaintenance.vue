@@ -76,6 +76,7 @@ export default {
       totalReportDevelopments: 0,
       reportDevelopmentForm: {
         reportName: '',
+        collectionName: '',
         pageSize: '',
         rotate: '',
         itemsPerPage: 20,

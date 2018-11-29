@@ -14,6 +14,7 @@
             <el-autocomplete
               class="inline-input"
               clearable
+              default-first-option
               v-model="state2"
               prefix-icon="el-icon-search"
               :fetch-suggestions="querySearch"
@@ -25,7 +26,7 @@
           </el-row>
         </el-col>
         <el-col :span="6">
-          <el-dropdown split-button type="primary" @command="handleCommand">
+          <el-dropdown split-button type="primary" @command="handleCommand" style="min-width: 200px;">
             <i class="fa fa-user" aria-hidden="true"><span style="margin: 10px;">{{userProfile.sub}}</span></i>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="a">导航</el-dropdown-item>
@@ -61,7 +62,7 @@
             <!--this div will add scroll bar for the el-main, don't remove it-->
             <el-main>
               <blockquote class="minsx-quote">{{instruction}}</blockquote>
-              <router-view></router-view>
+              <router-view :leftMenus="leftMenus" v-on:getTopMenus="getTopMenus"></router-view>
             </el-main>
           </el-container>
         </el-main>
@@ -118,6 +119,7 @@ export default {
   created () {
   },
   methods: {
+    // search input
     getSystemMenu () {
       let vm = this
       this.$ajax.get('/api/systemMenu/displayedMenuItems')

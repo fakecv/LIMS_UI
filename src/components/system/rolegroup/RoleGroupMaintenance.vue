@@ -73,7 +73,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalUserRoleGroups = res.data.totalUserRoleGroups || 0
-          console.log('total user role group is: ' + vm.totalUserRoleGroups)
         })
     }
   },

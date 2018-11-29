@@ -9,10 +9,10 @@
     <el-container style="padding: 10px">
       <el-form :model="reportElementForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :span="24">
             <el-form-item label="报告名称">
-              <el-select name="reportName" filterable editable clearable default-first-option v-model="reportElementForm.reportName">
-                <el-option v-for="item in staticOptions.reportNames"
+              <el-select name="reportName" filterable default-first-option v-model="reportElementForm.reportName" @change="getCascadeItems">
+                <el-option v-for="item in staticOptions.reports"
                   :key="item.id"
                   :label="item.reportName"
                   :value="item.id">
@@ -21,8 +21,61 @@
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="序号">
+              <el-input name="reportElementSort" v-model="reportElementForm.reportElementSort" autoComplete="reportElementSort"></el-input>
+              <el-button :disabled="disableSortButton" @click="numberGenerator">生成序号</el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="单元格名称">
               <el-input name="reportElementName" v-model="reportElementForm.reportElementName" autoComplete="reportElementName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="单元格标签">
+              <el-input name="reportElementLabel" v-model="reportElementForm.reportElementLabel" autoComplete="reportElementLabel"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="输入值特征">
+              <el-radio-group v-model="reportElementForm.reportElementInput" :disabled="staticOptions.input" @change="handleInputChange">
+                <el-radio label="no">无</el-radio>
+                <el-radio label="direct">直接输入</el-radio>
+                <el-radio label="indirect">关联输入</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="reportElementForm.reportElementInput ==='direct'" :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="值内容">
+              <el-select name="value" filterable default-first-option v-model="reportElementForm.value">
+                <el-option v-for="item in staticOptions.values"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="reportElementForm.reportElementInput ==='indirect'" :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="关联对象">
+              <el-select name="value" filterable default-first-option v-model="reportElementForm.object" @change="handleObjectChange">
+                <el-option v-for="item in staticOptions.objects"
+                  :key="item.id"
+                  :label="item.enrichObject"
+                  :value="item.id">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="reportElementForm.reportElementInput ==='indirect'" :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="关联值内容">
+              <el-select name="value" filterable default-first-option v-model="reportElementForm.indirectValue">
+                <el-option v-for="item in staticOptions.indirectValues"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+                </el-option>
+                </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
@@ -72,8 +125,8 @@
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="是否所属组">
               <el-radio-group v-model="reportElementForm.group">
-                <el-radio label="是">是</el-radio>
-                <el-radio label="否">否</el-radio>
+                <el-radio label="yes">是</el-radio>
+                <el-radio label="no">否</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -90,17 +143,6 @@
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="所占列数">
               <el-input name="column" v-model="reportElementForm.column" autoComplete="column"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="值内容">
-              <el-select name="value" filterable default-first-option v-model="reportElementForm.value">
-                <el-option v-for="item in staticOptions.values"
-                  :key="item.id"
-                  :label="item.value"
-                  :value="item.value">
-                </el-option>
-                </el-select>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
@@ -131,11 +173,12 @@ export default {
         {'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
         {'name': '数据库保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false},
         {'name': '解锁', 'id': '4', 'icon': 'el-icon-edit', 'loading': false},
-        {'name': '删除', 'id': '5', 'icon': 'el-icon-upload', 'loading': false},
+        {'name': '删除', 'id': '5', 'icon': 'el-icon-delete', 'loading': false},
         {'name': '文件导入', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '7', 'icon': 'el-icon-download', 'loading': false}
       ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
+      disableSortButton: false
     }
   },
   methods: {
@@ -156,9 +199,11 @@ export default {
     },
     new () {
       this.$emit('new')
+      this.disableSortButton = false
     },
     copy () {
       this.$emit('copy')
+      this.disableSortButton = false
     },
     saveToDB () {
       let vm = this
@@ -192,11 +237,36 @@ export default {
       this.$ajax.get('/api/report/reportElement/delete/' + this.reportElementForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deletereportElementForm')
-          vm.sampleNumberButton = false
+          vm.$emit('deleteReportElementForm')
+          vm.disableSortButton = false
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    handleObjectChange (val) {
+      let vm = this
+      this.staticOptions.objects.forEach(item => {
+        if (item.id === val) {
+          vm.staticOptions.indirectValues = item.enrichValues.split(',')
+        }
+      })
+    },
+    handleInputChange (val) {
+      this.$emit('handleInputChange', val)
+    },
+    numberGenerator () {
+      let vm = this
+      this.$ajax.get('/api/report/reportElement/generateSortNumber')
+        .then(function (res) {
+          vm.reportElementForm.reportElementSort = res.data
+          vm.disableSortButton = true
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    getCascadeItems (val) {
+      this.reportElementForm.value = ''
+      this.$emit('getCascadeItems', val)
     }
   }
 }

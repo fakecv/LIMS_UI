@@ -1,145 +1,225 @@
 <template>
   <div>
     <el-container>
-      <el-header style="min-width:400px;">
+      <el-header style="min-width:500px;">
         <el-button-group>
-          <el-button type="info" v-for="(action,index) in actions" :key="index" size="mini" :icon="action.icon" :loading="action.loading" @click="actionHandle(action)">{{action.name}}
+          <el-button :ref="action.ref" type="info" v-for="(action,index) in actions"
+            :key="index" size="mini" :icon="action.icon"
+            :loading="action.loading"
+            @click="actionHandle(action)"
+            :disabled="action.disabled"
+            >
+            {{action.name}}
           </el-button>
         </el-button-group>
       </el-header>
       <el-container style="padding: 10px">
-        <el-form :model="processingForm" label-width="100px" label-position="left" size="mini">
+        <el-form :model="processForm" label-width="100px" label-position="left" size="mini" readonly>
           <el-row :gutter="20">
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="委托编号">
-                <el-select name="agreementNumber" filterable default-first-option v-model="processingForm.agreementNumber" @change="getAgreementNumber">
-                <el-option v-for="item in staticOptions.agreements"
-                  :key="item.Id"
-                  :label="item.agreementNumber"
-                  :value="item.id">
-                </el-option>
-                </el-select>
+                <el-input name="agreementNumber" v-model="processForm.agreementNumber" readonly autoComplete="agreementNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="样品名称">
-                <el-input name="sampleName" v-model="processingForm.sampleName" readonly autoComplete="sampleName"></el-input>
+                <el-input name="sampleName" v-model="agreementForm.sampleName" readonly autoComplete="sampleName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="样品接收时间">
+                <el-date-picker type="datetime" placeholder="选择日期" readonly v-model="agreementForm.receiveSampleTime" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="材质牌号">
+                <el-input name="materialNumber" v-model="agreementForm.materialNumber" readonly autoComplete="materialNumber"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="要求完成时间">
+                <el-date-picker type="datetime" placeholder="选择日期" readonly v-model="agreementForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="来样编号">
+                <el-input name="sampleClientNumber" v-model="agreementForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="加工图号">
+              <el-select name="drawingDesign" filterable default-first-option v-model="processForm.drawingDesign">
+                <el-option v-for="item in staticOptions.filteredDrawingDesigns"
+                  :key="item.id"
+                  :label="item.drawingDesignName"
+                  :value="item.drawingDesignName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="提交部门">
+              <el-select name="submitFrom" filterable default-first-option v-model="processForm.submitFrom">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.departmentName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+            <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+              <el-form-item label="提交时间">
+                <el-date-picker type="datetime" placeholder="选择日期" v-model="processForm.submitTime" style="width: 100%;"></el-date-picker>
+              </el-form-item>
+            </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="当前流转状态">
+              <el-select name="processingStatus" filterable default-first-option v-model="processForm.processingStatus">
+                <el-option v-for="item in staticOptions.processingStatuses"
+                  :key="item.id"
+                  :label="item.processingStatusName"
+                  :value="item.processingStatusName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="提交至">
+              <el-select name="submitTo" filterable default-first-option v-model="processForm.submitTo">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.departmentName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="优先级">
+                <el-select name="processPriority" filterable default-first-option v-model="processForm.processPriority">
+                <el-option v-for="item in staticOptions.processPriorities"
+                  :key="item.Id"
+                  :label="item.processPriorityName"
+                  :value="item.processPriorityName">
+                </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="其他信息">
+                <el-input type="textarea" name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
               <el-form-item label="样品编号">
-                <el-input name="sampleNumber" v-model="processingForm.sampleNumber" autoComplete="sampleNumber"></el-input>
+                <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="试样编号">
-                <el-input name="sampleSubNumber" v-model="processingForm.sampleSubNumber" autoComplete="sampleSubNumber"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col>
-              <el-form-item label="检测项目">
-                <el-select name="experimentalItem" filterable default-first-option v-model="processingForm.experimentalItem">
-                <el-option v-for="item in staticOptions.experimentalItems"
-                  :key="item.Id"
-                  :label="item.experimentalItemName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="提交部门">
-                <el-select name="submitFrom" filterable default-first-option v-model="processingForm.submitFrom">
-                <el-option v-for="item in staticOptions.departments"
-                  :key="item.Id"
-                  :label="item.departmentName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="提交至">
-                <el-select name="submitTo" filterable default-first-option v-model="processingForm.submitTo">
-                <el-option v-for="item in staticOptions.departments"
-                  :key="item.Id"
-                  :label="item.departmentName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="流转状态">
-                <el-select name="processingStatus" filterable default-first-option v-model="processingForm.processingStatus">
-                <el-option v-for="item in staticOptions.processingStatuses"
-                  :key="item.Id"
-                  :label="item.processingStatusName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
+                <el-input name="sampleSubNumber" v-model="processForm.sampleSubNumber" autoComplete="sampleSubNumber"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
       </el-container>
+    <el-table :data="staticOptions.testedItemTaskTableData" style="width: 100%" size="mini">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column
+          prop="testedItemTaskName"
+          label="检测项目名称"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testCategory"
+          label="检测类别"
+          :formatter="testCategoryFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testedItem"
+          label="检测项目"
+          :formatter="testedItemFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testParameter"
+          label="检测项目参数"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testMethod"
+          label="检测方法"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="processPriority"
+          label="优先级"
+          width="180">
+        </el-table-column>
+      </el-table>
     </el-container>
   </div>
 </template>
-
 <script>
 export default {
   name: 'processingDetail',
-  props: ['processingForm', 'staticOptions', 'customerForm', 'userForm'],
+  props: ['agreementForm', 'processForm', 'staticOptions', 'customerForm', 'userForm'],
   data () {
     return {
+      sampleNumberButton: false,
       actions: [
-        {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false},
-        {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
-        {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
-        {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false},
-        {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
-        {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
-        {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
+        {'ref': 'delete', 'name': '删除', 'id': '6', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false}
       ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
+      testedItemProductGroupFormVisible: false,
+      testedItemProductGroupForm: {
+        testedItemProductGroupName: '',
+        testedItemProductGroupDescription: '',
+        itemsPerPage: 20,
+        currentPage: 1
+      },
+      testedItemTaskForm: {
+        testedItemTaskName: '',
+        testedItem: '',
+        testParameter: '',
+        testMethod: '',
+        drawingDesign: '',
+        submitFrom: '',
+        processingStatus: '',
+        submitTo: '',
+        processPriority: '',
+        itemsPerPage: 20,
+        currentPage: 1
+      },
+      testedItemProductGroupTableData: [],
+      deletedTestedItemTasks: [],
+      totalTestedItemProductGroups: 0
     }
   },
   methods: {
     actionHandle (action) {
       if (action.id === '1') {
-        // this.saveToDB()
-      } else if (action.id === '2') {
-        this.confirmDelete()
-      } else if (action.id === '3') {
-      } else if (action.id === '4') {
-      } else if (action.id === '5') {
         // this.new()
-      } else if (action.id === '6') {
+      } else if (action.id === '2') {
         // this.copy()
-      } else if (action.id === '7') {
+      } else if (action.id === '3') {
+        // this.saveToDB()
+      } else if (action.id === '4') {
+        // this.submit()
+      } else if (action.id === '5') {
+        // this.actions[3].disabled = false
+      } else if (action.id === '6') {
+        this.confirmDelete()
       }
-    },
-    new () {
-      this.$emit('new')
-    },
-    copy () {
-      this.$emit('copy')
-      this.$message('复制成功!')
-    },
-    saveToDB () {
-      let vm = this
-      this.$ajax.post('/api/sample/processing', this.processingForm)
-        .then(function (res) {
-          vm.$message('已经成功保存到数据库!')
-          vm.$emit('updateProcessingForm', res.data)
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
     },
     confirmDelete () {
       let vm = this
-      if (this.processingForm.id && this.processingForm.id !== '') {
+      if (this.processForm.id && this.processForm.id !== '') {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -156,16 +236,59 @@ export default {
     },
     delete () {
       let vm = this
-      this.$ajax.get('/api/sample/processing/delete/' + this.processingForm.id)
+      this.$ajax.get('/api/sample/processing/delete/' + this.processForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteProcessing')
+          vm.$emit('deleteProcessForm')
+          vm.sampleNumberButton = false
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
     getAgreementNumber  (val) {
       this.$emit('getAgreementInfo', val)
+    },
+    getTestMethod  (val) {
+      this.processForm.drawingDesign = ''
+      this.processForm.testParameter = ''
+      this.processForm.testMethod = ''
+      this.$emit('getTestMethod', val)
+      this.$emit('getTestParameter', val)
+      this.$emit('getDrawingDesigns', val)
+    },
+    expectedCompletionTimeFormatter (row, column) {
+      if (row.expectedCompletionTime) {
+        let dateTT = new Date(row.expectedCompletionTime)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
+      }
+    },
+    receiveSampleTimeFormatter (row, column) {
+      if (row.receiveSampleTime) {
+        let dateTT = new Date(row.receiveSampleTime)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
+      }
+    },
+    testedItemFormatter (row, column) {
+      let name = ''
+      this.staticOptions.testedItems.forEach(item => {
+        if (row.testedItem === item.id) {
+          name = item.testedItemName
+        }
+      })
+      return name
+    },
+    testCategoryFormatter (row, column) {
+      let name = ''
+      this.staticOptions.testCategories.forEach(item => {
+        if (row.testCategory === item.id) {
+          name = item.testCategoryName
+        }
+      })
+      return name
     }
   }
 }

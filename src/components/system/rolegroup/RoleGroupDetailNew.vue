@@ -69,7 +69,6 @@ export default {
       let vm = this
       var index = this.userRoleGroupForm.userRoleIds.indexOf(id)
       if (index > -1) {
-        console.log('splice ' + id)
         this.userRoleGroupForm.userRoleIds.splice(index, 1)
         this.staticOptions.userRoles.forEach(row => {
           if (row.id === id) {
@@ -77,7 +76,6 @@ export default {
           }
         })
       } else {
-        console.log('push ' + id)
         this.userRoleGroupForm.userRoleIds.push(id)
         this.staticOptions.userRoles.forEach(row => {
           if (row.id === id) {

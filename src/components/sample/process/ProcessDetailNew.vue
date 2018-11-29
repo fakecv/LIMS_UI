@@ -2,72 +2,104 @@
 <div>
     <ProcessDetail
       :processForm="processForm"
+      :agreementForm="agreementForm"
       :staticOptions="staticOptions"
       v-on:getDrawingDesigns="getDrawingDesigns"
       v-on:getAgreementInfo="getAgreementInfo"
-      v-on:getExperimentalMethod="getExperimentalMethod"
-      v-on:getExperimentItemsParameter="getExperimentItemsParameter"
+      v-on:getTestMethod="getTestMethod"
+      v-on:getTestParameter="getTestParameter"
       v-on:updateProcessForm="updateProcessForm"
+      v-on:updateTestedItemTasks="updateTestedItemTasks"
+      v-on:updateTestedItemTask="updateTestedItemTask"
+      v-on:addTestedItemTask="addTestedItemTask"
+      v-on:updateTestedItemProduct="updateTestedItemProduct"
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
       v-on:copy="resetProcessId"
       />
-      <el-table :data="staticOptions.processTableData" style="width: 100%" @row-dblclick=dblclick>
+      <el-table :data="staticOptions.processTableData"
+      style="width: 100%"
+      tooltip-effect="dark"
+      @row-dblclick=dblclick
+      >
+      <el-table-column
+        type="expand">
+        <template slot-scope="scope">
+        <el-table :data="scope.row.testedItemTasks" size="mini">
         <el-table-column
-          prop="sampleNumber"
-          label="样品编号"
-          fixed
-          width="100">
-        </el-table-column>
-        <el-table-column
-          prop="sampleSubNumber"
-          label="试样编号"
-          fixed
-          width="100">
-        </el-table-column>
-        <el-table-column
-          prop="experimentalItem"
+          prop="testedItem"
           label="检测项目"
-          :formatter="experimentalItemFormatter"
+          :formatter="testedItemFormatter"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="experimentalMethod"
+          prop="testParameter"
+          label="检测项目参数"
+          show-overflow-tooltip
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testMethod"
           label="检测方法"
-          :formatter="experimentalMethodFormatter"
           width="180">
-        </el-table-column>
-        <el-table-column
-          prop="drawingDesign"
-          label="加工图号"
-          :formatter="drawingDesignFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="processingStatus"
-          label="当前流转状态"
-          :formatter="processingStatusFormatter"
-          width="150">
         </el-table-column>
         <el-table-column
           prop="processPriority"
           label="优先级"
-          :formatter="processPriorityFormatter"
-          width="80">
+          width="180">
         </el-table-column>
         <el-table-column
-          prop="receiveSampleTime"
-          label="接收样品时间"
-          :formatter="receiveSampleTimeFormatter"
-          width="150">
+          prop="rejectNote"
+          label="驳回原因"
+          show-overflow-tooltip
+          width="180">
         </el-table-column>
-        <el-table-column
-          prop="expectedCompletionTime"
-          label="要求完成时间"
-          :formatter="expectedCompletionTimeFormatter"
-          width="150">
-        </el-table-column>
-      </el-table>
+        </el-table>
+      </template>
+      </el-table-column>
+      <el-table-column
+        prop="agreementNumber"
+        label="委托编号"
+        width="150">
+      </el-table-column>
+      <el-table-column
+        prop="sampleSubNumber"
+        label="试样编号"
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="drawingDesign"
+        label="加工图号"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="submitFrom"
+        label="提交部门"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="processingStatus"
+        label="当前流转状态"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="submitTo"
+        label="提交至"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="processPriority"
+        label="优先级"
+        show-overflow-tooltip
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="comment"
+        label="其它"
+        show-overflow-tooltip
+        width="180">
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -78,54 +110,57 @@ export default {
   components: {ProcessDetail},
   data () {
     return {
-      processForm: {
-        id: '',
-        agreementNumber: '',
+      agreementForm: {
         sampleName: '',
         receiveSampleTime: '',
         materialNumber: '',
         expectedCompletionTime: '',
         sampleClientNumber: '',
+        drawingDesign: '',
+        submitFrom: '',
+        processingStatus: '',
+        submitTo: ''
+      },
+      processForm: {
+        id: '',
+        agreementNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
-        experimentalItem: '',
-        experimentItemsParameter: '',
-        experimentalMethod: '',
-        drawingDesign: '',
         comment: '',
+        testedItemTasks: [],
+        processPriority: '',
+        submitTime: '',
+        drawingDesign: '',
         submitFrom: '',
-        submitTo: '',
         processingStatus: '',
-        processingStatues: [],
-        processPriority: ''
+        submitTo: ''
       },
       processResetForm: {
         id: '',
         agreementNumber: '',
-        sampleName: '',
-        receiveSampleTime: '',
-        materialNumber: '',
-        expectedCompletionTime: '',
-        sampleClientNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
-        experimentalItem: '',
-        experimentItemsParameter: '',
-        experimentalMethod: '',
-        drawingDesign: '',
         comment: '',
+        testedItemTasks: [],
+        processPriority: '',
+        submitTime: '',
+        drawingDesign: '',
         submitFrom: '',
-        submitTo: '',
         processingStatus: '',
-        processingStatues: [],
-        processPriority: ''
+        submitTo: ''
       },
       staticOptions: {
-        experimentalMethods: [],
-        filteredExperimentalMethods: [],
-        experimentItemsParameters: [],
-        filteredExperimentItemsParameters: [],
-        experimentalItems: [],
+        department: '',
+        testCategories: [],
+        testedItemTaskTableData: [],
+        testedItemProducts: [],
+        testMethods: [],
+        filteredTestMethods: [],
+        testParameters: [],
+        filteredTestParameters: [],
+        checkedTestParameters: [],
+        testedItems: [],
+        filteredTestedItems: [],
         drawingDesigns: [],
         filteredDrawingDesigns: [],
         processingStatuses: [],
@@ -143,33 +178,34 @@ export default {
     getAgreementInfo (agreementId) {
       let vm = this
       this.staticOptions.agreements.forEach(agreement => {
-        if (agreement.id === agreementId) {
-          vm.processForm.sampleName = agreement.sampleName
-          vm.processForm.materialNumber = agreement.materialNumber
-          vm.processForm.receiveSampleTime = agreement.receiveSampleTime
-          vm.processForm.expectedCompletionTime = agreement.expectedCompletionTime
+        if (agreement.agreementNumber === agreementId) {
+          vm.agreementForm.sampleName = agreement.sampleName
+          vm.agreementForm.materialNumber = agreement.materialNumber
+          vm.agreementForm.receiveSampleTime = agreement.receiveSampleTime
+          vm.agreementForm.expectedCompletionTime = agreement.expectedCompletionTime
           vm.processForm.comment = agreement.comment
           vm.processForm.processPriority = agreement.processPriority
         }
       })
+      // to display other added processes within the same agreementId at the bottom of page.
       this.loadAgreementProcess(agreementId)
     },
-    getDrawingDesigns (experimentalItemId) {
+    getDrawingDesigns (testedItemIds) {
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+          return testedItemIds.indexOf(val.testedItem) >= 0
         })
     },
-    getExperimentalMethod (experimentalItemId) {
-      this.staticOptions.filteredExperimentalMethods =
-        this.staticOptions.experimentalMethods.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+    getTestMethod (testedItemId) {
+      this.staticOptions.filteredTestMethods =
+        this.staticOptions.testMethods.filter(function (val) {
+          return val.testedItem === testedItemId
         })
     },
-    getExperimentItemsParameter (experimentalItemId) {
-      this.staticOptions.filteredExperimentItemsParameters =
-        this.staticOptions.experimentItemsParameters.filter(function (val) {
-          return val.experimentalItem === experimentalItemId
+    getTestParameter (testedItemId) {
+      this.staticOptions.filteredTestParameters =
+        this.staticOptions.testParameters.filter(function (val) {
+          return val.testedItem === testedItemId
         })
     },
     resetProcessId () {
@@ -177,9 +213,62 @@ export default {
     },
     resetProcessForm () {
       this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
+      this.staticOptions.testedItemTaskTableData = []
     },
     updateProcessForm (event) {
       this.processForm.id = event.id
+    },
+    updateTestedItemTasks () {
+      let vm = this
+      this.staticOptions.testedItemProducts.forEach(testItemProductGroup => {
+        vm.$ajax.post('/api/sample/testedItemProductGroup/getTestedItemTasks', testItemProductGroup)
+          .then(function (res) {
+            res.data.forEach(item => {
+              item.processPriority = vm.processForm.processPriority
+              vm.staticOptions.testedItemTaskTableData.push(item)
+            })
+            // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+            vm.fetchDrawingDesign()
+          }).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      })
+    },
+    updateTestedItemProduct () {
+      let vm = this
+      this.staticOptions.testedItemProducts.forEach(testItemProduct => {
+        vm.$ajax.post('/api/sample/testedItemProduct/getTestedItemTasks', testItemProduct)
+          .then(function (res) {
+            res.data.processPriority = vm.processForm.processPriority
+            vm.staticOptions.testedItemTaskTableData.push(res.data)
+            // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+            vm.fetchDrawingDesign()
+          }).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      })
+    },
+    addTestedItemTask () {
+      let vm = this
+      vm.$ajax.get('/api/sample/testedItemProduct/getTestedItemTask')
+        .then(function (res) {
+          res.data.processPriority = vm.processForm.processPriority
+          vm.staticOptions.testedItemTaskTableData.push(res.data)
+          // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+          // vm.fetchDrawingDesign()
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    updateTestedItemTask () {
+      this.fetchDrawingDesign()
+    },
+    fetchDrawingDesign () {
+      let testedItemIds = []
+      this.staticOptions.testedItemTaskTableData.forEach(item => {
+        testedItemIds.push(item.testedItem)
+      })
+      this.getDrawingDesigns(testedItemIds)
     },
     loadAgreement () {
       let vm = this
@@ -208,6 +297,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    queryApplicationUserDepartment () {
+      let vm = this
+      this.$ajax.get('/api/users/queryApplicationUserDepartment')
+        .then(function (res) {
+          vm.processForm.submitFrom = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     loadDrawingDesignData () {
       let vm = this
       this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
@@ -215,27 +313,37 @@ export default {
           vm.staticOptions.drawingDesigns = res.data
         })
     },
-    loadExperimentalItemData () {
+    loadTestCategory () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalItem/getExperimentalItem')
+      this.$ajax.get('/api/sample/testCategory/getTestCategory')
         .then(function (res) {
-          vm.staticOptions.experimentalItems = res.data
+          vm.staticOptions.testCategories = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalMethodData () {
+    loadTestedItemData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
+      this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.staticOptions.experimentalMethods = res.data
+          vm.staticOptions.testedItems = res.data
+          vm.staticOptions.filteredTestedItems = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     },
-    loadExperimentItemsParameterData () {
+    loadTestMethodData () {
       let vm = this
-      this.$ajax.get('/api/sample/experimentItemsParameter/getExperimentItemsParameter')
+      this.$ajax.get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
-          vm.staticOptions.experimentItemsParameters = res.data
+          vm.staticOptions.testMethods = res.data
+        })
+    },
+    loadTestParameterData () {
+      let vm = this
+      this.$ajax.get('/api/sample/testParameter/getTestParameter')
+        .then(function (res) {
+          vm.staticOptions.testParameters = res.data
         })
     },
     loadProcessingStatusData () {
@@ -254,41 +362,6 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    drawingDesignFormatter (row, column) {
-      let name = ''
-      this.staticOptions.drawingDesigns.forEach(item => {
-        if (row.drawingDesign === item.id) {
-          name = item.drawingDesignName
-        }
-      })
-      return name
-    },
-    expectedCompletionTimeFormatter (row, column) {
-      if (row.expectedCompletionTime) {
-        let dateTT = new Date(row.expectedCompletionTime)
-        let hours = dateTT.getHours() < 10 ? '0' : ''
-        let min = dateTT.getMinutes() < 10 ? '0' : ''
-        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
-      }
-    },
-    experimentalItemFormatter (row, column) {
-      let name = ''
-      this.staticOptions.experimentalItems.forEach(item => {
-        if (row.experimentalItem === item.id) {
-          name = item.experimentalItemName
-        }
-      })
-      return name
-    },
-    experimentalMethodFormatter (row, column) {
-      let name = ''
-      this.staticOptions.experimentalMethods.forEach(item => {
-        if (row.experimentalMethod === item.id) {
-          name = item.experimentalMethodName
-        }
-      })
-      return name
-    },
     processPriorityFormatter (row, column) {
       let name = ''
       this.staticOptions.processPriorities.forEach(item => {
@@ -298,28 +371,22 @@ export default {
       })
       return name
     },
-    processingStatusFormatter (row, column) {
+    testedItemFormatter (row, column) {
       let name = ''
-      this.staticOptions.processingStatuses.forEach(item => {
-        if (row.processingStatus === item.id) {
-          name = item.processingStatusName
+      this.staticOptions.testedItems.forEach(item => {
+        if (row.testedItem === item.id) {
+          name = item.testedItemName
         }
       })
       return name
-    },
-    receiveSampleTimeFormatter (row, column) {
-      if (row.receiveSampleTime) {
-        let dateTT = new Date(row.receiveSampleTime)
-        let hours = dateTT.getHours() < 10 ? '0' : ''
-        let min = dateTT.getMinutes() < 10 ? '0' : ''
-        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
-      }
     }
   },
   mounted () {
-    this.loadExperimentalMethodData()
-    this.loadExperimentItemsParameterData()
-    this.loadExperimentalItemData()
+    this.queryApplicationUserDepartment()
+    this.loadTestCategory()
+    this.loadTestMethodData()
+    this.loadTestParameterData()
+    this.loadTestedItemData()
     this.loadDrawingDesignData()
     this.loadProcessingStatusData()
     this.loadProcessPriorityData()

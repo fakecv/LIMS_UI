@@ -5,23 +5,13 @@
       <el-row :gutter="20">
         <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
           <el-form-item label="委托编号">
-            <el-select name="agreementNumber" filterable default-first-option v-model="processRequestForm.agreementNumber">
-              <el-option v-for="item in agreements"
+            <el-select name="agreementNumber" filterable clearable default-first-option v-model="processRequestForm.agreementNumber">
+              <el-option v-for="item in staticOptions.agreements"
                 :key="item.Id"
                 :label="item.agreementNumber"
-                :value="item.id">
+                :value="item.agreementNumber">
               </el-option>
               </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-          <el-form-item label="委托单位">
-            <el-input name="client" v-model="processRequestForm.client"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-          <el-form-item label="样品名称">
-            <el-input name="sampleName" v-model="processRequestForm.sampleName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -34,24 +24,46 @@
             <el-input name="sampleSubNumber" v-model="processRequestForm.sampleSubNumber"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-          <el-form-item label="流转状态">
-            <el-select name="processingStatus" filterable clearable default-first-option v-model="processRequestForm.processingStatus">
-            <el-option v-for="item in processingStatuses"
-              :key="item.Id"
-              :label="item.processingStatusName"
-              :value="item.id">
-            </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="提交部门">
+              <el-select name="submitFrom" filterable clearable default-first-option v-model="processRequestForm.submitFrom">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.departmentName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="当前流转状态">
+              <el-select name="processingStatus" filterable clearable default-first-option v-model="processRequestForm.processingStatus">
+                <el-option v-for="item in staticOptions.processingStatuses"
+                  :key="item.id"
+                  :label="item.processingStatusName"
+                  :value="item.processingStatusName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="提交至">
+              <el-select name="submitTo" filterable clearable default-first-option v-model="processRequestForm.submitTo">
+                <el-option v-for="item in staticOptions.departments"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.departmentName">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
         <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
           <el-form-item label="优先级">
             <el-select name="processPriority" filterable clearable default-first-option v-model="processRequestForm.processPriority">
-              <el-option v-for="item in processPriorities"
+              <el-option v-for="item in staticOptions.processPriorities"
                 :key="item.Id"
                 :label="item.processPriorityName"
-                :value="item.id">
+                :value="item.processPriorityName">
               </el-option>
               </el-select>
           </el-form-item>
@@ -66,77 +78,85 @@
   </el-container>
     <el-table :data="tableData"
       style="width: 100%"
+      tooltip-effect="dark"
       @row-dblclick=dblclick
       :row-style="processTableStyle"
       >
       <el-table-column
-        fixed
+        type="expand">
+        <template slot-scope="scope">
+        <el-table :data="scope.row.testedItemTasks" size="mini">
+        <el-table-column
+          prop="testedItem"
+          label="检测项目"
+          :formatter="testedItemFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testParameter"
+          label="检测项目参数"
+          show-overflow-tooltip
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="testMethod"
+          label="检测方法"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="processPriority"
+          label="优先级"
+          width="180">
+        </el-table-column>
+        </el-table>
+      </template>
+      </el-table-column>
+      <el-table-column
         prop="agreementNumber"
         label="委托编号"
-        :formatter="agreementFormatter"
         width="150">
       </el-table-column>
       <el-table-column
         prop="sampleSubNumber"
-        fixed
         label="试样编号"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="experimentalItem"
-        label="检测项目"
-        :formatter="experimentalItemFormatter"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="experimentItemsParameter"
-        label="检测项目参数"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="experimentalMethod"
-        label="检测方法"
-        :formatter="experimentalMethodFormatter"
-        width="180">
+        width="80">
       </el-table-column>
       <el-table-column
         prop="drawingDesign"
         label="加工图号"
-        :formatter="drawingDesignFormatter"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="sampleName"
-        label="样品名称"
-        width="150">
+        prop="submitFrom"
+        label="提交部门"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="submitTime"
+        label="提交时间"
+        :formatter="submitTimeFormatter"
+        width="180">
       </el-table-column>
       <el-table-column
         prop="processingStatus"
         label="当前流转状态"
-        :formatter="processingStatusFormatter"
-        width="150">
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="submitTo"
+        label="提交至"
+        width="180">
       </el-table-column>
       <el-table-column
         prop="processPriority"
         label="优先级"
-        :formatter="processPriorityFormatter"
+        show-overflow-tooltip
         width="80">
       </el-table-column>
       <el-table-column
-        prop="receiveSampleTime"
-        label="接收样品时间"
-        :formatter="receiveSampleTimeFormatter"
-        width="150">
-      </el-table-column>
-      <el-table-column
-        prop="expectedCompletionTime"
-        label="要求完成时间"
-        :formatter="expectedCompletionTimeFormatter"
-        width="150">
-      </el-table-column>
-      <el-table-column
-        prop="materialNumber"
-        label="材质编号"
+        prop="comment"
+        label="其它"
+        show-overflow-tooltip
         width="180">
       </el-table-column>
     </el-table>
@@ -163,32 +183,43 @@ export default {
       totalProcesss: 0,
       processRequestForm: {
         agreementNumber: '',
-        sampleName: '',
-        materialNumber: '',
+        sampleNumber: '',
         sampleSubNumber: '',
-        experimentalMethod: '',
+        comment: '',
+        processPriority: '',
+        submitTime: '',
         drawingDesign: '',
+        submitFrom: '',
         processingStatus: '',
-        processingStatues: [],
+        submitTo: '',
         itemsPerPage: 20,
         currentPage: 1
       },
-      experimentalMethods: [],
-      experimentalItems: [],
-      drawingDesigns: [],
-      agreements: [],
-      processingStatuses: [],
-      processPriorities: [],
-      departments: [],
-      columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }
+      columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 },
+      staticOptions: {
+        testedItemTaskTableData: [],
+        testedItemProducts: [],
+        testMethods: [],
+        filteredTestMethods: [],
+        testParameters: [],
+        filteredTestParameters: [],
+        testedItems: [],
+        drawingDesigns: [],
+        filteredDrawingDesigns: [],
+        processingStatuses: [],
+        processPriorities: [],
+        departments: [],
+        processTableData: [],
+        agreements: []
+      }
     }
   },
   methods: {
     processTableStyle ({row, rowIndex}) {
       let backgroundColor = '#FFFFFF'
       let color = '#000000'
-      this.processPriorities.forEach(item => {
-        if (row.processPriority === item.id) {
+      this.staticOptions.processPriorities.forEach(item => {
+        if (row.processPriority === item.processPriorityName) {
           backgroundColor = item.processPriorityColor
           color = item.processPriorityFontColor
         }
@@ -223,7 +254,7 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/agreement/getAgreement')
         .then(function (res) {
-          vm.agreements = res.data
+          vm.staticOptions.agreements = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -232,7 +263,7 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/department/getDepartment')
         .then(function (res) {
-          vm.departments = res.data
+          vm.staticOptions.departments = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -241,27 +272,27 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
         .then(function (res) {
-          vm.drawingDesigns = res.data
+          vm.staticOptions.drawingDesigns = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalMethodData () {
+    loadTestMethodData () {
       let vm = this
       this.$ajax
-        .get('/api/sample/experimentalMethod/getExperimentalMethod')
+        .get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
-          vm.experimentalMethods = res.data
+          vm.staticOptions.testMethods = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalItemData () {
+    loadTestedItemData () {
       let vm = this
       this.$ajax
-        .get('/api/sample/experimentalItem/getExperimentalItem')
+        .get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.experimentalItems = res.data
+          vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -270,7 +301,7 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
         .then(function (res) {
-          vm.processingStatuses = res.data
+          vm.staticOptions.processingStatuses = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -279,7 +310,7 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/processPriority/getProcessPriority')
         .then(function (res) {
-          vm.processPriorities = res.data
+          vm.staticOptions.processPriorities = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -322,20 +353,37 @@ export default {
         return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
       }
     },
-    experimentalItemFormatter (row, column) {
+    submitTimeFormatter (row, column) {
+      if (row.submitTime) {
+        let dateTT = new Date(row.submitTime)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
+      }
+    },
+    testedItemFormatter (row, column) {
       let name = ''
-      this.experimentalItems.forEach(item => {
-        if (row.experimentalItem === item.id) {
-          name = item.experimentalItemName
+      this.staticOptions.testedItems.forEach(item => {
+        if (row.testedItem === item.id) {
+          name = item.testedItemName
         }
       })
       return name
     },
-    experimentalMethodFormatter (row, column) {
+    testMethodFormatter (row, column) {
       let name = ''
-      this.experimentalMethods.forEach(item => {
-        if (row.experimentalMethod === item.id) {
-          name = item.experimentalMethodName
+      this.staticOptions.testMethods.forEach(item => {
+        if (row.testMethod === item.id) {
+          name = item.testMethodName
+        }
+      })
+      return name
+    },
+    testParameterFormatter (row, column) {
+      let name = ''
+      this.staticOptions.testParameters.forEach(item => {
+        if (row.testParameter === item.id) {
+          name = item.testParameterName
         }
       })
       return name
@@ -369,8 +417,8 @@ export default {
   },
   mounted () {
     this.onSubmit()
-    this.loadExperimentalMethodData()
-    this.loadExperimentalItemData()
+    this.loadTestMethodData()
+    this.loadTestedItemData()
     this.loadDrawingDesignData()
     this.loadDepartment()
     this.loadAgreement()

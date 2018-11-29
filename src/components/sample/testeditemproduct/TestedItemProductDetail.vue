@@ -14,12 +14,28 @@
               <el-input name="testedItemProductName" v-model="testedItemProductForm.testedItemProductName" autoComplete="testedItemProductName"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="检测项目产品序号" label-width="140px">
+              <el-input name="sort" v-model="testedItemProductForm.sort"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="检测项目类别">
+                <el-select name="testedItem" filterable default-first-option v-model="testedItemProductForm.testCategory" @change="getFilteredTestItems">
+                  <el-option v-for="item in staticOptions.testCategories"
+                    :key="item.id"
+                    :label="item.testCategoryName"
+                    :value="item.id">
+                  </el-option>
+                  </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目">
-              <el-select name="experimentalItem" filterable default-first-option v-model="testedItemProductForm.experimentalItem" @change="getCascadeItems">
-                <el-option v-for="item in staticOptions.experimentalItems"
+              <el-select name="testedItem" filterable default-first-option v-model="testedItemProductForm.testedItem" @change="getCascadeItems">
+                <el-option v-for="item in staticOptions.filteredTestedItems"
                   :key="item.id"
-                  :label="item.experimentalItemName"
+                  :label="item.testedItemName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -27,33 +43,21 @@
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目参数">
-              <el-select name="experimentalParameter" filterable default-first-option v-model="testedItemProductForm.experimentalItemsParameter">
-                <el-option v-for="item in staticOptions.filteredExperimentalItemsParameters"
-                  :key="item.id"
-                  :label="item.experimentalItemsParameterName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
+              <el-input name="testParameter" v-model="testedItemProductForm.testParameter" autoComplete="testParameter"></el-input>
+              <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+              <div style="margin: 15px 0;"></div>
+              <el-checkbox-group v-model="staticOptions.checkedTestParameters" @change="handleCheckedTestParametersChange">
+                <el-checkbox v-for="testParameter in staticOptions.filteredTestParameters" :label="testParameter.testParameterName" :key="testParameter.id">{{testParameter.testParameterName}}</el-checkbox>
+              </el-checkbox-group>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测方法">
-              <el-select name="experimentalMethod" filterable default-first-option v-model="testedItemProductForm.experimentalMethod">
-                <el-option v-for="item in staticOptions.filteredExperimentalMethods"
+              <el-select name="testMethod" filterable default-first-option v-model="testedItemProductForm.testMethod">
+                <el-option v-for="item in staticOptions.filteredTestMethods"
                   :key="item.id"
-                  :label="item.experimentalMethodName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="加工图号">
-              <el-select name="drawingDesign" filterable default-first-option v-model="testedItemProductForm.drawingDesign">
-                <el-option v-for="item in staticOptions.filteredDrawingDesigns"
-                  :key="item.id"
-                  :label="item.drawingDesignName"
-                  :value="item.id">
+                  :label="item.testMethodName"
+                  :value="item.testMethodName">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -75,11 +79,13 @@ export default {
         {'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
         {'name': '数据库保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false},
         {'name': '解锁', 'id': '4', 'icon': 'el-icon-edit', 'loading': false},
-        {'name': '删除', 'id': '5', 'icon': 'el-icon-upload', 'loading': false},
+        {'name': '删除', 'id': '5', 'icon': 'el-icon-delete', 'loading': false},
         {'name': '文件导入', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '7', 'icon': 'el-icon-download', 'loading': false}
       ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
+      isIndeterminate: true,
+      checkAll: false
     }
   },
   methods: {
@@ -136,14 +142,37 @@ export default {
       this.$ajax.get('/api/sample/testedItemProduct/delete/' + this.testedItemProductForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deletetestedItemProductForm')
+          vm.$emit('deleteTestedItemProductForm')
           vm.sampleNumberButton = false
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
+    getFilteredTestItems (val) {
+      this.$emit('getFilteredTestItems', val)
+    },
     getCascadeItems (val) {
       this.$emit('getCascadeItems', val)
+    },
+    handleCheckedTestParametersChange (value) {
+      let checkedCount = value.length
+      this.checkAll = checkedCount === this.staticOptions.filteredTestParameters.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.staticOptions.filteredTestParameters.length
+      this.testedItemProductForm.testParameter = value.join(',')
+      // this.testedItemProductForm.testParameter = value
+    },
+    handleCheckAllChange (val) {
+      let vm = this
+      if (val) {
+        this.staticOptions.filteredTestParameters.forEach(testParameter => {
+          vm.staticOptions.checkedTestParameters.push(testParameter.testParameterName)
+        })
+        this.testedItemProductForm.testParameter = this.staticOptions.checkedTestParameters.join(',')
+      } else {
+        this.staticOptions.checkedTestParameters = []
+        this.testedItemProductForm.testParameter = ''
+      }
+      this.isIndeterminate = false
     }
   }
 }

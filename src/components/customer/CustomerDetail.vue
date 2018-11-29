@@ -81,6 +81,7 @@ export default {
       this.$emit('new')
     },
     copy () {
+      this.$message('复制成功!')
       this.$emit('copy')
     },
     saveToDB () {

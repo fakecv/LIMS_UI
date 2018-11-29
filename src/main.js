@@ -5,7 +5,6 @@ import router from './router'
 import App from './App'
 import AuthService from './auth/AuthService'
 import Axios from 'axios'
-import '@/components/dynamic-form'
 import echarts from 'echarts'
 import ElementUI from 'element-ui'
 import filter from '@/components/filter'
@@ -20,7 +19,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import 'font-awesome/css/font-awesome.min.css'
-import FormatterService from './auth/FormatterService'
 // import '@progress/kendo-ui'
 // import '@progress/kendo-theme-default/dist/all.css'
 // import Scheduler from '@progress/kendo-scheduler-vue-wrapper'
@@ -65,6 +63,7 @@ Axios.interceptors.request.use(
     if (localStorage.getItem('id_token')) {
       config.headers.Authorization = localStorage.getItem('id_token')
     }
+    // config.baseURL = '/context'
     return config
   },
   err => {
@@ -80,7 +79,6 @@ Axios.interceptors.response.use((response) => {
 }, function (error) {
   // Do something with response error
   if (error.response.status === 401) {
-    console.log('unauthorized, logging out ...')
     auth.logout()
     router.replace('/login')
   }
@@ -92,9 +90,6 @@ Vue.prototype.$echarts = echarts
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  data: {
-    formatter: new FormatterService()
-  },
   router,
   store,
   components: { App },

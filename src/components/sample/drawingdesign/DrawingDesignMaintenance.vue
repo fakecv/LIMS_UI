@@ -4,13 +4,13 @@
         <el-form :model="drawingDesignRequestForm" label-width="100px" label-position="left" size="mini">
           <el-row :gutter="20">
             <el-form-item label="检测项目名称">
-              <el-select name="experimentalItem" filterable default-first-option v-model="drawingDesignRequestForm.experimentalItem">
-                <el-option v-for="item in experimentalItems"
+              <el-select name="testedItem" filterable clearable default-first-option v-model="drawingDesignRequestForm.testedItem">
+                <el-option v-for="item in testedItems"
                   :key="item.Id"
-                  :label="item.experimentalItemName"
+                  :label="item.testedItemName"
                   :value="item.id">
                 </el-option>
-                </el-select>
+              </el-select>
           </el-form-item>
             <el-form-item label="图纸名称">
               <el-input name="drawingDesignName" v-model="drawingDesignRequestForm.drawingDesignName"></el-input>
@@ -28,9 +28,9 @@
       </el-container>
       <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
         <el-table-column
-          prop="experimentalItem"
+          prop="testedItem"
           label="检测项目名称"
-          :formatter="experimentalItemFormatter"
+          :formatter="testedItemFormatter"
           width="180">
         </el-table-column>
         <el-table-column
@@ -66,21 +66,21 @@ export default {
       tableData: [],
       totalDrawingDesigns: 0,
       drawingDesignRequestForm: {
-        experimentalItem: '',
+        testedItem: '',
         drawingDesignName: '',
         itemsPerPage: 20,
         currentPage: 1
       },
-      experimentalItems: []
+      testedItems: []
     }
   },
   methods: {
-    loadExperimentalItemData () {
+    loadTestedItemData () {
       let vm = this
       this.$ajax
-        .get('/api/sample/experimentalItem/getExperimentalItem')
+        .get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          vm.experimentalItems = res.data
+          vm.testedItems = res.data
         })
     },
     handleSizeChange (val) {
@@ -109,11 +109,11 @@ export default {
           vm.totalDrawingDesigns = res.data.totalDrawingDesigns || 0
         })
     },
-    experimentalItemFormatter (row, column) {
+    testedItemFormatter (row, column) {
       let name = ''
-      this.experimentalItems.forEach(item => {
-        if (row.experimentalItem === item.id) {
-          name = item.experimentalItemName
+      this.testedItems.forEach(item => {
+        if (row.testedItem === item.id) {
+          name = item.testedItemName
         }
       })
       return name
@@ -121,7 +121,7 @@ export default {
   },
   mounted () {
     this.onSubmit()
-    this.loadExperimentalItemData()
+    this.loadTestedItemData()
   }
 
 }

@@ -42,7 +42,7 @@
                 <el-option v-for="item in staticOptions.processPriorities"
                   :key="item.Id"
                   :label="item.processPriorityName"
-                  :value="item.id">
+                  :value="item.processPriorityName">
                 </el-option>
                 </el-select>
               </el-form-item>
@@ -58,11 +58,6 @@
                     <el-radio label="true">是</el-radio>
                     <el-radio label="false">否</el-radio>
                   </el-radio-group>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="其他信息">
-                <el-input type="textarea" name="comment" v-model="agreementForm.comment" autoComplete="comment"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -169,6 +164,18 @@
                 <el-input name="clientAddress" v-model="customerForm.address" autoComplete="clientAddress"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="24">
+              <el-form-item label="其他信息">
+              <el-select name="customerNote" filterable clearable default-first-option v-model="agreementForm.comment">
+                <el-option v-for="item in staticOptions.customerNotes"
+                  :key="item.id"
+                  :label="item.customerNoteName"
+                  :value="item.customerNoteDescription">
+                </el-option>
+                </el-select>
+                <el-input type="textarea" name="comment" v-model="agreementForm.comment" autoComplete="comment"></el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
       </el-container>
@@ -217,7 +224,7 @@
             multiple>
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击选取文件</em></div>
-            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过2M</div>
           </el-upload>
           <el-button @click="uploadToServer">上传图片</el-button>
         </el-row>
@@ -346,7 +353,7 @@ export default {
         {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
         {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
         {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false},
-        {'name': '删除', 'id': '2', 'icon': 'el-icon-upload', 'loading': false},
+        {'name': '删除', 'id': '2', 'icon': 'el-icon-delete', 'loading': false},
         {'name': '文件预览', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
       ],
@@ -478,6 +485,9 @@ export default {
       this.customerRequestForm.currentPage = val
       this.$emit('reloadCustomerData', this.customerRequestForm)
     },
+    handleCustomerNoteChange (val) {
+      this.agreementForm.comment = val
+    },
     reloadCustomers () {
       this.$emit('reloadCustomerData', this.customerRequestForm)
     },
@@ -485,7 +495,14 @@ export default {
       this.customerDialogFormVisible = true
     },
     confirmCustomer () {
+      let vm = this
       this.customerDialogFormVisible = false
+      this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.customerForm.id)
+        .then(function (res) {
+          vm.staticOptions.customerNotes = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     handleCustomerRowClick (row, event, column) {
       this.$emit('updateCustomer', row)

@@ -33,7 +33,7 @@ export default {
         expectedCompletionTime: '',
         processPriority: '',
         materialNumber: '',
-        noOfSample: '',
+        noOfSample: '1组(2件)',
         done: 'false',
         comment: '',
         finishedSampleHandlingMethod: '2',
@@ -57,7 +57,7 @@ export default {
         expectedCompletionTime: '',
         processPriority: '',
         materialNumber: '',
-        noOfSample: '',
+        noOfSample: '1组(2件)',
         done: 'false',
         comment: '',
         finishedSampleHandlingMethod: '2',
@@ -76,9 +76,9 @@ export default {
       customerForm: {},
       userForm: {},
       staticOptions: {
-        experimentalMethods: [],
         processPriorities: [],
         customers: [],
+        customerNotes: [],
         users: [],
         totalCustomers: 0,
         totalUsers: 0,
@@ -107,18 +107,12 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    loadExperimentalMethodData () {
-      let vm = this
-      this.$ajax.get('/api/sample/experimentalMethod/getExperimentalMethod')
-        .then(function (res) {
-          vm.staticOptions.experimentalMethods = res.data
-        })
-    },
     loadProcessPriorityData () {
       let vm = this
       this.$ajax.get('/api/sample/processPriority/getProcessPriority')
         .then(function (res) {
           vm.staticOptions.processPriorities = res.data
+          vm.agreementForm.processPriority = vm.staticOptions.processPriorities[0].processPriorityName
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -164,6 +158,7 @@ export default {
     },
     updateCustomer (row) {
       this.agreementForm.customerId = row.id
+      this.customerForm.id = row.id
       this.customerForm.name = row.name
       this.customerForm.company = row.company
       this.customerForm.mobileNumber = row.mobileNumber
@@ -216,7 +211,6 @@ export default {
     }
   },
   mounted () {
-    this.loadExperimentalMethodData()
     this.loadProcessPriorityData()
     this.initCustomerData()
     this.initUserData()

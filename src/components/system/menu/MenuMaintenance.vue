@@ -30,7 +30,10 @@
           </el-row>
           <el-row :gutter="20">
             <el-form-item>
+              <el-row>
               <el-button type="primary" @click="onSubmit">查询</el-button>
+              <el-button type="primary" @click="refreshMenu">刷新菜单</el-button>
+              </el-row>
             </el-form-item>
           </el-row>
         </el-form>
@@ -77,6 +80,7 @@
 <script>
 export default {
   name: 'menuMaintenance',
+  props: ['leftMenus'],
   data () {
     return {
       tableData: [],
@@ -96,6 +100,9 @@ export default {
     }
   },
   methods: {
+    refreshMenu () {
+      this.$emit('getTopMenus')
+    },
     handleSizeChange (val) {
       this.menuItemRequestForm.itemsPerPage = val
       this.onSubmit()
