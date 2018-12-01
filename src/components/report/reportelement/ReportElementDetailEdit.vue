@@ -5,6 +5,8 @@
    v-on:getCascadeItems="getCascadeItems"
    v-on:loadReportEnrichmentData="loadReportEnrichmentData"
    v-on:handleInputChange="handleInputChange"
+   v-on:handleGroupChange="handleGroupChange"
+   v-on:handleGroupClassChange="handleGroupClassChange"
    v-on:deleteReportElementForm="resetReportElementForm"
    v-on:new="resetReportElementForm"
    v-on:copy="resetReportElementId"/>
@@ -69,7 +71,8 @@ export default {
         textAligns: [
           {id: 1, textAlign: '居中'},
           {id: 2, textAlign: '靠左'},
-          {id: 3, textAlign: '靠右'}
+          {id: 3, textAlign: '靠右'},
+          {id: 4, textAlign: '居中分散'}
         ],
         fontSizes: [
           {id: 1, fontSize: '大号'},
@@ -86,7 +89,8 @@ export default {
           {id: 3, border: '上边框'},
           {id: 4, border: '下边框'}
         ],
-        reports: []
+        reports: [],
+        collectionNames: []
       }
     }
   },
@@ -139,15 +143,37 @@ export default {
     handleInputChange (event) {
       switch (event) {
         case 'no':
-          console.log('no')
+          this.reportElementForm.value = ''
+          this.reportElementForm.indirectValue = ''
+          this.reportElementForm.object = ''
           break
         case 'direct':
-          this.getCascadeItems(this.reportElementForm.reportName)
+          this.reportElementForm.indirectValue = ''
+          this.reportElementForm.object = ''
+          this.reportElementForm.reportElementName = ''
+          this.reportElementForm.reportElementLabel = ''
           break
         case 'indirect':
           this.loadReportEnrichmentData(this.reportElementForm.reportName)
+          this.reportElementForm.reportElementName = ''
+          this.reportElementForm.reportElementLabel = ''
+          this.reportElementForm.value = ''
           break
       }
+    },
+    handleGroupChange (event) {
+      switch (event) {
+        case 'no':
+          this.getCascadeItems(this.reportElementForm.reportName)
+          break
+        case 'yes':
+          this.loadCollectionData()
+          this.staticOptions.values = []
+          break
+      }
+    },
+    handleGroupClassChange (event) {
+      this.getCascadeItemsWithName(event)
     },
     resetReportElementForm () {
       this.reportElementForm = JSON.parse(JSON.stringify(this.reportElementResetForm))

@@ -45,6 +45,26 @@
           width="180">
         </el-table-column>
         <el-table-column
+          prop="reportElementLabel"
+          label="单元格标签"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="value"
+          label="值内容"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="object"
+          label="关联对象"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="indirectValue"
+          label="关联值内容"
+          width="180">
+        </el-table-column>
+        <el-table-column
           prop="border"
           label="边框特征"
           width="180">
@@ -82,11 +102,6 @@
         <el-table-column
           prop="column"
           label="所占列数"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="value"
-          label="值内容"
           width="180">
         </el-table-column>
         <el-table-column

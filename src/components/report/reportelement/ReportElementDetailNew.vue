@@ -4,6 +4,8 @@
   v-on:getCascadeItems="getCascadeItems"
   v-on:loadReportEnrichmentData="loadReportEnrichmentData"
   v-on:handleInputChange="handleInputChange"
+  v-on:handleGroupChange="handleGroupChange"
+  v-on:handleGroupClassChange="handleGroupClassChange"
   v-on:updateReportElementForm="updateReportElementForm"
   v-on:deleteReportElementForm="resetReportElementForm"
   v-on:new="resetReportElementForm"
@@ -69,7 +71,8 @@ export default {
         textAligns: [
           {id: 1, textAlign: '居中'},
           {id: 2, textAlign: '靠左'},
-          {id: 3, textAlign: '靠右'}
+          {id: 3, textAlign: '靠右'},
+          {id: 4, textAlign: '居中分散'}
         ],
         fontSizes: [
           {id: 1, fontSize: '大号'},
@@ -86,7 +89,8 @@ export default {
           {id: 3, border: '上边框'},
           {id: 4, border: '下边框'}
         ],
-        reports: []
+        reports: [],
+        collectionNames: []
       }
     }
   },
@@ -109,6 +113,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadCollectionData () {
+      let vm = this
+      this.$ajax.get('/api/report/reportDevelopment/getCollectionNames')
+        .then(function (res) {
+          vm.staticOptions.collectionNames = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     getCascadeItems (event) {
       let vm = this
       let collectionName = ''
@@ -125,18 +138,50 @@ export default {
         })
       this.staticOptions.input = false
     },
+    getCascadeItemsWithName (event) {
+      let vm = this
+      this.$ajax.get('/api/report/reportElement/getFieldNames/' + event)
+        .then(function (res) {
+          vm.staticOptions.values = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+      this.staticOptions.input = false
+    },
     handleInputChange (event) {
       switch (event) {
         case 'no':
-          console.log('no')
+          this.reportElementForm.value = ''
+          this.reportElementForm.indirectValue = ''
+          this.reportElementForm.object = ''
           break
         case 'direct':
-          this.getCascadeItems(this.reportElementForm.reportName)
+          this.reportElementForm.indirectValue = ''
+          this.reportElementForm.object = ''
+          this.reportElementForm.reportElementName = ''
+          this.reportElementForm.reportElementLabel = ''
           break
         case 'indirect':
           this.loadReportEnrichmentData(this.reportElementForm.reportName)
+          this.reportElementForm.reportElementName = ''
+          this.reportElementForm.reportElementLabel = ''
+          this.reportElementForm.value = ''
           break
       }
+    },
+    handleGroupChange (event) {
+      switch (event) {
+        case 'no':
+          this.getCascadeItems(this.reportElementForm.reportName)
+          break
+        case 'yes':
+          this.loadCollectionData()
+          this.staticOptions.values = []
+          break
+      }
+    },
+    handleGroupClassChange (event) {
+      this.getCascadeItemsWithName(event)
     },
     updateReportElementForm (event) {
       this.reportElementForm.id = event.id
