@@ -30,6 +30,11 @@
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
+          <el-form-item label="检测项目价格">
+            <el-input name="price" v-model="testedItemForm.price"></el-input>
+          </el-form-item>
+        </el-row>
+        <el-row :gutter="20">
           <el-form-item label="检测项目说明">
             <el-input type="textarea" name="testedItemNumber" v-model="testedItemForm.testedItemNumber"></el-input>
           </el-form-item>

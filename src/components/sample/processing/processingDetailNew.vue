@@ -24,19 +24,18 @@ export default {
         sampleName: '',
         receiveSampleTime: '',
         materialNumber: '',
-        expectedCompletionTime: '',
-        sampleClientNumber: ''
+        expectedCompletionTime: ''
       },
       agreementResetForm: {
         sampleName: '',
         receiveSampleTime: '',
         materialNumber: '',
-        expectedCompletionTime: '',
-        sampleClientNumber: ''
+        expectedCompletionTime: ''
       },
       processForm: {
         id: '',
         agreementNumber: '',
+        sampleClientNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
         comment: '',
@@ -51,6 +50,7 @@ export default {
       processResetForm: {
         id: '',
         agreementNumber: '',
+        sampleClientNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
         comment: '',

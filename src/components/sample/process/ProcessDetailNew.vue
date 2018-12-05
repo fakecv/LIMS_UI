@@ -115,7 +115,6 @@ export default {
         receiveSampleTime: '',
         materialNumber: '',
         expectedCompletionTime: '',
-        sampleClientNumber: '',
         drawingDesign: '',
         submitFrom: '',
         processingStatus: '',
@@ -124,6 +123,7 @@ export default {
       processForm: {
         id: '',
         agreementNumber: '',
+        sampleClientNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
         comment: '',
@@ -138,6 +138,7 @@ export default {
       processResetForm: {
         id: '',
         agreementNumber: '',
+        sampleClientNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
         comment: '',

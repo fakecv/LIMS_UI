@@ -76,7 +76,8 @@
       </el-row>
     </el-form>
   </el-container>
-    <el-table :data="tableData"
+    <el-table ref="out-table"
+      :data="tableData"
       style="width: 100%"
       @row-dblclick=dblclick
       :row-style="processTableStyle"
@@ -146,6 +147,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'processingMaintenance',
   data () {

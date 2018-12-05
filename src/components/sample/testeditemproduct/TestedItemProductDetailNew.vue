@@ -22,6 +22,7 @@ export default {
         sort: '',
         testCategory: '',
         testedItem: '',
+        testedItemName: '',
         testParameter: '',
         testMethod: '',
         id: ''
@@ -31,6 +32,7 @@ export default {
         sort: '',
         testCategory: '',
         testedItem: '',
+        testedItemName: '',
         testParameter: '',
         testMethod: '',
         id: ''
@@ -66,6 +68,11 @@ export default {
       this.getDrawingDesigns(itemId)
       this.getTestMethod(itemId)
       this.getTestParameter(itemId)
+      this.staticOptions.filteredTestedItems.forEach(item => {
+        if (item.id === itemId) {
+          this.testedItemProductForm.testedItemName = item.testedItemName
+        }
+      })
     },
     resetCascadeForms () {
       this.testedItemProductForm.drawingDesign = ''

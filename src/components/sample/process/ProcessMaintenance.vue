@@ -76,7 +76,10 @@
       </el-row>
     </el-form>
   </el-container>
-    <el-table :data="tableData"
+    <div class="block text-right">
+      <el-button type="primary" icon="el-icon-download" circle @click="exportExcel">导出</el-button>
+    </div>
+    <el-table  id="out-table" :data="tableData"
       style="width: 100%"
       tooltip-effect="dark"
       @row-dblclick=dblclick
@@ -175,6 +178,9 @@
 </template>
 
 <script>
+
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 export default {
   name: 'processMaintenance',
   data () {
@@ -215,6 +221,16 @@ export default {
     }
   },
   methods: {
+    exportExcel () {
+      /* generate workbook object from table */
+      var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+      try {
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
+      } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+      return wbout
+    },
     processTableStyle ({row, rowIndex}) {
       let backgroundColor = '#FFFFFF'
       let color = '#000000'

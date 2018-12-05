@@ -49,7 +49,7 @@
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="来样编号">
-                <el-input name="sampleClientNumber" v-model="agreementForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
+                <el-input name="sampleClientNumber" v-model="processForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -456,6 +456,7 @@ export default {
         testedItemTaskName: '',
         testCategory: '',
         testedItem: '',
+        testedItemName: '',
         testParameter: '',
         testMethod: '',
         processPriority: '',
@@ -465,6 +466,7 @@ export default {
         testedItemProductName: '',
         testCategory: '',
         testedItem: '',
+        testedItemName: '',
         testParameter: '',
         testMethod: '',
         id: '',
@@ -692,6 +694,11 @@ export default {
       this.testedItemTaskForm.drawingDesign = ''
       this.testedItemTaskForm.testParameter = ''
       this.testedItemTaskForm.testMethod = ''
+      this.staticOptions.filteredTestedItems.forEach(item => {
+        if (item.id === val) {
+          this.testedItemTaskForm.testedItemName = item.testedItemName
+        }
+      })
       this.getTestMethod(val)
     },
     sampleNumberGenerator () {

@@ -45,7 +45,18 @@
               <el-input name="reportElementLabel" v-model="reportElementForm.reportElementLabel" autoComplete="reportElementLabel"></el-input>
             </el-form-item>
           </el-col>
-          <el-col v-if="reportElementForm.reportElementInput ==='direct'" :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <el-col v-if="reportElementForm.reportElementInput ==='no'" :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="类别">
+              <el-select name="type" filterable default-first-option v-model="reportElementForm.type">
+                <el-option v-for="item in staticOptions.types"
+                  :key="item.id"
+                  :label="item.type"
+                  :value="item.type">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="reportElementForm.reportElementInput !=='no'" :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="是否所属组">
               <el-radio-group v-model="reportElementForm.group" @change="handleGroupChange">
                 <el-radio label="yes">是</el-radio>
@@ -53,7 +64,7 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col v-if="reportElementForm.group ==='yes'&&reportElementForm.reportElementInput ==='direct'" :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <el-col v-if="reportElementForm.group ==='yes'" :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="所属组类名">
               <el-select name="groupClass" filterable default-first-option v-model="reportElementForm.groupClass" @change="handleGroupClassChange">
                 <el-option v-for="item in staticOptions.collectionNames"
@@ -68,9 +79,9 @@
             <el-form-item label="值内容">
               <el-select name="value" filterable default-first-option v-model="reportElementForm.value">
                 <el-option v-for="item in staticOptions.values"
-                  :key="item"
-                  :label="item"
-                  :value="item">
+                  :key="item.fieldName"
+                  :label="item.fieldName"
+                  :value="item.fieldName">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -149,17 +160,6 @@
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="所占列数">
               <el-input name="column" v-model="reportElementForm.column" autoComplete="column"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="类别">
-              <el-select name="type" filterable default-first-option v-model="reportElementForm.type">
-                <el-option v-for="item in staticOptions.types"
-                  :key="item.id"
-                  :label="item.type"
-                  :value="item.type">
-                </el-option>
-                </el-select>
             </el-form-item>
           </el-col>
         </el-row>

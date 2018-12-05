@@ -24,9 +24,9 @@
             <el-form-item label="关联字段">
               <el-select name="enrichKey" filterable clearable default-first-option v-model="reportEnrichmentForm.enrichKey">
                 <el-option v-for="item in staticOptions.enrichKeys"
-                  :key="item"
-                  :label="item"
-                  :value="item">
+                  :key="item.fieldName"
+                  :label="item.fieldName"
+                  :value="item.fieldName">
                 </el-option>
                 </el-select>
             </el-form-item>
@@ -48,7 +48,7 @@
               <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
               <div style="margin: 15px 0;"></div>
               <el-checkbox-group v-model="staticOptions.checkedEnrichValues" @change="handleReportEnrichmentValuesChange">
-                <el-checkbox v-for="reportEnrichment in staticOptions.enrichValues" :label="reportEnrichment" :key="reportEnrichment">
+                <el-checkbox v-for="reportEnrichment in staticOptions.enrichValues" :label="reportEnrichment.fieldName" :key="reportEnrichment.fieldName">
                 </el-checkbox>
               </el-checkbox-group>
             </el-form-item>

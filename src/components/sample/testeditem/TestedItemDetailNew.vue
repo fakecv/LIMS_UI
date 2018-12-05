@@ -20,13 +20,15 @@ export default {
         id: '',
         testedItemName: '',
         sort: '',
-        testedItemNumber: ''
+        testedItemNumber: '',
+        price: ''
       },
       testedItemResetForm: {
         id: '',
         testedItemName: '',
         sort: '',
-        testedItemNumber: ''
+        testedItemNumber: '',
+        price: ''
       },
       staticOptions: {
         testCategories: []

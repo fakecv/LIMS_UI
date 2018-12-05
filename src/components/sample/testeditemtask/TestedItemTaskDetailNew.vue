@@ -20,6 +20,7 @@ export default {
       testedItemTaskForm: {
         testedItemTaskName: '',
         testedItem: '',
+        testedItemName: '',
         testParameter: [],
         testMethod: '',
         drawingDesign: '',
@@ -32,6 +33,7 @@ export default {
       testedItemTaskResetForm: {
         testedItemTaskName: '',
         testedItem: '',
+        testedItemName: '',
         testParameter: [],
         testMethod: '',
         drawingDesign: '',
@@ -70,6 +72,11 @@ export default {
       this.getDrawingDesigns(itemId)
       this.getTestMethod(itemId)
       this.getTestParameter(itemId)
+      this.staticOptions.filteredTestedItems.forEach(item => {
+        if (item.id === itemId) {
+          this.testedItemTaskForm.testedItemName = item.testedItemName
+        }
+      })
     },
     resetCascadeForms () {
       this.testedItemTaskForm.drawingDesign = ''
@@ -77,7 +84,6 @@ export default {
       this.testedItemTaskForm.testParameter = ''
     },
     getDrawingDesigns (testedItemId) {
-      console.log(this.drawingDesigns)
       this.staticOptions.filteredDrawingDesigns =
         this.staticOptions.drawingDesigns.filter(function (val) {
           return val.testedItem === testedItemId
