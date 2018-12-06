@@ -4,6 +4,7 @@
    :staticOptions="staticOptions"
    v-on:getCascadeItems="getCascadeItems"
    v-on:loadReportEnrichmentData="loadReportEnrichmentData"
+   v-on:handleIsStringChange="handleIsStringChange"
    v-on:handleInputChange="handleInputChange"
    v-on:handleGroupChange="handleGroupChange"
    v-on:handleGroupClassChange="handleGroupClassChange"
@@ -37,6 +38,8 @@ export default {
         column: '1',
         value: '',
         type: '字符串',
+        isString: 'yes',
+        listValue: '',
         id: ''
       },
       reportElementResetForm: {
@@ -57,9 +60,12 @@ export default {
         column: '1',
         value: '',
         type: '字符串',
+        isString: 'yes',
+        listValue: '',
         id: ''
       },
       staticOptions: {
+        listValues: [],
         input: false,
         types: [
           {id: 1, type: '字符串'},
@@ -174,6 +180,19 @@ export default {
     },
     handleGroupClassChange (event) {
       this.getCascadeItemsWithName(event)
+    },
+    handleIsStringChange (event) {
+      let vm = this
+      this.$ajax.get('/api/report/reportElement/getListValues/' + this.reportElementForm.object + '/' + this.reportElementForm.indirectValue)
+        .then(function (res) {
+          vm.staticOptions.listValues = res.data
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
+        })
     },
     resetReportElementForm () {
       this.reportElementForm = JSON.parse(JSON.stringify(this.reportElementResetForm))

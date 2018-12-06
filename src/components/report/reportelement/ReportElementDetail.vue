@@ -108,6 +108,25 @@
                 </el-select>
             </el-form-item>
           </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="关联值是否为字符串" label-width="200px">
+              <el-radio-group v-model="reportElementForm.isString"  @change="handleIsStringChange">
+                <el-radio label="yes">是</el-radio>
+                <el-radio label="no">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="reportElementForm.isString === 'no'" :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+            <el-form-item label="关联列表值">
+              <el-select name="listValue" filterable clearable default-first-option v-model="reportElementForm.listValue">
+                <el-option v-for="item in staticOptions.listValues"
+                  :key="item"
+                  :label="item"
+                  :value="item">
+                </el-option>
+                </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="边框特征">
               <el-select name="border" filterable default-first-option v-model="reportElementForm.border">
@@ -279,6 +298,9 @@ export default {
     getCascadeItems (val) {
       this.reportElementForm.value = ''
       this.$emit('getCascadeItems', val)
+    },
+    handleIsStringChange (val) {
+      this.$emit('handleIsStringChange', val)
     }
   }
 }

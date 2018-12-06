@@ -122,7 +122,10 @@ export default {
           vm.tableData = res.data.pageResult || []
           vm.totalReportEnrichments = res.data.totalReportEnrichments || 0
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     loadReportData () {
@@ -131,7 +134,10 @@ export default {
         .then(function (res) {
           vm.staticOptions.reports = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     loadCollectionData () {
@@ -140,7 +146,10 @@ export default {
         .then(function (res) {
           vm.staticOptions.enrichObjects = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     reportFormatter (row, column) {

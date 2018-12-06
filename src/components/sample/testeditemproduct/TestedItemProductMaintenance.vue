@@ -62,8 +62,10 @@
     </el-container>
       <el-row type="flex" justify="end">
         <el-button-group size="mini">
+          <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveTop">置顶</el-button>
           <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveUp">上移</el-button>
           <el-button type="primary" @click.native="moveDown">下移<i class="el-icon-arrow-down"></i></el-button>
+          <el-button type="primary" @click.native="moveBottom">置底<i class="el-icon-arrow-down"></i></el-button>
         </el-button-group>
       </el-row>
     <el-table ref="multipleTable"
@@ -227,7 +229,12 @@ export default {
       this.indexArray.forEach(item => {
         vm.moveUpSingle(item)
       })
-      // this.indexArray = []
+    },
+    moveTop () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveTopSingle(item)
+      })
     },
     moveUpSingle (index) {
       let vm = this
@@ -246,18 +253,57 @@ export default {
           })
       }
     },
+    moveTopSingle (index) {
+      let vm = this
+      let tmp = ''
+      if (index > 0) {
+        this.tempTestedItemProductForm = this.tableData[0]
+        this.testedItemProductForm = this.tableData[index]
+        tmp = this.tempTestedItemProductForm.sort
+        this.tempTestedItemProductForm.sort = this.testedItemProductForm.sort
+        this.testedItemProductForm.sort = tmp
+        this.$ajax.all([this.update(this.testedItemProductForm), this.update(this.tempTestedItemProductForm)])
+          .then(vm.$ajax.spread((res1, res2) => {
+            vm.reload(res1.data)
+          })).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      }
+    },
     moveDown () {
       let vm = this
       this.indexArray.forEach(item => {
         vm.moveDownSingle(item)
       })
-      // this.indexArray = []
+    },
+    moveBottom () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveBottomSingle(item)
+      })
     },
     moveDownSingle (index) {
       let vm = this
       let tmp = ''
       if (index < this.tableData.length - 1) {
         this.tempTestedItemProductForm = this.tableData[(index + 1)]
+        this.testedItemProductForm = this.tableData[index]
+        tmp = this.tempTestedItemProductForm.sort
+        this.tempTestedItemProductForm.sort = this.testedItemProductForm.sort
+        this.testedItemProductForm.sort = tmp
+        this.$ajax.all([this.update(this.testedItemProductForm), this.update(this.tempTestedItemProductForm)])
+          .then(vm.$ajax.spread((res1, res2) => {
+            vm.reload(res1.data)
+          })).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      }
+    },
+    moveBottomSingle (index) {
+      let vm = this
+      let tmp = ''
+      if (index < this.tableData.length - 1) {
+        this.tempTestedItemProductForm = this.tableData[this.tableData.length - 1]
         this.testedItemProductForm = this.tableData[index]
         tmp = this.tempTestedItemProductForm.sort
         this.tempTestedItemProductForm.sort = this.testedItemProductForm.sort

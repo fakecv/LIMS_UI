@@ -594,7 +594,10 @@ export default {
           vm.testedItemProductGroupTableData = res.data.pageResult || []
           vm.totalTestedItemProductGroups = res.data.totalTestedItemProductGroups || 0
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     // load all the testedItemProductes
@@ -604,10 +607,12 @@ export default {
         .post('/api/sample/testedItemProduct/queryTestedItemProduct', this.testedItemProductForm)
         .then(function (res) {
           vm.testedItemProductTableData = res.data.pageResult || []
-          console.log(vm.testedItemProductTableData)
           vm.totalTestedItemProducts = res.data.totalTestedItemProducts || 0
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     new () {
@@ -628,7 +633,10 @@ export default {
           vm.$emit('updateProcessForm', res.data)
           vm.sampleNumberButton = false
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     submit () {
@@ -641,7 +649,10 @@ export default {
           vm.sampleNumberButton = false
           vm.actions[3].disabled = true
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     confirmDelete () {
@@ -669,7 +680,10 @@ export default {
           vm.$emit('deleteProcessForm')
           vm.sampleNumberButton = false
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     getAgreementNumber  (val) {
@@ -709,7 +723,10 @@ export default {
           vm.processForm.sampleSubNumber = res.data
           vm.sampleNumberButton = true
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     drawingDesignFormatter (row, column) {

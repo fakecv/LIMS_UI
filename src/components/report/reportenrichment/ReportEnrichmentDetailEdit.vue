@@ -21,6 +21,7 @@ export default {
         enrichKey: '',
         enrichObject: '',
         enrichValues: '',
+        group: 'no',
         id: ''
       },
       reportEnrichmentResetForm: {
@@ -28,6 +29,7 @@ export default {
         enrichKey: '',
         enrichObject: '',
         enrichValues: '',
+        group: 'no',
         id: ''
       },
       staticOptions: {
@@ -46,7 +48,11 @@ export default {
         .then(function (res) {
           vm.reportEnrichmentForm = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
     },
     loadReportData () {
@@ -54,9 +60,25 @@ export default {
       this.$ajax.get('/api/report/reportDevelopment/getReportDevelopment')
         .then(function (res) {
           vm.staticOptions.reports = res.data
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
+        })
+    },
+    loadCollectionData () {
+      let vm = this
+      this.$ajax.get('/api/report/reportDevelopment/getCollectionNames')
+        .then(function (res) {
           vm.staticOptions.enrichObjects = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
     },
     getCascadeItems (event) {
@@ -71,7 +93,11 @@ export default {
         .then(function (res) {
           vm.staticOptions.enrichKeys = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
     },
     resetReportEnrichmentForm () {
@@ -82,6 +108,7 @@ export default {
     }
   },
   mounted () {
+    this.loadCollectionData()
     this.loadReportData()
     if (this.$route.params.id !== undefined) {
       this.loadReportEnrichment(this.$route.params.id)

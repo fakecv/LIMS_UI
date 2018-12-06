@@ -14,11 +14,6 @@
               <el-input name="testedItemProductGroupName" v-model="testedItemProductGroupForm.testedItemProductGroupName" autoComplete="testedItemProductGroupName"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目产品组序号" label-width="140px">
-              <el-input name="sort" v-model="testedItemProductGroupForm.sort"></el-input>
-            </el-form-item>
-          </el-col>
           <el-col :span="24">
             <el-form-item label="组描述">
               <el-input type="textarea" name="testedItemProductGroupDescription" v-model="testedItemProductGroupForm.testedItemProductGroupDescription" autoComplete="testedItemProductGroupDescription"></el-input>

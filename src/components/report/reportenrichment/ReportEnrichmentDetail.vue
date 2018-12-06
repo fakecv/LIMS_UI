@@ -35,11 +35,19 @@
             <el-form-item label="关联对象">
               <el-select name="enrichObject" filterable clearable default-first-option v-model="reportEnrichmentForm.enrichObject" @change="handleEnrichObjectChange">
                 <el-option v-for="item in staticOptions.enrichObjects"
-                  :key="item"
+                  :key="item.id"
                   :label="item"
                   :value="item">
                 </el-option>
                 </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="是否所属组">
+              <el-radio-group v-model="reportEnrichmentForm.group">
+                <el-radio label="yes">是</el-radio>
+                <el-radio label="no">否</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
@@ -108,7 +116,11 @@ export default {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateReportEnrichmentForm', res.data)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
     },
     confirmDelete () {
@@ -136,7 +148,11 @@ export default {
           vm.$emit('deleteReportEnrichmentForm')
           vm.sampleNumberButton = false
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
     },
     getCascadeItems (val) {
@@ -169,7 +185,11 @@ export default {
         .then(function (res) {
           vm.staticOptions.enrichValues = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
     }
   }

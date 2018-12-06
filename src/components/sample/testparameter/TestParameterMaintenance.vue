@@ -25,8 +25,10 @@
       </el-container>
       <el-row type="flex" justify="end">
         <el-button-group size="mini">
+          <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveTop">置顶</el-button>
           <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveUp">上移</el-button>
           <el-button type="primary" @click.native="moveDown">下移<i class="el-icon-arrow-down"></i></el-button>
+          <el-button type="primary" @click.native="moveBottom">置底<i class="el-icon-arrow-down"></i></el-button>
         </el-button-group>
       </el-row>
       <el-table ref="multipleTable"
@@ -131,7 +133,12 @@ export default {
       this.indexArray.forEach(item => {
         vm.moveUpSingle(item)
       })
-      // this.indexArray = []
+    },
+    moveTop () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveTopSingle(item)
+      })
     },
     moveUpSingle (index) {
       let vm = this
@@ -150,19 +157,57 @@ export default {
           })
       }
     },
+    moveTopSingle (index) {
+      let vm = this
+      let tmp = ''
+      if (index > 0) {
+        this.tempTestParameterForm = this.tableData[0]
+        this.testParameterForm = this.tableData[index]
+        tmp = this.tempTestParameterForm.sort
+        this.tempTestParameterForm.sort = this.testParameterForm.sort
+        this.testParameterForm.sort = tmp
+        this.$ajax.all([this.update(this.testParameterForm), this.update(this.tempTestParameterForm)])
+          .then(vm.$ajax.spread((res1, res2) => {
+            vm.reload(res1.data)
+          })).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      }
+    },
     moveDown () {
       let vm = this
       this.indexArray.forEach(item => {
         vm.moveDownSingle(item)
       })
-      // this.$refs.multipleTable.clearSelection()
-      // this.indexArray = []
+    },
+    moveBottom () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveBottomSingle(item)
+      })
     },
     moveDownSingle (index) {
       let vm = this
       let tmp = ''
       if (index < this.tableData.length - 1) {
         this.tempTestParameterForm = this.tableData[(index + 1)]
+        this.testParameterForm = this.tableData[index]
+        tmp = this.tempTestParameterForm.sort
+        this.tempTestParameterForm.sort = this.testParameterForm.sort
+        this.testParameterForm.sort = tmp
+        this.$ajax.all([this.update(this.testParameterForm), this.update(this.tempTestParameterForm)])
+          .then(vm.$ajax.spread((res1, res2) => {
+            vm.reload(res1.data)
+          })).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      }
+    },
+    moveBottomSingle (index) {
+      let vm = this
+      let tmp = ''
+      if (index < this.tableData.length - 1) {
+        this.tempTestParameterForm = this.tableData[this.tableData.length - 1]
         this.testParameterForm = this.tableData[index]
         tmp = this.tempTestParameterForm.sort
         this.tempTestParameterForm.sort = this.testParameterForm.sort

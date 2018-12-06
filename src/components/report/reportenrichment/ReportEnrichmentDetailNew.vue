@@ -22,6 +22,7 @@ export default {
         enrichKey: '',
         enrichObject: '',
         enrichValues: '',
+        group: 'no',
         id: ''
       },
       reportEnrichmentResetForm: {
@@ -29,6 +30,7 @@ export default {
         enrichKey: '',
         enrichObject: '',
         enrichValues: '',
+        group: 'no',
         id: ''
       },
       staticOptions: {
@@ -47,7 +49,11 @@ export default {
         .then(function (res) {
           vm.staticOptions.reports = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
     },
     loadCollectionData () {
@@ -56,7 +62,11 @@ export default {
         .then(function (res) {
           vm.staticOptions.enrichObjects = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
     },
     getCascadeItems (event) {
@@ -71,7 +81,11 @@ export default {
         .then(function (res) {
           vm.staticOptions.enrichKeys = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
     },
     updateReportEnrichmentForm (event) {

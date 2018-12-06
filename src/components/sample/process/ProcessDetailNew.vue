@@ -231,7 +231,10 @@ export default {
             // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
             vm.fetchDrawingDesign()
           }).catch(function (error) {
-            vm.$message(error.response.data.message)
+            vm.$message({
+              showClose: true,
+              message: error.response.data.message
+            })
           })
       })
     },
@@ -245,7 +248,10 @@ export default {
             // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
             vm.fetchDrawingDesign()
           }).catch(function (error) {
-            vm.$message(error.response.data.message)
+            vm.$message({
+              showClose: true,
+              message: error.response.data.message
+            })
           })
       })
     },
@@ -258,7 +264,10 @@ export default {
           // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
           // vm.fetchDrawingDesign()
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     updateTestedItemTask () {
@@ -277,7 +286,10 @@ export default {
         .then(function (res) {
           vm.staticOptions.agreements = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     loadAgreementProcess (agreementId) {
@@ -286,7 +298,10 @@ export default {
         .then(function (res) {
           vm.staticOptions.processTableData = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     loadDepartment () {
@@ -295,7 +310,10 @@ export default {
         .then(function (res) {
           vm.staticOptions.departments = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     queryApplicationUserDepartment () {
@@ -304,7 +322,10 @@ export default {
         .then(function (res) {
           vm.processForm.submitFrom = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     loadDrawingDesignData () {
@@ -312,6 +333,11 @@ export default {
       this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
         .then(function (res) {
           vm.staticOptions.drawingDesigns = res.data
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     loadTestCategory () {
@@ -320,7 +346,10 @@ export default {
         .then(function (res) {
           vm.staticOptions.testCategories = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     loadTestedItemData () {
@@ -330,7 +359,10 @@ export default {
           vm.staticOptions.testedItems = res.data
           vm.staticOptions.filteredTestedItems = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     loadTestMethodData () {
@@ -338,6 +370,11 @@ export default {
       this.$ajax.get('/api/sample/testMethod/getTestMethod')
         .then(function (res) {
           vm.staticOptions.testMethods = res.data
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     loadTestParameterData () {
@@ -345,6 +382,11 @@ export default {
       this.$ajax.get('/api/sample/testParameter/getTestParameter')
         .then(function (res) {
           vm.staticOptions.testParameters = res.data
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     loadProcessingStatusData () {
@@ -352,6 +394,11 @@ export default {
       this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
         .then(function (res) {
           vm.staticOptions.processingStatuses = res.data
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     loadProcessPriorityData () {
@@ -360,7 +407,10 @@ export default {
         .then(function (res) {
           vm.staticOptions.processPriorities = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
         })
     },
     processPriorityFormatter (row, column) {
