@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pdf">
     <el-row>
       <el-button @click="downloadToFrontEnd">下载</el-button>
       <el-button @click="goBackAgreement">返回</el-button>
@@ -9,7 +9,6 @@
       :key="i"
       :src="src"
       :page="i"
-      style="display: inline-block; width: 100%"
     ></pdf>
   </div>
 </template>
@@ -57,13 +56,17 @@ export default {
     },
     openFullScreen2 () {
       let vm = this
+      console.log(vm.agreementNumber)
       const loading = this.$loading({
         lock: true,
-        text: '正在努力生成报告，报告编号为：' + vm.agreementNumber,
+        text: '正在努力生成报告，报告编号为：' + vm.agreementNumber.split(',')[0],
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })
-      var loadingTask = pdf.createLoadingTask('/api/sample/agreement/downloadPdfFile/' + this.agreementNumber)
+      var headers = {'Authorization': localStorage.getItem('id_token')}
+      var loadingTask = pdf.createLoadingTask({
+        url: '/api/sample/agreement/downloadPdfFile/' + this.agreementNumber,
+        httpHeaders: headers})
       this.src = loadingTask
       this.src.then(pdf => {
         vm.numPages = pdf.numPages
@@ -84,4 +87,7 @@ export default {
 </script>
 
 <style scoped>
+  .pdf {
+    overflow: hidden;
+  }
 </style>

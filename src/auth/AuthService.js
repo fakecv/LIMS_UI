@@ -54,6 +54,7 @@ export default class AuthService {
     this.authNotifier.emit('authChange', { authenticated: true })
     // 正式上线应该跳转至欢迎页面，或者流转状态列表
     router.push({name: 'navPage'})
+    // router.push({path: '/login/second'})
   }
 
   logout () {

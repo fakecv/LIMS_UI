@@ -336,6 +336,24 @@
         <el-button type="primary" @click.native="confirmUser">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="用户列表" :visible.sync="reportOptionDialog" :modal-append-to-body="false">
+      <el-container style="padding: 10px">
+          <el-form :model="form">
+            <el-form-item label="可预览文件列表">
+                <el-checkbox-group v-model="form.reportList">
+                  <el-checkbox label="cover"></el-checkbox>
+                  <el-checkbox label="agreement"></el-checkbox>
+                  <el-checkbox label="process"></el-checkbox>
+                  <el-checkbox label="task"></el-checkbox>
+                </el-checkbox-group>
+            </el-form-item>
+          </el-form>
+      </el-container>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="reportOptionDialog = false">取 消</el-button>
+          <el-button type="primary" @click="preview">确 定</el-button>
+        </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -348,6 +366,10 @@ export default {
   data () {
     return {
       agreementNumberButton: false,
+      reportOptionDialog: false,
+      form: {
+        reportList: []
+      },
       actions: [
         {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false},
         {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
@@ -537,8 +559,14 @@ export default {
     },
     previewReport (agreementNumber) {
       if (agreementNumber && agreementNumber !== '') {
-        this.$router.push('/lims/agreementReport/' + agreementNumber)
+        this.reportOptionDialog = true
+        this.form.reportList = []
+        this.form.reportList.push(agreementNumber)
       }
+    },
+    preview () {
+      this.reportOptionDialog = false
+      this.$router.push('/lims/agreementReport/' + this.form.reportList.join(','))
     },
     removeImage (item) {
       this.$emit('removeImage', item)

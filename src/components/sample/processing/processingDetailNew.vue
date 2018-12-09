@@ -8,7 +8,6 @@
       v-on:getAgreementInfo="getAgreementInfo"
       v-on:getTestMethod="getTestMethod"
       v-on:getTestParameter="getTestParameter"
-      v-on:deleteProcessForm="resetProcessForm"
       />
   </div>
 </template>

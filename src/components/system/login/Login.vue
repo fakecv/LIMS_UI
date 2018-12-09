@@ -26,25 +26,52 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="用户注册" name="second">
-          <el-form :model="registerForm" :rules="rules" ref="registerForm" label-width="0px">
+        <el-tab-pane label="更改密码" name="second">
+          <el-form :model="loginForm" :rules="rules" ref="passwordForm" label-width="0px">
             <el-form-item prop="userName">
-              <el-input v-model="registerForm.userName" placeholder="输入用户名">
+              <el-input v-model="loginForm.userName" placeholder="输入用户名">
                 <template slot="prepend"><i class="fa fa-user" aria-hidden="true"></i></template>
               </el-input>
             </el-form-item>
+            <el-form-item prop="oldPassword">
+              <el-input type="password" v-model="loginForm.oldPassword" placeholder="输入原密码">
+                <template slot="prepend"><i class="fa fa-lock" aria-hidden="true"></i></template>
+              </el-input>
+            </el-form-item>
             <el-form-item prop="password">
-              <el-input type="password" v-model="registerForm.password" placeholder="输入密码">
+              <el-input type="password" v-model="loginForm.password" placeholder="输入新密码">
                 <template slot="prepend"><i class="fa fa-lock" aria-hidden="true"></i></template>
               </el-input>
             </el-form-item>
             <el-form-item prop="confirmPassword">
-              <el-input type="password" v-model="registerForm.confirmPassword" placeholder="确认密码">
+              <el-input type="password" v-model="loginForm.confirmPassword" placeholder="确认新密码">
                 <template slot="prepend"><i class="fa fa-lock" aria-hidden="true"></i></template>
               </el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="info" @click="regForm('registerForm')" style="width: 100%">注册</el-button>
+              <el-button type="info" @click="updateForm('passwordForm')" style="width: 100%">提交</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="注册" name="third">
+          <el-form :model="loginForm" :rules="rules" ref="regForm" label-width="0px">
+            <el-form-item prop="userName">
+              <el-input v-model="loginForm.userName" placeholder="输入用户名">
+                <template slot="prepend"><i class="fa fa-user" aria-hidden="true"></i></template>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input type="password" v-model="loginForm.password" placeholder="输入密码">
+                <template slot="prepend"><i class="fa fa-lock" aria-hidden="true"></i></template>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="confirmPassword">
+              <el-input type="password" v-model="loginForm.confirmPassword" placeholder="确认密码">
+                <template slot="prepend"><i class="fa fa-lock" aria-hidden="true"></i></template>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="info" @click="regForm('regForm')" style="width: 100%">注册</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -57,7 +84,6 @@
 </div>
 </template>
 <script>
-import toastr from 'toastr'
 export default {
   name: 'login',
   props: ['auth', 'authenticated'],
@@ -65,8 +91,17 @@ export default {
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.registerForm.password) {
+      } else if (value !== this.loginForm.password) {
         callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+    var validateOldPass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value === this.loginForm.oldPassword) {
+        callback(new Error('新密码不能和原密码一致!'))
       } else {
         callback()
       }
@@ -75,18 +110,20 @@ export default {
       activeName: 'first',
       loginForm: {
         userName: '',
-        password: ''
-      },
-      registerForm: {
-        userName: '',
         password: '',
+        oldPassword: '',
+        newPassword: '',
         confirmPassword: ''
       },
       rules: {
         userName: [
           { required: true, message: '用户名不能为空', trigger: 'blur' }],
         password: [
-          { required: true, message: '密码不能为空', trigger: 'blur' }
+          { required: true, message: '密码不能为空', trigger: 'blur' },
+          { validator: validateOldPass, trigger: 'blur' }
+        ],
+        oldPassword: [
+          { required: true, message: '原密码不能为空', trigger: 'blur' }
         ],
         confirmPassword: [
           { validator: validatePass, trigger: 'blur' }
@@ -107,8 +144,36 @@ export default {
             .then(function (res) {
               vm.auth.login(res.headers.authorization)
             }).catch(function (error) {
-              // vm.$message('密码不正确！')
-              vm.$message(error.response.data.message)
+              vm.$message({
+                showClose: true,
+                message: error.response.data.message
+              })
+            })
+        } else {
+          return false
+        }
+      })
+    },
+    updateForm (formName) {
+      console.log(this.loginForm.userName)
+      var update = {
+        userName: this.loginForm.userName,
+        oldPassword: this.loginForm.oldPassword,
+        password: this.loginForm.password
+      }
+      var vm = this
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log(update.userName)
+          vm.$ajax.post('/api/users/updatePassword', update)
+            .then(function (res) {
+              vm.$message('密码更新成功，请重新登录！')
+            }).catch(function (error) {
+              vm.$message({
+                showClose: true,
+                duration: 0,
+                message: error.response.data.message
+              })
             })
         } else {
           return false
@@ -117,19 +182,20 @@ export default {
     },
     regForm (formName) {
       var register = {
-        userName: this.registerForm.userName,
-        password: this.registerForm.password
+        userName: this.loginForm.userName,
+        password: this.loginForm.password
       }
       var vm = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
           vm.$ajax.post('/api/users/sign-up', register)
             .then(function (res) {
-              toastr.success('注册成功！')
-              vm.loginForm.userName = vm.registerForm.userName
-              vm.loginForm.password = vm.registerForm.password
+              vm.$message('注册成功！')
             }).catch(function (error) {
-              vm.$message(error.response.data.message)
+              vm.$message({
+                showClose: true,
+                message: error.response.data.message
+              })
             })
         } else {
           return false
@@ -137,7 +203,8 @@ export default {
       })
     }
   },
-  created () {
+  mounted () {
+    console.log(this.$route.params.id)
     this.activeName = this.$route.params.id
   }
 }

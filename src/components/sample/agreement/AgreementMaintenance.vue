@@ -136,7 +136,7 @@ export default {
       let backgroundColor = '#FFFFFF'
       let color = '#000000'
       this.processPriorities.forEach(item => {
-        if (row.processPriority === item.id) {
+        if (row.processPriority === item.processPriorityName) {
           backgroundColor = item.processPriorityColor
           color = item.processPriorityFontColor
         }

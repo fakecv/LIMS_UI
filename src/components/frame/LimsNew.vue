@@ -112,6 +112,7 @@ export default {
     })
     this.header = {Authorization: localStorage.getItem('id_token')}
     this.userProfile = JSON.parse(localStorage.getItem('userProfile'))
+    this.checkIfFirstTimeLogin()
     this.getTopMenus()
     this.initialPosition()
     this.getSystemMenu()
@@ -119,6 +120,23 @@ export default {
   created () {
   },
   methods: {
+    checkIfFirstTimeLogin () {
+      let vm = this
+      console.log('checkIfFirstTimeLogin')
+      this.$ajax.get('/api/users/checkIfFirstTimeLogin/' + this.userProfile.sub)
+        .then(function (res) {
+          if (res.data === 'yes') {
+            vm.$message({
+              showClose: true,
+              message: '第一次登录，请更新密码！'
+            })
+            vm.$router.replace({path: '/login/second'})
+          }
+          vm.fetchShortCuts(vm.menuItems)
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     // search input
     getSystemMenu () {
       let vm = this
