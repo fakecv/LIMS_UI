@@ -83,11 +83,6 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="sort"
-          label="序号"
-          width="80">
-        </el-table-column>
-        <el-table-column
           prop="testCategory"
           label="检测类别"
           :formatter="testCategoryFormatter"

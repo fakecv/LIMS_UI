@@ -114,6 +114,11 @@ const router = new Router({
   // base: '/context/',
   routes: [
     {
+      path: '/login/:id/:userName',
+      name: 'login',
+      component: login
+    },
+    {
       path: '/login/:id',
       name: 'login',
       component: login

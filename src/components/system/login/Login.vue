@@ -5,7 +5,7 @@
       登录系统
     </el-header>
     <el-main class="login-main">
-      <el-tabs v-model="activeName" style="color::active: #005458">
+      <el-tabs v-model="activeName" style="color::active: #005458" @tab-click="clickTab">
         <el-tab-pane label="用户登录" name="first" style="{color: #005458, active: {color: #005458} width: 175px}">
           <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="0px" @keyup.enter.native="submitForm('loginForm')">
             <el-form-item prop="userName">
@@ -112,7 +112,6 @@ export default {
         userName: '',
         password: '',
         oldPassword: '',
-        newPassword: '',
         confirmPassword: ''
       },
       rules: {
@@ -132,6 +131,11 @@ export default {
     }
   },
   methods: {
+    clickTab () {
+      this.loginForm.password = ''
+      this.loginForm.oldPassword = ''
+      this.loginForm.confirmPassword = ''
+    },
     submitForm (formName) {
       var credentials = {
         userName: this.loginForm.userName,
@@ -146,6 +150,7 @@ export default {
             }).catch(function (error) {
               vm.$message({
                 showClose: true,
+                duration: 0,
                 message: error.response.data.message
               })
             })
@@ -155,17 +160,10 @@ export default {
       })
     },
     updateForm (formName) {
-      console.log(this.loginForm.userName)
-      var update = {
-        userName: this.loginForm.userName,
-        oldPassword: this.loginForm.oldPassword,
-        password: this.loginForm.password
-      }
       var vm = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(update.userName)
-          vm.$ajax.post('/api/users/updatePassword', update)
+          vm.$ajax.post('/api/users/updatePassword', this.loginForm)
             .then(function (res) {
               vm.$message('密码更新成功，请重新登录！')
             }).catch(function (error) {
@@ -194,6 +192,7 @@ export default {
             }).catch(function (error) {
               vm.$message({
                 showClose: true,
+                duration: 0,
                 message: error.response.data.message
               })
             })
@@ -205,7 +204,12 @@ export default {
   },
   mounted () {
     console.log(this.$route.params.id)
-    this.activeName = this.$route.params.id
+    if (this.$route.params.id !== undefined) {
+      this.activeName = this.$route.params.id
+    }
+    if (this.$route.params.userName !== undefined) {
+      this.loginForm.userName = this.$route.params.userName
+    }
   }
 }
 </script>

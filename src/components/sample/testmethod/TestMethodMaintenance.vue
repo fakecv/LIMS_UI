@@ -47,11 +47,6 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="sort"
-          label="序号"
-          width="80">
-        </el-table-column>
-        <el-table-column
           prop="testMethodName"
           label="实验方法编号"
           width="180">
@@ -255,7 +250,6 @@ export default {
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalTestMethods = res.data.totalTestMethods || 0
-          console.log(vm.totalTestMethods)
         })
     },
     testedItemFormatter (row, column) {

@@ -31,6 +31,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="a">导航</el-dropdown-item>
               <el-dropdown-item command="b">快捷键一览</el-dropdown-item>
+              <el-dropdown-item command="changePassword">更改密码</el-dropdown-item>
               <el-dropdown-item command="c" divided>退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -122,20 +123,27 @@ export default {
   methods: {
     checkIfFirstTimeLogin () {
       let vm = this
-      console.log('checkIfFirstTimeLogin')
       this.$ajax.get('/api/users/checkIfFirstTimeLogin/' + this.userProfile.sub)
         .then(function (res) {
           if (res.data === 'yes') {
             vm.$message({
               showClose: true,
+              duration: 0,
               message: '第一次登录，请更新密码！'
             })
-            vm.$router.replace({path: '/login/second'})
+            vm.$router.replace({path: '/login/second/' + vm.userProfile.sub})
           }
           vm.fetchShortCuts(vm.menuItems)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
+    },
+    changePassword () {
+      this.$router.replace({path: '/login/second/' + this.userProfile.sub})
     },
     // search input
     getSystemMenu () {
@@ -145,7 +153,11 @@ export default {
           vm.menuItems = res.data
           vm.fetchShortCuts(vm.menuItems)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
     },
     fetchShortCuts (menuItems) {
@@ -168,7 +180,11 @@ export default {
         .then(function (res) {
           vm.$store.commit('FORM_IMPORT_WITH_FID_G', {fid: 'qry', initV: res.data})
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
     },
     handleCommand (command) {
@@ -182,6 +198,9 @@ export default {
           router.push({name: 'shortCut'})
           this.initialPosition()
           this.instruction = '快捷键一览'
+          break
+        case 'changePassword' :
+          this.changePassword()
           break
         case 'c' :
           this.auth.logout()
@@ -233,7 +252,11 @@ export default {
           // })
           // vm.defaultOpeneds.push(child.entity.name)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
         })
     },
     /* 根据选取菜单改变导航面包屑 */

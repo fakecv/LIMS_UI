@@ -18,11 +18,13 @@ export default {
         id: '',
         testedItem: '',
         drawingDesignName: '',
+        sort: '',
         drawingDesignNumber: ''
       },
       drawingDesignResetForm: {
         id: '',
         testedItem: '',
+        sort: '',
         drawingDesignName: '',
         drawingDesignNumber: ''
       },

@@ -57,11 +57,6 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="sort"
-          label="检测项目序号"
-          width="180">
-        </el-table-column>
-        <el-table-column
           prop="price"
           label="检测项目价格"
           width="180">

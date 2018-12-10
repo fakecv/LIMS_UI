@@ -54,11 +54,6 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="sort"
-          label="序号"
-          width="80">
-        </el-table-column>
-        <el-table-column
           prop="testParameterDescription"
           label="检测项目参数描述"
           width="180">
