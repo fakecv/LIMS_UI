@@ -26,6 +26,7 @@
           <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveTop">置顶</el-button>
           <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveUp">上移</el-button>
           <el-button type="primary" @click.native="moveDown">下移<i class="el-icon-arrow-down"></i></el-button>
+          <el-button type="primary" @click.native="moveBottom">置底<i class="el-icon-arrow-down"></i></el-button>
         </el-button-group>
       </el-row>
     <el-table ref="multipleTable"
