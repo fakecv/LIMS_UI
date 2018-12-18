@@ -112,7 +112,7 @@ export default {
       this.$ajax.get('/api/sample/numberGenerator/delete/' + this.numberGeneratorForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteNumberGenerator')
+          vm.$emit('deleteNumberGeneratorForm')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

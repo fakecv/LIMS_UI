@@ -1,7 +1,7 @@
 <template>
   <DepartmentDetail
    :departmentForm="departmentForm"
-   v-on:deleteDepartment="resetDepartmentForm"
+   v-on:deleteDepartmentForm="resetDepartmentForm"
    v-on:new="resetDepartmentForm"
    v-on:copy="resetDepartmentId"/>
 </template>

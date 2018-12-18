@@ -1,7 +1,7 @@
 <template>
   <NumberGeneratorDetail
    :numberGeneratorForm="numberGeneratorForm"
-   v-on:deleteNumberGenerator="resetNumberGeneratorForm"
+   v-on:deleteNumberGeneratorForm="resetNumberGeneratorForm"
    v-on:new="resetNumberGeneratorForm"
    v-on:copy="resetNumberGeneratorId"/>
 </template>

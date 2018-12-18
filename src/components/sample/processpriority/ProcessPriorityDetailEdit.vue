@@ -1,7 +1,7 @@
 <template>
   <ProcessPriorityDetail
    :processPriorityForm="processPriorityForm"
-   v-on:deleteProcessPriority="resetProcessPriorityForm"
+   v-on:deleteProcessPriorityForm="resetProcessPriorityForm"
    v-on:new="resetProcessPriorityForm"
    v-on:copy="resetProcessPriorityId"/>
 </template>

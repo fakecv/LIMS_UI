@@ -62,11 +62,6 @@
             label="检测方法"
             width="180">
           </el-table-column>
-          <el-table-column
-            prop="drawingDesign"
-            label="加工图号"
-            width="180">
-          </el-table-column>
       </el-table>
     </div>
     <el-dialog title="检测项目产品列表" :visible.sync="dialogFormVisible" :modal-append-to-body="false">

@@ -2,7 +2,7 @@
   <TestParameterDetail
    :testParameterForm="testParameterForm"
    :staticOptions="staticOptions"
-   v-on:deleteTestParameter="resetTestParameterForm"
+   v-on:deleteTestParameterForm="resetTestParameterForm"
    v-on:new="resetTestParameterForm"
    v-on:copy="resetTestParameterId"/>
 </template>

@@ -112,7 +112,7 @@ export default {
       this.$ajax.get('/api/sample/testParameter/delete/' + this.testParameterForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteTestParameter')
+          vm.$emit('deleteTestParameterForm')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

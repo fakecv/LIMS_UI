@@ -21,12 +21,12 @@
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
-          <el-form-item label="实验方法编号">
+          <el-form-item label="试验方法编号">
             <el-input name="testMethodName" v-model="testMethodForm.testMethodName"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="20">
-          <el-form-item label="实验方法描述">
+          <el-form-item label="试验方法描述">
             <el-input type="textarea" name="testMethodNumber" v-model="testMethodForm.testMethodNumber"></el-input>
           </el-form-item>
         </el-row>
@@ -107,7 +107,7 @@ export default {
       this.$ajax.get('/api/sample/testMethod/delete/' + this.testMethodForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteTestMethod')
+          vm.$emit('deleteTestMethodForm')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

@@ -101,11 +101,11 @@
                 </el-radio-group>
               </el-form-item>
             </el-col>
-            <el-col :span="24">
+            <!-- <el-col :span="24">
               <el-form-item label="样品检查偏离说明" label-width="150px">
                 <el-input type="textarea" name="sampleCheckResultNotes" v-model="agreementForm.sampleCheckResultNotes" autoComplete="sampleCheckResultNotes"></el-input>
               </el-form-item>
-            </el-col>
+            </el-col> -->
             <el-col :span="24">
               <el-form-item label="检测类别">
                 <el-radio-group v-model="agreementForm.experimentalCategory">
@@ -121,11 +121,11 @@
                 ></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="24">
+            <!-- <el-col :span="24">
               <el-form-item label="保密声明">
                 <el-input type="textarea" name="privacyClaim" v-model="agreementForm.privacyClaim" autoComplete="privacyClaim"></el-input>
               </el-form-item>
-            </el-col>
+            </el-col> -->
           </el-row>
         </el-form>
       </el-container>
@@ -165,7 +165,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="其他信息">
+              <el-form-item label="其它信息">
               <el-select name="customerNote" filterable clearable default-first-option v-model="agreementForm.comment">
                 <el-option v-for="item in staticOptions.customerNotes"
                   :key="item.id"
@@ -473,7 +473,7 @@ export default {
             type: 'success',
             message: '已经成功删除！'
           })
-          vm.$emit('deleteAgreement')
+          vm.$emit('deleteAgreementForm')
           vm.agreementNumberButton = false
         }).catch(function (error) {
           vm.$message(error.response.data.message)

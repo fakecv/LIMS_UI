@@ -8,7 +8,7 @@
     v-on:reloadCustomerData="reloadCustomerData"
     v-on:updateUser="updateUser"
     v-on:reloadUserData="reloadUserData"
-    v-on:deleteAgreement="resetAgreementForm"
+    v-on:deleteAgreementForm="resetAgreementForm"
     v-on:new="resetAgreementForm"
     v-on:copy="resetAgreementId"
     v-on:removeImage="removeImage"

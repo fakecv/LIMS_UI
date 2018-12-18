@@ -1,7 +1,7 @@
 <template>
   <ProcessingStatusDetail
    :processingStatusForm="processingStatusForm"
-   v-on:deleteProcessingStatus="resetProcessingStatusForm"
+   v-on:deleteProcessingStatusForm="resetProcessingStatusForm"
    v-on:new="resetProcessingStatusForm"
    v-on:copy="resetProcessingStatusId"/>
 </template>

@@ -4,7 +4,7 @@
    :staticOptions="staticOptions"
    v-on:new="resetTestMethodForm"
    v-on:copy="resetTestMethodId"
-   v-on:deleteTestMethod="resetTestMethodForm"
+   v-on:deleteTestMethodForm="resetTestMethodForm"
    />
 </template>
 
@@ -58,6 +58,7 @@ export default {
     },
     resetTestMethodId () {
       this.testMethodForm.id = ''
+      // this.testMethodForm.sort = ''
     }
   },
   mounted () {

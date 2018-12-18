@@ -3,7 +3,7 @@
    :testedItemTaskForm="testedItemTaskForm"
    :staticOptions="staticOptions"
     v-on:getCascadeItems="getCascadeItems"
-   v-on:deleteTestedItemTask="resetTestedItemTaskForm"
+   v-on:deleteTestedItemTaskForm="resetTestedItemTaskForm"
    v-on:new="resetTestedItemTaskForm"
    v-on:copy="resetTestedItemTaskId"
   />

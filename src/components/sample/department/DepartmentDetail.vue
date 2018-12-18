@@ -96,7 +96,7 @@ export default {
       this.$ajax.get('/api/sample/department/delete/' + this.departmentForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteDepartment')
+          vm.$emit('deleteDepartmentForm')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

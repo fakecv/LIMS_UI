@@ -12,7 +12,7 @@
                 </el-option>
                 </el-select>
           </el-form-item>
-            <el-form-item label="实验方法编号">
+            <el-form-item label="试验方法编号">
               <el-input name="testMethodName" v-model="testMethodRequestForm.testMethodName"></el-input>
             </el-form-item>
           </el-row>
@@ -48,12 +48,12 @@
         </el-table-column>
         <el-table-column
           prop="testMethodName"
-          label="实验方法编号"
+          label="试验方法编号"
           width="180">
         </el-table-column>
         <el-table-column
           prop="testMethodNumber"
-          label="实验方法描述"
+          label="试验方法描述"
           width="180">
         </el-table-column>
       </el-table>

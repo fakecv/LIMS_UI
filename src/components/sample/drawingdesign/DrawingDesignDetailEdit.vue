@@ -2,7 +2,7 @@
   <DrawingDesignDetail
    :drawingDesignForm="drawingDesignForm"
    :staticOptions="staticOptions"
-   v-on:deleteDrawingDesign="resetDrawingDesignForm"
+   v-on:deleteDrawingDesignForm="resetDrawingDesignForm"
    v-on:new="resetDrawingDesignForm"
    v-on:copy="resetDrawingDesignId"/>
 </template>

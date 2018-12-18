@@ -107,7 +107,7 @@ export default {
       this.$ajax.get('/api/sample/drawingDesign/delete/' + this.drawingDesignForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteDrawingDesign')
+          vm.$emit('deleteDrawingDesignForm')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
