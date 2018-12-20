@@ -16,11 +16,13 @@ export default {
       departmentForm: {
         id: '',
         departmentName: '',
+        sort: '',
         departmentDescription: ''
       },
       departmentResetForm: {
         id: '',
         departmentName: '',
+        sort: '',
         departmentDescription: ''
       }
     }

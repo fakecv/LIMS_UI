@@ -14,7 +14,23 @@
           </el-row>
         </el-form>
       </el-container>
-      <el-table :data="tableData" style="width: 100%" @row-dblclick=dblclick>
+      <el-row type="flex" justify="end">
+        <el-button-group size="mini">
+          <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveTop">置顶</el-button>
+          <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveUp">上移</el-button>
+          <el-button type="primary" @click.native="moveDown">下移<i class="el-icon-arrow-down"></i></el-button>
+          <el-button type="primary" @click.native="moveBottom">置底<i class="el-icon-arrow-down"></i></el-button>
+        </el-button-group>
+      </el-row>
+      <el-table ref="multipleTable"
+      :data="tableData" style="width: 100%"
+      @row-dblclick=dblclick
+      @selection-change="handleSelectionChange"
+      @select="handleSelection">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
         <el-table-column
           prop="departmentName"
           label="部门名称"
@@ -46,12 +62,15 @@ export default {
   data () {
     return {
       tableData: [],
+      indexArray: [],
       totalDepartments: 0,
       departmentRequestForm: {
         departmentName: '',
         itemsPerPage: 20,
         currentPage: 1
-      }
+      },
+      departmentForm: {},
+      tempDepartmentForm: {}
     }
   },
   methods: {
@@ -62,6 +81,132 @@ export default {
     handleCurrentChange (val) {
       this.departmentRequestForm.currentPage = val
       this.onSubmit()
+    },
+    handleSelection (selection, row) {
+      if (selection.indexOf(row) > 0) {
+        selection.forEach(item => {
+          this.$refs.multipleTable.toggleRowSelection(item)
+        })
+      }
+    },
+    handleSelectionChange (selection) {
+      let vm = this
+      this.indexArray = []
+      selection.forEach(item => {
+        vm.indexArray.push(vm.tableData.indexOf(item))
+      })
+    },
+    moveUp () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveUpSingle(item)
+      })
+    },
+    moveTop () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveTopSingle(item)
+      })
+    },
+    moveUpSingle (index) {
+      let vm = this
+      let tmp = ''
+      if (index > 0) {
+        this.tempDepartmentForm = this.tableData[(index - 1)]
+        this.departmentForm = this.tableData[index]
+        tmp = this.tempDepartmentForm.sort
+        this.tempDepartmentForm.sort = this.departmentForm.sort
+        this.departmentForm.sort = tmp
+        this.$ajax.all([this.update(this.departmentForm), this.update(this.tempDepartmentForm)])
+          .then(vm.$ajax.spread((res1, res2) => {
+            vm.reload(res1.data)
+          })).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      }
+    },
+    moveTopSingle (index) {
+      let vm = this
+      let tmp = ''
+      if (index > 0) {
+        this.tempDepartmentForm = this.tableData[0]
+        this.departmentForm = this.tableData[index]
+        tmp = this.tempDepartmentForm.sort
+        this.tempDepartmentForm.sort = this.departmentForm.sort
+        this.departmentForm.sort = tmp
+        this.$ajax.all([this.update(this.departmentForm), this.update(this.tempDepartmentForm)])
+          .then(vm.$ajax.spread((res1, res2) => {
+            vm.reload(res1.data)
+          })).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      }
+    },
+    moveDown () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveDownSingle(item)
+      })
+    },
+    moveBottom () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveBottomSingle(item)
+      })
+    },
+    moveDownSingle (index) {
+      let vm = this
+      let tmp = ''
+      if (index < this.tableData.length - 1) {
+        this.tempDepartmentForm = this.tableData[(index + 1)]
+        this.departmentForm = this.tableData[index]
+        tmp = this.tempDepartmentForm.sort
+        this.tempDepartmentForm.sort = this.departmentForm.sort
+        this.departmentForm.sort = tmp
+        this.$ajax.all([this.update(this.departmentForm), this.update(this.tempDepartmentForm)])
+          .then(vm.$ajax.spread((res1, res2) => {
+            vm.reload(res1.data)
+          })).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      }
+    },
+    moveBottomSingle (index) {
+      let vm = this
+      let tmp = ''
+      if (index < this.tableData.length - 1) {
+        this.tempDepartmentForm = this.tableData[this.tableData.length - 1]
+        this.departmentForm = this.tableData[index]
+        tmp = this.tempDepartmentForm.sort
+        this.tempDepartmentForm.sort = this.departmentForm.sort
+        this.departmentForm.sort = tmp
+        this.$ajax.all([this.update(this.departmentForm), this.update(this.tempDepartmentForm)])
+          .then(vm.$ajax.spread((res1, res2) => {
+            vm.reload(res1.data)
+          })).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      }
+    },
+    update (val) {
+      return this.$ajax.post('/api/sample/department', val)
+    },
+    reload (val) {
+      let vm = this
+      this.$ajax.post('/api/sample/department/queryDepartment', this.departmentRequestForm)
+        .then(function (res) {
+          vm.tableData = res.data.pageResult || []
+          vm.totalDepartments = res.data.totalDepartments || 0
+          vm.$nextTick(() => {
+            vm.tableData.forEach(row => {
+              if (row.id === val.id) {
+                vm.$refs.multipleTable.toggleRowSelection(row, true)
+              }
+            })
+          })
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     loadData () {
       let vm = this

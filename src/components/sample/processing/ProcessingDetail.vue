@@ -129,11 +129,11 @@
           type="selection"
           width="55">
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="testedItemTaskName"
           label="检测项目名称"
           width="180">
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           prop="testCategory"
           label="检测类别"

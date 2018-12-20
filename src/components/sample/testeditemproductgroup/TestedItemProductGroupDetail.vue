@@ -28,17 +28,26 @@
         </el-row>
       </el-form>
     </el-container>
+      <el-row type="flex" justify="end">
+        <el-button-group size="mini">
+          <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveUp">上移</el-button>
+          <el-button type="primary" @click.native="moveDown">下移<i class="el-icon-arrow-down"></i></el-button>
+        </el-button-group>
+      </el-row>
     <div>
-      <el-table :data="staticOptions.selectedTestedItemProducts" style="width: 100%" @selection-change="handleTestedItemProductChange">
+      <el-table  ref="multipleTable" :data="staticOptions.selectedTestedItemProducts"
+       style="width: 100%"
+       @selection-change="handleTestedItemProductChange"
+       @select="handleSelection">
           <el-table-column
             type="selection"
             width="55">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             prop="testedItemProductName"
             label="检测项目名称"
             width="180">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             prop="testCategory"
             label="检测类别"
@@ -69,11 +78,11 @@
     <el-container style="padding: 10px">
       <el-form :model="testedItemProductForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <!-- <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目名称">
               <el-input name="testedItemProductName" v-model="testedItemProductForm.testedItemProductName" autoComplete="testedItemProductName"></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目类别">
                 <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testCategory" @change="getFilteredTestItems">
@@ -142,11 +151,11 @@
           type="selection"
           width="55">
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="testedItemProductName"
           label="检测项目名称"
           width="180">
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           prop="testCategory"
           label="检测类别"
@@ -223,6 +232,8 @@ export default {
         {'name': '文件保存', 'id': '7', 'icon': 'el-icon-download', 'loading': false}
       ],
       multipleSelection: [],
+      indexArray: [],
+      tempTestedItemProducts: [],
       deletedTestedItemProducts: [],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
       dialogFormVisible: false
@@ -252,10 +263,15 @@ export default {
     },
     saveToDB () {
       let vm = this
+      this.testedItemProductGroupForm.testedItemProducts = []
+      this.staticOptions.selectedTestedItemProducts.forEach(item => {
+        vm.testedItemProductGroupForm.testedItemProducts.push(item.id)
+      })
       this.$ajax.post('/api/sample/testedItemProductGroup', this.testedItemProductGroupForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
-          vm.$emit('updateTestedItemProductGroupForm', res.data)
+          // console.log(res.data)
+          // vm.$emit('updateTestedItemProductGroupForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -314,8 +330,116 @@ export default {
       this.testedItemProductForm.itemsPerPage = val
       this.$emit('reloadTestedItemProducts', this.testedItemProductForm)
     },
+    handleSelection (selection, row) {
+      if (selection.indexOf(row) > 0) {
+        selection.forEach(item => {
+          this.$refs.multipleTable.toggleRowSelection(item)
+        })
+      }
+    },
     handleTestedItemProductChange (val) {
+      let vm = this
       this.deletedTestedItemProducts = val
+      this.indexArray = []
+      val.forEach(item => {
+        vm.indexArray.push(vm.staticOptions.selectedTestedItemProducts.indexOf(item))
+      })
+    },
+    moveUp () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveUpSingle(item)
+      })
+    },
+    moveTop () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveTopSingle(item)
+      })
+    },
+    moveUpSingle (index) {
+      let vm = this
+      if (index > 0) {
+        for (var i = 0; i < this.staticOptions.selectedTestedItemProducts.length; i++) {
+          if (i === index - 1) {
+            vm.tempTestedItemProducts.push(this.staticOptions.selectedTestedItemProducts[index])
+          } else if (i === index) {
+            vm.tempTestedItemProducts.push(this.staticOptions.selectedTestedItemProducts[index - 1])
+          } else {
+            vm.tempTestedItemProducts.push(this.staticOptions.selectedTestedItemProducts[i])
+          }
+        }
+        this.staticOptions.selectedTestedItemProducts = this.tempTestedItemProducts
+        this.$nextTick(() => {
+          vm.$refs.multipleTable.toggleRowSelection(this.staticOptions.selectedTestedItemProducts[index - 1], true)
+        })
+        this.tempTestedItemProducts = []
+      }
+    },
+    moveTopSingle (index) {
+      let vm = this
+      let tmp = ''
+      if (index > 0) {
+        this.tempDrawingDesignForm = this.tableData[0]
+        this.drawingDesignForm = this.tableData[index]
+        tmp = this.tempDrawingDesignForm.sort
+        this.tempDrawingDesignForm.sort = this.drawingDesignForm.sort
+        this.drawingDesignForm.sort = tmp
+        this.$ajax.all([this.update(this.drawingDesignForm), this.update(this.tempDrawingDesignForm)])
+          .then(vm.$ajax.spread((res1, res2) => {
+            vm.reload(res1.data)
+          })).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      }
+    },
+    moveDown () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveDownSingle(item)
+      })
+    },
+    moveBottom () {
+      let vm = this
+      this.indexArray.forEach(item => {
+        vm.moveBottomSingle(item)
+      })
+    },
+    moveDownSingle (index) {
+      let vm = this
+      if (index < this.staticOptions.selectedTestedItemProducts.length - 1) {
+        for (var i = 0; i < this.staticOptions.selectedTestedItemProducts.length; i++) {
+          if (i === index + 1) {
+            vm.tempTestedItemProducts.push(this.staticOptions.selectedTestedItemProducts[index])
+          } else if (i === index) {
+            vm.tempTestedItemProducts.push(this.staticOptions.selectedTestedItemProducts[index + 1])
+          } else {
+            vm.tempTestedItemProducts.push(this.staticOptions.selectedTestedItemProducts[i])
+          }
+        }
+        this.staticOptions.selectedTestedItemProducts = this.tempTestedItemProducts
+        this.$nextTick(() => {
+          vm.$refs.multipleTable.toggleRowSelection(this.staticOptions.selectedTestedItemProducts[index + 1], true)
+        })
+        this.tempTestedItemProducts = []
+      }
+    },
+    moveBottomSingle (index) {
+      let vm = this
+      let tmp = ''
+      if (index < this.tableData.length - 1) {
+        this.tempDrawingDesignForm = this.tableData[this.tableData.length - 1]
+        this.drawingDesignForm = this.tableData[index]
+        tmp = this.tempDrawingDesignForm.sort
+        this.tempDrawingDesignForm.sort = this.drawingDesignForm.sort
+        this.drawingDesignForm.sort = tmp
+        this.$ajax.all([this.update(this.drawingDesignForm), this.update(this.tempDrawingDesignForm)])
+          .then(vm.$ajax.spread((res1, res2) => {
+            vm.reload(res1.data)
+          })).catch(function (error) {
+            vm.$message(error.response.data.message)
+          })
+      }
     },
     reloadTestedItemProducts () {
       this.$emit('reloadTestedItemProducts', this.testedItemProductForm)

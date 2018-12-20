@@ -9,11 +9,11 @@
     <el-container style="padding: 10px">
       <el-form :model="testedItemProductForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <!-- <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目名称">
               <el-input name="testedItemProductName" v-model="testedItemProductForm.testedItemProductName" autoComplete="testedItemProductName"></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目类别">
                 <el-select name="testedItem" filterable default-first-option v-model="testedItemProductForm.testCategory" @change="getFilteredTestItems">
@@ -110,7 +110,7 @@ export default {
       this.$ajax.post('/api/sample/testedItemProduct', this.testedItemProductForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
-          vm.$emit('updatetestedItemProductForm', res.data)
+          vm.$emit('updateTestedItemProductForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

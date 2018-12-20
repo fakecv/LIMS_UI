@@ -17,11 +17,13 @@ export default {
     return {
       testCategoryForm: {
         testCategoryName: '',
+        sort: '',
         testCategoryDescription: '',
         id: ''
       },
       testCategoryResetForm: {
         testCategoryName: '',
+        sort: '',
         testCategoryDescription: '',
         id: ''
       }

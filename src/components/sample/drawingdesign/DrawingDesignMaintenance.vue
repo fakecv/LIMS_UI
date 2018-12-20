@@ -81,6 +81,8 @@ export default {
     return {
       tableData: [],
       indexArray: [],
+      drawingDesignForm: {},
+      tempDrawingDesignForm: {},
       totalDrawingDesigns: 0,
       drawingDesignRequestForm: {
         testedItem: '',
@@ -88,8 +90,6 @@ export default {
         itemsPerPage: 20,
         currentPage: 1
       },
-      drawingDesignForm: {},
-      tempDrawingDesignForm: {},
       testedItems: []
     }
   },

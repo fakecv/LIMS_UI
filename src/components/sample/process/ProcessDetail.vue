@@ -48,11 +48,6 @@
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="来样编号">
-                <el-input name="sampleClientNumber" v-model="processForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="优先级">
                 <el-select name="processPriority" filterable default-first-option v-model="processForm.processPriority">
                 <el-option v-for="item in staticOptions.processPriorities"
@@ -66,6 +61,11 @@
             <el-col :span="24">
               <el-form-item label="其他信息">
                 <el-input type="textarea" name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="来样编号">
+                <el-input name="sampleClientNumber" v-model="processForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -250,11 +250,11 @@
     <el-container style="padding: 10px">
       <el-form :model="testedItemProductForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <!-- <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目名称">
               <el-input name="testedItemProductName" v-model="testedItemProductForm.testedItemProductName" autoComplete="testedItemProductName"></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目类别">
                 <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testCategory" @change="handleTestCategoryChange">
@@ -351,11 +351,11 @@
     <el-container style="padding: 10px">
       <el-form :model="testedItemTaskForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <!-- <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目名称">
               <el-input name="testedItemProductName" v-model="testedItemTaskForm.testedItemTaskName" autoComplete="testedItemTaskName"></el-input>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目类别">
                 <el-select name="testedItem" filterable default-first-option v-model="testedItemTaskForm.testCategory" @change="handleTestCategoryChange">
@@ -463,7 +463,7 @@ export default {
         rejectNote: ''
       },
       testedItemProductForm: {
-        testedItemProductName: '',
+        // testedItemProductName: '',
         testCategory: '',
         testedItem: '',
         testedItemName: '',

@@ -16,11 +16,13 @@ export default {
       processingStatusForm: {
         id: '',
         processingStatusName: '',
+        sort: '',
         processingStatusDescription: ''
       },
       processingStatusResetForm: {
         id: '',
         processingStatusName: '',
+        sort: '',
         processingStatusDescription: ''
       }
     }

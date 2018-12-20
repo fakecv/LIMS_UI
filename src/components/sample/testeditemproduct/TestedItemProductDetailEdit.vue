@@ -17,7 +17,6 @@ export default {
   data () {
     return {
       testedItemProductForm: {
-        testedItemProductName: '',
         sort: '',
         testCategory: '',
         testedItem: '',
@@ -27,7 +26,6 @@ export default {
         id: ''
       },
       testedItemProductResetForm: {
-        testedItemProductName: '',
         sort: '',
         testCategory: '',
         testedItem: '',

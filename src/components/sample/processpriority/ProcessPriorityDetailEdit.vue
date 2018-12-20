@@ -16,13 +16,15 @@ export default {
       processPriorityForm: {
         id: '',
         processPriorityName: '',
-        processPriorityColor: '',
-        processPriorityFontColor: '',
+        processPriorityColor: '#FFFFFF',
+        sort: '',
+        processPriorityFontColor: '#000000',
         processPriorityDescription: ''
       },
       processPriorityResetForm: {
         id: '',
         processPriorityName: '',
+        sort: '',
         processPriorityColor: '#FFFFFF',
         processPriorityFontColor: '#000000',
         processPriorityDescription: ''

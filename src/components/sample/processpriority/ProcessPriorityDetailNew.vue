@@ -17,6 +17,7 @@ export default {
         id: '',
         processPriorityName: '',
         processPriorityColor: '#FFFFFF',
+        sort: '',
         processPriorityFontColor: '#000000',
         processPriorityDescription: ''
       },
@@ -24,6 +25,7 @@ export default {
         id: '',
         processPriorityName: '',
         processPriorityColor: 'FFFFFF',
+        sort: '',
         processPriorityFontColor: '#000000',
         processPriorityDescription: ''
       }
