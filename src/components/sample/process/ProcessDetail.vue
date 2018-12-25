@@ -59,7 +59,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="其他信息">
+              <el-form-item label="其它信息">
                 <el-input type="textarea" name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
               </el-form-item>
             </el-col>
@@ -143,7 +143,7 @@
       <el-row>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="加工图号">
-              <el-select name="drawingDesign" filterable default-first-option v-model="processForm.drawingDesign">
+              <el-select name="drawingDesign" filterable clearable default-first-option allow-create v-model="processForm.drawingDesign">
                 <el-option v-for="item in staticOptions.filteredDrawingDesigns"
                   :key="item.id"
                   :label="item.drawingDesignName"
@@ -255,7 +255,7 @@
               <el-input name="testedItemProductName" v-model="testedItemProductForm.testedItemProductName" autoComplete="testedItemProductName"></el-input>
             </el-form-item>
           </el-col> -->
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目类别">
                 <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testCategory" @change="handleTestCategoryChange">
                   <el-option v-for="item in staticOptions.testCategories"
@@ -266,7 +266,7 @@
                   </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目">
               <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testedItem" @change="handleTestedItemChange">
                 <el-option v-for="item in staticOptions.filteredTestedItems"
@@ -277,7 +277,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目参数">
               <el-select name="testParameter" filterable clearable default-first-option v-model="testedItemProductForm.testParameter">
                 <el-option v-for="item in staticOptions.filteredTestParameters"
@@ -288,7 +288,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测方法">
               <el-select name="testMethod" filterable clearable default-first-option v-model="testedItemProductForm.testMethod">
                 <el-option v-for="item in staticOptions.filteredTestMethods"
@@ -356,7 +356,7 @@
               <el-input name="testedItemProductName" v-model="testedItemTaskForm.testedItemTaskName" autoComplete="testedItemTaskName"></el-input>
             </el-form-item>
           </el-col> -->
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目类别">
                 <el-select name="testedItem" filterable default-first-option v-model="testedItemTaskForm.testCategory" @change="handleTestCategoryChange">
                   <el-option v-for="item in staticOptions.testCategories"
@@ -367,7 +367,7 @@
                   </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目">
               <el-select name="testedItem" filterable default-first-option v-model="testedItemTaskForm.testedItem" @change="handleTestedItemChange">
                 <el-option v-for="item in staticOptions.filteredTestedItems"
@@ -378,7 +378,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目参数">
               <el-input name="testParameter" v-model="testedItemTaskForm.testParameter" autoComplete="testParameter"></el-input>
               <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
@@ -388,7 +388,7 @@
               </el-checkbox-group>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测方法">
               <el-select name="testMethod" filterable default-first-option v-model="testedItemTaskForm.testMethod">
                 <el-option v-for="item in staticOptions.filteredTestMethods"
@@ -449,6 +449,7 @@ export default {
       testedItemProductGroupForm: {
         testedItemProductGroupName: '',
         testedItemProductGroupDescription: '',
+        testedItemTasks: [],
         itemsPerPage: 20,
         currentPage: 1
       },

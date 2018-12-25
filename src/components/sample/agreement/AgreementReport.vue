@@ -25,9 +25,10 @@ export default {
   data () {
     return {
       src: {},
-      numPages: undefined,
+      numPages: 0,
       fullscreenLoading: false,
-      agreementNumber: ''
+      agreementNumber: '',
+      loading: {}
     }
   },
   methods: {
@@ -71,6 +72,10 @@ export default {
       this.src.then(pdf => {
         vm.numPages = pdf.numPages
         loading.close()
+      }).catch(function (error) {
+        loading.close()
+        console.log(error.message)
+        vm.$message('未选择打印内容')
       })
     },
     goBackAgreement () {

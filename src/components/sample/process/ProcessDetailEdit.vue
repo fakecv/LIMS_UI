@@ -134,17 +134,12 @@ export default {
     updateTestedItemTasks () {
       let vm = this
       this.staticOptions.testedItemProducts.forEach(testItemProductGroup => {
-        vm.$ajax.post('/api/sample/testedItemProductGroup/getTestedItemTasks', testItemProductGroup)
-          .then(function (res) {
-            res.data.forEach(item => {
-              item.processPriority = vm.processForm.processPriority
-              vm.staticOptions.testedItemTaskTableData.push(item)
-            })
-            // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
-            vm.fetchDrawingDesign()
-          }).catch(function (error) {
-            vm.$message(error.response.data.message)
-          })
+        testItemProductGroup.testedItemTasks.forEach(item => {
+          item.processPriority = vm.processForm.processPriority
+          vm.staticOptions.testedItemTaskTableData.push(item)
+        })
+        // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+        vm.fetchDrawingDesign()
       })
     },
     updateTestedItemProduct () {

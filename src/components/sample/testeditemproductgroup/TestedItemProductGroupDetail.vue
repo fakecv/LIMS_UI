@@ -35,10 +35,11 @@
         </el-button-group>
       </el-row>
     <div>
-      <el-table  ref="multipleTable" :data="staticOptions.selectedTestedItemProducts"
+      <el-table  ref="multipleTable"
+       :data="testedItemProductGroupForm.testedItemTasks"
        style="width: 100%"
        @selection-change="handleTestedItemProductChange"
-       @select="handleSelection">
+       >
           <el-table-column
             type="selection"
             width="55">
@@ -94,7 +95,7 @@
                   </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目">
               <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testedItem" @change="getCascadeItems">
                 <el-option v-for="item in staticOptions.filteredTestedItems"
@@ -105,7 +106,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目参数">
               <el-select name="testParameter" filterable clearable default-first-option v-model="testedItemProductForm.testParameter">
                 <el-option v-for="item in staticOptions.filteredTestParameters"
@@ -116,7 +117,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测方法">
               <el-select name="testMethod" filterable clearable default-first-option v-model="testedItemProductForm.testMethod">
                 <el-option v-for="item in staticOptions.filteredTestMethods"
@@ -127,7 +128,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="加工图号">
               <el-select name="drawingDesign" filterable clearable default-first-option v-model="testedItemProductForm.drawingDesign">
                 <el-option v-for="item in staticOptions.filteredDrawingDesigns"
@@ -146,7 +147,10 @@
         </el-row>
       </el-form>
     </el-container>
-    <el-table ref="testedItemProductTable" :data="staticOptions.testedItemProducts" style="width: 100%" @select="handleSelect">
+    <el-table ref="testedItemProductTable"
+      :data="staticOptions.testedItemProducts"
+      style="width: 100%"
+      @selection-change="handleDialogTestedItemProductChange">
         <el-table-column
           type="selection"
           width="55">
@@ -179,11 +183,11 @@
           label="检测方法"
           width="180">
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="drawingDesign"
           label="加工图号"
           width="180">
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <div class="block text-right">
         <el-pagination
@@ -215,6 +219,7 @@ export default {
         testedItemProductName: '',
         testCategory: '',
         testedItem: '',
+        testedItemName: '',
         itemsPerPage: 20,
         currentPage: 1,
         testParameter: '',
@@ -263,15 +268,9 @@ export default {
     },
     saveToDB () {
       let vm = this
-      this.testedItemProductGroupForm.testedItemProducts = []
-      this.staticOptions.selectedTestedItemProducts.forEach(item => {
-        vm.testedItemProductGroupForm.testedItemProducts.push(item.id)
-      })
       this.$ajax.post('/api/sample/testedItemProductGroup', this.testedItemProductGroupForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
-          // console.log(res.data)
-          // vm.$emit('updateTestedItemProductGroupForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -309,11 +308,6 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         vm.$refs.testedItemProductTable.clearSelection()
-        vm.staticOptions.testedItemProducts.forEach(row => {
-          if (vm.testedItemProductGroupForm.testedItemProducts && vm.testedItemProductGroupForm.testedItemProducts.indexOf(row.id) !== -1) {
-            vm.$refs.testedItemProductTable.toggleRowSelection(row, true)
-          }
-        })
       })
     },
     deleteTestedItemProducts () {
@@ -323,26 +317,22 @@ export default {
       this.testedItemProductForm.currentPage = val
       this.$emit('reloadTestedItemProducts', this.testedItemProductForm)
     },
-    handleSelect (selection, row) {
-      this.$emit('updateTestedItemProducts', row.id)
+    handleDialogTestedItemProductChange (val) {
+      this.staticOptions.selectedDialogTestedItemProducts = []
+      val.forEach(item => {
+        this.staticOptions.selectedDialogTestedItemProducts.push(item)
+      })
     },
     handleSizeChange (val) {
       this.testedItemProductForm.itemsPerPage = val
       this.$emit('reloadTestedItemProducts', this.testedItemProductForm)
-    },
-    handleSelection (selection, row) {
-      if (selection.indexOf(row) > 0) {
-        selection.forEach(item => {
-          this.$refs.multipleTable.toggleRowSelection(item)
-        })
-      }
     },
     handleTestedItemProductChange (val) {
       let vm = this
       this.deletedTestedItemProducts = val
       this.indexArray = []
       val.forEach(item => {
-        vm.indexArray.push(vm.staticOptions.selectedTestedItemProducts.indexOf(item))
+        vm.indexArray.push(vm.testedItemProductGroupForm.testedItemTasks.indexOf(item))
       })
     },
     moveUp () {
@@ -351,46 +341,23 @@ export default {
         vm.moveUpSingle(item)
       })
     },
-    moveTop () {
-      let vm = this
-      this.indexArray.forEach(item => {
-        vm.moveTopSingle(item)
-      })
-    },
     moveUpSingle (index) {
       let vm = this
       if (index > 0) {
-        for (var i = 0; i < this.staticOptions.selectedTestedItemProducts.length; i++) {
+        for (var i = 0; i < this.testedItemProductGroupForm.testedItemTasks.length; i++) {
           if (i === index - 1) {
-            vm.tempTestedItemProducts.push(this.staticOptions.selectedTestedItemProducts[index])
+            vm.tempTestedItemProducts.push(this.testedItemProductGroupForm.testedItemTasks[index])
           } else if (i === index) {
-            vm.tempTestedItemProducts.push(this.staticOptions.selectedTestedItemProducts[index - 1])
+            vm.tempTestedItemProducts.push(this.testedItemProductGroupForm.testedItemTasks[index - 1])
           } else {
-            vm.tempTestedItemProducts.push(this.staticOptions.selectedTestedItemProducts[i])
+            vm.tempTestedItemProducts.push(this.testedItemProductGroupForm.testedItemTasks[i])
           }
         }
-        this.staticOptions.selectedTestedItemProducts = this.tempTestedItemProducts
+        this.testedItemProductGroupForm.testedItemTasks = this.tempTestedItemProducts
         this.$nextTick(() => {
-          vm.$refs.multipleTable.toggleRowSelection(this.staticOptions.selectedTestedItemProducts[index - 1], true)
+          vm.$refs.multipleTable.toggleRowSelection(this.testedItemProductGroupForm.testedItemTasks[index - 1], true)
         })
         this.tempTestedItemProducts = []
-      }
-    },
-    moveTopSingle (index) {
-      let vm = this
-      let tmp = ''
-      if (index > 0) {
-        this.tempDrawingDesignForm = this.tableData[0]
-        this.drawingDesignForm = this.tableData[index]
-        tmp = this.tempDrawingDesignForm.sort
-        this.tempDrawingDesignForm.sort = this.drawingDesignForm.sort
-        this.drawingDesignForm.sort = tmp
-        this.$ajax.all([this.update(this.drawingDesignForm), this.update(this.tempDrawingDesignForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
-            vm.$message(error.response.data.message)
-          })
       }
     },
     moveDown () {
@@ -399,53 +366,32 @@ export default {
         vm.moveDownSingle(item)
       })
     },
-    moveBottom () {
-      let vm = this
-      this.indexArray.forEach(item => {
-        vm.moveBottomSingle(item)
-      })
-    },
     moveDownSingle (index) {
       let vm = this
-      if (index < this.staticOptions.selectedTestedItemProducts.length - 1) {
-        for (var i = 0; i < this.staticOptions.selectedTestedItemProducts.length; i++) {
+      if (index < this.testedItemProductGroupForm.testedItemTasks.length - 1) {
+        for (var i = 0; i < this.testedItemProductGroupForm.testedItemTasks.length; i++) {
           if (i === index + 1) {
-            vm.tempTestedItemProducts.push(this.staticOptions.selectedTestedItemProducts[index])
+            vm.tempTestedItemProducts.push(this.testedItemProductGroupForm.testedItemTasks[index])
           } else if (i === index) {
-            vm.tempTestedItemProducts.push(this.staticOptions.selectedTestedItemProducts[index + 1])
+            vm.tempTestedItemProducts.push(this.testedItemProductGroupForm.testedItemTasks[index + 1])
           } else {
-            vm.tempTestedItemProducts.push(this.staticOptions.selectedTestedItemProducts[i])
+            vm.tempTestedItemProducts.push(this.testedItemProductGroupForm.testedItemTasks[i])
           }
         }
-        this.staticOptions.selectedTestedItemProducts = this.tempTestedItemProducts
+        this.testedItemProductGroupForm.testedItemTasks = this.tempTestedItemProducts
         this.$nextTick(() => {
-          vm.$refs.multipleTable.toggleRowSelection(this.staticOptions.selectedTestedItemProducts[index + 1], true)
+          vm.$refs.multipleTable.toggleRowSelection(this.testedItemProductGroupForm.testedItemTasks[index + 1], true)
         })
         this.tempTestedItemProducts = []
-      }
-    },
-    moveBottomSingle (index) {
-      let vm = this
-      let tmp = ''
-      if (index < this.tableData.length - 1) {
-        this.tempDrawingDesignForm = this.tableData[this.tableData.length - 1]
-        this.drawingDesignForm = this.tableData[index]
-        tmp = this.tempDrawingDesignForm.sort
-        this.tempDrawingDesignForm.sort = this.drawingDesignForm.sort
-        this.drawingDesignForm.sort = tmp
-        this.$ajax.all([this.update(this.drawingDesignForm), this.update(this.tempDrawingDesignForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
-            vm.$message(error.response.data.message)
-          })
       }
     },
     reloadTestedItemProducts () {
       this.$emit('reloadTestedItemProducts', this.testedItemProductForm)
     },
     updateTestedItemProducts () {
+      console.log('confirm updateTestedItemProducts')
       this.dialogFormVisible = false
+      this.$emit('updateTestedItemProducts')
     },
     getFilteredTestItems (testCategoryId) {
       this.testedItemProductForm.testedItem = ''

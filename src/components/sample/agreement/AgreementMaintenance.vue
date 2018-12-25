@@ -74,7 +74,7 @@
         </el-table-column>
         <el-table-column
           prop="comment"
-          label="其他信息"
+          label="其它信息"
           show-overflow-tooltip
           width="180">
         </el-table-column>

@@ -341,10 +341,10 @@
           <el-form :model="form">
             <el-form-item label="可预览文件列表">
                 <el-checkbox-group v-model="form.reportList">
-                  <el-checkbox label="cover"></el-checkbox>
-                  <el-checkbox label="agreement"></el-checkbox>
-                  <el-checkbox label="process"></el-checkbox>
-                  <el-checkbox label="task"></el-checkbox>
+                  <el-checkbox label="cover">检测报表封面</el-checkbox>
+                  <el-checkbox label="agreement">委托协议书</el-checkbox>
+                  <el-checkbox label="process">样品流转表</el-checkbox>
+                  <el-checkbox label="task">检测任务单</el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
           </el-form>

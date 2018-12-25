@@ -32,14 +32,14 @@ export default {
         testedItemProductGroupName: '',
         sort: '',
         testedItemProductGroupDescription: '',
-        testedItemProducts: [],
+        testedItemTasks: [],
         id: ''
       },
       testedItemProductGroupResetForm: {
         testedItemProductGroupName: '',
         sort: '',
         testedItemProductGroupDescription: '',
-        testedItemProducts: [],
+        testedItemTasks: [],
         id: ''
       },
       staticOptions: {
@@ -71,46 +71,28 @@ export default {
           vm.$refs.testedItemProductGroupDetail.addTestedItemProducts()
         })
     },
-    updateTestedItemProducts (id) {
+    updateTestedItemProducts () {
       let vm = this
-      var index = this.testedItemProductGroupForm.testedItemProducts.indexOf(id)
-      if (index > -1) {
-        this.testedItemProductGroupForm.testedItemProducts.splice(index, 1)
-        this.staticOptions.testedItemProducts.forEach(row => {
-          if (row.id === id) {
-            vm.staticOptions.selectedTestedItemProducts.splice(row, 1)
-          }
-        })
-      } else {
-        this.testedItemProductGroupForm.testedItemProducts.push(id)
-        this.staticOptions.testedItemProducts.forEach(row => {
-          if (row.id === id) {
-            vm.staticOptions.selectedTestedItemProducts.push(row)
-          }
-        })
-      }
-    },
-    addTestedItemProduct (id) {
-      this.testedItemProductGroupForm.testedItemProducts.push(id)
-    },
-    removeTestedItemProduct (id) {
-      var index = this.testedItemProductGroupForm.testedItemProducts.indexOf(id)
-      if (index > -1) {
-        this.testedItemProductGroupForm.testedItemProducts.splice(index, 1)
-      }
+      this.staticOptions.selectedDialogTestedItemProducts.forEach(element => {
+        vm.$ajax.post('/api/sample/testedItemProduct/getTestedItemTasks', element)
+          .then(function (res) {
+            vm.testedItemProductGroupForm.testedItemTasks.push(res.data)
+          }).catch(function (error) {
+            vm.$message({
+              showClose: true,
+              message: error.response.data.message
+            })
+          })
+      })
     },
     deleteTestedItemProducts (event) {
       let vm = this
       event.forEach(row => {
-        for (var i = 0; i < vm.staticOptions.selectedTestedItemProducts.length; i++) {
-          if (vm.staticOptions.selectedTestedItemProducts[i].id === row.id) {
-            vm.staticOptions.selectedTestedItemProducts.splice(i, 1)
+        for (var i = 0; i < vm.testedItemProductGroupForm.testedItemTasks.length; i++) {
+          if (vm.testedItemProductGroupForm.testedItemTasks[i].id === row.id) {
+            vm.testedItemProductGroupForm.testedItemTasks.splice(i, 1)
           }
         }
-      })
-      this.testedItemProductGroupForm.testedItemProducts = []
-      this.staticOptions.selectedTestedItemProducts.forEach(row => {
-        vm.testedItemProductGroupForm.testedItemProducts.push(row.id)
       })
     },
     loadTestedItemProductGroup (testedItemProductGroupId) {

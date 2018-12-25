@@ -107,7 +107,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="其他信息">
+              <el-form-item label="其它信息">
                 <el-input type="textarea" name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
               </el-form-item>
             </el-col>
@@ -186,6 +186,7 @@ export default {
       testedItemTaskForm: {
         testedItemTaskName: '',
         testedItem: '',
+        testedItemName: '',
         testParameter: '',
         testMethod: '',
         drawingDesign: '',
