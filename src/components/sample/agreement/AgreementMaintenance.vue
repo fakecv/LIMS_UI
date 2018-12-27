@@ -31,8 +31,15 @@
     </el-container>
     <div class="block text-right">
       <el-button type="primary" icon="el-icon-download" circle @click="exportExcel">导出</el-button>
+      <el-button type="primary" icon="el-icon-download" circle @click="exportSettlementList">导出结算清单</el-button>
     </div>
-      <el-table id="out-table" :data="tableData" style="width: 100%" @row-dblclick=dblclick :row-style="agreementTableStyle">
+      <el-table id="out-table" :data="tableData" style="width: 100%" @row-dblclick=dblclick :row-style="agreementTableStyle"
+      @selection-change="handleSelectionChange"
+      >
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
         <el-table-column
           prop="agreementNumber"
           label="委托编号"
@@ -107,6 +114,7 @@ export default {
   data () {
     return {
       tableData: [],
+      agreementIds: [],
       totalAgreements: 0,
       agreementRequestForm: {
         agreementNumber: '',
@@ -128,9 +136,35 @@ export default {
       /* get binary string as output */
       var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
       try {
-        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
+        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '委托协议.xlsx')
       } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
       return wbout
+    },
+    handleSelectionChange (val) {
+      this.agreementIds = []
+      val.forEach(element => {
+        this.agreementIds.push(element.id)
+      })
+    },
+    exportSettlementList () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/downloadExportSettlementList/' + this.agreementIds.join(','), {responseType: 'blob'})
+        .then(function (res) {
+          if (!res.data) {
+            return
+          }
+          let url = window.URL.createObjectURL(new Blob([res.data]), {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'})
+          let link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          link.setAttribute('download', '结算清单.xls')
+
+          document.body.appendChild(link)
+          link.click()
+        }
+        ).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     agreementTableStyle ({row, rowIndex}) {
       let backgroundColor = '#FFFFFF'
