@@ -43,6 +43,7 @@ export default {
         testParameters: [],
         filteredTestParameters: [],
         checkedTestParameters: [],
+        checkedTestMethods: [],
         testedItems: [],
         filteredTestedItems: [],
         drawingDesigns: [],

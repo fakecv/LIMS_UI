@@ -30,7 +30,7 @@
       </el-form>
     </el-container>
     <div class="block text-right">
-      <el-button type="primary" icon="el-icon-download" circle @click="exportExcel">导出</el-button>
+      <!-- <el-button type="primary" icon="el-icon-download" circle @click="exportExcel">导出</el-button> -->
       <el-button type="primary" icon="el-icon-download" circle @click="exportSettlementList">导出结算清单</el-button>
     </div>
       <el-table id="out-table" :data="tableData" style="width: 100%" @row-dblclick=dblclick :row-style="agreementTableStyle"

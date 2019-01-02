@@ -47,6 +47,8 @@
         </el-row>
       </el-form>
     </el-container>
+    <el-table>
+    </el-table>
   </el-container>
 </template>
 
@@ -62,7 +64,7 @@ export default {
         {'name': '数据库保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false},
         {'name': '解锁', 'id': '4', 'icon': 'el-icon-edit', 'loading': false},
         {'name': '删除', 'id': '5', 'icon': 'el-icon-delete', 'loading': false},
-        {'name': '文件导入', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false},
+        {'name': '报表预览', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '7', 'icon': 'el-icon-download', 'loading': false}
       ],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
@@ -81,6 +83,7 @@ export default {
       } else if (action.id === '5') {
         this.confirmDelete()
       } else if (action.id === '6') {
+        // this.$router.push('/lims/agreementReport/' + this.reportDevelopmentForm.id)
       } else if (action.id === '7') {
       }
     },

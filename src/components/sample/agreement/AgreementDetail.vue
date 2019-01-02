@@ -269,7 +269,7 @@
       <el-table ref="customerTable" :data="staticOptions.customers" style="width: 100%"
         highlight-current-row
         @row-click="handleCustomerRowClick"
-        @row-dbclick="handleCustomerRowDLClick"
+        @row-dblclick="handleCustomerRowDLClick"
        >
         <el-table-column prop="company" label="客户单位" width="180"></el-table-column>
         <el-table-column prop="name" label="客户名称" width="180"></el-table-column>
@@ -312,7 +312,7 @@
       <el-table ref="userTable" :data="staticOptions.users" style="width: 100%"
         highlight-current-row
         @row-click="handleUserRowClick"
-        @row-dbclick="handleUserRowDLClick"
+        @row-dblclick="handleUserRowDLClick"
       >
         <el-table-column prop="name" label="接收人名称" width="180"></el-table-column>
         <el-table-column prop="mobileNumber" label="接收人电话" width="180"></el-table-column>

@@ -156,6 +156,7 @@ export default {
         testedItemTaskTableData: [],
         testedItemProducts: [],
         testMethods: [],
+        checkedTestMethods: [],
         filteredTestMethods: [],
         testParameters: [],
         filteredTestParameters: [],

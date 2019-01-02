@@ -41,6 +41,7 @@ export default {
         selectedTestedItemProducts: [],
         testMethods: [],
         filteredTestMethods: [],
+        checkedTestMethods: [],
         testParameters: [],
         filteredTestParameters: [],
         checkedTestParameters: [],
