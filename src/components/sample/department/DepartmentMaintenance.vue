@@ -62,13 +62,13 @@ export default {
   data () {
     return {
       tableData: [],
-      indexArray: [],
       totalDepartments: 0,
       departmentRequestForm: {
         departmentName: '',
         itemsPerPage: 20,
         currentPage: 1
       },
+      indexArray: [],
       departmentForm: {},
       tempDepartmentForm: {}
     }

@@ -123,6 +123,7 @@ export default {
     resetAgreementId () {
       this.agreementForm.id = ''
       this.staticOptions.images.length = 0
+      this.agreementNumberGenerator()
     },
     newAgreementForm () {
       // it's better than vm.staticOptions.images = [], any reference will be also cleared.

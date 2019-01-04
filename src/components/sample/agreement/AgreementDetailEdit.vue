@@ -13,6 +13,7 @@
     v-on:copy="resetAgreementId"
     v-on:removeImage="removeImage"
     v-on:addImage="addImage"
+    v-on:agreementNumberGenerator="agreementNumberGenerator"
     />
 </template>
 
@@ -96,6 +97,15 @@ export default {
     }
   },
   methods: {
+    agreementNumberGenerator () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/generateAgreeNumber')
+        .then(function (res) {
+          vm.agreementForm.agreementNumber = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     loadAgreement (agreementId) {
       let vm = this
       this.$ajax.get('/api/sample/agreement/' + agreementId)
@@ -173,6 +183,8 @@ export default {
     },
     resetAgreementId () {
       this.agreementForm.id = ''
+      this.staticOptions.images.length = 0
+      this.agreementNumberGenerator()
     },
     reloadCustomerData (event) {
       let vm = this

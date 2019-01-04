@@ -345,6 +345,7 @@
                   <el-checkbox label="agreement">委托协议书</el-checkbox>
                   <el-checkbox label="process">样品流转表</el-checkbox>
                   <el-checkbox label="task">检测任务单</el-checkbox>
+                  <el-checkbox label="other">自定义报表</el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
           </el-form>
@@ -530,8 +531,15 @@ export default {
       this.$emit('updateCustomer', row)
     },
     handleCustomerRowDLClick (row, event, column) {
+      let vm = this
       this.$emit('updateCustomer', row)
       this.customerDialogFormVisible = false
+      this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.customerForm.id)
+        .then(function (res) {
+          vm.staticOptions.customerNotes = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     handleUserSizeChange (val) {
       this.userRequestForm.itemsPerPage = val
