@@ -127,17 +127,12 @@ export default {
     },
     moveTopSingle (index) {
       let vm = this
-      let tmp = ''
       if (index > 0) {
-        this.tempProcessPriorityForm = this.tableData[0]
         this.processPriorityForm = this.tableData[index]
-        tmp = this.tempProcessPriorityForm.sort
-        this.tempProcessPriorityForm.sort = this.processPriorityForm.sort
-        this.processPriorityForm.sort = tmp
-        this.$ajax.all([this.update(this.processPriorityForm), this.update(this.tempProcessPriorityForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
+        this.$ajax.post('/api/sample/processPriority/moveToTop', this.processPriorityForm)
+          .then(function (res) {
+            vm.reload(res.data)
+          }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       }
@@ -173,17 +168,12 @@ export default {
     },
     moveBottomSingle (index) {
       let vm = this
-      let tmp = ''
       if (index < this.tableData.length - 1) {
-        this.tempProcessPriorityForm = this.tableData[this.tableData.length - 1]
         this.processPriorityForm = this.tableData[index]
-        tmp = this.tempProcessPriorityForm.sort
-        this.tempProcessPriorityForm.sort = this.processPriorityForm.sort
-        this.processPriorityForm.sort = tmp
-        this.$ajax.all([this.update(this.processPriorityForm), this.update(this.tempProcessPriorityForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
+        this.$ajax.post('/api/sample/processPriority/moveToBottom', this.processPriorityForm)
+          .then(function (res) {
+            vm.reload(res.data)
+          }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       }

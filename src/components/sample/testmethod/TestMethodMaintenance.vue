@@ -153,17 +153,12 @@ export default {
     },
     moveTopSingle (index) {
       let vm = this
-      let tmp = ''
       if (index > 0) {
-        this.tempTestMethodForm = this.tableData[0]
         this.testMethodForm = this.tableData[index]
-        tmp = this.tempTestMethodForm.sort
-        this.tempTestMethodForm.sort = this.testMethodForm.sort
-        this.testMethodForm.sort = tmp
-        this.$ajax.all([this.update(this.testMethodForm), this.update(this.tempTestMethodForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
+        this.$ajax.post('/api/sample/testMethod/moveToTop', this.testMethodForm)
+          .then(function (res) {
+            vm.reload(res.data)
+          }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       }
@@ -199,17 +194,12 @@ export default {
     },
     moveBottomSingle (index) {
       let vm = this
-      let tmp = ''
       if (index < this.tableData.length - 1) {
-        this.tempTestMethodForm = this.tableData[this.tableData.length - 1]
         this.testMethodForm = this.tableData[index]
-        tmp = this.tempTestMethodForm.sort
-        this.tempTestMethodForm.sort = this.testMethodForm.sort
-        this.testMethodForm.sort = tmp
-        this.$ajax.all([this.update(this.testMethodForm), this.update(this.tempTestMethodForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
+        this.$ajax.post('/api/sample/testMethod/moveToBottom', this.testMethodForm)
+          .then(function (res) {
+            vm.reload(res.data)
+          }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       }

@@ -139,17 +139,12 @@ export default {
     },
     moveTopSingle (index) {
       let vm = this
-      let tmp = ''
       if (index > 0) {
-        this.tempTestedItemProductGroupForm = this.tableData[0]
         this.testedItemProductGroupForm = this.tableData[index]
-        tmp = this.tempTestedItemProductGroupForm.sort
-        this.tempTestedItemProductGroupForm.sort = this.testedItemProductGroupForm.sort
-        this.testedItemProductGroupForm.sort = tmp
-        this.$ajax.all([this.update(this.testedItemProductGroupForm), this.update(this.tempTestedItemProductGroupForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
+        this.$ajax.post('/api/sample/testedItemProductGroup/moveToTop', this.testedItemProductGroupForm)
+          .then(function (res) {
+            vm.reload(res.data)
+          }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       }
@@ -185,17 +180,12 @@ export default {
     },
     moveBottomSingle (index) {
       let vm = this
-      let tmp = ''
       if (index < this.tableData.length - 1) {
-        this.tempTestedItemProductGroupForm = this.tableData[this.tableData.length - 1]
         this.testedItemProductGroupForm = this.tableData[index]
-        tmp = this.tempTestedItemProductGroupForm.sort
-        this.tempTestedItemProductGroupForm.sort = this.testedItemProductGroupForm.sort
-        this.testedItemProductGroupForm.sort = tmp
-        this.$ajax.all([this.update(this.testedItemProductGroupForm), this.update(this.tempTestedItemProductGroupForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
+        this.$ajax.post('/api/sample/testedItemProductGroup/moveToBottom', this.testedItemProductGroupForm)
+          .then(function (res) {
+            vm.reload(res.data)
+          }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       }

@@ -127,17 +127,12 @@ export default {
     },
     moveTopSingle (index) {
       let vm = this
-      let tmp = ''
       if (index > 0) {
-        this.tempDepartmentForm = this.tableData[0]
         this.departmentForm = this.tableData[index]
-        tmp = this.tempDepartmentForm.sort
-        this.tempDepartmentForm.sort = this.departmentForm.sort
-        this.departmentForm.sort = tmp
-        this.$ajax.all([this.update(this.departmentForm), this.update(this.tempDepartmentForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
+        this.$ajax.post('/api/sample/department/moveToTop', this.departmentForm)
+          .then(function (res) {
+            vm.reload(res.data)
+          }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       }
@@ -173,17 +168,12 @@ export default {
     },
     moveBottomSingle (index) {
       let vm = this
-      let tmp = ''
       if (index < this.tableData.length - 1) {
-        this.tempDepartmentForm = this.tableData[this.tableData.length - 1]
         this.departmentForm = this.tableData[index]
-        tmp = this.tempDepartmentForm.sort
-        this.tempDepartmentForm.sort = this.departmentForm.sort
-        this.departmentForm.sort = tmp
-        this.$ajax.all([this.update(this.departmentForm), this.update(this.tempDepartmentForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
+        this.$ajax.post('/api/sample/department/moveToBottom', this.departmentForm)
+          .then(function (res) {
+            vm.reload(res.data)
+          }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       }

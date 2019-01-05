@@ -249,17 +249,12 @@ export default {
     },
     moveTopSingle (index) {
       let vm = this
-      let tmp = ''
       if (index > 0) {
-        this.tempUserForm = this.tableData[0]
         this.userForm = this.tableData[index]
-        tmp = this.tempUserForm.sort
-        this.tempUserForm.sort = this.userForm.sort
-        this.userForm.sort = tmp
-        this.$ajax.all([this.update(this.userForm), this.update(this.tempUserForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
+        this.$ajax.post('/api/users/moveToTop', this.userForm)
+          .then(function (res) {
+            vm.reload(res.data)
+          }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       }
@@ -295,17 +290,12 @@ export default {
     },
     moveBottomSingle (index) {
       let vm = this
-      let tmp = ''
       if (index < this.tableData.length - 1) {
-        this.tempUserForm = this.tableData[this.tableData.length - 1]
         this.userForm = this.tableData[index]
-        tmp = this.tempUserForm.sort
-        this.tempUserForm.sort = this.userForm.sort
-        this.userForm.sort = tmp
-        this.$ajax.all([this.update(this.userForm), this.update(this.tempUserForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
+        this.$ajax.post('/api/users/moveToBottom', this.userForm)
+          .then(function (res) {
+            vm.reload(res.data)
+          }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       }

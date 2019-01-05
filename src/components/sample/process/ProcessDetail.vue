@@ -392,7 +392,7 @@
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测方法">
-              <el-input name="testMethod" v-model="testedItemProductForm.testMethod" autoComplete="testMethod"></el-input>
+              <el-input name="testMethod" v-model="testedItemTaskForm.testMethod" autoComplete="testMethod"></el-input>
               <el-checkbox :indeterminate="isTestMethodIndeterminate" v-model="testMethodCheckAll" @change="handleTestMethodCheckAllChange">全选</el-checkbox>
               <div style="margin: 15px 0;"></div>
               <el-checkbox-group v-model="staticOptions.checkedTestMethods" @change="handleCheckedTestMethodsChange">
@@ -605,10 +605,10 @@ export default {
         this.staticOptions.filteredTestMethods.forEach(testMethod => {
           vm.staticOptions.checkedTestMethods.push(testMethod.testMethodName)
         })
-        this.testedItemProductForm.testMethod = this.staticOptions.checkedTestMethods.join(';')
+        this.testedItemTaskForm.testMethod = this.staticOptions.checkedTestMethods.join(';')
       } else {
         // this.staticOptions.checkedTestParameters = []
-        this.testedItemProductForm.testMethod = ''
+        this.testedItemTaskForm.testMethod = ''
       }
       this.isTestMethodIndeterminate = false
     },

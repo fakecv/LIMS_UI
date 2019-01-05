@@ -132,6 +132,7 @@
       <el-table-column
         prop="submitFrom"
         label="提交部门"
+        show-overflow-tooltip
         width="180">
       </el-table-column>
       <el-table-column
@@ -148,6 +149,7 @@
       <el-table-column
         prop="submitTo"
         label="提交至"
+        show-overflow-tooltip
         width="180">
       </el-table-column>
       <el-table-column

@@ -173,17 +173,12 @@ export default {
     },
     moveTopSingle (index) {
       let vm = this
-      let tmp = ''
       if (index > 0) {
-        this.tempDrawingDesignForm = this.tableData[0]
         this.drawingDesignForm = this.tableData[index]
-        tmp = this.tempDrawingDesignForm.sort
-        this.tempDrawingDesignForm.sort = this.drawingDesignForm.sort
-        this.drawingDesignForm.sort = tmp
-        this.$ajax.all([this.update(this.drawingDesignForm), this.update(this.tempDrawingDesignForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
+        this.$ajax.post('/api/sample/drawingDesign/moveToTop', this.drawingDesignForm)
+          .then(function (res) {
+            vm.reload(res.data)
+          }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       }
@@ -219,17 +214,12 @@ export default {
     },
     moveBottomSingle (index) {
       let vm = this
-      let tmp = ''
       if (index < this.tableData.length - 1) {
-        this.tempDrawingDesignForm = this.tableData[this.tableData.length - 1]
         this.drawingDesignForm = this.tableData[index]
-        tmp = this.tempDrawingDesignForm.sort
-        this.tempDrawingDesignForm.sort = this.drawingDesignForm.sort
-        this.drawingDesignForm.sort = tmp
-        this.$ajax.all([this.update(this.drawingDesignForm), this.update(this.tempDrawingDesignForm)])
-          .then(vm.$ajax.spread((res1, res2) => {
-            vm.reload(res1.data)
-          })).catch(function (error) {
+        this.$ajax.post('/api/sample/drawingDesign/moveToBottom', this.drawingDesignForm)
+          .then(function (res) {
+            vm.reload(res.data)
+          }).catch(function (error) {
             vm.$message(error.response.data.message)
           })
       }
