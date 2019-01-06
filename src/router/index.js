@@ -62,6 +62,9 @@ import ProcessingStatusMaintenance from '@/components/sample/processingstatus/Pr
 import ProcessPriorityDetailNew from '@/components/sample/processpriority/ProcessPriorityDetailNew'
 import ProcessPriorityDetailEdit from '@/components/sample/processpriority/ProcessPriorityDetailEdit'
 import ProcessPriorityMaintenance from '@/components/sample/processpriority/ProcessPriorityMaintenance'
+import ProviderDetailNew from '@/components/equipment/provider/ProviderDetailNew'
+import ProviderDetailEdit from '@/components/equipment/provider/ProviderDetailEdit'
+import ProviderMaintenance from '@/components/equipment/provider/ProviderMaintenance'
 import ReportDevelopmentDetailNew from '@/components/report/reportdevelopment/ReportDevelopmentDetailNew'
 import ReportDevelopmentDetailEdit from '@/components/report/reportdevelopment/ReportDevelopmentDetailEdit'
 import ReportDevelopmentMaintenance from '@/components/report/reportdevelopment/ReportDevelopmentMaintenance'
@@ -392,6 +395,21 @@ const router = new Router({
           path: 'processPriorityMaintenance',
           name: 'processPriorityMaintenance',
           component: ProcessPriorityMaintenance
+        },
+        {
+          path: 'providerDetailEdit/:id',
+          name: 'providerAuditorDetailEdit',
+          component: ProviderDetailEdit
+        },
+        {
+          path: 'providerDetailNew',
+          name: 'providerDetailNew',
+          component: ProviderDetailNew
+        },
+        {
+          path: 'providerMaintenance',
+          name: 'providerMaintenance',
+          component: ProviderMaintenance
         },
         {
           path: 'roleDetailEdit/:id',
