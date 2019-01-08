@@ -595,7 +595,7 @@ export default {
       let checkedCount = value.length
       this.testMethodCheckAll = checkedCount === this.staticOptions.filteredTestMethods.length
       this.isTestMethodIndeterminate = checkedCount > 0 && checkedCount < this.staticOptions.filteredTestMethods.length
-      this.testedItemProductForm.testMethod = value.join(';')
+      this.testedItemTaskForm.testMethod = value.join(';')
       // this.testedItemProductForm.testParameter = value
     },
     handleTestMethodCheckAllChange (val) {

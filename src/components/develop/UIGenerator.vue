@@ -46,7 +46,9 @@ export default {
       if (action.id === '1') {
         this.reset()
       } else if (action.id === '2') {
+        this.$message('复制成功！')
         this.$store.state.forms[this.$route.params.fid].id = ''
+        this.$store.state.forms[this.$route.params.fid].domain = ''
       } else if (action.id === '3') {
         this.submit(this.$store.state.forms[this.$route.params.fid])
       } else if (action.id === '4') {

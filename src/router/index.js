@@ -17,6 +17,15 @@ import CustomerMaintenance from '@/components/customer/CustomerMaintenance'
 import CustomerNoteDetailNew from '@/components/customer/customernote/CustomerNoteDetailNew'
 import CustomerNoteDetailEdit from '@/components/customer/customernote/CustomerNoteDetailEdit'
 import CustomerNoteMaintenance from '@/components/customer/customernote/CustomerNoteMaintenance'
+import ConsumableAcceptanceCheckDetailNew from '@/components/equipment/consumableacceptancecheck/ConsumableAcceptanceCheckDetailNew'
+import ConsumableAcceptanceCheckDetailEdit from '@/components/equipment/consumableacceptancecheck/ConsumableAcceptanceCheckDetailEdit'
+import ConsumableAcceptanceCheckMaintenance from '@/components/equipment/consumableacceptancecheck/ConsumableAcceptanceCheckMaintenance'
+import ConsumableProcurementDetailNew from '@/components/equipment/consumableprocurement/ConsumableProcurementDetailNew'
+import ConsumableProcurementDetailEdit from '@/components/equipment/consumableprocurement/ConsumableProcurementDetailEdit'
+import ConsumableProcurementMaintenance from '@/components/equipment/consumableprocurement/ConsumableProcurementMaintenance'
+import ConsumableSupplierAssessmentDetailNew from '@/components/equipment/consumablesupplierassessment/ConsumableSupplierAssessmentDetailNew'
+import ConsumableSupplierAssessmentDetailEdit from '@/components/equipment/consumablesupplierassessment/ConsumableSupplierAssessmentDetailEdit'
+import ConsumableSupplierAssessmentMaintenance from '@/components/equipment/consumablesupplierassessment/ConsumableSupplierAssessmentMaintenance'
 import Dashboard from '@/components/reference/Dashboard'
 import DepartmentDetailNew from '@/components/sample/department/DepartmentDetailNew'
 import DepartmentDetailEdit from '@/components/sample/department/DepartmentDetailEdit'
@@ -29,11 +38,20 @@ import EditorFormAside from '@/views/editor/form/aside'
 import EditorFormMain from '@/views/editor/form/main'
 import EditorTableAside from '@/views/editor/table/aside'
 import EditorTableMain from '@/views/editor/table/main'
+import EquipmentAcceptanceDetailNew from '@/components/equipment/equipmentacceptance/EquipmentAcceptanceDetailNew'
+import EquipmentAcceptanceDetailEdit from '@/components/equipment/equipmentacceptance/EquipmentAcceptanceDetailEdit'
+import EquipmentAcceptanceMaintenance from '@/components/equipment/equipmentacceptance/EquipmentAcceptanceMaintenance'
 import FileUpload from '@/components/reference/FileUpload'
 import ForgetPassword from '@/components/system/login/ForgetPassword'
 import FormDevelopmentDetailNew from '@/components/system/formdevelopment/FormDevelopmentDetailNew'
 import FormDevelopmentDetailEdit from '@/components/system/formdevelopment/FormDevelopmentDetailEdit'
 import FormDevelopmentMaintenance from '@/components/system/formdevelopment/FormDevelopmentMaintenance'
+import GeneralApplicanceCheckDetailNew from '@/components/equipment/generalapplicancecheck/GeneralApplicanceCheckDetailNew'
+import GeneralApplicanceCheckDetailEdit from '@/components/equipment/generalapplicancecheck/GeneralApplicanceCheckDetailEdit'
+import GeneralApplicanceCheckMaintenance from '@/components/equipment/generalapplicancecheck/GeneralApplicanceCheckMaintenance'
+import GeneralApplicanceRequestDetailNew from '@/components/equipment/generalapplicancerequest/GeneralApplicanceRequestDetailNew'
+import GeneralApplicanceRequestDetailEdit from '@/components/equipment/generalapplicancerequest/GeneralApplicanceRequestDetailEdit'
+import GeneralApplicanceRequestMaintenance from '@/components/equipment/generalapplicancerequest/GeneralApplicanceRequestMaintenance'
 import InternalAuditCheckListDetailNew from '@/components/internalaudit/internalauditchecklist/InternalAuditCheckListDetailNew'
 import InternalAuditCheckListDetailEdit from '@/components/internalaudit/internalauditchecklist/InternalAuditCheckListDetailEdit'
 import InternalAuditCheckListMaintenance from '@/components/internalaudit/internalauditchecklist/InternalAuditCheckListMaintenance'
@@ -62,6 +80,9 @@ import ProcessingStatusMaintenance from '@/components/sample/processingstatus/Pr
 import ProcessPriorityDetailNew from '@/components/sample/processpriority/ProcessPriorityDetailNew'
 import ProcessPriorityDetailEdit from '@/components/sample/processpriority/ProcessPriorityDetailEdit'
 import ProcessPriorityMaintenance from '@/components/sample/processpriority/ProcessPriorityMaintenance'
+import ProcurementDetailNew from '@/components/equipment/procurement/ProcurementDetailNew'
+import ProcurementDetailEdit from '@/components/equipment/procurement/ProcurementDetailEdit'
+import ProcurementMaintenance from '@/components/equipment/procurement/ProcurementMaintenance'
 import ProviderDetailNew from '@/components/equipment/provider/ProviderDetailNew'
 import ProviderDetailEdit from '@/components/equipment/provider/ProviderDetailEdit'
 import ProviderMaintenance from '@/components/equipment/provider/ProviderMaintenance'
@@ -82,6 +103,9 @@ import RoleGroupMaintenance from '@/components/system/rolegroup/RoleGroupMainten
 import RoleMaintenance from '@/components/system/role/RoleMaintenance'
 import Schedule from '@/components/equipment/Schedule'
 import ShortCut from '@/components/frame/ShortCut'
+import SupplierAssessmentDetailNew from '@/components/equipment/supplierassessment/SupplierAssessmentDetailNew'
+import SupplierAssessmentDetailEdit from '@/components/equipment/supplierassessment/SupplierAssessmentDetailEdit'
+import SupplierAssessmentMaintenance from '@/components/equipment/supplierassessment/SupplierAssessmentMaintenance'
 import TableSchedule from '@/components/equipment/MyTableSchedule'
 import TestCategoryDetailNew from '@/components/sample/testcategory/TestCategoryDetailNew'
 import TestCategoryDetailEdit from '@/components/sample/testcategory/TestCategoryDetailEdit'
@@ -105,6 +129,9 @@ import TestedItemTaskDetailNew from '@/components/sample/testeditemtask/TestedIt
 import TestedItemTaskDetailEdit from '@/components/sample/testeditemtask/TestedItemTaskDetailEdit'
 import TestedItemTaskMaintenance from '@/components/sample/testeditemtask/TestedItemTaskMaintenance'
 import ThemePicker from '@/components/frame/themePicker'
+import TraceabilityServiceProviderDetailNew from '@/components/equipment/traceabilityserviceprovider/TraceabilityServiceProviderDetailNew'
+import TraceabilityServiceProviderDetailEdit from '@/components/equipment/traceabilityserviceprovider/TraceabilityServiceProviderDetailEdit'
+import TraceabilityServiceProviderMaintenance from '@/components/equipment/traceabilityserviceprovider/TraceabilityServiceProviderMaintenance'
 import UIGenerator from '@/components/develop/UIGenerator'
 import UserDetailNew from '@/components/system/user/UserDetailNew'
 import UserDetailEdit from '@/components/system/user/UserDetailEdit'
@@ -187,6 +214,51 @@ const router = new Router({
           component: ComposeSchedule
         },
         {
+          path: 'consumableAcceptanceCheckDetailEdit/:id',
+          name: 'consumableAcceptanceCheckAuditorDetailEdit',
+          component: ConsumableAcceptanceCheckDetailEdit
+        },
+        {
+          path: 'consumableAcceptanceCheckDetailNew',
+          name: 'consumableAcceptanceCheckDetailNew',
+          component: ConsumableAcceptanceCheckDetailNew
+        },
+        {
+          path: 'consumableAcceptanceCheckMaintenance',
+          name: 'consumableAcceptanceCheckMaintenance',
+          component: ConsumableAcceptanceCheckMaintenance
+        },
+        {
+          path: 'consumableProcurementDetailEdit/:id',
+          name: 'consumableProcurementAuditorDetailEdit',
+          component: ConsumableProcurementDetailEdit
+        },
+        {
+          path: 'consumableProcurementDetailNew',
+          name: 'consumableProcurementDetailNew',
+          component: ConsumableProcurementDetailNew
+        },
+        {
+          path: 'consumableProcurementMaintenance',
+          name: 'consumableProcurementMaintenance',
+          component: ConsumableProcurementMaintenance
+        },
+        {
+          path: 'consumableSupplierAssessmentDetailEdit/:id',
+          name: 'consumableSupplierAssessmentAuditorDetailEdit',
+          component: ConsumableSupplierAssessmentDetailEdit
+        },
+        {
+          path: 'consumableSupplierAssessmentDetailNew',
+          name: 'consumableSupplierAssessmentDetailNew',
+          component: ConsumableSupplierAssessmentDetailNew
+        },
+        {
+          path: 'consumableSupplierAssessmentMaintenance',
+          name: 'consumableSupplierAssessmentMaintenance',
+          component: ConsumableSupplierAssessmentMaintenance
+        },
+        {
           path: 'customerDetailEdit/:id',
           name: 'customerDetailEdit',
           component: CustomerDetailEdit
@@ -252,6 +324,21 @@ const router = new Router({
           component: DrawingDesignDetailNew
         },
         {
+          path: 'equipmentAcceptanceDetailEdit/:id',
+          name: 'equipmentAcceptanceAuditorDetailEdit',
+          component: EquipmentAcceptanceDetailEdit
+        },
+        {
+          path: 'equipmentAcceptanceDetailNew',
+          name: 'equipmentAcceptanceDetailNew',
+          component: EquipmentAcceptanceDetailNew
+        },
+        {
+          path: 'equipmentAcceptanceMaintenance',
+          name: 'equipmentAcceptanceMaintenance',
+          component: EquipmentAcceptanceMaintenance
+        },
+        {
           path: 'fileUpload',
           name: 'fileUpload',
           component: FileUpload
@@ -270,6 +357,36 @@ const router = new Router({
           path: 'formDevelopmentMaintenance',
           name: 'formDevelopmentMaintenance',
           component: FormDevelopmentMaintenance
+        },
+        {
+          path: 'generalApplicanceCheckDetailEdit/:id',
+          name: 'generalApplicanceCheckAuditorDetailEdit',
+          component: GeneralApplicanceCheckDetailEdit
+        },
+        {
+          path: 'generalApplicanceCheckDetailNew',
+          name: 'generalApplicanceCheckDetailNew',
+          component: GeneralApplicanceCheckDetailNew
+        },
+        {
+          path: 'generalApplicanceCheckMaintenance',
+          name: 'generalApplicanceCheckMaintenance',
+          component: GeneralApplicanceCheckMaintenance
+        },
+        {
+          path: 'generalApplicanceRequestDetailEdit/:id',
+          name: 'generalApplicanceRequestAuditorDetailEdit',
+          component: GeneralApplicanceRequestDetailEdit
+        },
+        {
+          path: 'generalApplicanceRequestDetailNew',
+          name: 'generalApplicanceRequestDetailNew',
+          component: GeneralApplicanceRequestDetailNew
+        },
+        {
+          path: 'generalApplicanceRequestMaintenance',
+          name: 'generalApplicanceRequestMaintenance',
+          component: GeneralApplicanceRequestMaintenance
         },
         {
           path: 'internalAuditCheckListDetailEdit/:id',
@@ -397,6 +514,21 @@ const router = new Router({
           component: ProcessPriorityMaintenance
         },
         {
+          path: 'procurementDetailEdit/:id',
+          name: 'procurementAuditorDetailEdit',
+          component: ProcurementDetailEdit
+        },
+        {
+          path: 'procurementDetailNew',
+          name: 'procurementDetailNew',
+          component: ProcurementDetailNew
+        },
+        {
+          path: 'procurementMaintenance',
+          name: 'procurementMaintenance',
+          component: ProcurementMaintenance
+        },
+        {
           path: 'providerDetailEdit/:id',
           name: 'providerAuditorDetailEdit',
           component: ProviderDetailEdit
@@ -495,6 +627,21 @@ const router = new Router({
           path: 'shortCut',
           name: 'shortCut',
           component: ShortCut
+        },
+        {
+          path: 'supplierAssessmentDetailEdit/:id',
+          name: 'supplierAssessmentAuditorDetailEdit',
+          component: SupplierAssessmentDetailEdit
+        },
+        {
+          path: 'supplierAssessmentDetailNew',
+          name: 'supplierAssessmentDetailNew',
+          component: SupplierAssessmentDetailNew
+        },
+        {
+          path: 'supplierAssessmentMaintenance',
+          name: 'supplierAssessmentMaintenance',
+          component: SupplierAssessmentMaintenance
         },
         {
           path: 'tableSchedule',
@@ -610,6 +757,21 @@ const router = new Router({
           path: 'themePicker',
           name: 'themePicker',
           component: ThemePicker
+        },
+        {
+          path: 'traceabilityServiceProviderDetailEdit/:id',
+          name: 'traceabilityServiceProviderAuditorDetailEdit',
+          component: TraceabilityServiceProviderDetailEdit
+        },
+        {
+          path: 'traceabilityServiceProviderDetailNew',
+          name: 'traceabilityServiceProviderDetailNew',
+          component: TraceabilityServiceProviderDetailNew
+        },
+        {
+          path: 'traceabilityServiceProviderMaintenance',
+          name: 'traceabilityServiceProviderMaintenance',
+          component: TraceabilityServiceProviderMaintenance
         },
         {
           path: 'UIGenerator',

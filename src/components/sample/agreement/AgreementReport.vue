@@ -2,9 +2,10 @@
   <div class="pdf">
     <el-row>
       <el-button @click="downloadToFrontEnd">下载</el-button>
+      <!-- <el-button @click="$refs.myPdfComponent.print()">print</el-button> -->
       <el-button @click="goBackAgreement">返回</el-button>
     </el-row>
-    <pdf
+    <pdf  ref="myPdfComponent"
       v-for="i in numPages"
       :key="i"
       :src="src"
@@ -57,7 +58,6 @@ export default {
     },
     openFullScreen2 () {
       let vm = this
-      console.log(vm.agreementNumber)
       const loading = this.$loading({
         lock: true,
         text: '正在努力生成报告，报告编号为：' + vm.agreementNumber.split(',')[0],
