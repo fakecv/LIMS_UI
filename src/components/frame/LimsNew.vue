@@ -41,17 +41,27 @@
     <el-main>
       <el-container class="frame">
         <el-aside v-bind:style="{marginBottom: '20px', width: elAside + 'px'}">
-          <el-menu :default-active="$route.path"
-            @open="handleOpen" @close="handleClose"
-            @select="menuSelected"
-            class="lims-el-menu-vertical"
-            :unique-opened="true"
-            background-color="#545c64"
-            text-color="#fff"
-            active-text-color="#ffd04b"
-            >
-            <NavMenu :menuData="leftMenus" :showEnableOnly="showEnableOnly" :iconSize="'18px'"></NavMenu>
-          </el-menu>
+          <el-tabs type="border-card">
+            <el-tab-pane label="主菜单">
+              <el-menu :default-active="$route.path"
+              @open="handleOpen" @close="handleClose"
+              @select="menuSelected"
+              class="lims-el-menu-vertical"
+              :unique-opened="true"
+              background-color="#545c64"
+              text-color="#fff"
+              active-text-color="#ffd04b"
+              >
+              <NavMenu :menuData="leftMenus" :showEnableOnly="showEnableOnly" :iconSize="'18px'"></NavMenu>
+            </el-menu>
+            </el-tab-pane>
+            <el-tab-pane label="待完成事项">
+              <el-menu mode="horizontal" @select="handleSelect">
+                <el-menu-item index="1">待处理任务</el-menu-item>
+              </el-menu>
+            </el-tab-pane>
+          </el-tabs>
+
         </el-aside>
         <el-main style="margin-bottom: 30px;padding: 0px" :border="true">
           <el-container>
@@ -104,23 +114,10 @@ export default {
       shortCuts: []
     }
   },
-  mounted: function () {
-    this.$notify({
-      title: '重要重要!',
-      type: 'warning',
-      message: '可以管理用户和角色的关系。',
-      duration: 1000
-    })
-    this.header = {Authorization: localStorage.getItem('id_token')}
-    this.userProfile = JSON.parse(localStorage.getItem('userProfile'))
-    this.checkIfFirstTimeLogin()
-    this.getTopMenus()
-    this.initialPosition()
-    this.getSystemMenu()
-  },
-  created () {
-  },
   methods: {
+    changePassword () {
+      this.$router.replace({path: '/login/second/' + this.userProfile.sub})
+    },
     checkIfFirstTimeLogin () {
       let vm = this
       this.$ajax.get('/api/users/checkIfFirstTimeLogin/' + this.userProfile.sub)
@@ -142,8 +139,57 @@ export default {
           })
         })
     },
-    changePassword () {
-      this.$router.replace({path: '/login/second/' + this.userProfile.sub})
+    collapseChange () {
+      this.elAside = this.isCollapse ? 235 : 0
+      this.menuStatus = this.isCollapse ? '收起菜单' : '展开菜单'
+      this.isCollapse = !this.isCollapse
+    },
+    createFilter (queryString) {
+      return (menuItem) => {
+        return (menuItem.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      }
+    },
+    fetchShortCuts (menuItems) {
+      let vm = this
+      menuItems.forEach(element => {
+        let shortCut = {}
+        shortCut.value = element.sort
+        shortCut.path = element.value
+        vm.shortCuts.push(shortCut)
+      })
+    },
+    getTopMenus () {
+      var vm = this
+      // this.$ajax.get('/static/menu.json')
+      this.$ajax.get('/api/systemMenu')
+        .then(function (response) {
+          vm.leftMenus = response.data.children
+        //  vm.leftMenus = response.data.childs
+          // vm.leftMenus.forEach(child => {
+          // })
+          // vm.defaultOpeneds.push(child.entity.name)
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
+        })
+    },
+    /* 根据选取菜单改变导航面包屑 */
+    getPositionsByMenus (value) {
+      let positions = []
+      let curruntMenu = value
+      while (typeof (curruntMenu.$attrs.data) !== 'undefined') {
+        let menu = curruntMenu.$attrs.data
+        positions.push({
+          value: menu.value === null ? null : (menu.value === '' ? null : '/' + menu.value),
+          icon: menu.icon,
+          alias: menu.alias
+        })
+        curruntMenu = curruntMenu.$parent.$parent
+      }
+      return positions.reverse()
     },
     // search input
     getSystemMenu () {
@@ -160,32 +206,7 @@ export default {
           })
         })
     },
-    fetchShortCuts (menuItems) {
-      let vm = this
-      menuItems.forEach(element => {
-        let shortCut = {}
-        shortCut.value = element.sort
-        shortCut.path = element.value
-        vm.shortCuts.push(shortCut)
-      })
-    },
-    collapseChange () {
-      this.elAside = this.isCollapse ? 235 : 0
-      this.menuStatus = this.isCollapse ? '收起菜单' : '展开菜单'
-      this.isCollapse = !this.isCollapse
-    },
-    loadData () {
-      let vm = this
-      this.$ajax.get('/api/systemMenu')
-        .then(function (res) {
-          vm.$store.commit('FORM_IMPORT_WITH_FID_G', {fid: 'qry', initV: res.data})
-        }).catch(function (error) {
-          vm.$message({
-            showClose: true,
-            duration: 0,
-            message: error.response.data.message
-          })
-        })
+    handleClose (key, keyPath) {
     },
     handleCommand (command) {
       switch (command) {
@@ -208,9 +229,31 @@ export default {
     },
     handleOpen (key, keyPath) {
     },
-    handleClose (key, keyPath) {
+    handleSelect (index, indexPath) {
+      this.$router.push('/lims/taskListMaintenance')
+    },
+    initialPosition () {
+      this.positions = [{
+        value: '/lims',
+        icon: 'el-icon-success',
+        alias: '系统首页'
+      }]
+    },
+    loadData () {
+      let vm = this
+      this.$ajax.get('/api/systemMenu')
+        .then(function (res) {
+          vm.$store.commit('FORM_IMPORT_WITH_FID_G', {fid: 'qry', initV: res.data})
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
+        })
     },
     menuSelected (key, keyPath, value) {
+      // console.log(value)
       let menu = value.$attrs.data
       if (menu.classifier === 'TOP') {
         if (menu.type === 'MENU') {
@@ -234,62 +277,28 @@ export default {
       }
       this.positions = this.getPositionsByMenus(value)
     },
-    initialPosition () {
-      this.positions = [{
-        value: '/lims',
-        icon: 'el-icon-success',
-        alias: '系统首页'
-      }]
-    },
-    getTopMenus () {
-      var vm = this
-      // this.$ajax.get('/static/menu.json')
-      this.$ajax.get('/api/systemMenu')
-        .then(function (response) {
-          vm.leftMenus = response.data.children
-        //  vm.leftMenus = response.data.childs
-          // vm.leftMenus.forEach(child => {
-          // })
-          // vm.defaultOpeneds.push(child.entity.name)
-        }).catch(function (error) {
-          vm.$message({
-            showClose: true,
-            duration: 0,
-            message: error.response.data.message
-          })
-        })
-    },
-    /* 根据选取菜单改变导航面包屑 */
-    getPositionsByMenus (value) {
-      let positions = []
-      let currnetMenu = value
-      while (typeof (currnetMenu.$attrs.data) !== 'undefined') {
-        let menu = currnetMenu.$attrs.data
-        positions.push({
-          value: menu.value === null ? null : (menu.value === '' ? null : '/' + menu.value),
-          icon: menu.icon,
-          alias: menu.alias
-        })
-        currnetMenu = currnetMenu.$parent.$parent
-      }
-      return positions.reverse()
-    },
     querySearch (queryString, cb) {
       var shortCuts = this.shortCuts
       var results = queryString ? shortCuts.filter(this.createFilter(queryString)) : shortCuts
       // 调用 callback 返回建议列表的数据
       cb(results)
-    },
-    createFilter (queryString) {
-      return (menuItem) => {
-        return (menuItem.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
-      }
-    },
-    handleSelect (item) {
-      this.$router.push(item.path)
-      // this.$router.push(item.value)
     }
-
+  },
+  mounted: function () {
+    this.$notify({
+      title: '重要重要!',
+      type: 'warning',
+      message: '可以管理用户和角色的关系。',
+      duration: 1000
+    })
+    this.header = {Authorization: localStorage.getItem('id_token')}
+    this.userProfile = JSON.parse(localStorage.getItem('userProfile'))
+    this.checkIfFirstTimeLogin()
+    this.getTopMenus()
+    this.initialPosition()
+    this.getSystemMenu()
+  },
+  created () {
   }
 }
 </script>

@@ -1,0 +1,18 @@
+import WangxingangDetailNew from '@/components/equipment/wangxingang/WangxingangDetailNew'
+import WangxingangDetailEdit from '@/components/equipment/wangxingang/WangxingangDetailEdit'
+import WangxingangMaintenance from '@/components/equipment/wangxingang/WangxingangMaintenance'
+{
+  path: 'wangxingangDetailEdit/:id',
+  name: 'wangxingangAuditorDetailEdit',
+  component: WangxingangDetailEdit
+},
+{
+  path: 'wangxingangDetailNew',
+  name: 'wangxingangDetailNew',
+  component: WangxingangDetailNew
+},
+{
+  path: 'wangxingangMaintenance',
+  name: 'wangxingangMaintenance',
+  component: WangxingangMaintenance
+},

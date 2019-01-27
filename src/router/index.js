@@ -60,6 +60,12 @@ import InternalAuditorDetailEdit from '@/components/internalaudit/internalaudito
 import InternalAuditorMaintenance from '@/components/internalaudit/internalauditor/InternalAuditorMaintenance'
 import login from '@/components/system/login/Login'
 import Lims from '@/components/frame/LimsNew'
+import ManagementReviewInputMaterialsDetailNew from '@/components/managementreview/managementreviewinputmaterials/ManagementReviewInputMaterialsDetailNew'
+import ManagementReviewInputMaterialsDetailEdit from '@/components/managementreview/managementreviewinputmaterials/ManagementReviewInputMaterialsDetailEdit'
+import ManagementReviewInputMaterialsMaintenance from '@/components/managementreview/managementreviewinputmaterials/ManagementReviewInputMaterialsMaintenance'
+import ManagementReviewYearPlanDetailNew from '@/components/managementreview/managementreviewyearplan/ManagementReviewYearPlanDetailNew'
+import ManagementReviewYearPlanDetailEdit from '@/components/managementreview/managementreviewyearplan/ManagementReviewYearPlanDetailEdit'
+import ManagementReviewYearPlanMaintenance from '@/components/managementreview/managementreviewyearplan/ManagementReviewYearPlanMaintenance'
 import MenuDetailNew from '@/components/system/menu/MenuDetailNew'
 import MenuDetailEdit from '@/components/system/menu/MenuDetailEdit'
 import MenuMaintenance from '@/components/system/menu/MenuMaintenance'
@@ -107,6 +113,7 @@ import SupplierAssessmentDetailNew from '@/components/equipment/supplierassessme
 import SupplierAssessmentDetailEdit from '@/components/equipment/supplierassessment/SupplierAssessmentDetailEdit'
 import SupplierAssessmentMaintenance from '@/components/equipment/supplierassessment/SupplierAssessmentMaintenance'
 import TableSchedule from '@/components/equipment/MyTableSchedule'
+import TaskListMaintenance from '@/components/tasklist/taskListMaintenance'
 import TestCategoryDetailNew from '@/components/sample/testcategory/TestCategoryDetailNew'
 import TestCategoryDetailEdit from '@/components/sample/testcategory/TestCategoryDetailEdit'
 import TestCategoryMaintenance from '@/components/sample/testcategory/TestCategoryMaintenance'
@@ -136,6 +143,9 @@ import UIGenerator from '@/components/develop/UIGenerator'
 import UserDetailNew from '@/components/system/user/UserDetailNew'
 import UserDetailEdit from '@/components/system/user/UserDetailEdit'
 import UserMaintenance from '@/components/system/user/UserMaintenance'
+import WangxingangDetailNew from '@/components/equipment/wangxingang/WangxingangDetailNew'
+import WangxingangDetailEdit from '@/components/equipment/wangxingang/WangxingangDetailEdit'
+import WangxingangMaintenance from '@/components/equipment/wangxingang/WangxingangMaintenance'
 
 Vue.use(Router)
 
@@ -419,6 +429,36 @@ const router = new Router({
           component: InternalAuditorMaintenance
         },
         {
+          path: 'managementReviewInputMaterialsDetailEdit/:id',
+          name: 'managementReviewInputMaterialsAuditorDetailEdit',
+          component: ManagementReviewInputMaterialsDetailEdit
+        },
+        {
+          path: 'managementReviewInputMaterialsDetailNew',
+          name: 'managementReviewInputMaterialsDetailNew',
+          component: ManagementReviewInputMaterialsDetailNew
+        },
+        {
+          path: 'managementReviewInputMaterialsMaintenance',
+          name: 'managementReviewInputMaterialsMaintenance',
+          component: ManagementReviewInputMaterialsMaintenance
+        },
+        {
+          path: 'managementReviewYearPlanDetailEdit/:id',
+          name: 'managementReviewYearPlanAuditorDetailEdit',
+          component: ManagementReviewYearPlanDetailEdit
+        },
+        {
+          path: 'managementReviewYearPlanDetailNew',
+          name: 'managementReviewYearPlanDetailNew',
+          component: ManagementReviewYearPlanDetailNew
+        },
+        {
+          path: 'managementReviewYearPlanMaintenance',
+          name: 'managementReviewYearPlanMaintenance',
+          component: ManagementReviewYearPlanMaintenance
+        },
+        {
           path: 'menuDetailEdit/:id',
           name: 'menuDetailEdit',
           component: MenuDetailEdit
@@ -649,6 +689,11 @@ const router = new Router({
           component: TableSchedule
         },
         {
+          path: 'taskListMaintenance',
+          name: 'taskListMaintenance',
+          component: TaskListMaintenance
+        },
+        {
           path: 'testCategoryDetailEdit/:id',
           name: 'testCategoryAuditorDetailEdit',
           component: TestCategoryDetailEdit
@@ -808,6 +853,21 @@ const router = new Router({
           path: 'userDetailNew',
           name: 'userDetailNew',
           component: UserDetailNew
+        },
+        {
+          path: 'wangxingangDetailEdit/:id',
+          name: 'wangxingangAuditorDetailEdit',
+          component: WangxingangDetailEdit
+        },
+        {
+          path: 'wangxingangDetailNew',
+          name: 'wangxingangDetailNew',
+          component: WangxingangDetailNew
+        },
+        {
+          path: 'wangxingangMaintenance',
+          name: 'wangxingangMaintenance',
+          component: WangxingangMaintenance
         },
         {
           path: 'userMaintenance',

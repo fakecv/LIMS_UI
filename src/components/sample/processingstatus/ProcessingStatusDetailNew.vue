@@ -1,6 +1,7 @@
 <template>
   <ProcessingStatusDetail :processingStatusForm="processingStatusForm"
   v-on:updateProcessingStatusForm="updateProcessingStatusForm"
+  :staticOptions="staticOptions"
   v-on:deleteProcessingStatusForm="resetProcessingStatusForm"
   v-on:new="resetProcessingStatusForm"
   v-on:copy="resetProcessingStatusId"/>
@@ -24,6 +25,10 @@ export default {
         processingStatusName: '',
         sort: '',
         processingStatusDescription: ''
+      },
+      staticOptions: {
+        departments: [],
+        selectedDepartments: []
       }
     }
   },
@@ -36,9 +41,22 @@ export default {
     },
     resetProcessingStatusForm () {
       this.processingStatusForm = JSON.parse(JSON.stringify(this.processingStatusResetForm))
+    },
+    loadDepartment () {
+      let vm = this
+      this.$ajax.get('/api/sample/department/getDepartment')
+        .then(function (res) {
+          vm.staticOptions.departments = res.data
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
+        })
     }
   },
   mounted () {
+    this.loadDepartment()
   }
 }
 </script>
