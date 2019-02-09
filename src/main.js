@@ -63,7 +63,9 @@ Axios.interceptors.request.use(
     if (localStorage.getItem('id_token')) {
       config.headers.Authorization = localStorage.getItem('id_token')
     }
-    // config.baseURL = '/context'
+    // config.baseURL = '/lims'
+    let URL = process.env.URL
+    config.baseURL = URL === 'lims' ? 'http://adun.live:17025' : '/'
     return config
   },
   err => {

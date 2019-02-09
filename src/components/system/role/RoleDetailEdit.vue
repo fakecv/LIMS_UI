@@ -18,16 +18,20 @@ export default {
         id: '',
         userRoleName: '',
         menuId: [],
+        privileges: '',
         userRoleDescription: ''
       },
       roleResetForm: {
         id: '',
         userRoleName: '',
         menuId: [],
+        privileges: '',
         userRoleDescription: ''
       },
       staticOptions: {
-        linkMenus: []
+        linkMenus: [],
+        privileges: ['new', 'copy', 'unlock', 'delete', 'save', 'auth'],
+        checkedPrivileges: []
       }
     }
   },
@@ -46,6 +50,7 @@ export default {
       this.$ajax.get('/api/role/' + userRoleId)
         .then(function (res) {
           vm.roleForm = res.data
+          vm.staticOptions.checkedPrivileges = vm.roleForm.privileges.split(',')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

@@ -19,16 +19,20 @@ export default {
         id: '',
         userRoleName: '',
         menuId: [],
+        privileges: '',
         userRoleDescription: ''
       },
       roleResetForm: {
         id: '',
         userRoleName: '',
         menuId: [],
+        privileges: '',
         userRoleDescription: ''
       },
       staticOptions: {
-        linkMenus: []
+        linkMenus: [],
+        privileges: ['new', 'copy', 'unlock', 'delete', 'save', 'auth'],
+        checkedPrivileges: []
       }
     }
   },

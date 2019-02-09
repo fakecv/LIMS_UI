@@ -12,11 +12,11 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/api': {
-        target: 'http://localhost:9000',
+        target: 'http://localhost:17025',
           pathRewrite: {"^/api" : "api"}
                 },
         '/login': {
-        target: 'http://localhost:9000'
+        target: 'http://localhost:17025'
                 }
     },
     // Various Dev Server settings
@@ -57,7 +57,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: (process.argv[2] && process.argv[2] == 'lims')? '/lims/' : '/',
 
     /**
      * Source Maps

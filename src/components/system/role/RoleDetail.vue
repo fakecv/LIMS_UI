@@ -22,6 +22,21 @@
         </el-row>
       </el-form>
     </el-container>
+    <el-container direction="vertical">
+      <el-row>
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+      </el-row>
+      <el-row>
+        <el-checkbox-group v-model="staticOptions.checkedPrivileges" @change="handleCheckedPriviledgesChange">
+          <el-checkbox label="new">新建</el-checkbox>
+          <el-checkbox label="copy">复制</el-checkbox>
+          <el-checkbox label="unlock">解锁</el-checkbox>
+          <el-checkbox label="delete">删除</el-checkbox>
+          <el-checkbox label="save">保存</el-checkbox>
+          <el-checkbox label="auth">授权</el-checkbox>
+        </el-checkbox-group>
+      </el-row>
+    </el-container>
   </el-container>
 </template>
 
@@ -40,10 +55,23 @@ export default {
         {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
       ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
+      isIndeterminate: false,
+      checkAll: false
     }
   },
   methods: {
+    handleCheckAllChange (val) {
+      this.staticOptions.checkedPrivileges = val ? this.staticOptions.privileges : []
+      this.isIndeterminate = false
+      console.log(this.staticOptions.checkedPrivileges)
+    },
+    handleCheckedPriviledgesChange (value) {
+      console.log(this.staticOptions.checkedPrivileges)
+      let checkedCount = value.length
+      this.checkAll = checkedCount === this.staticOptions.privileges.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.staticOptions.privileges.length
+    },
     actionHandle (action) {
       // var vm = this
       if (action.id === '1') {
@@ -68,6 +96,8 @@ export default {
     },
     saveToDB () {
       let vm = this
+      this.roleForm.privileges = this.staticOptions.checkedPrivileges.join(',')
+      console.log(this.roleForm.privileges)
       this.$ajax.post('/api/role', this.roleForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')

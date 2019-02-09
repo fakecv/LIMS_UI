@@ -106,12 +106,14 @@ export default {
         this.staticOptions.testMethods.filter(function (val) {
           return val.testedItem === testedItemId
         })
+      this.staticOptions.checkedTestMethods = this.testedItemProductForm.testMethod.split(';')
     },
     getTestParameter (testedItemId) {
       this.staticOptions.filteredTestParameters =
         this.staticOptions.testParameters.filter(function (val) {
           return val.testedItem === testedItemId
         })
+      this.staticOptions.checkedTestParameters = this.testedItemProductForm.testParameter.split(',')
     },
     loadDrawingDesignData () {
       let vm = this
