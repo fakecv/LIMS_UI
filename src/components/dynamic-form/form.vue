@@ -4,7 +4,7 @@
     <dynamic-form-item
       v-for="item in formConfig.formItemList"
       :key="item.key"
-      v-if="value[item.key]!==undefined"
+      v-show="value[item.key]!==undefined"
       :item="item"
       :value="value[item.key]"
       @input="handleInput($event, item.key)"

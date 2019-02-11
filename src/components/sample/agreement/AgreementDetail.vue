@@ -3,7 +3,7 @@
     <el-container>
       <el-header style="min-width:400px;">
         <el-button-group>
-          <el-button type="info" v-for="(action,index) in actions" :key="index" size="mini" :icon="action.icon" :loading="action.loading" @click="actionHandle(action)">{{action.name}}
+          <el-button type="info" v-for="(action,index) in actions" :key="index" size="mini" v-show="action.show" :icon="action.icon" :loading="action.loading" @click="actionHandle(action)">{{action.name}}
           </el-button>
         </el-button-group>
       </el-header>
@@ -372,13 +372,13 @@ export default {
         reportList: []
       },
       actions: [
-        {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false},
-        {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
-        {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false},
-        {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false},
-        {'name': '删除', 'id': '2', 'icon': 'el-icon-delete', 'loading': false},
-        {'name': '文件预览', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
-        {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
+        {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': true, 'show': true},
+        {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'show': true},
+        {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false, 'show': true},
+        {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false, 'show': false},
+        {'name': '删除', 'id': '2', 'icon': 'el-icon-delete', 'loading': false, 'show': true},
+        {'name': '文件预览', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false, 'show': false},
+        {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false, 'show': false}
       ],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 12},
       customerDialogFormVisible: false,
@@ -412,6 +412,16 @@ export default {
     vueImages: vueImages
   },
   methods: {
+    displayAction () {
+      let vm = this
+      this.$ajax.post('/api/security/agreement', this.agreementForm)
+        .then(function (res) {
+          vm.$message('已经成功保存到数据库!')
+          vm.$emit('updateAgreementForm', res.data)
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     actionHandle (action) {
       if (action.id === '1') {
         this.saveToDB()

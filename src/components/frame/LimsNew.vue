@@ -164,6 +164,7 @@ export default {
       this.$ajax.get('/api/systemMenu')
         .then(function (response) {
           vm.leftMenus = response.data.children
+          vm.populatePrivileges()
         //  vm.leftMenus = response.data.childs
           // vm.leftMenus.forEach(child => {
           // })
@@ -244,6 +245,20 @@ export default {
       this.$ajax.get('/api/systemMenu')
         .then(function (res) {
           vm.$store.commit('FORM_IMPORT_WITH_FID_G', {fid: 'qry', initV: res.data})
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
+        })
+    },
+    populatePrivileges () {
+      let vm = this
+      this.$ajax.get('/api/users/getPrivileges')
+        .then(function (res) {
+          console.log(res.data)
+          vm.$store.commit('POPULATE_PRIVILEGES', res.data)
         }).catch(function (error) {
           vm.$message({
             showClose: true,

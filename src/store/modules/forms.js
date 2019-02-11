@@ -1,6 +1,7 @@
 export default {
   state: {
     'qry': {
+      id: '',
       inline: true, // 是否使用inline排版
       labelPosition: 'right', // 标签对齐方式
       labelWidth: '', // 标签宽度

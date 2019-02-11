@@ -7,7 +7,11 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     itemKey: '', // 当前选中的item
-    asideActiveName: 'items-list' // 侧边栏标签当前活动位置
+    asideActiveName: 'items-list', // 侧边栏标签当前活动位置
+    privilegeMap: {
+      path: '',
+      privileges: ''
+    }
   },
   mutations: {
     SELECT_ITEM (state, newKey) {
@@ -17,6 +21,9 @@ const store = new Vuex.Store({
     },
     TOGGLE_ASIDE_ACTIVE (state, newName) {
       state.asideActiveName = newName
+    },
+    POPULATE_PRIVILEGES (state, privilegeMap) {
+      state.privilegeMap = privilegeMap
     }
   },
   modules: {
