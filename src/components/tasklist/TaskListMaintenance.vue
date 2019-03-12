@@ -15,6 +15,7 @@
         <el-table-column
           prop="bussinessDescription"
           label="业务描述"
+          show-overflow-tooltip
           width="180">
         </el-table-column>
         <el-table-column
@@ -30,11 +31,13 @@
         <el-table-column
           prop="submitTime"
           label="提交时间"
+          :formatter="submitTimeFormatter"
           width="180">
         </el-table-column>
         <el-table-column
           prop="status"
           label="当前状态"
+          show-overflow-tooltip
           width="180">
         </el-table-column>
       </el-table>
@@ -92,6 +95,14 @@ export default {
           vm.tableData = res.data.pageResult || []
           vm.totalTaskLists = res.data.totalTaskLists || 0
         })
+    },
+    submitTimeFormatter (row, column) {
+      if (row.submitTime) {
+        let dateTT = new Date(row.submitTime)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
+      }
     }
   },
   mounted () {

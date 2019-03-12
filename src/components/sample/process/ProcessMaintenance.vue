@@ -258,6 +258,10 @@ export default {
     // load all the processes
     onSubmit () {
       let vm = this
+      if (this.$store.state.maintenanceParameters['processRequestForm']) {
+        this.processRequestForm = this.$store.state.maintenanceParameters['processRequestForm']
+      }
+      this.$store.commit('query', { fid: 'processRequestForm', requestForm: this.processRequestForm })
       this.$ajax
         .post('/api/sample/process/queryProcess', this.processRequestForm)
         .then(function (res) {

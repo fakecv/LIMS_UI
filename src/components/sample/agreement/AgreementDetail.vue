@@ -3,7 +3,7 @@
     <el-container>
       <el-header style="min-width:400px;">
         <el-button-group>
-          <el-button type="info" v-for="(action,index) in actions" :key="index" size="mini" v-show="action.show" :icon="action.icon" :loading="action.loading" @click="actionHandle(action)">{{action.name}}
+          <el-button type="info" v-for="(action,index) in staticOptions.actions" :key="index" size="mini" v-show="action.show" :icon="action.icon" :loading="action.loading" @click="actionHandle(action)">{{action.name}}
           </el-button>
         </el-button-group>
       </el-header>
@@ -36,6 +36,34 @@
                 <el-date-picker type="datetime" placeholder="选择要求完成日期" default-time="12:00:00" v-model="agreementForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
+            <el-col :span="24">
+              <el-form-item label="检测周期">
+                <el-radio-group v-model="agreementForm.testDuration">
+                  <el-radio label="5">5个工作日</el-radio>
+                  <el-radio label="3">3个工作日（加收50%检测费）</el-radio>
+                  <el-radio label="1.5">1.5个工作日（加收100%检测费）</el-radio>
+                  <el-radio label="0" @change="durationChange">其它</el-radio>
+                </el-radio-group>
+                <el-input name="duration"
+                  :disabled="durationDisable"
+                  v-model="agreementForm.duration"
+                  autoComplete="duration"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="分包情况">
+                <el-radio-group v-model="agreementForm.distributionOption">
+                  <el-radio label="yes" @change="distribution">涉及分包项目</el-radio>
+                  <el-radio label="no">未涉及分包项目</el-radio>
+                </el-radio-group>
+                <el-input name="distribution"
+                  :disabled="distributionDisable"
+                  v-model="agreementForm.distribution"
+                  autoComplete="distribution"
+                ></el-input>
+              </el-form-item>
+            </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="优先级">
                 <el-select name="processPriority" filterable default-first-option v-model="agreementForm.processPriority">
@@ -60,16 +88,21 @@
                   </el-radio-group>
               </el-form-item>
             </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-col :span="24">
               <el-form-item label="已验样品处置">
-                <el-select  filterable allow-create default-first-option
-                  placeholder="请选择处置方式"
+                <el-radio-group
                   name="finishedSampleHandlingMethod"
                   v-model="agreementForm.finishedSampleHandlingMethod"
                   >
-                <el-option label="样品随报告带走" value="1"></el-option>
-                <el-option label="样品由本公司保存" value="2"></el-option>
-                </el-select>
+                <el-radio label="0">样品随报告带走</el-radio>
+                <el-radio label="1">样品由本公司保存3个月销毁</el-radio>
+                <el-radio label="2" @change="sampleStoreRequest">对样品储存要求</el-radio>
+                </el-radio-group>
+                <el-input name="sampleStoreRequest"
+                  :disabled="sampleStoreRequestDisable"
+                  v-model="agreementForm.sampleStoreRequest"
+                  autoComplete="sampleStoreRequest"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -112,20 +145,21 @@
                   <el-radio label="委托检测"></el-radio>
                   <el-radio label="委托检验"></el-radio>
                   <el-radio label="现场检测"></el-radio>
-                  <el-radio label="其它" @change="experimentalCategoryOther"></el-radio>
                 </el-radio-group>
-                <el-input name="experimentalCategoryOther"
-                  :disabled="experimentalCategoryOtherDisable"
-                  v-model="agreementForm.experimentalCategoryOther"
-                  autoComplete="experimentalCategory"
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="发票选择">
+                <el-radio-group v-model="agreementForm.invoice">
+                  <el-radio label="yes">开普票</el-radio>
+                  <el-radio label="no">开专票</el-radio>
+                </el-radio-group>
+                <el-input name="invoiceTitle"
+                  v-model="agreementForm.invoiceTitle"
+                  autoComplete="invoiceTitle"
                 ></el-input>
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="24">
-              <el-form-item label="保密声明">
-                <el-input type="textarea" name="privacyClaim" v-model="agreementForm.privacyClaim" autoComplete="privacyClaim"></el-input>
-              </el-form-item>
-            </el-col> -->
           </el-row>
         </el-form>
       </el-container>
@@ -271,10 +305,14 @@
         @row-click="handleCustomerRowClick"
         @row-dblclick="handleCustomerRowDLClick"
        >
-        <el-table-column prop="company" label="客户单位" width="180"></el-table-column>
+        <el-table-column prop="company" label="客户单位"
+          show-overflow-tooltip
+          width="180"></el-table-column>
         <el-table-column prop="name" label="客户名称" width="180"></el-table-column>
         <el-table-column prop="mobileNumber" label="客户电话" width="180"></el-table-column>
-        <el-table-column prop="address" label="通讯地址" width="180"></el-table-column>
+        <el-table-column prop="address"
+          show-overflow-tooltip
+          label="通讯地址" width="180"></el-table-column>
         <el-table-column prop="email" label="客户邮箱" width="180"></el-table-column>
         <el-table-column prop="fax" label="客户传真" width="180"></el-table-column>
       </el-table>
@@ -371,15 +409,6 @@ export default {
       form: {
         reportList: []
       },
-      actions: [
-        {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': true, 'show': true},
-        {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'show': true},
-        {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false, 'show': true},
-        {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false, 'show': false},
-        {'name': '删除', 'id': '2', 'icon': 'el-icon-delete', 'loading': false, 'show': true},
-        {'name': '文件预览', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false, 'show': false},
-        {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false, 'show': false}
-      ],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 12},
       customerDialogFormVisible: false,
       userDialogFormVisible: false,
@@ -395,6 +424,11 @@ export default {
       },
       reportTransferModeOtherDisable: true,
       experimentalCategoryOtherDisable: true,
+      sampleStoreRequestDisable: true,
+      distributionDisable: true,
+      durationDisable: true,
+      invoiceDisable: true,
+      invoiceTitleDisable: true,
       src: [],
       fileList: [],
       modalclose: true,
@@ -502,12 +536,28 @@ export default {
         this.agreementForm.reportTransferModeOther = ''
       }
     },
-    experimentalCategoryOther (val) {
+    sampleStoreRequest (val) {
       if (val) {
-        this.experimentalCategoryOtherDisable = false
+        this.sampleStoreRequestDisable = false
       } else {
-        this.experimentalCategoryOtherDisable = true
-        this.agreementForm.experimentalCategoryOther = ''
+        this.sampleStoreRequestDisable = true
+        this.agreementForm.sampleStoreRequest = ''
+      }
+    },
+    distribution (val) {
+      if (val) {
+        this.distributionDisable = false
+      } else {
+        this.distributionDisable = true
+        this.agreementForm.distribution = ''
+      }
+    },
+    durationChange (val) {
+      if (val) {
+        this.durationDisable = false
+      } else {
+        this.durationDisable = true
+        this.agreementForm.duration = ''
       }
     },
     handleCustomerSizeChange (val) {
@@ -578,8 +628,8 @@ export default {
     previewReport (agreementNumber) {
       if (agreementNumber && agreementNumber !== '') {
         this.reportOptionDialog = true
-        this.form.reportList = []
         this.form.reportList.push(agreementNumber)
+        this.form.reportList = this.form.reportList.concat(['cover', 'agreement', 'process', 'task'])
       }
     },
     preview () {

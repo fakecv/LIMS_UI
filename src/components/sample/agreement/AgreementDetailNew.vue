@@ -36,17 +36,23 @@ export default {
         noOfSample: '1组(2件)',
         done: 'false',
         comment: '',
-        finishedSampleHandlingMethod: '2',
+        finishedSampleHandlingMethod: '1',
         reportTransferMode: ['取'],
         reportTransferModeOther: '',
         noOfReport: '1',
         sampleCheckResult: 'yes',
         sampleCheckResultNotes: '',
         experimentalCategory: '委托检测',
-        experimentalCategoryOther: '',
+        sampleStoreRequest: '',
         privacyDeclaim: '',
         customerId: '',
         receiverId: '',
+        testDuration: '5',
+        distribution: '',
+        distributionOption: 'no',
+        duration: '',
+        invoice: 'yes',
+        invoiceTitle: '',
         imageNameList: []
       },
       agreementResetForm: {
@@ -60,17 +66,23 @@ export default {
         noOfSample: '1组(2件)',
         done: 'false',
         comment: '',
-        finishedSampleHandlingMethod: '2',
+        finishedSampleHandlingMethod: '1',
         reportTransferMode: ['取'],
         reportTransferModeOther: '',
         noOfReport: '1',
         sampleCheckResult: 'yes',
         sampleCheckResultNotes: '',
         experimentalCategory: '委托检测',
-        experimentalCategoryOther: '',
+        sampleStoreRequest: '',
         privacyDeclaim: '',
         customerId: '',
         receiverId: '',
+        testDuration: '5',
+        distribution: '',
+        distributionOption: 'no',
+        duration: '',
+        invoice: 'yes',
+        invoiceTitle: '',
         imageNameList: []
       },
       customerForm: {},
@@ -82,7 +94,17 @@ export default {
         users: [],
         totalCustomers: 0,
         totalUsers: 0,
-        images: []
+        images: [],
+        privileges: '',
+        actions: [
+          {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false, 'show': false},
+          {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'show': false},
+          {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false, 'show': false},
+          {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false, 'show': false},
+          {'name': '删除', 'id': '2', 'icon': 'el-icon-delete', 'loading': false, 'show': false},
+          {'name': '文件预览', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false, 'show': true},
+          {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false, 'show': true}
+        ]
       },
       customerRequestForm: {
         company: '',
@@ -98,6 +120,40 @@ export default {
     }
   },
   methods: {
+    displayActions () {
+      console.log(this.staticOptions.privileges.indexOf('unlock'))
+      this.staticOptions.actions.forEach(item => {
+        if (item.name === '新建' && this.staticOptions.privileges.indexOf('new') > 0) {
+          item.show = true
+        }
+        if (item.name === '复制' && this.staticOptions.privileges.indexOf('copy') > 0) {
+          item.show = true
+        }
+        if (item.name === '数据库保存' && this.staticOptions.privileges.indexOf('save') > 0) {
+          item.show = true
+        }
+        if (item.name === '解锁' && this.staticOptions.privileges.indexOf('unlock') > -1) {
+          item.show = true
+        }
+        if (item.name === '删除' && this.staticOptions.privileges.indexOf('delete') > 0) {
+          item.show = true
+        }
+      })
+    },
+    populatePrivileges () {
+      let vm = this
+      this.$ajax.get('/api/users/getPrivileges/' + '_lims_agreementDetailNew')
+        .then(function (res) {
+          vm.staticOptions.privileges = res.data
+          vm.displayActions()
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            message: error.response.data.message
+          })
+        })
+    },
     agreementNumberGenerator () {
       let vm = this
       this.$ajax.get('/api/sample/agreement/generateAgreeNumber')
@@ -166,6 +222,7 @@ export default {
       this.customerForm.fax = row.fax
       this.customerForm.email = row.email
       this.customerForm.address = row.address
+      this.agreementForm.invoiceTitle = row.company
     },
     reloadUserData (event) {
       let vm = this
@@ -215,6 +272,7 @@ export default {
     this.loadProcessPriorityData()
     this.initCustomerData()
     this.initUserData()
+    this.populatePrivileges()
   }
 }
 </script>

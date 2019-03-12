@@ -23,6 +23,7 @@
         <el-table-column
           prop="company"
           label="客户单位"
+          show-overflow-tooltip
           width="180">
         </el-table-column>
         <el-table-column
@@ -38,6 +39,7 @@
         <el-table-column
           prop="address"
           label="客户地址"
+          show-overflow-tooltip
           width="180">
         </el-table-column>
         <el-table-column

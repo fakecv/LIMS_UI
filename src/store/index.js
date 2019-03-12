@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import forms from './modules/forms' // 顶部查询表单
+import maintenanceParameters from './modules/maintenanceParameters' // 保留查询表单
 
 Vue.use(Vuex)
 
@@ -21,14 +22,15 @@ const store = new Vuex.Store({
     },
     TOGGLE_ASIDE_ACTIVE (state, newName) {
       state.asideActiveName = newName
-    },
-    POPULATE_PRIVILEGES (state, privilegeMap) {
-      state.privilegeMap = privilegeMap
     }
+    // POPULATE_PRIVILEGES (state, privilegeMap) {
+    //   state.privilegeMap = privilegeMap
+    // }
   },
   modules: {
     // todo 表格table 图表Chart
-    forms
+    forms,
+    maintenanceParameters
   }
 })
 

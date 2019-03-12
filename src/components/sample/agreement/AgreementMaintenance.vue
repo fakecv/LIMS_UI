@@ -21,6 +21,11 @@
               <el-input name="sampleName" v-model="agreementRequestForm.sampleName"></el-input>
             </el-form-item>
           </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="客户单位">
+              <el-input name="company" v-model="agreementRequestForm.company"></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-form-item>
@@ -120,6 +125,7 @@ export default {
         agreementNumber: '',
         done: 'false',
         sampleName: '',
+        company: '',
         experimentalCategory: '',
         itemsPerPage: 20,
         currentPage: 1
@@ -190,6 +196,9 @@ export default {
     },
     onSubmit () {
       let vm = this
+      if (this.$store.state.maintenanceParameters['agreementRequestForm']) {
+        this.agreementRequestForm = this.$store.state.maintenanceParameters['agreementRequestForm']
+      }
       this.$ajax.post('/api/sample/agreement/queryAgreement', this.agreementRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
