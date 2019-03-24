@@ -189,248 +189,70 @@
         </el-form>
       </el-container>
     </el-container>
-  <el-dialog :visible.sync="testedItemProductGroupFormVisible" :modal-append-to-body="false">
-    <div>
-    <el-container style="padding: 10px">
-      <el-form :model="testedItemProductGroupForm" label-width="100px" label-position="left" size="mini">
-        <el-row :gutter="20">
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="组名称">
-              <el-input name="testedItemProductGroupName" v-model="testedItemProductGroupForm.testedItemProductGroupName" autoComplete="testedItemProductGroupName"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="组描述">
-              <el-input name="testedItemProductGroupDescription" v-model="testedItemProductGroupForm.testedItemProductGroupDescription" autoComplete="testedItemProductGroupDescription"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-form-item>
-            <el-button type="primary" @click="loadTestedItemProductGroupData">查询</el-button>
-          </el-form-item>
-        </el-row>
-      </el-form>
-    </el-container>
-    <el-table ref="testedItemProductGroupTable" :data="testedItemProductGroupTableData" style="width: 100%" @selection-change="handleTestedItemProductGroupChange">
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column
-          prop="testedItemProductGroupName"
-          label="组名称"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testedItemProductGroupDescription"
-          label="组描述"
-          width="180">
-        </el-table-column>
-      </el-table>
-      <div class="block text-right">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="testedItemProductGroupForm.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="20"
-          layout="sizes, prev, pager, next"
-          :total="totalTestedItemProductGroups">
-        </el-pagination>
-      </div>
-    </div>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click.native="testedItemProductGroupFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click.native="updateTestedItemTasks">确 定</el-button>
-    </div>
-  </el-dialog>
-  <el-dialog :visible.sync="testedItemProductFormVisible" :modal-append-to-body="false">
-    <div>
-    <el-container style="padding: 10px">
-      <el-form :model="testedItemProductForm" label-width="100px" label-position="left" size="mini">
-        <el-row :gutter="20">
-          <!-- <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目名称">
-              <el-input name="testedItemProductName" v-model="testedItemProductForm.testedItemProductName" autoComplete="testedItemProductName"></el-input>
-            </el-form-item>
-          </el-col> -->
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目类别">
-                <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testCategory" @change="handleTestCategoryChange">
-                  <el-option v-for="item in staticOptions.testCategories"
-                    :key="item.id"
-                    :label="item.testCategoryName"
-                    :value="item.id">
-                  </el-option>
-                  </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目">
-              <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testedItem" @change="handleTestedItemChange">
-                <el-option v-for="item in staticOptions.filteredTestedItems"
-                  :key="item.id"
-                  :label="item.testedItemName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目参数">
-              <el-select name="testParameter" filterable clearable default-first-option v-model="testedItemProductForm.testParameter">
-                <el-option v-for="item in staticOptions.filteredTestParameters"
-                  :key="item.id"
-                  :label="item.testParameterName"
-                  :value="item.testParameterName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测方法">
-              <el-select name="testMethod" filterable clearable default-first-option v-model="testedItemProductForm.testMethod">
-                <el-option v-for="item in staticOptions.filteredTestMethods"
-                  :key="item.id"
-                  :label="item.testMethodName"
-                  :value="item.testMethodName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-form-item>
-            <el-button type="primary" @click="loadTestedItemProductData">查询</el-button>
-          </el-form-item>
-        </el-row>
-      </el-form>
-    </el-container>
-    <el-table :data="testedItemProductTableData" style="width: 100%"  @selection-change="handleTestedItemProductChange">
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column
-          prop="testedItem"
-          label="检测项目"
-          :formatter="testedItemFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testParameter"
-          label="检测项目参数"
-          show-overflow-tooltip
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testMethod"
-          label="检测方法"
-          width="180">
-        </el-table-column>
-      </el-table>
-      <div class="block text-right">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="testedItemProductForm.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="20"
-          layout="sizes, prev, pager, next"
-          :total="totalTestedItemProducts">
-        </el-pagination>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click.native="testedItemProductFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click.native="updateTestedItemProduct">确 定</el-button>
-      </div>
-    </div>
-  </el-dialog>
-  <el-dialog :visible.sync="testedItemTaskFormVisible" :modal-append-to-body="false">
-    <el-container style="padding: 10px">
-      <el-form :model="testedItemTaskForm" label-width="100px" label-position="left" size="mini">
-        <el-row :gutter="20">
-          <!-- <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目名称">
-              <el-input name="testedItemProductName" v-model="testedItemTaskForm.testedItemTaskName" autoComplete="testedItemTaskName"></el-input>
-            </el-form-item>
-          </el-col> -->
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目类别">
-                <el-select name="testedItem" filterable default-first-option v-model="testedItemTaskForm.testCategory" @change="handleTestCategoryChange">
-                  <el-option v-for="item in staticOptions.testCategories"
-                    :key="item.id"
-                    :label="item.testCategoryName"
-                    :value="item.id">
-                  </el-option>
-                  </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目">
-              <el-select name="testedItem" filterable default-first-option v-model="testedItemTaskForm.testedItem" @change="handleTestedItemChange">
-                <el-option v-for="item in staticOptions.filteredTestedItems"
-                  :key="item.id"
-                  :label="item.testedItemName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目参数">
-              <el-input name="testParameter" v-model="testedItemTaskForm.testParameter" autoComplete="testParameter"></el-input>
-              <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-              <div style="margin: 15px 0;"></div>
-              <el-checkbox-group v-model="staticOptions.checkedTestParameters" @change="handleCheckedTestParametersChange">
-                <el-checkbox v-for="testParameter in staticOptions.filteredTestParameters"
-                 :label="testParameter.testParameterName" :key="testParameter.id">
-                 {{testParameter.testParameterName}}</el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测方法">
-              <el-input name="testMethod" v-model="testedItemTaskForm.testMethod" autoComplete="testMethod"></el-input>
-              <el-checkbox :indeterminate="isTestMethodIndeterminate" v-model="testMethodCheckAll" @change="handleTestMethodCheckAllChange">全选</el-checkbox>
-              <div style="margin: 15px 0;"></div>
-              <el-checkbox-group v-model="staticOptions.checkedTestMethods" @change="handleCheckedTestMethodsChange">
-                <el-checkbox v-for="testMethod in staticOptions.filteredTestMethods"
-                 :label="testMethod.testMethodName" :key="testMethod.id">
-                 {{testMethod.testMethodName}}</el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-          </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="优先级">
-                <el-select name="processPriority" filterable default-first-option v-model="testedItemTaskForm.processPriority">
-                <el-option v-for="item in staticOptions.processPriorities"
-                  :key="item.id"
-                  :label="item.processPriorityName"
-                  :value="item.processPriorityName">
-                </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          <el-col :span="24">
-            <el-form-item label="驳回原因">
-              <el-input type="textarea" name="rejectNote" v-model="testedItemTaskForm.rejectNote" autoComplete="rejectNote"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-container>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click.native="testedItemTaskFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click.native="updateTestedItemTask">确 定</el-button>
-    </div>
-  </el-dialog>
+    <testedItemProductDialog
+      :testCategories="staticOptions.testCategories"
+      :filteredTestedItems="staticOptions.filteredTestedItems"
+      :filteredTestParameters="staticOptions.filteredTestParameters"
+      :filteredTestMethods="staticOptions.filteredTestMethods"
+      :testedItemProductForm="testedItemProductForm"
+      :testedItemProductTableData="testedItemProductTableData"
+      :testedItemProductFormVisible="testedItemProductFormVisible"
+      :totalTestedItemProducts="totalTestedItemProducts"
+      :testedItems="staticOptions.testedItems"
+      v-on:handleTestCategoryChange="handleTestCategoryChange"
+      v-on:handleTestedItemChange="handleTestedItemChange"
+      v-on:loadTestedItemProductData="loadTestedItemProductData"
+      v-on:handleTestedItemProductChange="handleTestedItemProductChange"
+      v-on:handleTestedItemProductSizeChange="handleTestedItemProductSizeChange"
+      v-on:handleTestedItemProductCurrentChange="handleTestedItemProductCurrentChange"
+      v-on:updateTestedItemProduct="updateTestedItemProduct"
+      />
+    <testedItemTaskDialog
+      :testCategories="staticOptions.testCategories"
+      :filteredTestedItems="staticOptions.filteredTestedItems"
+      :filteredTestParameters="staticOptions.filteredTestParameters"
+      :filteredTestMethods="staticOptions.filteredTestMethods"
+      :processPriorities="staticOptions.processPriorities"
+      :checkedTestMethods="staticOptions.checkedTestMethods"
+      :checkedTestParameters="staticOptions.checkedTestParameters"
+      :testedItemTaskForm="testedItemTaskForm"
+      :isIndeterminate="isIndeterminate"
+      :checkAll="checkAll"
+      :isTestMethodIndeterminate="isTestMethodIndeterminate"
+      :testMethodCheckAll="testMethodCheckAll"
+      :testedItemTaskFormVisible="testedItemTaskFormVisible"
+      v-on:handleTestCategoryChange="handleTestCategoryChange"
+      v-on:handleTestedItemChange="handleTestedItemChange"
+      v-on:handleCheckAllChange="handleCheckAllChange"
+      v-on:handleCheckedTestParametersChange="handleCheckedTestParametersChange"
+      v-on:handleTestMethodCheckAllChange="handleTestMethodCheckAllChange"
+      v-on:handleCheckedTestMethodsChange="handleCheckedTestMethodsChange"
+      v-on:updateTestedItemTask="updateTestedItemTask"
+      />
+    <testedItemProductGroupDialog
+      :testedItemProductGroupForm="testedItemProductGroupForm"
+      :testedItemProductGroupTableData="testedItemProductGroupTableData"
+      :testedItemProductGroupFormVisible="testedItemProductGroupFormVisible"
+      :totalTestedItemProductGroups="totalTestedItemProductGroups"
+      v-on:loadTestedItemProductGroupData="loadTestedItemProductGroupData"
+      v-on:handleTestedItemProductGroupChange="handleTestedItemProductGroupChange"
+      v-on:handleTestedItemProductGroupSizeChange="handleTestedItemProductGroupSizeChange"
+      v-on:handleTestedItemProductGroupCurrentChange="handleTestedItemProductGroupCurrentChange"
+      v-on:updateTestedItemTasks="updateTestedItemTasks"
+      />
   </div>
 </template>
 <script>
+import testedItemProductDialog from './dialog/TestedItemProductDialog'
+import testedItemTaskDialog from './dialog/TestedItemTaskDialog'
+import testedItemProductGroupDialog from './dialog/TestedItemProductGroupDialog'
 export default {
   name: 'processDetail',
+  components: {
+    testedItemProductDialog,
+    testedItemProductGroupDialog,
+    testedItemTaskDialog
+  },
   props: ['agreementForm', 'processForm', 'staticOptions', 'customerForm', 'userForm'],
   data () {
     return {
@@ -544,13 +366,21 @@ export default {
       })
       this.deletedTestedItemTasks = []
     },
-    handleSizeChange (val) {
+    handleTestedItemProductGroupSizeChange (val) {
       this.testedItemProductGroupForm.itemsPerPage = val
       this.loadTestedItemProductGroupData()
     },
-    handleCurrentChange (val) {
+    handleTestedItemProductGroupCurrentChange (val) {
       this.testedItemProductGroupForm.currentPage = val
       this.loadTestedItemProductGroupData()
+    },
+    handleTestedItemProductSizeChange (val) {
+      this.testedItemProductForm.itemsPerPage = val
+      this.loadTestedItemProductData()
+    },
+    handleTestedItemProductCurrentChange (val) {
+      this.testedItemProductForm.currentPage = val
+      this.loadTestedItemProductData()
     },
     handleTestedItemProductGroupChange (val) {
       let vm = this

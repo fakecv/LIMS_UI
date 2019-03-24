@@ -1,21 +1,23 @@
 <template>
   <div class="pdf">
     <el-row>
-      <el-button @click="downloadToFrontEnd">下载</el-button>
-      <!-- <el-button @click="$refs.myPdfComponent.print()">print</el-button> -->
+      <el-button @click="downloadToFrontEnd">重新加载</el-button>
       <el-button @click="goBackAgreement">返回</el-button>
     </el-row>
-    <pdf  ref="myPdfComponent"
+    <iframe id='previewPdf' :src="'/static/pdf/web/viewer.html?file=' + fileUrl" height="800"
+        width="100%">
+    </iframe>
+    <!-- <pdf ref="myPdfComponent1"
       v-for="i in numPages"
       :key="i"
       :src="src"
       :page="i"
-    ></pdf>
+    ></pdf> -->
   </div>
 </template>
 <script>
 import pdf from 'vue-pdf'
-
+import pdfJS from '../../../../static/pdf/build/pdf'
 export default {
   name: 'agreementReport',
   props: {
@@ -27,6 +29,7 @@ export default {
     return {
       src: {},
       numPages: 0,
+      fileUrl: '',
       fullscreenLoading: false,
       agreementNumber: '',
       loading: {}
@@ -48,13 +51,51 @@ export default {
         return
       }
       let url = window.URL.createObjectURL(new Blob([data]), {type: 'application/pdf'})
-      let link = document.createElement('a')
-      link.style.display = 'none'
-      link.href = url
-      link.setAttribute('download', this.agreementNumber + '.pdf')
-
-      document.body.appendChild(link)
-      link.click()
+      this.fileUrl = url
+      // let link = document.createElement('a')
+      // link.style.display = 'none'
+      // link.href = url
+      // link.setAttribute('download', this.agreementNumber + '.pdf')
+      // document.body.appendChild(link)
+      // link.click()
+    },
+    print (data) {
+      let pdfjsLib = pdfJS
+      pdfjsLib.PDFJS.workerSrc = '/static/pdf/build/pdf.worker.js'
+      let url = window.URL.createObjectURL(new Blob([data]), {type: 'application/pdf'})
+      let loadingTask = pdfjsLib.getDocument(url)
+      loadingTask.promise.then((pdf) => {
+        let numPages = pdf.numPages
+        let container = document.getElementById('mycanvas')
+        let pageNumber = 1
+        this.getPage(pdf, pageNumber, container, numPages)
+      }, function (reason) {
+        alert(reason)
+      })
+    },
+    getPage (pdf, pageNumber, container, numPages) { // 获取pdf
+      let _this = this
+      pdf.getPage(pageNumber).then((page) => {
+        let scale = (container.offsetWidth / page.view[2])
+        let viewport = page.getViewport(scale)
+        let canvas = document.createElement('canvas')
+        canvas.width = viewport.width
+        canvas.height = viewport.height
+        container.appendChild(canvas)
+        let ctx = canvas.getContext('2d')
+        var renderContext = {
+          canvasContext: ctx,
+          transform: [1, 0, 0, 1, 0, 0],
+          viewport: viewport,
+          intent: 'print'
+        }
+        page.render(renderContext).then(() => {
+          pageNumber += 1
+          if (pageNumber <= numPages) {
+            _this.getPage(pdf, pageNumber, container, numPages)
+          }
+        })
+      })
     },
     openFullScreen2 () {
       let vm = this
@@ -85,7 +126,7 @@ export default {
   mounted () {
     if (this.$route.params.id !== undefined) {
       this.agreementNumber = this.$route.params.id
-      this.openFullScreen2()
+      this.downloadToFrontEnd()
     }
   }
 }

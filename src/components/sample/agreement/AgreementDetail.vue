@@ -280,125 +280,44 @@
         </div>
       </el-container>
     </el-container>
-    <el-dialog title="客户列表" :visible.sync="customerDialogFormVisible" :modal-append-to-body="false">
-      <el-container style="padding: 10px">
-        <el-form :model="customerRequestForm" label-width="100px" label-position="left" size="mini">
-        <el-row :gutter="20">
-          <el-form-item label="客户单位">
-            <el-input name="company" v-model="customerRequestForm.company" autoComplete="company"></el-input>
-          </el-form-item>
-        </el-row>
-          <el-row :gutter="20">
-            <el-form-item label="客户名称">
-              <el-input name="name" v-model="customerRequestForm.name" autoComplete="name"></el-input>
-            </el-form-item>
-          </el-row>
-          <el-row :gutter="20">
-            <el-form-item>
-              <el-button type="primary" @click="reloadCustomers">查询</el-button>
-            </el-form-item>
-          </el-row>
-        </el-form>
-      </el-container>
-      <el-table ref="customerTable" :data="staticOptions.customers" style="width: 100%"
-        highlight-current-row
-        @row-click="handleCustomerRowClick"
-        @row-dblclick="handleCustomerRowDLClick"
-       >
-        <el-table-column prop="company" label="客户单位"
-          show-overflow-tooltip
-          width="180"></el-table-column>
-        <el-table-column prop="name" label="客户名称" width="180"></el-table-column>
-        <el-table-column prop="mobileNumber" label="客户电话" width="180"></el-table-column>
-        <el-table-column prop="address"
-          show-overflow-tooltip
-          label="通讯地址" width="180"></el-table-column>
-        <el-table-column prop="email" label="客户邮箱" width="180"></el-table-column>
-        <el-table-column prop="fax" label="客户传真" width="180"></el-table-column>
-      </el-table>
-      <div class="block text-right">
-        <el-pagination
-          @size-change="handleCustomerSizeChange"
-          @current-change="handleCustomerCurrentChange"
-          :current-page.sync="customerRequestForm.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="20"
-          layout="sizes, prev, pager, next"
-          :total="staticOptions.totalCustomers">
-        </el-pagination>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="customerDialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click.native="confirmCustomer">确 定</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog title="用户列表" :visible.sync="userDialogFormVisible" :modal-append-to-body="false">
-      <el-container style="padding: 10px">
-        <el-form :model="userRequestForm" label-width="100px" label-position="left" size="mini">
-          <el-row :gutter="20">
-            <el-form-item label="用户名称">
-              <el-input name="name" v-model="userRequestForm.name"></el-input>
-            </el-form-item>
-          </el-row>
-          <el-row :gutter="20">
-            <el-form-item>
-              <el-button type="primary" @click="reloadUsers">查询</el-button>
-            </el-form-item>
-          </el-row>
-        </el-form>
-      </el-container>
-      <el-table ref="userTable" :data="staticOptions.users" style="width: 100%"
-        highlight-current-row
-        @row-click="handleUserRowClick"
-        @row-dblclick="handleUserRowDLClick"
-      >
-        <el-table-column prop="name" label="接收人名称" width="180"></el-table-column>
-        <el-table-column prop="mobileNumber" label="接收人电话" width="180"></el-table-column>
-        <el-table-column prop="fax" label="接收人传真" width="180"></el-table-column>
-        <el-table-column prop="email" label="接收人邮箱" width="180"></el-table-column>
-        <el-table-column prop="address" label="接收人通讯地址" width="180"></el-table-column>
-      </el-table>
-      <div class="block text-right">
-        <el-pagination
-          @size-change="handleUserSizeChange"
-          @current-change="handleUserCurrentChange"
-          :current-page.sync="userRequestForm.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="20"
-          layout="sizes, prev, pager, next"
-          :total="staticOptions.totalUsers">
-        </el-pagination>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="userDialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click.native="confirmUser">确 定</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog title="用户列表" :visible.sync="reportOptionDialog" :modal-append-to-body="false">
-      <el-container style="padding: 10px">
-          <el-form :model="form">
-            <el-form-item label="可预览文件列表">
-                <el-checkbox-group v-model="form.reportList">
-                  <el-checkbox label="cover">检测报表封面</el-checkbox>
-                  <el-checkbox label="agreement">委托协议书</el-checkbox>
-                  <el-checkbox label="process">样品流转表</el-checkbox>
-                  <el-checkbox label="task">检测任务单</el-checkbox>
-                  <el-checkbox label="other">自定义报表</el-checkbox>
-                </el-checkbox-group>
-            </el-form-item>
-          </el-form>
-      </el-container>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="reportOptionDialog = false">取 消</el-button>
-          <el-button type="primary" @click="preview">确 定</el-button>
-        </div>
-    </el-dialog>
+    <clientDialog
+      :customers="staticOptions.customers"
+      :customerRequestForm="customerRequestForm"
+      :customerDialogFormVisible="customerDialogFormVisible"
+      :totalCustomers="staticOptions.totalCustomers"
+      v-on:confirmCustomer="confirmCustomer"
+      v-on:reloadCustomers="reloadCustomers"
+      v-on:handleCustomerSizeChange="handleCustomerSizeChange"
+      v-on:handleCustomerCurrentChange="handleCustomerCurrentChange"
+      v-on:handleCustomerRowClick="handleCustomerRowClick"
+      v-on:handleCustomerRowDLClick="handleCustomerRowDLClick"
+      />
+    <userDialog
+      :users="staticOptions.users"
+      :userRequestForm="userRequestForm"
+      :userDialogFormVisible="userDialogFormVisible"
+      :totalUsers="staticOptions.totalUsers"
+      v-on:confirmUser="confirmUser"
+      v-on:reloadUsers="reloadUsers"
+      v-on:handleUserSizeChange="handleUserSizeChange"
+      v-on:handleUserCurrentChange="handleUserCurrentChange"
+      v-on:handleUserRowClick="handleUserRowClick"
+      v-on:handleUserRowDLClick="handleUserRowDLClick"
+      />
+    <previewDialog
+      :form="form"
+      :reportOptionDialog='reportOptionDialog'
+      v-on:preview="preview"
+    />
   </div>
 </template>
 
 <script>
 
 import vueImages from 'vue-images'
+import previewDialog from './dialog/PreviewDialog'
+import clientDialog from './dialog/ClientDialog'
+import userDialog from './dialog/UserDialog'
 export default {
   name: 'agreementDetail',
   props: ['agreementForm', 'staticOptions', 'customerForm', 'userForm'],
@@ -443,7 +362,10 @@ export default {
     }
   },
   components: {
-    vueImages: vueImages
+    vueImages: vueImages,
+    previewDialog: previewDialog,
+    clientDialog: clientDialog,
+    userDialog: userDialog
   },
   methods: {
     displayAction () {
@@ -587,11 +509,12 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    handleCustomerRowClick (row, event, column) {
+    handleCustomerRowClick (row) {
       this.$emit('updateCustomer', row)
     },
-    handleCustomerRowDLClick (row, event, column) {
+    handleCustomerRowDLClick (row) {
       let vm = this
+      console.log('agreement ' + row.id)
       this.$emit('updateCustomer', row)
       this.customerDialogFormVisible = false
       this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.customerForm.id)
@@ -618,10 +541,10 @@ export default {
     confirmUser () {
       this.userDialogFormVisible = false
     },
-    handleUserRowClick (row, event, column) {
+    handleUserRowClick (row) {
       this.$emit('updateUser', row)
     },
-    handleUserRowDLClick (row, event, column) {
+    handleUserRowDLClick (row) {
       this.$emit('updateUser', row)
       this.userDialogFormVisible = false
     },
@@ -629,7 +552,7 @@ export default {
       if (agreementNumber && agreementNumber !== '') {
         this.reportOptionDialog = true
         this.form.reportList.push(agreementNumber)
-        this.form.reportList = this.form.reportList.concat(['cover', 'agreement', 'process', 'task'])
+        this.form.reportList = this.form.reportList.concat(['agreement', 'process', 'task'])
       }
     },
     preview () {
