@@ -51,8 +51,8 @@
       </div>
     </div>
     <div slot="footer" class="dialog-footer">
-      <el-button @click.native="testedItemProductGroupFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click.native="updateTestedItemTasks">确 定</el-button>
+      <el-button @click="testedItemProductGroupFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="updateTestedItemTasks">确 定</el-button>
     </div>
   </el-dialog>
 </template>

@@ -216,12 +216,9 @@
       :checkedTestMethods="staticOptions.checkedTestMethods"
       :checkedTestParameters="staticOptions.checkedTestParameters"
       :testedItemTaskForm="testedItemTaskForm"
-      :isIndeterminate="isIndeterminate"
-      :checkAll="checkAll"
-      :isTestMethodIndeterminate="isTestMethodIndeterminate"
-      :testMethodCheckAll="testMethodCheckAll"
-      :testedItemTaskFormVisible="testedItemTaskFormVisible"
+      :testedItemTaskFormVisible.sync="testedItemTaskFormVisible"
       v-on:handleTestCategoryChange="handleTestCategoryChange"
+      v-on:closeTestedItemTaskDialog="closeTestedItemTaskDialog"
       v-on:handleTestedItemChange="handleTestedItemChange"
       v-on:handleCheckAllChange="handleCheckAllChange"
       v-on:handleCheckedTestParametersChange="handleCheckedTestParametersChange"
@@ -263,13 +260,11 @@ export default {
         {'ref': 'save', 'name': '数据库保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false, 'disabled': false},
         {'ref': 'submit', 'name': '数据库保存并提交', 'id': '4', 'icon': 'el-icon-check', 'loading': false, 'disabled': false},
         {'ref': 'unlock', 'name': '解锁', 'id': '5', 'icon': 'el-icon-edit', 'loading': false, 'disabled': false},
-        {'ref': 'delete', 'name': '删除', 'id': '6', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false}
+        {'ref': 'delete', 'name': '删除', 'id': '6', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false},
+        {'ref': 'delete', 'name': '查看协议', 'id': '7', 'icon': 'el-icon-check', 'loading': false, 'disabled': false},
+        {'ref': 'delete', 'name': '查看流转', 'id': '8', 'icon': 'el-icon-check', 'loading': false, 'disabled': false}
       ],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 12},
-      isIndeterminate: true,
-      checkAll: false,
-      isTestMethodIndeterminate: true,
-      testMethodCheckAll: false,
       testedItemProductGroupFormVisible: false,
       testedItemProductFormVisible: false,
       testedItemTaskFormVisible: false,
@@ -291,7 +286,6 @@ export default {
         rejectNote: ''
       },
       testedItemProductForm: {
-        // testedItemProductName: '',
         testCategory: '',
         testedItem: '',
         testedItemName: '',
@@ -322,6 +316,10 @@ export default {
         this.actions[3].disabled = false
       } else if (action.id === '6') {
         this.confirmDelete()
+      } else if (action.id === '7') {
+        this.$emit('checkAgreement', this.processForm.agreementNumber)
+      } else if (action.id === '8') {
+        this.$emit('processReview', this.processForm.agreementNumber)
       }
     },
     addTestedItemTask () {
@@ -386,7 +384,6 @@ export default {
       let vm = this
       this.staticOptions.testedItemProducts = []
       val.forEach(item => {
-        // item.processPriority = vm.processForm.processPriority
         vm.staticOptions.testedItemProducts.push(item)
       })
     },
@@ -394,7 +391,6 @@ export default {
       let vm = this
       this.staticOptions.testedItemProducts = []
       val.forEach(item => {
-        // item.processPriority = vm.processForm.processPriority
         vm.staticOptions.testedItemProducts.push(item)
       })
     },
@@ -402,31 +398,22 @@ export default {
       this.deletedTestedItemTasks = val
     },
     handleCheckedTestParametersChange (value) {
-      let checkedCount = value.length
-      this.checkAll = checkedCount === this.staticOptions.filteredTestParameters.length
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.staticOptions.filteredTestParameters.length
       this.testedItemTaskForm.testParameter = value.join(',')
-      // this.testedItemProductForm.testParameter = value
     },
     handleCheckAllChange (val) {
       let vm = this
+      this.staticOptions.checkedTestParameters = []
       if (val) {
         this.staticOptions.filteredTestParameters.forEach(testParameter => {
           vm.staticOptions.checkedTestParameters.push(testParameter.testParameterName)
         })
         this.testedItemTaskForm.testParameter = this.staticOptions.checkedTestParameters.join(',')
       } else {
-        this.staticOptions.checkedTestParameters = []
         this.testedItemTaskForm.testParameter = ''
       }
-      this.isIndeterminate = false
     },
     handleCheckedTestMethodsChange (value) {
-      let checkedCount = value.length
-      this.testMethodCheckAll = checkedCount === this.staticOptions.filteredTestMethods.length
-      this.isTestMethodIndeterminate = checkedCount > 0 && checkedCount < this.staticOptions.filteredTestMethods.length
       this.testedItemTaskForm.testMethod = value.join(';')
-      // this.testedItemProductForm.testParameter = value
     },
     handleTestMethodCheckAllChange (val) {
       let vm = this
@@ -437,10 +424,11 @@ export default {
         })
         this.testedItemTaskForm.testMethod = this.staticOptions.checkedTestMethods.join(';')
       } else {
-        // this.staticOptions.checkedTestParameters = []
         this.testedItemTaskForm.testMethod = ''
       }
-      this.isTestMethodIndeterminate = false
+    },
+    closeTestedItemTaskDialog () {
+      this.testedItemTaskFormVisible = false
     },
     // load all the testedItemProductGroups
     loadTestedItemProductGroupData () {

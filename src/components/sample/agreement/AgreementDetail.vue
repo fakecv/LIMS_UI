@@ -389,6 +389,8 @@ export default {
           this.previewReport(this.agreementForm.agreementNumber)
         }
       } else if (action.id === '4') {
+        console.log(this.agreementForm.agreementNumber)
+        this.$router.push('/lims/processReview/' + this.agreementForm.agreementNumber)
       } else if (action.id === '5') {
         this.new()
         this.agreementNumberButton = false

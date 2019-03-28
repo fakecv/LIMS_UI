@@ -100,7 +100,7 @@ export default {
           {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false, 'show': false},
           {'name': '删除', 'id': '2', 'icon': 'el-icon-delete', 'loading': false, 'show': false},
           {'name': '文件预览', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false, 'show': true},
-          {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false, 'show': true}
+          {'name': '查看样品流转', 'id': '4', 'icon': 'el-icon-download', 'loading': false, 'show': true}
         ],
         images: []
       },

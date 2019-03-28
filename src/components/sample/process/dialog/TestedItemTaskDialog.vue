@@ -35,7 +35,7 @@
               <el-input name="testParameter" v-model="testedItemTaskForm.testParameter" autoComplete="testParameter"></el-input>
               <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
               <div style="margin: 15px 0;"></div>
-              <el-checkbox-group v-model="checkedTestParameters" @change="handleCheckedTestParametersChange">
+              <el-checkbox-group v-model="checkedTestParameters1" @change="handleCheckedTestParametersChange">
                 <el-checkbox v-for="testParameter in filteredTestParameters"
                  :label="testParameter.testParameterName" :key="testParameter.id">
                  {{testParameter.testParameterName}}</el-checkbox>
@@ -47,7 +47,7 @@
               <el-input name="testMethod" v-model="testedItemTaskForm.testMethod" autoComplete="testMethod"></el-input>
               <el-checkbox :indeterminate="isTestMethodIndeterminate" v-model="testMethodCheckAll" @change="handleTestMethodCheckAllChange">全选</el-checkbox>
               <div style="margin: 15px 0;"></div>
-              <el-checkbox-group v-model="checkedTestMethods" @change="handleCheckedTestMethodsChange">
+              <el-checkbox-group v-model="checkedTestMethods1" @change="handleCheckedTestMethodsChange">
                 <el-checkbox v-for="testMethod in filteredTestMethods"
                  :label="testMethod.testMethodName" :key="testMethod.id">
                  {{testMethod.testMethodName}}</el-checkbox>
@@ -74,8 +74,8 @@
       </el-form>
     </el-container>
     <div slot="footer" class="dialog-footer">
-      <el-button @click.native="testedItemTaskFormVisible = false">取 消</el-button>
-      <el-button type="primary" @click.native="updateTestedItemTask">确 定</el-button>
+      <el-button @click="closeTestedItemTaskDialog">取 消</el-button>
+      <el-button type="primary" @click="updateTestedItemTask">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -90,15 +90,17 @@ export default {
     'processPriorities',
     'checkedTestParameters',
     'checkedTestMethods',
-    'isIndeterminate',
-    'checkAll',
-    'isTestMethodIndeterminate',
-    'testMethodCheckAll',
     'testedItemTaskForm',
     'testedItemTaskFormVisible'
   ],
   data () {
     return {
+      isTestMethodIndeterminate: true,
+      testMethodCheckAll: false,
+      isIndeterminate: true,
+      checkAll: false,
+      checkedTestMethods1: this.checkedTestMethods,
+      checkedTestParameters1: this.checkedTestParameters,
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 12}
     }
   },
@@ -112,17 +114,42 @@ export default {
     updateTestedItemTask (val) {
       this.$emit('updateTestedItemTask', val)
     },
-    handleCheckAllChange (val) {
-      this.$emit('handleCheckAllChange', val)
+    closeTestedItemTaskDialog () {
+      this.$emit('closeTestedItemTaskDialog')
     },
-    handleCheckedTestParametersChange (val) {
-      this.$emit('handleCheckedTestParametersChange', val)
+    handleCheckAllChange (val) {
+      let vm = this
+      this.checkedTestParameters1 = []
+      if (val) {
+        this.filteredTestParameters.forEach(testParameter => {
+          vm.checkedTestParameters1.push(testParameter.testParameterName)
+        })
+      }
+      this.$emit('handleCheckAllChange', val)
+      this.isIndeterminate = false
+    },
+    handleCheckedTestParametersChange (value) {
+      let checkedCount = value.length
+      this.checkAll = checkedCount === this.filteredTestParameters.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.filteredTestParameters.length
+      this.$emit('handleCheckedTestParametersChange', value)
     },
     handleTestMethodCheckAllChange (val) {
+      this.isTestMethodIndeterminate = false
+      let vm = this
+      this.checkedTestMethods1 = []
+      if (val) {
+        this.filteredTestMethods.forEach(testMethod => {
+          vm.checkedTestMethods1.push(testMethod.testMethodName)
+        })
+      }
       this.$emit('handleTestMethodCheckAllChange', val)
     },
-    handleCheckedTestMethodsChange (val) {
-      this.$emit('handleCheckedTestMethodsChange', val)
+    handleCheckedTestMethodsChange (value) {
+      let checkedCount = value.length
+      this.testMethodCheckAll = checkedCount === this.filteredTestMethods.length
+      this.isTestMethodIndeterminate = checkedCount > 0 && checkedCount < this.filteredTestMethods.length
+      this.$emit('handleCheckedTestMethodsChange', value)
     }
   }
 

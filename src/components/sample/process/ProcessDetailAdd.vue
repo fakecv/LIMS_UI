@@ -16,6 +16,8 @@
       v-on:deleteProcessForm="resetProcessForm"
       v-on:new="resetProcessForm"
       v-on:copy="resetProcessId"
+      v-on:checkAgreement="checkAgreement"
+      v-on:processReview="processReview"
       />
       <el-table :data="staticOptions.processTableData"
       style="width: 100%"
@@ -106,7 +108,7 @@
 <script>
 import ProcessDetail from '@/components/sample/process/ProcessDetail'
 export default {
-  name: 'processDetailNew',
+  name: 'processDetailAdd',
   components: {ProcessDetail},
   data () {
     return {
@@ -175,6 +177,21 @@ export default {
     }
   },
   methods: {
+    checkAgreement (agreementNumber) {
+      this.$router.push('/lims/agreementDetailEdit/' + this.fetchAgreementId(agreementNumber))
+    },
+    processReview (agreementNumber) {
+      this.$router.push('/lims/processReview/' + agreementNumber)
+    },
+    fetchAgreementId (agreementNumber) {
+      let agreementId = ''
+      this.staticOptions.agreements.forEach(agreement => {
+        if (agreement.agreementNumber === agreementNumber) {
+          agreementId = agreement.id
+        }
+      })
+      return agreementId
+    },
     dblclick (row, event) {
       this.$router.push('/lims/processDetailEdit/' + row.id)
     },
@@ -187,6 +204,7 @@ export default {
           vm.agreementForm.materialNumber = agreement.materialNumber
           vm.agreementForm.receiveSampleTime = agreement.receiveSampleTime
           vm.agreementForm.expectedCompletionTime = agreement.expectedCompletionTime
+          vm.processForm.agreementNumber = agreement.agreementNumber
           vm.processForm.comment = agreement.comment
           vm.processForm.processPriority = agreement.processPriority
         }
@@ -280,6 +298,19 @@ export default {
       this.$ajax.get('/api/sample/agreement/getAgreement')
         .then(function (res) {
           vm.staticOptions.agreements = res.data
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
+        })
+    },
+    loadAndPopulateAgreement (agreementId) {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/getAgreement')
+        .then(function (res) {
+          vm.staticOptions.agreements = res.data
+          vm.getAgreementInfo(agreementId)
         }).catch(function (error) {
           vm.$message({
             showClose: true,
@@ -428,6 +459,10 @@ export default {
     }
   },
   mounted () {
+    if (this.$route.params.id !== undefined) {
+      console.log('processDetailAdd' + this.$route.params.id)
+      this.loadAndPopulateAgreement(this.$route.params.id)
+    }
     this.queryApplicationUserDepartment()
     this.loadTestCategory()
     this.loadTestMethodData()
@@ -437,7 +472,7 @@ export default {
     this.loadProcessingStatusData()
     this.loadProcessPriorityData()
     this.loadDepartment()
-    this.loadAgreement()
+    // this.loadAgreement()
   }
 }
 </script>

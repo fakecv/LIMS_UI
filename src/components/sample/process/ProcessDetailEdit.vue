@@ -2,7 +2,7 @@
   <ProcessDetail
     :processForm="processForm"
       :agreementForm="agreementForm"
-    :staticOptions="staticOptions"
+      :staticOptions="staticOptions"
       v-on:getAgreementInfo="getAgreementInfo"
       v-on:getDrawingDesigns="getDrawingDesigns"
       v-on:getTestMethod="getTestMethod"
@@ -14,6 +14,8 @@
       v-on:updateTestedItemTask="updateTestedItemTask"
       v-on:addTestedItemTask="addTestedItemTask"
       v-on:updateTestedItemProduct="updateTestedItemProduct"
+      v-on:checkAgreement="checkAgreement"
+      v-on:processReview="processReview"
     />
 </template>
 
@@ -25,6 +27,7 @@ export default {
   data () {
     return {
       agreementForm: {
+        id: '',
         sampleName: '',
         receiveSampleTime: '',
         materialNumber: '',
@@ -89,6 +92,12 @@ export default {
     }
   },
   methods: {
+    checkAgreement (agreementNumber) {
+      this.$router.push('/lims/agreementDetailEdit/' + this.fetchAgreementId(agreementNumber))
+    },
+    processReview (agreementNumber) {
+      this.$router.push('/lims/processReview/' + agreementNumber)
+    },
     getAgreementInfo (agreementId) {
       let vm = this
       this.staticOptions.agreements.forEach(agreement => {
@@ -104,6 +113,15 @@ export default {
       })
       // to display other added processes within the same agreementId at the bottom of page.
       // this.loadAgreementProcess(agreementId)
+    },
+    fetchAgreementId (agreementNumber) {
+      let agreementId = ''
+      this.staticOptions.agreements.forEach(agreement => {
+        if (agreement.agreementNumber === agreementNumber) {
+          agreementId = agreement.id
+        }
+      })
+      return agreementId
     },
     getDrawingDesigns (testedItemIds) {
       this.staticOptions.filteredDrawingDesigns =

@@ -74,9 +74,11 @@ import NumberGeneratorDetailNew from '@/components/sample/numbergenerator/Number
 import NumberGeneratorDetailEdit from '@/components/sample/numbergenerator/NumberGeneratorDetailEdit'
 import NumberGeneratorMaintenance from '@/components/sample/numbergenerator/NumberGeneratorMaintenance'
 import Preview from '@/views/preview/preview'
+import ProcessDetailAdd from '@/components/sample/process/ProcessDetailAdd'
 import ProcessDetailNew from '@/components/sample/process/ProcessDetailNew'
 import ProcessDetailEdit from '@/components/sample/process/ProcessDetailEdit'
 import ProcessMaintenance from '@/components/sample/process/ProcessMaintenance'
+import ProcessReview from '@/components/sample/process/ProcessReview'
 import ProcessingDetailNew from '@/components/sample/processing/ProcessingDetailNew'
 import ProcessingDetailEdit from '@/components/sample/processing/ProcessingDetailEdit'
 import ProcessingMaintenance from '@/components/sample/processing/ProcessingMaintenance'
@@ -153,15 +155,22 @@ const router = new Router({
   mode: 'history',
   // base: '/lims/',
   routes: [
-    {
-      path: '/login/:id/:userName',
-      name: 'login',
-      component: login
-    },
+    // {
+    //   path: '/login/:id/:userName',
+    //   name: 'login',
+    //   component: login
+    // },
     {
       path: '/login/:id',
       name: 'login',
-      component: login
+      component: login,
+      children: [
+        {
+          path: '/:userName',
+          name: 'loginWithUserName',
+          component: login
+        }
+      ]
     },
     {
       path: '/ForgetPassword',
@@ -494,6 +503,11 @@ const router = new Router({
           component: NumberGeneratorMaintenance
         },
         {
+          path: 'processDetailAdd/:id',
+          name: 'processDetailAdd',
+          component: ProcessDetailAdd
+        },
+        {
           path: 'processDetailEdit/:id',
           name: 'processDetailEdit',
           component: ProcessDetailEdit
@@ -507,6 +521,11 @@ const router = new Router({
           path: 'processMaintenance',
           name: 'processMaintenance',
           component: ProcessMaintenance
+        },
+        {
+          path: 'processReview/:id',
+          name: 'processReview',
+          component: ProcessReview
         },
         {
           path: 'processingDetailEdit/:id',

@@ -91,8 +91,8 @@
         </el-pagination>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click.native="testedItemProductFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click.native="updateTestedItemProduct">确 定</el-button>
+        <el-button @click="testedItemProductFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateTestedItemProduct">确 定</el-button>
       </div>
     </div>
   </el-dialog>
