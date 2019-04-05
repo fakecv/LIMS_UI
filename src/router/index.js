@@ -161,14 +161,21 @@ const router = new Router({
     //   component: login
     // },
     {
-      path: '/login/:id',
+      path: '/login',
       name: 'login',
       component: login,
       children: [
         {
-          path: '/:userName',
-          name: 'loginWithUserName',
-          component: login
+          path: '/:id',
+          name: 'loginWithId',
+          component: login,
+          children: [
+            {
+              path: '/:userName',
+              name: 'loginWithUserName',
+              component: login
+            }
+          ]
         }
       ]
     },

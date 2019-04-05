@@ -44,7 +44,7 @@ export default class AuthService {
     var decoded = jwtDec(token)
     // Set the time that the access token will expire at
     let expiresAt = JSON.stringify(
-      decoded.exp * 1000 + new Date().getTime()
+      decoded.exp * 1000
     )
     localStorage.setItem('access_token', authResult)
     localStorage.setItem('id_token', authResult)
