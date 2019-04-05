@@ -24,6 +24,5 @@ bin-release/
 /node_modules/
 /test/
 package-lock.json
-*.svg
 *.gif
 *.pdf
