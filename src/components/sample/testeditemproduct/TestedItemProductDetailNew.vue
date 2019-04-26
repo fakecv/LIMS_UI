@@ -7,6 +7,10 @@
     v-on:deleteTestedItemProductForm="resetTestedItemProductForm"
     v-on:new="resetTestedItemProductForm"
     v-on:copy="resetTestedItemProductId"
+    v-on:handleCheckedTestParametersChange="handleCheckedTestParametersChange"
+    v-on:handleCheckedTestMethodsChange="handleCheckedTestMethodsChange"
+    v-on:handleTestMethodCheckAllChange="handleTestMethodCheckAllChange"
+    v-on:handleCheckAllChange="handleCheckAllChange"
   />
 </template>
 
@@ -46,9 +50,11 @@ export default {
         checkedTestMethods: [],
         testedItems: [],
         filteredTestedItems: [],
-        drawingDesigns: [],
         processingStatuses: [],
-        filteredDrawingDesigns: []
+        isIndeterminate: true,
+        checkAll: false,
+        isTestMethodIndeterminate: true,
+        testMethodCheckAll: false
       }
     }
   },
@@ -64,7 +70,6 @@ export default {
     },
     getCascadeItems (itemId) {
       this.resetCascadeForms()
-      this.getDrawingDesigns(itemId)
       this.getTestMethod(itemId)
       this.getTestParameter(itemId)
       this.staticOptions.filteredTestedItems.forEach(item => {
@@ -74,21 +79,21 @@ export default {
       })
     },
     resetCascadeForms () {
-      this.testedItemProductForm.drawingDesign = ''
       this.testedItemProductForm.testMethod = ''
       this.testedItemProductForm.testParameter = ''
+      this.selectedTestedItemProducts = []
+      this.staticOptions.checkedTestMethods = []
+      this.staticOptions.checkedTestParameters = []
+      this.staticOptions.isTestMethodIndeterminate = false
+      this.staticOptions.isIndeterminate = false
+      this.staticOptions.testMethodCheckAll = false
+      this.staticOptions.checkAll = false
     },
     getFilteredTestItems (testCategoryId) {
       this.testedItemProductForm.testedItem = ''
       this.staticOptions.filteredTestedItems =
         this.staticOptions.testedItems.filter(function (val) {
           return val.testCategory === testCategoryId
-        })
-    },
-    getDrawingDesigns (testedItemId) {
-      this.staticOptions.filteredDrawingDesigns =
-        this.staticOptions.drawingDesigns.filter(function (val) {
-          return val.testedItem === testedItemId
         })
     },
     getTestMethod (testedItemId) {
@@ -103,14 +108,43 @@ export default {
           return val.testedItem === testedItemId
         })
     },
-    loadDrawingDesignData () {
+    handleCheckedTestMethodsChange (methods) {
+      let checkedCount1 = methods.length
+      this.staticOptions.testMethodCheckAll = checkedCount1 === this.staticOptions.filteredTestMethods.length
+      this.staticOptions.isTestMethodIndeterminate = checkedCount1 > 0 && checkedCount1 < this.staticOptions.filteredTestMethods.length
+      this.testedItemProductForm.testMethod = methods.join(';')
+    },
+    handleCheckedTestParametersChange (value) {
+      let checkedCount = value.length
+      this.staticOptions.checkAll = checkedCount === this.staticOptions.filteredTestParameters.length
+      this.staticOptions.isIndeterminate = checkedCount > 0 && checkedCount < this.staticOptions.filteredTestParameters.length
+      this.testedItemProductForm.testParameter = value.join(',')
+    },
+    handleTestMethodCheckAllChange (val) {
       let vm = this
-      this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
-        .then(function (res) {
-          vm.staticOptions.drawingDesigns = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
+      this.staticOptions.checkedTestMethods = []
+      if (val) {
+        this.staticOptions.filteredTestMethods.forEach(testMethod => {
+          vm.staticOptions.checkedTestMethods.push(testMethod.testMethodName)
         })
+        this.testedItemProductForm.testMethod = this.staticOptions.checkedTestMethods.join(';')
+      } else {
+        this.testedItemProductForm.testMethod = ''
+      }
+      this.staticOptions.isTestMethodIndeterminate = false
+    },
+    handleCheckAllChange (val) {
+      let vm = this
+      this.staticOptions.checkedTestParameters = []
+      if (val) {
+        this.staticOptions.filteredTestParameters.forEach(testParameter => {
+          vm.staticOptions.checkedTestParameters.push(testParameter.testParameterName)
+        })
+        this.testedItemProductForm.testParameter = this.staticOptions.checkedTestParameters.join(',')
+      } else {
+        this.testedItemProductForm.testParameter = ''
+      }
+      this.staticOptions.isIndeterminate = false
     },
     loadTestCategory () {
       let vm = this
@@ -151,7 +185,6 @@ export default {
     this.loadTestCategory()
     this.loadTestMethodData()
     this.loadTestedItemData()
-    this.loadDrawingDesignData()
     this.loadTestParameterData()
   }
 }

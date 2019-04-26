@@ -275,7 +275,6 @@ export default {
           res.data.processPriority = vm.processForm.processPriority
           vm.staticOptions.testedItemTaskTableData.push(res.data)
           // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
-          // vm.fetchDrawingDesign()
         }).catch(function (error) {
           vm.$message({
             showClose: true,
@@ -460,7 +459,6 @@ export default {
   },
   mounted () {
     if (this.$route.params.id !== undefined) {
-      console.log('processDetailAdd' + this.$route.params.id)
       this.loadAndPopulateAgreement(this.$route.params.id)
     }
     this.queryApplicationUserDepartment()
@@ -472,7 +470,6 @@ export default {
     this.loadProcessingStatusData()
     this.loadProcessPriorityData()
     this.loadDepartment()
-    // this.loadAgreement()
   }
 }
 </script>

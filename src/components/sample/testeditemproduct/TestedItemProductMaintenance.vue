@@ -71,17 +71,13 @@
     <el-table ref="multipleTable"
       :data="tableData" style="width: 100%"
       @row-dblclick=dblclick
+      tooltip-effect="light"
       @selection-change="handleSelectionChange"
       @select="handleSelection">
         <el-table-column
           type="selection"
           width="55">
         </el-table-column>
-        <!-- <el-table-column
-          prop="testedItemProductName"
-          label="检测项目名称"
-          width="180">
-        </el-table-column> -->
         <el-table-column
           prop="testCategory"
           label="检测类别"
@@ -103,6 +99,7 @@
         <el-table-column
           prop="testMethod"
           label="检测方法"
+          show-overflow-tooltip
           width="180">
         </el-table-column>
       </el-table>
@@ -133,7 +130,6 @@ export default {
         testedItem: '',
         testParameter: '',
         testMethod: '',
-        drawingDesign: '',
         itemsPerPage: 20,
         currentPage: 1
       },
@@ -150,9 +146,7 @@ export default {
         checkedTestParameters: [],
         testedItems: [],
         filteredTestedItems: [],
-        drawingDesigns: [],
-        processingStatuses: [],
-        filteredDrawingDesigns: []
+        processingStatuses: []
       },
       columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }
     }
@@ -163,12 +157,10 @@ export default {
     },
     getCascadeItems (itemId) {
       this.resetCascadeForms()
-      this.getDrawingDesigns(itemId)
       this.getTestMethod(itemId)
       this.getTestParameter(itemId)
     },
     resetCascadeForms () {
-      this.testedItemProductRequestForm.drawingDesign = ''
       this.testedItemProductRequestForm.testMethod = ''
       this.testedItemProductRequestForm.testParameter = ''
     },
@@ -177,12 +169,6 @@ export default {
       this.staticOptions.filteredTestedItems =
         this.staticOptions.testedItems.filter(function (val) {
           return val.testCategory === testCategoryId
-        })
-    },
-    getDrawingDesigns (testedItemId) {
-      this.staticOptions.filteredDrawingDesigns =
-        this.staticOptions.drawingDesigns.filter(function (val) {
-          return val.testedItem === testedItemId
         })
     },
     getTestMethod (testedItemId) {
@@ -334,15 +320,6 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    loadDrawingDesignData () {
-      let vm = this
-      this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
-        .then(function (res) {
-          vm.staticOptions.drawingDesigns = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
     loadTestCategory () {
       let vm = this
       this.$ajax.get('/api/sample/testCategory/getTestCategory')
@@ -378,15 +355,6 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
-    },
-    drawingDesignFormatter (row, column) {
-      let name = ''
-      this.staticOptions.drawingDesigns.forEach(item => {
-        if (row.drawingDesign === item.id) {
-          name = item.drawingDesignName
-        }
-      })
-      return name
     },
     testedItemFormatter (row, column) {
       let name = ''
@@ -430,7 +398,6 @@ export default {
     this.loadTestCategory()
     this.loadTestMethodData()
     this.loadTestedItemData()
-    this.loadDrawingDesignData()
     this.loadTestParameterData()
   }
 }

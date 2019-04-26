@@ -9,11 +9,6 @@
     <el-container style="padding: 10px">
       <el-form :model="testedItemProductForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <!-- <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目名称">
-              <el-input name="testedItemProductName" v-model="testedItemProductForm.testedItemProductName" autoComplete="testedItemProductName"></el-input>
-            </el-form-item>
-          </el-col> -->
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目类别">
                 <el-select name="testedItem" filterable default-first-option v-model="testedItemProductForm.testCategory" @change="getFilteredTestItems">
@@ -39,7 +34,7 @@
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测方法">
               <el-input name="testMethod" v-model="testedItemProductForm.testMethod" autoComplete="testMethod"></el-input>
-              <el-checkbox :indeterminate="isTestMethodIndeterminate" v-model="testMethodCheckAll" @change="handleTestMethodCheckAllChange">全选</el-checkbox>
+              <el-checkbox :indeterminate="staticOptions.isTestMethodIndeterminate" v-model="staticOptions.testMethodCheckAll" @change="handleTestMethodCheckAllChange">全选</el-checkbox>
               <div style="margin: 15px 0;"></div>
               <el-checkbox-group ref="testMethod" v-model="staticOptions.checkedTestMethods" @change="handleCheckedTestMethodsChange">
                 <el-checkbox v-for="testMethod in staticOptions.filteredTestMethods"
@@ -51,7 +46,7 @@
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="检测项目参数">
               <el-input name="testParameter" v-model="testedItemProductForm.testParameter" autoComplete="testParameter"></el-input>
-              <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+              <el-checkbox :indeterminate="staticOptions.isIndeterminate" v-model="staticOptions.checkAll" @change="handleCheckAllChange">全选</el-checkbox>
               <div style="margin: 15px 0;"></div>
               <el-checkbox-group ref="testParameter" v-model="staticOptions.checkedTestParameters" @change="handleCheckedTestParametersChange">
                 <el-checkbox v-for="testParameter in staticOptions.filteredTestParameters"
@@ -81,11 +76,7 @@ export default {
         {'name': '文件导入', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '7', 'icon': 'el-icon-download', 'loading': false}
       ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
-      isIndeterminate: true,
-      checkAll: false,
-      isTestMethodIndeterminate: true,
-      testMethodCheckAll: false
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
     }
   },
   methods: {
@@ -155,47 +146,16 @@ export default {
       this.$emit('getCascadeItems', val)
     },
     handleCheckedTestParametersChange (value) {
-      let checkedCount = value.length
-      this.checkAll = checkedCount === this.staticOptions.filteredTestParameters.length
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.staticOptions.filteredTestParameters.length
-      this.testedItemProductForm.testParameter = value.join(',')
-      // this.testedItemProductForm.testParameter = value
+      this.$emit('handleCheckedTestParametersChange', value)
     },
     handleCheckedTestMethodsChange (methods) {
-      console.log('methods is: ' + methods)
-      let checkedCount1 = methods.length
-      this.testMethodCheckAll = checkedCount1 === this.staticOptions.filteredTestMethods.length
-      this.isTestMethodIndeterminate = checkedCount1 > 0 && checkedCount1 < this.staticOptions.filteredTestMethods.length
-      this.testedItemProductForm.testMethod = methods.join(';')
-      // this.testedItemProductForm.testParameter = value
+      this.$emit('handleCheckedTestMethodsChange', methods)
     },
     handleTestMethodCheckAllChange (val) {
-      let vm = this
-      this.staticOptions.checkedTestMethods = []
-      if (val) {
-        this.staticOptions.filteredTestMethods.forEach(testMethod => {
-          vm.staticOptions.checkedTestMethods.push(testMethod.testMethodName)
-        })
-        this.testedItemProductForm.testMethod = this.staticOptions.checkedTestMethods.join(';')
-      } else {
-        // this.staticOptions.checkedTestParameters = []
-        this.testedItemProductForm.testMethod = ''
-      }
-      this.isTestMethodIndeterminate = false
+      this.$emit('handleTestMethodCheckAllChange', val)
     },
     handleCheckAllChange (val) {
-      let vm = this
-      this.staticOptions.checkedTestParameters = []
-      if (val) {
-        this.staticOptions.filteredTestParameters.forEach(testParameter => {
-          vm.staticOptions.checkedTestParameters.push(testParameter.testParameterName)
-        })
-        this.testedItemProductForm.testParameter = this.staticOptions.checkedTestParameters.join(',')
-      } else {
-        // this.staticOptions.checkedTestParameters = []
-        this.testedItemProductForm.testParameter = ''
-      }
-      this.isIndeterminate = false
+      this.$emit('handleCheckAllChange', val)
     }
   }
 }

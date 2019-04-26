@@ -1,8 +1,6 @@
 <template>
   <AgreementDetail
     :agreementForm="agreementForm"
-    :customerForm="customerForm"
-    :userForm="userForm"
     :staticOptions="staticOptions"
     v-on:updateCustomer="updateCustomer"
     v-on:reloadCustomerData="reloadCustomerData"
@@ -46,12 +44,22 @@ export default {
         sampleStoreRequest: '',
         privacyDeclaim: '',
         customerId: '',
-        receiverId: '',
+        customerName: '',
+        customerCompany: '',
+        customerMobileNumber: '',
+        customerFax: '',
+        customerEmail: '',
+        customerAddress: '',
+        receiverName: '',
+        receiverMobileNumber: '',
+        receiverFax: '',
+        receiverEmail: '',
+        receiverAddress: '',
         testDuration: '5',
         distribution: '',
         distributionOption: 'no',
         duration: '',
-        invoice: 'yes',
+        invoice: 'no',
         invoiceTitle: '',
         imageNameList: []
       },
@@ -76,17 +84,25 @@ export default {
         sampleStoreRequest: '',
         privacyDeclaim: '',
         customerId: '',
-        receiverId: '',
+        customerName: '',
+        customerCompany: '',
+        customerMobileNumber: '',
+        customerFax: '',
+        customerEmail: '',
+        customerAddress: '',
+        receiverName: '',
+        receiverMobileNumber: '',
+        receiverFax: '',
+        receiverEmail: '',
+        receiverAddress: '',
         testDuration: '5',
         distribution: '',
         distributionOption: 'no',
         duration: '',
-        invoice: 'yes',
+        invoice: 'no',
         invoiceTitle: '',
         imageNameList: []
       },
-      customerForm: {},
-      userForm: {},
       staticOptions: {
         processPriorities: [],
         customers: [],
@@ -215,13 +231,13 @@ export default {
     },
     updateCustomer (row) {
       this.agreementForm.customerId = row.id
-      this.customerForm.id = row.id
-      this.customerForm.name = row.name
-      this.customerForm.company = row.company
-      this.customerForm.mobileNumber = row.mobileNumber
-      this.customerForm.fax = row.fax
-      this.customerForm.email = row.email
-      this.customerForm.address = row.address
+      this.agreementForm.customerName = row.name
+      this.agreementForm.customerCompany = row.company
+      this.agreementForm.customerMobileNumber = row.mobileNumber
+      this.agreementForm.customerFax = row.fax
+      this.agreementForm.customerEmail = row.email
+      this.agreementForm.customerAddress = row.address
+      this.agreementForm.customerInvoiceTitle = row.company
       this.agreementForm.invoiceTitle = row.company
     },
     reloadUserData (event) {
@@ -241,12 +257,12 @@ export default {
         })
     },
     updateUser (row) {
-      this.agreementForm.receiverId = row.id
-      this.userForm.name = row.name
-      this.userForm.mobileNumber = row.mobileNumber
-      this.userForm.fax = row.fax
-      this.userForm.email = row.email
-      this.userForm.address = row.address
+      this.agreementForm.reeiverName = row.name
+      this.agreementForm.receiverName = row.name
+      this.agreementForm.receiverMobileNumber = row.mobileNumber
+      this.agreementForm.receiverFax = row.fax
+      this.agreementForm.receiverEmail = row.email
+      this.agreementForm.receiverAddress = row.address
     },
     addImage (imageCP) {
       this.agreementForm.imageNameList.push(imageCP.caption)

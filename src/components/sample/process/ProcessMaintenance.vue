@@ -15,6 +15,11 @@
           </el-form-item>
         </el-col>
         <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <el-form-item label="来样编号">
+            <el-input name="sampleClientNumber" v-model="processRequestForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
           <el-form-item label="样品编号">
             <el-input name="sampleNumber" v-model="processRequestForm.sampleNumber"></el-input>
           </el-form-item>
@@ -24,7 +29,7 @@
             <el-input name="sampleSubNumber" v-model="processRequestForm.sampleSubNumber"></el-input>
           </el-form-item>
         </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md*2" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="提交部门">
               <el-select name="submitFrom" filterable clearable default-first-option v-model="processRequestForm.submitFrom">
                 <el-option v-for="item in staticOptions.departments"
@@ -35,7 +40,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="当前流转状态">
               <el-select name="processingStatus" filterable clearable default-first-option v-model="processRequestForm.processingStatus">
                 <el-option v-for="item in staticOptions.processingStatuses"
@@ -46,7 +51,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="提交至">
               <el-select name="submitTo" filterable clearable default-first-option v-model="processRequestForm.submitTo">
                 <el-option v-for="item in staticOptions.departments"
@@ -80,6 +85,7 @@
       <el-button type="primary" icon="el-icon-download" circle @click="exportExcel">导出</el-button>
     </div>
     <el-table  id="out-table" :data="tableData"
+      height="500"
       style="width: 100%"
       tooltip-effect="dark"
       @row-dblclick=dblclick
@@ -117,11 +123,13 @@
       <el-table-column
         prop="agreementNumber"
         label="委托编号"
+        fixed
         width="150">
       </el-table-column>
       <el-table-column
         prop="sampleSubNumber"
         label="试样编号"
+        fixed
         width="80">
       </el-table-column>
       <el-table-column

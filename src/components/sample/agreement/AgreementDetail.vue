@@ -134,11 +134,6 @@
                 </el-radio-group>
               </el-form-item>
             </el-col>
-            <!-- <el-col :span="24">
-              <el-form-item label="样品检查偏离说明" label-width="150px">
-                <el-input type="textarea" name="sampleCheckResultNotes" v-model="agreementForm.sampleCheckResultNotes" autoComplete="sampleCheckResultNotes"></el-input>
-              </el-form-item>
-            </el-col> -->
             <el-col :span="24">
               <el-form-item label="检测类别">
                 <el-radio-group v-model="agreementForm.experimentalCategory">
@@ -146,6 +141,38 @@
                   <el-radio label="委托检验"></el-radio>
                   <el-radio label="现场检测"></el-radio>
                 </el-radio-group>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="委托方联系人">
+                <el-input name="clientName" v-model="agreementForm.customername" autoComplete="clientName">
+                  <el-button slot="append" icon="el-icon-search" @click.native="openCustomer"></el-button>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="委托单位">
+                <el-input name="client" v-model="agreementForm.customerCompany" autoComplete="company"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="委托方电话">
+                <el-input name="clietMobileNumber" v-model="agreementForm.customerMobileNumber" autoComplete="clietMobileNumber"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="委托人传真">
+                <el-input name="clientFax" v-model="agreementForm.customerFax" autoComplete="clientFax"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="委托人邮箱">
+                <el-input name="clientEmail" v-model="agreementForm.customerEmail" autoComplete="clientEmail"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="委托人通讯地址">
+                <el-input name="clientAddress" v-model="agreementForm.customerAddress" autoComplete="clientAddress"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -160,44 +187,6 @@
                 ></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-        </el-form>
-      </el-container>
-      <el-container>
-        <el-form :model="customerForm" label-width="100px" label-position="left" size="mini">
-          <el-row :gutter="20">
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="委托方联系人">
-                <el-input name="clientName" v-model="customerForm.name" autoComplete="clientName">
-                  <el-button slot="append" icon="el-icon-search" @click.native="openCustomer"></el-button>
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="委托单位">
-                <el-input name="client" v-model="customerForm.company" autoComplete="company"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="委托方电话">
-                <el-input name="clietMobileNumber" v-model="customerForm.mobileNumber" autoComplete="clietMobileNumber"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="委托人传真">
-                <el-input name="clientFax" v-model="customerForm.fax" autoComplete="clientFax"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="委托人邮箱">
-                <el-input name="clientEmail" v-model="customerForm.email" autoComplete="clientEmail"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="委托人通讯地址">
-                <el-input name="clientAddress" v-model="customerForm.address" autoComplete="clientAddress"></el-input>
-              </el-form-item>
-            </el-col>
             <el-col :span="24">
               <el-form-item label="其它信息">
               <el-select name="customerNote" filterable clearable default-first-option v-model="agreementForm.comment">
@@ -210,43 +199,34 @@
                 <el-input type="textarea" name="comment" v-model="agreementForm.comment" autoComplete="comment"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-        </el-form>
-      </el-container>
-      <el-container>
-        <el-form :model="userForm" label-width="100px" label-position="left" size="mini">
-          <el-row :gutter="20">
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="检测接收人">
-                <el-input name="receiverName" v-model="userForm.name" autoComplete="receiverName">
+                <el-input name="receiverName" v-model="agreementForm.receiverName" autoComplete="receiverName">
                   <el-button slot="append" icon="el-icon-search" @click.native="openUser"></el-button>
                 </el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="接收人电话">
-                <el-input name="receiverMobileNumber" v-model="userForm.mobileNumber" autoComplete="receiverMobileNumber"></el-input>
+                <el-input name="receiverMobileNumber" v-model="agreementForm.receiverMobileNumber" autoComplete="receiverMobileNumber"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="接收人传真">
-                <el-input name="receiverFax" v-model="userForm.fax" autoComplete="receiverFax"></el-input>
+                <el-input name="receiverFax" v-model="agreementForm.receiverFax" autoComplete="receiverFax"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="接收人邮箱">
-                <el-input name="receiverEmail" v-model="userForm.email" autoComplete="receiverEmail"></el-input>
+                <el-input name="receiverEmail" v-model="agreementForm.receiverEmail" autoComplete="receiverEmail"></el-input>
               </el-form-item>
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="接收人通讯地址">
-                <el-input name="receiverAddress" v-model="userForm.address" autoComplete="receiverAddress"></el-input>
+                <el-input name="receiverAddress" v-model="agreementForm.receiverAddress" autoComplete="receiverAddress"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-        </el-form>
-      </el-container>
-      <el-container direction="vertical">
         <el-row>
           <el-upload ref="upload"
             class="upload-demo"
@@ -278,6 +258,7 @@
                       :showthumbnails="showthumbnails">
           </vue-images>
         </div>
+        </el-form>
       </el-container>
     </el-container>
     <clientDialog
@@ -320,7 +301,7 @@ import clientDialog from './dialog/ClientDialog'
 import userDialog from './dialog/UserDialog'
 export default {
   name: 'agreementDetail',
-  props: ['agreementForm', 'staticOptions', 'customerForm', 'userForm'],
+  props: ['agreementForm', 'staticOptions'],
   data () {
     return {
       agreementNumberButton: false,
@@ -504,7 +485,7 @@ export default {
     confirmCustomer () {
       let vm = this
       this.customerDialogFormVisible = false
-      this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.customerForm.id)
+      this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.agreementForm.id)
         .then(function (res) {
           vm.staticOptions.customerNotes = res.data
         }).catch(function (error) {
@@ -516,10 +497,9 @@ export default {
     },
     handleCustomerRowDLClick (row) {
       let vm = this
-      console.log('agreement ' + row.id)
       this.$emit('updateCustomer', row)
       this.customerDialogFormVisible = false
-      this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.customerForm.id)
+      this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.agreementForm.id)
         .then(function (res) {
           vm.staticOptions.customerNotes = res.data
         }).catch(function (error) {

@@ -3,9 +3,10 @@
     <el-row>
       <el-button @click="downloadToFrontEnd">重新加载</el-button>
       <el-button @click="goBackAgreement">返回</el-button>
+      <el-button @click="print1">打印</el-button>
     </el-row>
     <iframe id='previewPdf' :src="'/static/pdf/web/viewer.html?file=' + fileUrl" height="800"
-        width="100%">
+        width="100%" class="page">
     </iframe>
     <!-- <pdf ref="myPdfComponent1"
       v-for="i in numPages"
@@ -36,6 +37,9 @@ export default {
     }
   },
   methods: {
+    print1 () {
+      document.getElementById('previewPdf').contentWindow.print()
+    },
     downloadToFrontEnd () {
       let vm = this
       this.$ajax.get('/api/sample/agreement/downloadPdfFile/' + this.agreementNumber, {responseType: 'blob'})
@@ -135,5 +139,8 @@ export default {
 <style scoped>
   .pdf {
     overflow: hidden;
+  }
+  .page {
+    size: landscape;
   }
 </style>

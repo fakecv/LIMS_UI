@@ -17,15 +17,25 @@
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="材质牌号">
+              <el-input name="materialNumber" v-model="agreementRequestForm.materialNumber" autoComplete="materialNumber"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="样品名称">
               <el-input name="sampleName" v-model="agreementRequestForm.sampleName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="客户单位">
-              <el-input name="company" v-model="agreementRequestForm.company"></el-input>
+              <el-input name="company" v-model="agreementRequestForm.customerCompany"></el-input>
             </el-form-item>
           </el-col>
+            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+              <el-form-item label="其它信息">
+                <el-input name="comment" v-model="agreementRequestForm.comment"></el-input>
+              </el-form-item>
+            </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-form-item>
@@ -38,7 +48,7 @@
       <!-- <el-button type="primary" icon="el-icon-download" circle @click="exportExcel">导出</el-button> -->
       <el-button type="primary" icon="el-icon-download" circle @click="exportSettlementList">导出结算清单</el-button>
     </div>
-      <el-table id="out-table" :data="tableData" style="width: 100%" @row-dblclick=dblclick :row-style="agreementTableStyle"
+      <el-table id="out-table" :data="tableData" height="500" style="width: 100%" @row-dblclick=dblclick :row-style="agreementTableStyle"
       @selection-change="handleSelectionChange"
       >
         <el-table-column
@@ -48,6 +58,7 @@
         <el-table-column
           prop="agreementNumber"
           label="委托编号"
+          sortable
           width="180">
         </el-table-column>
         <el-table-column
@@ -66,21 +77,22 @@
           width="180">
       </el-table-column>
         <el-table-column
-          prop="customerId"
+          prop="customerCompany"
           label="委托单位"
           show-overflow-tooltip
-          :formatter="customerFormatter"
           width="180">
       </el-table-column>
         <el-table-column
           prop="receiveSampleTime"
           label="样品接收时间"
+          sortable
           :formatter="receiveSampleTimeFormatter"
           width="180">
         </el-table-column>
         <el-table-column
           prop="expectedCompletionTime"
           label="要求完成时间"
+          sortable
           :formatter="expectedCompletionTimeFormatter"
           width="180">
         </el-table-column>
@@ -163,7 +175,7 @@ export default {
           let link = document.createElement('a')
           link.style.display = 'none'
           link.href = url
-          link.setAttribute('download', '结算清单.xls')
+          link.setAttribute('download', '结算清单.xlsx')
 
           document.body.appendChild(link)
           link.click()

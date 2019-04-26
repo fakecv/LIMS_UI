@@ -155,29 +155,15 @@ const router = new Router({
   mode: 'history',
   // base: '/lims/',
   routes: [
-    // {
-    //   path: '/login/:id/:userName',
-    //   name: 'login',
-    //   component: login
-    // },
     {
-      path: '/login',
+      path: '/login/:id/:userName',
       name: 'login',
-      component: login,
-      children: [
-        {
-          path: '/:id',
-          name: 'loginWithId',
-          component: login,
-          children: [
-            {
-              path: '/:userName',
-              name: 'loginWithUserName',
-              component: login
-            }
-          ]
-        }
-      ]
+      component: login
+    },
+    {
+      path: '/login/:id',
+      name: 'login',
+      component: login
     },
     {
       path: '/ForgetPassword',

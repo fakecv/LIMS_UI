@@ -22,7 +22,8 @@
         </el-row>
         <el-row :gutter="20">
           <el-form-item label="检测项目">
-            <button type="button" size='mini' class="btn btn-secondary" @click="addTestedItemProducts">添加检测项目</button>
+            <button type="button" size='mini' class="btn btn-secondary" @click="newTestedItemProduct">新建检测项目</button>
+            <button type="button" size='mini' class="btn btn-secondary" @click="addTestedItemProducts">添加已有检测项目</button>
             <button type="button" class="btn btn-secondary" @click="deleteTestedItemProducts">删除检测项目</button>
           </el-form-item>
         </el-row>
@@ -36,19 +37,16 @@
       </el-row>
     <div>
       <el-table  ref="multipleTable"
-       :data="testedItemProductGroupForm.testedItemTasks"
-       style="width: 100%"
-       @selection-change="handleTestedItemProductChange"
+        tooltip-effect="light"
+        :data="testedItemProductGroupForm.testedItemTasks"
+        style="width: 100%"
+        @selection-change="handleTestedItemProductGroupSelection"
+        @row-dblclick="dblclick"
        >
           <el-table-column
             type="selection"
             width="55">
           </el-table-column>
-          <!-- <el-table-column
-            prop="testedItemProductName"
-            label="检测项目名称"
-            width="180">
-          </el-table-column> -->
           <el-table-column
             prop="testCategory"
             label="检测类别"
@@ -69,164 +67,49 @@
           </el-table-column>
           <el-table-column
             prop="testMethod"
+            show-overflow-tooltip
             label="检测方法"
             width="180">
           </el-table-column>
       </el-table>
     </div>
-    <el-dialog title="检测项目产品列表" :visible.sync="dialogFormVisible" :modal-append-to-body="false">
-    <div>
-    <el-container style="padding: 10px">
-      <el-form :model="testedItemProductForm" label-width="100px" label-position="left" size="mini">
-        <el-row :gutter="20">
-          <!-- <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目名称">
-              <el-input name="testedItemProductName" v-model="testedItemProductForm.testedItemProductName" autoComplete="testedItemProductName"></el-input>
-            </el-form-item>
-          </el-col> -->
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
-            <el-form-item label="检测项目类别">
-                <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testCategory" @change="getFilteredTestItems">
-                  <el-option v-for="item in staticOptions.testCategories"
-                    :key="item.id"
-                    :label="item.testCategoryName"
-                    :value="item.id">
-                  </el-option>
-                  </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目">
-              <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemProductForm.testedItem" @change="getCascadeItems">
-                <el-option v-for="item in staticOptions.filteredTestedItems"
-                  :key="item.id"
-                  :label="item.testedItemName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目参数">
-              <el-select name="testParameter" filterable clearable default-first-option v-model="testedItemProductForm.testParameter">
-                <el-option v-for="item in staticOptions.filteredTestParameters"
-                  :key="item.id"
-                  :label="item.testParameterName"
-                  :value="item.testParameterName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测方法">
-              <el-select name="testMethod" filterable clearable default-first-option v-model="testedItemProductForm.testMethod">
-                <el-option v-for="item in staticOptions.filteredTestMethods"
-                  :key="item.id"
-                  :label="item.testMethodName"
-                  :value="item.testMethodName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="加工图号">
-              <el-select name="drawingDesign" filterable clearable default-first-option v-model="testedItemProductForm.drawingDesign">
-                <el-option v-for="item in staticOptions.filteredDrawingDesigns"
-                  :key="item.id"
-                  :label="item.drawingDesignName"
-                  :value="item.drawingDesignName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-form-item>
-            <el-button type="primary" @click="reloadTestedItemProducts">查询</el-button>
-          </el-form-item>
-        </el-row>
-      </el-form>
-    </el-container>
-    <el-table ref="testedItemProductTable"
-      :data="staticOptions.testedItemProducts"
-      style="width: 100%"
-      @selection-change="handleDialogTestedItemProductChange">
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <!-- <el-table-column
-          prop="testedItemProductName"
-          label="检测项目名称"
-          width="180">
-        </el-table-column> -->
-        <el-table-column
-          prop="testCategory"
-          label="检测类别"
-          :formatter="testCategoryFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testedItem"
-          label="检测项目"
-          :formatter="testedItemFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testParameter"
-          label="检测项目参数"
-          show-overflow-tooltip
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testMethod"
-          label="检测方法"
-          width="180">
-        </el-table-column>
-        <!-- <el-table-column
-          prop="drawingDesign"
-          label="加工图号"
-          width="180">
-        </el-table-column> -->
-      </el-table>
-      <div class="block text-right">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="testedItemProductForm.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="20"
-          layout="sizes, prev, pager, next"
-          :total="staticOptions.totalTestedItemProducts">
-        </el-pagination>
+    <el-dialog :visible.sync="testedItemProductListDialogVisible" :modal-append-to-body="false">
+      <testedItemProductListDialog
+        ref="testedItemProductListDialog"
+        :testedItemProductForm="testedItemProductForm"
+        v-bind="$attrs"
+        :staticOptions="staticOptions"
+        v-on="$listeners"
+        />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="testedItemProductListDialogVisible=false">取 消</el-button>
+        <el-button type="primary" @click="updateTestedItemProducts">确 定</el-button>
       </div>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click.native="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click.native="updateTestedItemProducts">确 定</el-button>
-        </div>
-    </div>
+    </el-dialog>
+    <el-dialog :visible.sync="testedItemProductDialogVisible" :modal-append-to-body="false">
+      <testedItemProductDialog
+        :testedItemTaskForm="testedItemTaskForm"
+        :staticOptions="staticOptions"
+        v-bind="$attrs"
+        v-on="$listeners"
+        />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="testedItemProductDialogVisible=false">取 消</el-button>
+        <el-button type="primary" @click="upsertTestedItemTask">确 定</el-button>
+      </div>
     </el-dialog>
   </el-container>
 </template>
 
 <script>
+import testedItemProductDialog from './dialog/testedItemProductDialog'
+import testedItemProductListDialog from './dialog/testedItemProductListDialog'
 export default {
   name: 'testedItemProductGroupDetail',
-  props: ['testedItemProductGroupForm', 'staticOptions'],
+  props: ['testedItemProductGroupForm', 'staticOptions', 'testedItemProductForm', 'testedItemTaskForm'],
+  inheritAttrs: false,
   data () {
     return {
-      testedItemProductForm: {
-        testedItemProductName: '',
-        testCategory: '',
-        testedItem: '',
-        testedItemName: '',
-        itemsPerPage: 20,
-        currentPage: 1,
-        testParameter: '',
-        testMethod: '',
-        drawingDesign: '',
-        id: ''
-      },
       actions: [
         {'name': '新建', 'id': '1', 'icon': 'el-icon-circle-plus', 'loading': false},
         {'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false},
@@ -241,10 +124,43 @@ export default {
       tempTestedItemProducts: [],
       deletedTestedItemProducts: [],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
-      dialogFormVisible: false
+      testedItemProductListDialogVisible: false,
+      testedItemProductDialogVisible: false,
+      existTask: true
     }
   },
+  components: {
+    testedItemProductDialog,
+    testedItemProductListDialog
+  },
   methods: {
+    upsertTestedItemTask () {
+      if (!this.existTask) {
+        this.$emit('insertTestedItemProduct', this.testedItemTaskForm)
+      }
+      this.testedItemProductDialogVisible = false
+    },
+    newTestedItemProduct () {
+      this.testedItemProductDialogVisible = true
+      this.existTask = false
+      this.$emit('newTestedItemProducts')
+    },
+    updateTestedItemProducts () {
+      this.testedItemProductListDialogVisible = false
+      this.$emit('updateTestedItemProducts')
+    },
+    dblclick (row, event) {
+      this.testedItemProductDialogVisible = true
+      this.existTask = true
+      this.$emit('loadTestedItemTask', row)
+    },
+    addTestedItemProducts () {
+      let vm = this
+      this.testedItemProductListDialogVisible = true
+      this.$nextTick(() => {
+        vm.$refs.testedItemProductListDialog.$refs.testedItemProductTable.clearSelection()
+      })
+    },
     actionHandle (action) {
       if (action.id === '1') {
         this.new()
@@ -303,31 +219,10 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    addTestedItemProducts () {
-      let vm = this
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        vm.$refs.testedItemProductTable.clearSelection()
-      })
-    },
     deleteTestedItemProducts () {
       this.$emit('deleteTestedItemProducts', this.deletedTestedItemProducts)
     },
-    handleCurrentChange (val) {
-      this.testedItemProductForm.currentPage = val
-      this.$emit('reloadTestedItemProducts', this.testedItemProductForm)
-    },
-    handleDialogTestedItemProductChange (val) {
-      this.staticOptions.selectedDialogTestedItemProducts = []
-      val.forEach(item => {
-        this.staticOptions.selectedDialogTestedItemProducts.push(item)
-      })
-    },
-    handleSizeChange (val) {
-      this.testedItemProductForm.itemsPerPage = val
-      this.$emit('reloadTestedItemProducts', this.testedItemProductForm)
-    },
-    handleTestedItemProductChange (val) {
+    handleTestedItemProductGroupSelection (val) {
       let vm = this
       this.deletedTestedItemProducts = val
       this.indexArray = []
@@ -385,102 +280,6 @@ export default {
         this.tempTestedItemProducts = []
       }
     },
-    reloadTestedItemProducts () {
-      this.$emit('reloadTestedItemProducts', this.testedItemProductForm)
-    },
-    updateTestedItemProducts () {
-      console.log('confirm updateTestedItemProducts')
-      this.dialogFormVisible = false
-      this.$emit('updateTestedItemProducts')
-    },
-    getFilteredTestItems (testCategoryId) {
-      this.testedItemProductForm.testedItem = ''
-      this.staticOptions.filteredTestedItems =
-        this.staticOptions.testedItems.filter(function (val) {
-          return val.testCategory === testCategoryId
-        })
-    },
-    getCascadeItems (itemId) {
-      this.resetCascadeForms()
-      this.getDrawingDesigns(itemId)
-      this.getTestMethod(itemId)
-      this.getTestParameter(itemId)
-    },
-    resetCascadeForms () {
-      this.testedItemProductForm.drawingDesign = ''
-      this.testedItemProductForm.testMethod = ''
-      this.testedItemProductForm.testParameter = ''
-    },
-    getDrawingDesigns (testedItemId) {
-      this.staticOptions.filteredDrawingDesigns =
-        this.staticOptions.drawingDesigns.filter(function (val) {
-          return val.testedItem === testedItemId
-        })
-    },
-    getTestMethod (testedItemId) {
-      this.staticOptions.filteredTestMethods =
-        this.staticOptions.testMethods.filter(function (val) {
-          return val.testedItem === testedItemId
-        })
-    },
-    getTestParameter (testedItemId) {
-      this.staticOptions.filteredTestParameters =
-        this.staticOptions.testParameters.filter(function (val) {
-          return val.testedItem === testedItemId
-        })
-    },
-    loadDrawingDesignData () {
-      let vm = this
-      this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
-        .then(function (res) {
-          vm.staticOptions.drawingDesigns = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    loadTestCategory () {
-      let vm = this
-      this.$ajax.get('/api/sample/testCategory/getTestCategory')
-        .then(function (res) {
-          vm.staticOptions.testCategories = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    loadTestedItemData () {
-      let vm = this
-      this.$ajax.get('/api/sample/testedItem/getTestedItem')
-        .then(function (res) {
-          vm.staticOptions.testedItems = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    loadTestMethodData () {
-      let vm = this
-      this.$ajax.get('/api/sample/testMethod/getTestMethod')
-        .then(function (res) {
-          vm.staticOptions.testMethods = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    loadTestParameterData () {
-      let vm = this
-      this.$ajax.get('/api/sample/testParameter/getTestParameter')
-        .then(function (res) {
-          vm.staticOptions.testParameters = res.data
-        })
-    },
-    drawingDesignFormatter (row, column) {
-      let name = ''
-      this.staticOptions.drawingDesigns.forEach(item => {
-        if (row.drawingDesign === item.id) {
-          name = item.drawingDesignName
-        }
-      })
-      return name
-    },
     expectedCompletionTimeFormatter (row, column) {
       if (row.expectedCompletionTime) {
         let dateTT = new Date(row.expectedCompletionTime)
@@ -525,13 +324,6 @@ export default {
       })
       return name
     }
-  },
-  mounted () {
-    this.loadTestCategory()
-    this.loadTestMethodData()
-    this.loadTestedItemData()
-    this.loadDrawingDesignData()
-    this.loadTestParameterData()
   }
 }
 </script>
