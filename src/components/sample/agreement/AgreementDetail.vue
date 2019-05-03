@@ -145,7 +145,7 @@
             </el-col>
             <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="委托方联系人">
-                <el-input name="clientName" v-model="agreementForm.customername" autoComplete="clientName">
+                <el-input name="clientName" v-model="agreementForm.customerName" autoComplete="clientName">
                   <el-button slot="append" icon="el-icon-search" @click.native="openCustomer"></el-button>
                 </el-input>
               </el-form-item>
@@ -485,7 +485,7 @@ export default {
     confirmCustomer () {
       let vm = this
       this.customerDialogFormVisible = false
-      this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.agreementForm.id)
+      this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.agreementForm.customerId)
         .then(function (res) {
           vm.staticOptions.customerNotes = res.data
         }).catch(function (error) {
@@ -499,7 +499,7 @@ export default {
       let vm = this
       this.$emit('updateCustomer', row)
       this.customerDialogFormVisible = false
-      this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.agreementForm.id)
+      this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.agreementForm.customerId)
         .then(function (res) {
           vm.staticOptions.customerNotes = res.data
         }).catch(function (error) {
