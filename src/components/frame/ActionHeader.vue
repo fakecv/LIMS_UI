@@ -10,10 +10,10 @@
 <el-col :span="10">
   <el-form ref="form" label-width="80px">
     <el-form-item label="表单名称">
-      <el-input size="mini" v-model="domain"></el-input>
+      <el-input size="mini" v-model="domain" placeholder="大写字母开头"></el-input>
     </el-form-item>
     <el-form-item label="类包名称">
-      <el-input size="mini" v-model="packageName"></el-input>
+      <el-input size="mini" v-model="packageName" placeholder="小写字母开头"></el-input>
     </el-form-item>
   </el-form>
 </el-col>
@@ -22,35 +22,25 @@
 </template>
 <script>
 export default {
-  name: 'actoinHeader',
+  name: 'actionHeader',
   data () {
     return {
+      domain: '',
+      packageName: ''
     }
   },
   props: ['actions'],
-  computed: {
-    domain: {
-      get () {
-        return this.$store.state.forms[this.$route.params.fid].domain
-      },
-      set (domain) {
-        this.$store.commit('FORM_UPDATE_WITH_FID_DOMAIN', { fid: this.$route.params.fid, domain })
-      }
-    },
-    packageName: {
-      get () {
-        return this.$store.state.forms[this.$route.params.fid].packageName
-      },
-      set (packageName) {
-        this.$store.commit('FORM_UPDATE_WITH_FID_PACKAGENAME', { fid: this.$route.params.fid, packageName })
-      }
-    }
-  },
   methods: {
     actionHandle (action) {
-      // action.loading = true
       this.$emit('add', action)
+    },
+    getDomainPackageName () {
+      this.domain = this.$store.state.forms[this.$route.params.fid].domain
+      this.packageName = this.$store.state.forms[this.$route.params.fid].packageName
     }
+  },
+  activated () {
+    this.getDomainPackageName()
   }
 }
 </script>

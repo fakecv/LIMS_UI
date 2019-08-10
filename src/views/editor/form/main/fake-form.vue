@@ -23,12 +23,12 @@ import Draggable from 'vuedraggable'
 import FakeFormItem from './fake-form-item'
 export default {
   components: { FakeFormItem, Draggable },
-  props: {
-    formConfig: {
-      type: Object,
-      required: true
-    }
-  },
+  props: ['formConfig'
+    // formConfig: {
+    //   type: Object,
+    //   required: true
+    // }
+  ],
   methods: {
     select (key) {
       this.$store.commit('SELECT_ITEM', key)

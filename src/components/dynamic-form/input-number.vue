@@ -35,6 +35,9 @@ export default {
   mounted () {
     this.$nextTick(this.formatValue)
   },
+  activated () {
+    this.$nextTick(this.formatValue)
+  },
   methods: {
     handleInput (value) {
       clearTimeout(this.timer)

@@ -99,7 +99,7 @@
           :page-sizes="[10, 20, 50]"
           :page-size="20"
           layout="sizes, prev, pager, next"
-          :total="totalFormDevelopments">
+          :total="totalFormTemplates">
         </el-pagination>
       </div>
     </div>
@@ -111,7 +111,7 @@ export default {
   data () {
     return {
       tableData: [],
-      totalFormDevelopments: 0,
+      totalFormTemplates: 0,
       staticOptions: {
         sizes: [
           {id: '1', label: '普通', value: 'medium'},
@@ -136,14 +136,15 @@ export default {
   methods: {
     dblclick (row, event) {
       let vm = this
+      vm.$route.params.fid = 'qry'
       this.$ajax.get('/api/system/formDevelopment/' + row.id)
         .then(function (res) {
           let document = res.data
           vm.$store.commit('FORM_IMPORT_WITH_FID_G', {fid: vm.$route.params.fid, initV: document})
+          vm.$router.push('/lims/UIGenerator/form/qry/' + row.id)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
-      this.$router.push('/lims/UIGenerator/form/qry/' + row.id)
     },
     handleSizeChange (val) {
       this.formDevelopmentForm.itemsPerPage = val
@@ -160,7 +161,7 @@ export default {
         .post('/api/system/formDevelopment/queryFormDevelopment', this.formDevelopmentForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
-          vm.totalFormDevelopments = res.data.totalFormDevelopments || 0
+          vm.totalFormTemplates = res.data.totalFormTemplates || 0
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

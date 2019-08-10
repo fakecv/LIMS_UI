@@ -1,5 +1,6 @@
 <template>
   <FormDevelopmentDetail :formDevelopmentForm="formDevelopmentForm"
+  :staticOptions="staticOptions"
   v-on:updateFormDevelopmentForm="updateFormDevelopmentForm"
   v-on:deleteFormDevelopmentForm="resetFormDevelopmentForm"
   v-on:new="resetFormDevelopmentForm"
@@ -21,7 +22,6 @@ export default {
         labelWidth: '',
         size: '',
         statusIcon: '',
-
         id: ''
       },
       formDevelopmentResetForm: {
@@ -32,8 +32,10 @@ export default {
         labelWidth: '',
         size: '',
         statusIcon: '',
-
         id: ''
+      },
+      staticOptions: {
+        sizes: ['small', 'medium', 'large']
       }
     }
   },

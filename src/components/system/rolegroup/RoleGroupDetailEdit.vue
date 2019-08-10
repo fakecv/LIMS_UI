@@ -56,7 +56,7 @@ export default {
       let vm = this
       this.$ajax.get('/api/roleGroup/selectedUserRoles/' + userRoleGroupId)
         .then(function (res) {
-          vm.staticOptions.selectedUserRoles = res.data
+          vm.staticOptions.selectedUserRoles = [].concat(res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -90,14 +90,7 @@ export default {
     updateUserRoles (id) {
       let vm = this
       var index = this.userRoleGroupForm.userRoleIds.indexOf(id)
-      if (index > -1) {
-        this.userRoleGroupForm.userRoleIds.splice(index, 1)
-        this.staticOptions.userRoles.forEach(row => {
-          if (row.id === id) {
-            vm.staticOptions.selectedUserRoles.splice(row, 1)
-          }
-        })
-      } else {
+      if (index < 0) {
         this.userRoleGroupForm.userRoleIds.push(id)
         this.staticOptions.userRoles.forEach(row => {
           if (row.id === id) {
@@ -128,6 +121,7 @@ export default {
     }
   },
   mounted () {
+    console.log('mounted')
     this.initUserRoles()
     this.loadMenuLinks()
     if (this.$route.params.id !== undefined) {
@@ -136,6 +130,7 @@ export default {
     }
   },
   activated () {
+    console.log('activated')
     this.initUserRoles()
     this.loadMenuLinks()
     if (this.$route.params.id !== undefined) {

@@ -9,7 +9,6 @@
       :value="value[item.key]"
       @input="handleInput($event, item.key)"
       :style="{'min-width':columnMinWidth}"></dynamic-form-item>
-
     <slot/>
 
   </el-form>
@@ -17,19 +16,7 @@
 
 <script>
 export default {
-  props: {
-    formConfig: {
-      type: Object,
-      required: true
-    },
-    value: {
-      type: Object,
-      required: true
-    },
-    columnMinWidth: {
-      type: String
-    }
-  },
+  props: ['formConfig', 'value', 'columnMinWidth'],
   methods: {
     handleInput (val, key) {
       // 这里element-ui没有上报event，直接就是value了
@@ -48,6 +35,9 @@ export default {
     }
   },
   mounted () {
+    this.setDefaultValue()
+  },
+  activated () {
     this.setDefaultValue()
   }
 }

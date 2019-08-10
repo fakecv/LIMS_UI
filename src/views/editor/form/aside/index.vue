@@ -58,7 +58,7 @@ export default {
     },
     currentForm: {
       get () {
-        return this.$store.state.forms[this.$route.params.fid]
+        return this.$store.state.forms['qry']
       },
       set (newV) {
         this.$store.commit('FORM_UPDATE_WITH_FID_G', { fid: this.$route.params.fid, newV })

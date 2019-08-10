@@ -68,14 +68,7 @@ export default {
     updateUserRoles (id) {
       let vm = this
       var index = this.userRoleGroupForm.userRoleIds.indexOf(id)
-      if (index > -1) {
-        this.userRoleGroupForm.userRoleIds.splice(index, 1)
-        this.staticOptions.userRoles.forEach(row => {
-          if (row.id === id) {
-            vm.staticOptions.selectedUserRoles.splice(row, 1)
-          }
-        })
-      } else {
+      if (index < 0) {
         this.userRoleGroupForm.userRoleIds.push(id)
         this.staticOptions.userRoles.forEach(row => {
           if (row.id === id) {
@@ -127,9 +120,9 @@ export default {
     this.loadMenuLinks()
   },
   activated () {
-    this.resetRoleGroupForm()
     this.initUserRoles()
     this.loadMenuLinks()
+    this.resetRoleGroupForm()
   }
 }
 </script>

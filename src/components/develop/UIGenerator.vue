@@ -2,7 +2,7 @@
   div
     el-container
       el-header(style="height: 100px")
-        router-view(name="header" :actions="actions" @add="actionHandler")
+        router-view(name="header" ref="UIGeneratorHeader" :actions="actions" @add="actionHandler")
       el-container(style="padding: 10px")
         router-view(name="aside" style="width:380px")
         router-view(name="main")
@@ -50,7 +50,7 @@ export default {
         this.$store.state.forms[this.$route.params.fid].id = ''
         this.$store.state.forms[this.$route.params.fid].domain = ''
       } else if (action.id === '3') {
-        this.submit(this.$store.state.forms[this.$route.params.fid])
+        this.submit()
       } else if (action.id === '4') {
         this.dialogVisible = true
       } else if (action.id === '5') {
@@ -65,6 +65,8 @@ export default {
       this.$store.state.forms[this.$route.params.fid].domain = ''
       this.$store.state.forms[this.$route.params.fid].formItemList = []
       this.formTemplateId = ''
+      this.$refs.UIGeneratorHeader.domain = ''
+      this.$refs.UIGeneratorHeader.packageName = ''
     },
     confirmDelete () {
       let vm = this
@@ -88,6 +90,8 @@ export default {
       vm.$store.state.forms[this.$route.params.fid].formItemList = []
       vm.$store.state.forms[this.$route.params.fid].domain = ''
       vm.$store.state.forms[this.$route.params.fid].packageName = ''
+      this.$refs.UIGeneratorHeader.domain = ''
+      this.$refs.UIGeneratorHeader.packageName = ''
       this.$ajax.get('/api/system/formDevelopment/delete/' + this.formTemplateId)
         .then(function (res) {
           vm.$message({
@@ -99,10 +103,15 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    submit (formTemplateJason) {
+    submit () {
       var vm = this
+      this.$store.commit('FORM_UPDATE_WITH_FID_DOMAIN', { fid: this.$route.params.fid, domain: vm.$refs.UIGeneratorHeader.domain })
+      this.$store.commit('FORM_UPDATE_WITH_FID_PACKAGENAME', { fid: this.$route.params.fid, packageName: vm.$refs.UIGeneratorHeader.packageName })
+      var formTemplateJason = this.$store.state.forms[this.$route.params.fid]
       this.$ajax.post('/api/formTemplate', formTemplateJason)
         .then(function (res) {
+          let document = res.data
+          vm.$store.commit('FORM_IMPORT_WITH_FID_G', {fid: vm.$route.params.fid, initV: document})
           vm.$message('Data has been uploaded successfully!')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
@@ -138,7 +147,11 @@ export default {
   },
   mounted () {
     this.formTemplateId = this.$route.params.id
-    this.$store.state.forms[this.$route.params.fid].id = ''
+    this.$store.state.forms[this.$route.params.fid].id = this.$route.params.id
+  },
+  activated () {
+    this.formTemplateId = this.$route.params.id
+    this.$store.state.forms[this.$route.params.fid].id = this.$route.params.id
   }
 }
 </script>

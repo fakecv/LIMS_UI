@@ -27,7 +27,7 @@
           </el-row>
         </el-form>
           <div>
-          <el-table ref="userRoleTable" :data="staticOptions.selectedUserRoles" style="width: 100%" @selection-change="handleUserRoleChange">
+          <el-table :data="staticOptions.selectedUserRoles" style="width: 100%" @selection-change="handleUserRoleChange">
             <el-table-column
               type="selection"
               width="55">
@@ -69,7 +69,7 @@
               </el-row>
             </el-form>
           </el-container>
-          <el-table ref="userRoleTable" :data="staticOptions.userRoles" style="width: 100%" @select="handleSelect">
+          <el-table ref="userRoleTable1" :data="staticOptions.userRoles" style="width: 100%" @select="handleSelect">
             <el-table-column
               type="selection"
               width="55">
@@ -166,6 +166,7 @@ export default {
       this.$emit('reloadUserRoles', this.roleRequestForm)
     },
     handleCurrentChange (val) {
+      console.log('handleCurrentChange')
       this.roleRequestForm.currentPage = val
       this.$emit('reloadUserRoles', this.roleRequestForm)
     },
@@ -173,16 +174,16 @@ export default {
       this.$emit('reloadUserRoles', this.roleRequestForm)
     },
     addUserRoles () {
-      let vm = this
+      // let vm = this
       this.dialogFormVisible = true
-      this.$nextTick(() => {
-        vm.$refs.userRoleTable.clearSelection()
-        vm.staticOptions.userRoles.forEach(row => {
-          if (vm.userRoleGroupForm.userRoleIds && vm.userRoleGroupForm.userRoleIds.indexOf(row.id) !== -1) {
-            vm.$refs.userRoleTable.toggleRowSelection(row, true)
-          }
-        })
-      })
+      // vm.$nextTick(() => {
+      //   vm.$refs.userRoleTable1.clearSelection()
+      //   vm.staticOptions.userRoles.forEach(row => {
+      //     if (vm.userRoleGroupForm.userRoleIds && vm.userRoleGroupForm.userRoleIds.indexOf(row.id) !== -1) {
+      //       vm.$refs.userRoleTable1.toggleRowSelection(row, true)
+      //     }
+      //   })
+      // })
     },
     handleSelect (selection, row) {
       this.$emit('updateUserRoles', row.id)
