@@ -1,0 +1,64 @@
+<template>
+  <TemplateFileDetail
+   :templateFileForm="templateFileForm"
+   :staticOptions="staticOptions"
+   v-on:deleteTemplateFileForm="resetTemplateFileForm"
+   v-on:new="resetTemplateFileForm"
+   v-on:copy="resetTemplateFileId"
+  />
+</template>
+
+<script>
+import TemplateFileDetail from '@/components/sample/templatefile/TemplateFileDetail'
+export default {
+  name: 'templateFileDetailEdit',
+  components: {TemplateFileDetail},
+  data () {
+    return {
+      templateFileForm: {
+        fileName: '',
+        location: '',
+        content: '',
+        displayName: '',
+        link: '',
+        show: '',
+        id: ''
+      },
+      templateFileResetForm: {
+        fileName: '',
+        location: '',
+        content: '',
+        displayName: '',
+        link: '',
+        show: '',
+        id: ''
+      },
+      staticOptions: {
+        types: []
+      }
+    }
+  },
+  methods: {
+    loadTemplateFile (templateFileId) {
+      let vm = this
+      this.$ajax.get('/api/sample/templateFile/' + templateFileId)
+        .then(function (res) {
+          vm.templateFileForm = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    resetTemplateFileForm () {
+      this.templateFileForm = JSON.parse(JSON.stringify(this.templateFileResetForm))
+    },
+    resetTemplateFileId () {
+      this.templateFileForm.id = ''
+    }
+  },
+  mounted () {
+    if (this.$route.params.id !== undefined) {
+      this.loadTemplateFile(this.$route.params.id)
+    }
+  }
+}
+</script>

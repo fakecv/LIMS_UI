@@ -115,6 +115,9 @@ import SupplierAssessmentDetailEdit from '@/components/equipment/supplierassessm
 import SupplierAssessmentMaintenance from '@/components/equipment/supplierassessment/SupplierAssessmentMaintenance'
 import TableSchedule from '@/components/equipment/MyTableSchedule'
 import TaskListMaintenance from '@/components/tasklist/taskListMaintenance'
+import TemplateFileDetailNew from '@/components/sample/templatefile/TemplateFileDetailNew'
+import TemplateFileDetailEdit from '@/components/sample/templatefile/TemplateFileDetailEdit'
+import TemplateFileMaintenance from '@/components/sample/templatefile/TemplateFileMaintenance'
 import TestCategoryDetailNew from '@/components/sample/testcategory/TestCategoryDetailNew'
 import TestCategoryDetailEdit from '@/components/sample/testcategory/TestCategoryDetailEdit'
 import TestCategoryMaintenance from '@/components/sample/testcategory/TestCategoryMaintenance'
@@ -703,6 +706,21 @@ const router = new Router({
           path: 'taskListMaintenance',
           name: 'taskListMaintenance',
           component: TaskListMaintenance
+        },
+        {
+          path: 'templateFileDetailEdit/:id',
+          name: 'templateFileAuditorDetailEdit',
+          component: TemplateFileDetailEdit
+        },
+        {
+          path: 'templateFileDetailNew',
+          name: 'templateFileDetailNew',
+          component: TemplateFileDetailNew
+        },
+        {
+          path: 'templateFileMaintenance',
+          name: 'templateFileMaintenance',
+          component: TemplateFileMaintenance
         },
         {
           path: 'testCategoryDetailEdit/:id',
