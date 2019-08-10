@@ -267,6 +267,10 @@ export default {
   mounted () {
     this.onSubmit()
     this.loadTestCategory()
+  },
+  activated () {
+    this.onSubmit()
+    this.loadTestCategory()
   }
 
 }

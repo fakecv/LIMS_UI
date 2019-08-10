@@ -106,7 +106,10 @@ export default {
   mounted () {
     this.loadMenuLinks()
     this.onSubmit()
+  },
+  activated () {
+    this.loadMenuLinks()
+    this.onSubmit()
   }
-
 }
 </script>

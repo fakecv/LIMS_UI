@@ -186,6 +186,9 @@ export default {
     this.loadTestMethodData()
     this.loadTestedItemData()
     this.loadTestParameterData()
+  },
+  activated () {
+    this.resetTestedItemProductForm()
   }
 }
 </script>

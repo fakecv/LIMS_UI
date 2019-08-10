@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <div class="container">
+    <div class="container1">
       <router-view
       :auth="auth"
       :authenticated="authenticated">
@@ -46,7 +46,7 @@ export default {
   /* background: rgb(0, 128, 128); */
   background-size: cover;
 }
-.container {
+.container1 {
   min-height: 100%;
   margin-bottom: -30px;
   background: white;

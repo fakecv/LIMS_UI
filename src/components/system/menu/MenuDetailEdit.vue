@@ -74,6 +74,12 @@ export default {
     if (this.$route.params.id !== undefined) {
       this.loadMenuItem(this.$route.params.id)
     }
+  },
+  activated () {
+    this.loadParentMenu()
+    if (this.$route.params.id !== undefined) {
+      this.loadMenuItem(this.$route.params.id)
+    }
   }
 }
 </script>

@@ -352,6 +352,14 @@ export default {
     this.loadTestMethodData()
     this.loadTestParameterData()
     this.loadTestedItemData()
+  },
+  activated () {
+    this.resetTestedItemProductGroupForm()
+    this.initTestedItemProducts()
+    this.loadTestCategory()
+    this.loadTestMethodData()
+    this.loadTestParameterData()
+    this.loadTestedItemData()
   }
 }
 </script>

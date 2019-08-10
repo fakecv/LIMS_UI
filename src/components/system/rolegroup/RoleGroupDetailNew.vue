@@ -125,6 +125,11 @@ export default {
   mounted () {
     this.initUserRoles()
     this.loadMenuLinks()
+  },
+  activated () {
+    this.resetRoleGroupForm()
+    this.initUserRoles()
+    this.loadMenuLinks()
   }
 }
 </script>

@@ -52,6 +52,11 @@ export default {
     if (this.$route.params.id !== undefined) {
       this.loadNumberGenerator(this.$route.params.id)
     }
+  },
+  activated () {
+    if (this.$route.params.id !== undefined) {
+      this.loadNumberGenerator(this.$route.params.id)
+    }
   }
 }
 </script>

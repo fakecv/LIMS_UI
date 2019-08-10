@@ -179,10 +179,6 @@ export default {
         testedItem: '',
         testParameter: [],
         testMethod: '',
-        drawingDesign: '',
-        submitFrom: '',
-        processingStatus: '',
-        submitTo: '',
         processPriority: '',
         itemsPerPage: 20,
         currentPage: 1

@@ -40,7 +40,8 @@ export default {
       this.testCategoryForm = JSON.parse(JSON.stringify(this.testCategoryResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetTestCategoryForm()
   }
 }
 </script>

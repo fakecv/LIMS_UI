@@ -57,6 +57,10 @@ export default {
   },
   mounted () {
     this.loadTestedItemData()
+  },
+  activated () {
+    this.loadTestedItemData()
+    this.resetTestMethodForm()
   }
 }
 </script>

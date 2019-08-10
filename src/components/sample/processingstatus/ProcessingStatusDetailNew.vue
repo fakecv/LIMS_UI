@@ -57,6 +57,10 @@ export default {
   },
   mounted () {
     this.loadDepartment()
+  },
+  activated () {
+    this.resetProcessingStatusForm()
+    this.loadDepartment()
   }
 }
 </script>

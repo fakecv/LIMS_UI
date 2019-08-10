@@ -41,8 +41,8 @@
     <el-main>
       <el-container class="frame">
         <el-aside v-bind:style="{marginBottom: '20px', width: elAside + 'px'}">
-          <el-tabs type="border-card">
-            <el-tab-pane label="主菜单">
+          <el-tabs type="border-card"  v-model="activeName" @tab-click="handleTabClick">
+            <el-tab-pane label="主菜单" name="mainMenu">
               <el-menu :default-active="$route.path"
               @open="handleOpen" @close="handleClose"
               @select="menuSelected"
@@ -55,8 +55,8 @@
               <NavMenu :menuData="leftMenus" :showEnableOnly="showEnableOnly" :iconSize="'18px'"></NavMenu>
             </el-menu>
             </el-tab-pane>
-            <el-tab-pane label="待完成事项">
-              <el-menu mode="horizontal" @select="handleSelect">
+            <el-tab-pane label="待完成事项" name="taskList">
+              <el-menu mode="horizontal" @select="handleTaskListSelect">
                 <el-menu-item index="1">待处理任务</el-menu-item>
               </el-menu>
             </el-tab-pane>
@@ -73,9 +73,9 @@
             <!--this div will add scroll bar for the el-main, don't remove it-->
             <el-main>
               <blockquote class="minsx-quote">{{instruction}}</blockquote>
-              <transition :name="transitionName">
+              <keep-alive>
                 <router-view :leftMenus="leftMenus" v-on:getTopMenus="getTopMenus"></router-view>
-              </transition>
+              </keep-alive>
             </el-main>
           </el-container>
         </el-main>
@@ -114,10 +114,18 @@ export default {
       menuStatus: '收起菜单',
       companyImageSource: companyImageSource,
       menuItems: [],
-      shortCuts: []
+      shortCuts: [],
+      activeName: 'mainMenu'
     }
   },
   methods: {
+    handleTabClick (tab, event) {
+      if (tab.name === 'taskList') {
+        this.$router.push('/lims/taskListMaintenance')
+      } else {
+        this.$router.push('/lims/navPage')
+      }
+    },
     changePassword () {
       this.$router.replace({path: '/login/second/' + this.userProfile.sub})
     },
@@ -232,8 +240,11 @@ export default {
     },
     handleOpen (key, keyPath) {
     },
-    handleSelect (index, indexPath) {
+    handleTaskListSelect (index, indexPath) {
       this.$router.push('/lims/taskListMaintenance')
+    },
+    handleSelect () {
+      console.log(this.state2)
     },
     initialPosition () {
       this.positions = [{
@@ -297,10 +308,10 @@ export default {
       this.positions = this.getPositionsByMenus(value)
     },
     querySearch (queryString, cb) {
-      var shortCuts = this.shortCuts
-      var results = queryString ? shortCuts.filter(this.createFilter(queryString)) : shortCuts
+      // var shortCuts = this.shortCuts
+      // var results = queryString ? shortCuts.filter(this.createFilter(queryString)) : shortCuts
       // 调用 callback 返回建议列表的数据
-      cb(results)
+      cb(this.shortCuts)
     }
   },
   beforeRouteUpdate (to, from, next) {

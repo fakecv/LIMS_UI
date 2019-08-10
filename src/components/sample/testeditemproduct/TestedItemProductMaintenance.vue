@@ -399,6 +399,13 @@ export default {
     this.loadTestMethodData()
     this.loadTestedItemData()
     this.loadTestParameterData()
+  },
+  activated () {
+    this.onSubmit()
+    this.loadTestCategory()
+    this.loadTestMethodData()
+    this.loadTestedItemData()
+    this.loadTestParameterData()
   }
 }
 </script>

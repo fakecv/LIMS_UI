@@ -94,29 +94,33 @@
       <el-table-column
         type="expand">
         <template slot-scope="scope">
-        <el-table :data="scope.row.testedItemTasks" size="mini">
+        <el-table :data="scope.row.workflows" size="mini">
         <el-table-column
-          prop="testedItem"
-          label="检测项目"
-          :formatter="testedItemFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testParameter"
-          label="检测项目参数"
-          show-overflow-tooltip
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testMethod"
-          label="检测方法"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="processPriority"
-          label="优先级"
-          width="180">
-        </el-table-column>
+              prop="submitFrom"
+              label="提交部门"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="submitTo"
+              label="提交至"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="submitPerson"
+              label="提交人"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="processingStatus"
+              label="当前状态"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="submitDate"
+              label="提交时间"
+              :formatter="submitTimeFormatter"
+              width="180">
+            </el-table-column>
         </el-table>
       </template>
       </el-table-column>

@@ -64,6 +64,12 @@ export default {
     if (this.$route.params.id !== undefined) {
       this.loadDrawingDesign(this.$route.params.id)
     }
+  },
+  activated () {
+    this.loadTestedItemData()
+    if (this.$route.params.id !== undefined) {
+      this.loadDrawingDesign(this.$route.params.id)
+    }
   }
 }
 </script>

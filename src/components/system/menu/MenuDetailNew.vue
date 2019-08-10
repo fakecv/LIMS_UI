@@ -66,6 +66,10 @@ export default {
   },
   mounted () {
     this.loadParentMenu()
+  },
+  activated () {
+    this.loadParentMenu()
+    this.resetMenuForm()
   }
 }
 </script>

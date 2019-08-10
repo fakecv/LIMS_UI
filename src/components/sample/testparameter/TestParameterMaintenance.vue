@@ -260,6 +260,10 @@ export default {
   mounted () {
     this.onSubmit()
     this.loadTestedItemData()
+  },
+  activated () {
+    this.onSubmit()
+    this.loadTestedItemData()
   }
 
 }

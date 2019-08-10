@@ -222,6 +222,9 @@ export default {
   },
   mounted () {
     this.onSubmit()
+  },
+  activated () {
+    this.onSubmit()
   }
 
 }

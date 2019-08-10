@@ -1,147 +1,107 @@
 <template>
-  <div>
+  <div style="padding: 40px;">
     <el-container>
-      <el-header style="min-width:500px;">
-        <el-button-group>
-          <el-button :ref="action.ref" type="info" v-for="(action,index) in actions"
-            :key="index" size="mini" :icon="action.icon"
-            :loading="action.loading"
-            @click="actionHandle(action)"
-            :disabled="action.disabled"
-            >
-            {{action.name}}
-          </el-button>
-        </el-button-group>
-      </el-header>
-      <el-container style="padding: 10px">
-        <el-form :model="processForm" label-width="100px" label-position="left" size="mini">
-          <el-row :gutter="20">
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="委托编号">
-                <el-select name="agreementNumber" filterable default-first-option v-model="processForm.agreementNumber" @change="getAgreementNumber">
-                <el-option v-for="item in staticOptions.agreements"
-                  :key="item.Id"
-                  :label="item.agreementNumber"
-                  :value="item.agreementNumber">
-                </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="样品名称">
-                <el-input name="sampleName" v-model="agreementForm.sampleName" readonly autoComplete="sampleName"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="样品接收时间">
-                <el-date-picker type="datetime" placeholder="选择日期" readonly v-model="agreementForm.receiveSampleTime" style="width: 100%;"></el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="材质牌号">
-                <el-input name="materialNumber" v-model="agreementForm.materialNumber" readonly autoComplete="materialNumber"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="要求完成时间">
-                <el-date-picker type="datetime" placeholder="选择日期" readonly v-model="agreementForm.expectedCompletionTime" style="width: 100%;"></el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="优先级">
-                <el-select name="processPriority" filterable default-first-option v-model="processForm.processPriority">
-                <el-option v-for="item in staticOptions.processPriorities"
-                  :key="item.id"
-                  :label="item.processPriorityName"
-                  :value="item.processPriorityName">
-                </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="其它信息">
-                <el-input type="textarea" name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="来样编号">
-                <el-input name="sampleClientNumber" v-model="processForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="样品编号">
-                <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input>
-                <el-button  :disabled="sampleNumberButton" @click="sampleNumberGenerator">生成样品编号</el-button>
-              </el-form-item>
-            </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-              <el-form-item label="试样编号">
-                <el-input name="sampleSubNumber" v-model="processForm.sampleSubNumber" autoComplete="sampleSubNumber"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-    <el-row type="flex" justify="end">
-      <el-button-group style="min-width: 200px">
-        <el-button type="success" icon="el-icon-plus" size="mini" circle @click="addTestedItemTask"></el-button>
-        <el-button type="success" icon="el-icon-tickets" size="mini" circle @click="addTestedItemProduct">添加检测项目产品</el-button>
-        <el-button type="success" icon="el-icon-goods" size="mini" circle @click="addTestedItemProductGroup">添加检测项目组</el-button>
-        <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="deleteTestedItemTask"></el-button>
-      </el-button-group>
-    </el-row>
-        </el-form>
+      <el-form :model="processForm" label-width="100px" label-position="left" size="mini">
+        <el-row :gutter="20">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="优先级">
+              <el-select name="processPriority" filterable default-first-option v-model="processForm.processPriority">
+              <el-option v-for="item in staticOptions.processPriorities"
+                :key="item.id"
+                :label="item.processPriorityName"
+                :value="item.processPriorityName">
+              </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="来样编号">
+              <el-input name="sampleClientNumber" v-model="processForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="样品编号">
+              <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input>
+              <el-button  :disabled="staticOptions.sampleNumberButton" @click="sampleNumberGenerator">生成样品编号</el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="试样编号">
+              <el-input name="sampleSubNumber" v-model="processForm.sampleSubNumber" autoComplete="sampleSubNumber"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="end">
+          <el-button-group style="min-width: 200px">
+            <el-button type="success" icon="el-icon-plus" size="mini" circle @click="addTestedItemTask"></el-button>
+            <el-button type="success" icon="el-icon-tickets" size="mini" circle @click="addTestedItemProduct">添加检测项目产品</el-button>
+            <el-button type="success" icon="el-icon-goods" size="mini" circle @click="addTestedItemProductGroup">添加检测项目组</el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="deleteTestedItemTask"></el-button>
+          </el-button-group>
+        </el-row>
+      </el-form>
     </el-container>
     <el-row>
       <el-col :span="24">
-    <el-table :data="staticOptions.testedItemTaskTableData" @row-dblclick="dblclick" @selection-change="handleTestedItemTaskChange" size="mini">
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column
-          prop="testedItem"
-          label="检测项目"
-          :formatter="testedItemFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testParameter"
-          label="检测项目参数"
-          show-overflow-tooltip
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testMethod"
-          label="检测方法"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="processPriority"
-          label="优先级"
-          :formatter="processPriorityFormatter"
-          width="180">
-            <template slot-scope="scope">
-              <el-select name="processPriority" filterable default-first-option v-model="scope.row.processPriority" size="mini">
-                <el-option v-for="item in staticOptions.processPriorities"
-                  :key="item.id"
-                  :label="item.processPriorityName"
-                  :value="item.processPriorityName">
-                </el-option>
-                </el-select>
-            </template>
-        </el-table-column>
-        <el-table-column
-          prop="rejectNote"
-          label="驳回原因"
-          show-overflow-tooltip
-          width="180">
-        </el-table-column>
-      </el-table>
+        <el-table :data="processForm.testedItemTasks"
+        @row-dblclick="dblclick"
+        @selection-change="handleTestedItemTaskChange"
+        size="mini"
+        height="250">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
+            prop="testedItem"
+            label="检测项目"
+            :formatter="testedItemFormatter"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="testParameter"
+            label="检测项目参数"
+            show-overflow-tooltip
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="testMethod"
+            label="检测方法"
+            width="180">
+          </el-table-column>
+          <!-- <el-table-column
+            prop="processPriority"
+            label="优先级"
+            :formatter="processPriorityFormatter"
+            width="180">
+              <template slot-scope="scope">
+                <el-select name="processPriority" filterable default-first-option v-model="scope.row.processPriority" size="mini">
+                  <el-option v-for="item in staticOptions.processPriorities"
+                    :key="item.id"
+                    :label="item.processPriorityName"
+                    :value="item.processPriorityName">
+                  </el-option>
+                  </el-select>
+              </template>
+          </el-table-column> -->
+          <el-table-column
+            prop="rejectNote"
+            label="驳回原因"
+            show-overflow-tooltip
+            width="180">
+          </el-table-column>
+        </el-table>
       </el-col>
     </el-row>
     <el-container style="padding: 10px">
       <el-form :model="processForm" label-width="100px" label-position="left" size="mini">
-      <el-row>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="其它信息">
+              <el-input type="textarea" name="comment" v-model="processForm.comment" autoComplete="comment"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="加工图号">
               <el-select name="drawingDesign" filterable clearable default-first-option allow-create v-model="processForm.drawingDesign">
                 <el-option v-for="item in staticOptions.filteredDrawingDesigns"
@@ -152,7 +112,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <!-- <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="提交部门">
               <el-select name="submitFrom" filterable default-first-option v-model="processForm.submitFrom">
                 <el-option v-for="item in staticOptions.departments"
@@ -184,12 +144,11 @@
                 </el-option>
                 </el-select>
             </el-form-item>
-          </el-col>
-          </el-row>
-        </el-form>
-      </el-container>
+          </el-col> -->
+        </el-row>
+      </el-form>
     </el-container>
-    <testedItemProductDialog
+    <testedItemProductDialog :append-to-body="true"
       :testCategories="staticOptions.testCategories"
       :filteredTestedItems="staticOptions.filteredTestedItems"
       :filteredTestParameters="staticOptions.filteredTestParameters"
@@ -250,20 +209,9 @@ export default {
     testedItemProductGroupDialog,
     testedItemTaskDialog
   },
-  props: ['agreementForm', 'processForm', 'staticOptions', 'customerForm', 'userForm'],
+  props: ['agreementId', 'processForm', 'staticOptions', 'customerForm', 'userForm'],
   data () {
     return {
-      sampleNumberButton: false,
-      actions: [
-        {'ref': 'new', 'name': '新建', 'id': '1', 'icon': 'el-icon-circle-plus', 'loading': false, 'disabled': false},
-        {'ref': 'copy', 'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'disabled': false},
-        {'ref': 'save', 'name': '数据库保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false, 'disabled': false},
-        {'ref': 'submit', 'name': '数据库保存并提交', 'id': '4', 'icon': 'el-icon-check', 'loading': false, 'disabled': false},
-        {'ref': 'unlock', 'name': '解锁', 'id': '5', 'icon': 'el-icon-edit', 'loading': false, 'disabled': false},
-        {'ref': 'delete', 'name': '删除', 'id': '6', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false},
-        {'ref': 'delete', 'name': '查看协议', 'id': '7', 'icon': 'el-icon-check', 'loading': false, 'disabled': false},
-        {'ref': 'delete', 'name': '查看流转', 'id': '8', 'icon': 'el-icon-check', 'loading': false, 'disabled': false}
-      ],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 12},
       testedItemProductGroupFormVisible: false,
       testedItemProductFormVisible: false,
@@ -303,25 +251,6 @@ export default {
     }
   },
   methods: {
-    actionHandle (action) {
-      if (action.id === '1') {
-        this.new()
-      } else if (action.id === '2') {
-        this.copy()
-      } else if (action.id === '3') {
-        this.saveToDB()
-      } else if (action.id === '4') {
-        this.submit()
-      } else if (action.id === '5') {
-        this.actions[3].disabled = false
-      } else if (action.id === '6') {
-        this.confirmDelete()
-      } else if (action.id === '7') {
-        this.$emit('checkAgreement', this.processForm.agreementNumber)
-      } else if (action.id === '8') {
-        this.$emit('processReview', this.processForm.agreementNumber)
-      }
-    },
     addTestedItemTask () {
       this.$emit('addTestedItemTask')
     },
@@ -356,9 +285,9 @@ export default {
     deleteTestedItemTask () {
       let vm = this
       this.deletedTestedItemTasks.forEach(item => {
-        for (var i = 0; i < vm.staticOptions.testedItemTaskTableData.length; i++) {
-          if (vm.staticOptions.testedItemTaskTableData[i].id === item.id) {
-            vm.staticOptions.testedItemTaskTableData.splice(i, 1)
+        for (var i = 0; i < vm.processForm.testedItemTasks.length; i++) {
+          if (vm.processForm.testedItemTasks[i].id === item.id) {
+            vm.processForm.testedItemTasks.splice(i, 1)
           }
         }
       })
@@ -460,45 +389,10 @@ export default {
           })
         })
     },
-    new () {
-      this.$emit('new')
-      this.sampleNumberButton = false
-    },
     copy () {
       this.$emit('copy')
       this.$message('复制成功!')
-      this.sampleNumberButton = false
-    },
-    saveToDB () {
-      let vm = this
-      this.processForm.testedItemTasks = this.staticOptions.testedItemTaskTableData
-      this.$ajax.post('/api/sample/process', this.processForm)
-        .then(function (res) {
-          vm.$message('已经成功保存到数据库!')
-          vm.$emit('updateProcessForm', res.data)
-          vm.sampleNumberButton = false
-        }).catch(function (error) {
-          vm.$message({
-            showClose: true,
-            message: error.response.data.message
-          })
-        })
-    },
-    submit () {
-      let vm = this
-      this.processForm.testedItemTasks = this.staticOptions.testedItemTaskTableData
-      this.$ajax.post('/api/sample/process/submitProcess', this.processForm)
-        .then(function (res) {
-          vm.$message('已经成功保存到数据库!')
-          vm.$emit('updateProcessForm', res.data)
-          vm.sampleNumberButton = false
-          vm.actions[3].disabled = true
-        }).catch(function (error) {
-          vm.$message({
-            showClose: true,
-            message: error.response.data.message
-          })
-        })
+      this.staticOptions.sampleNumberButton = false
     },
     confirmDelete () {
       let vm = this
@@ -523,7 +417,7 @@ export default {
         .then(function (res) {
           vm.$message('已经成功删除！')
           vm.$emit('deleteProcessForm')
-          vm.sampleNumberButton = false
+          vm.staticOptions.sampleNumberButton = false
         }).catch(function (error) {
           vm.$message({
             showClose: true,
@@ -566,7 +460,7 @@ export default {
         .then(function (res) {
           vm.processForm.sampleNumber = res.data
           vm.processForm.sampleSubNumber = res.data
-          vm.sampleNumberButton = true
+          vm.staticOptions.sampleNumberButton = true
         }).catch(function (error) {
           vm.$message({
             showClose: true,
@@ -677,5 +571,8 @@ export default {
 <style lang="less">
 .testedItemTask {
   overflow: auto;
+}
+.process {
+  overflow: scroll;
 }
 </style>

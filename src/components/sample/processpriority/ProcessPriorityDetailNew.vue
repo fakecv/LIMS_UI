@@ -42,7 +42,8 @@ export default {
       this.processPriorityForm = JSON.parse(JSON.stringify(this.processPriorityResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetProcessPriorityForm()
   }
 }
 </script>

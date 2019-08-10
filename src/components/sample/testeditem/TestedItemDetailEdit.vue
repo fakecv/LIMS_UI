@@ -65,6 +65,12 @@ export default {
     if (this.$route.params.id !== undefined) {
       this.loadTestedItem(this.$route.params.id)
     }
+  },
+  activated () {
+    this.loadTestCategory()
+    if (this.$route.params.id !== undefined) {
+      this.loadTestedItem(this.$route.params.id)
+    }
   }
 }
 </script>

@@ -67,6 +67,12 @@ export default {
     if (this.$route.params.id !== undefined) {
       this.loadUserRole(this.$route.params.id)
     }
+  },
+  activated () {
+    this.loadMenuLinks()
+    if (this.$route.params.id !== undefined) {
+      this.loadUserRole(this.$route.params.id)
+    }
   }
 }
 </script>

@@ -42,7 +42,8 @@ export default {
       this.numberGeneratorForm = JSON.parse(JSON.stringify(this.numberGeneratorResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetNumberGeneratorForm()
   }
 }
 </script>

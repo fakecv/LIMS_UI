@@ -47,7 +47,7 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
+          <!-- <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="优先级">
               <el-select name="processPriority" filterable default-first-option v-model="testedItemTaskForm.processPriority">
                 <el-option v-for="item in staticOptions.processPriorities"
@@ -57,7 +57,7 @@
                 </el-option>
                 </el-select>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
       </el-form>
     </el-container>

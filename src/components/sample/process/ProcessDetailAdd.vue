@@ -1,130 +1,149 @@
 <template>
-<div>
-    <ProcessDetail
-      :processForm="processForm"
-      :agreementForm="agreementForm"
-      :staticOptions="staticOptions"
-      v-on:getDrawingDesigns="getDrawingDesigns"
-      v-on:getAgreementInfo="getAgreementInfo"
-      v-on:getTestMethod="getTestMethod"
-      v-on:getTestParameter="getTestParameter"
-      v-on:updateProcessForm="updateProcessForm"
-      v-on:updateTestedItemTasks="updateTestedItemTasks"
-      v-on:updateTestedItemTask="updateTestedItemTask"
-      v-on:addTestedItemTask="addTestedItemTask"
-      v-on:updateTestedItemProduct="updateTestedItemProduct"
-      v-on:deleteProcessForm="resetProcessForm"
-      v-on:new="resetProcessForm"
-      v-on:copy="resetProcessId"
-      v-on:checkAgreement="checkAgreement"
-      v-on:processReview="processReview"
-      />
-      <el-table :data="staticOptions.processTableData"
-      style="width: 100%"
-      tooltip-effect="dark"
-      @row-dblclick=dblclick
-      >
-      <el-table-column
-        type="expand">
-        <template slot-scope="scope">
-        <el-table :data="scope.row.testedItemTasks" size="mini">
-        <el-table-column
-          prop="testedItem"
-          label="检测项目"
-          :formatter="testedItemFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testParameter"
-          label="检测项目参数"
-          show-overflow-tooltip
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testMethod"
-          label="检测方法"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="processPriority"
-          label="优先级"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="rejectNote"
-          label="驳回原因"
-          show-overflow-tooltip
-          width="180">
-        </el-table-column>
+  <div>
+    <el-container>
+      <el-header style="min-width:500px;">
+        <el-button-group>
+          <el-button :ref="action.ref" type="info" v-for="(action,index) in actions"
+            :key="index" size="mini" :icon="action.icon"
+            :loading="action.loading"
+            @click="actionHandle(action)"
+            :disabled="action.disabled"
+            >
+            {{action.name}}
+          </el-button>
+        </el-button-group>
+      </el-header>
+      <el-main>
+        <el-table :data="staticOptions.processTableData"
+        style="width: 100%"
+        tooltip-effect="dark"
+        :row-style="processTableStyle"
+        @selection-change="handleProcessTableSelectionChange"
+        @row-dblclick=dblclick
+        >
+          <el-table-column
+            type="expand">
+            <template slot-scope="scope">
+            <el-table :data="scope.row.workflows" size="mini">
+            <el-table-column
+              prop="submitFrom"
+              label="提交部门"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="submitTo"
+              label="提交至"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="submitPerson"
+              label="提交人"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="processingStatus"
+              label="当前状态"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="submitDate"
+              label="提交时间"
+              :formatter="submitTimeFormatter"
+              width="180">
+            </el-table-column>
+            </el-table>
+          </template>
+          </el-table-column>
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
+            prop="sampleNumber"
+            label="样品编号"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="sampleSubNumber"
+            label="试样编号"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="drawingDesign"
+            label="加工图号"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="processPriority"
+            label="优先级"
+            show-overflow-tooltip
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="comment"
+            label="其它"
+            show-overflow-tooltip
+            width="180">
+          </el-table-column>
         </el-table>
-      </template>
-      </el-table-column>
-      <el-table-column
-        prop="agreementNumber"
-        label="委托编号"
-        width="150">
-      </el-table-column>
-      <el-table-column
-        prop="sampleSubNumber"
-        label="试样编号"
-        width="80">
-      </el-table-column>
-      <el-table-column
-        prop="drawingDesign"
-        label="加工图号"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="submitFrom"
-        label="提交部门"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="processingStatus"
-        label="当前流转状态"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="submitTo"
-        label="提交至"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="processPriority"
-        label="优先级"
-        show-overflow-tooltip
-        width="80">
-      </el-table-column>
-      <el-table-column
-        prop="comment"
-        label="其它"
-        show-overflow-tooltip
-        width="180">
-      </el-table-column>
-    </el-table>
+      </el-main>
+    </el-container>
+    <div class="drawer">
+      <el-drawer
+        :title="title"
+        :before-close="handleClose"
+        :visible.sync="dialog"
+        ref="drawer"
+        :append-to-body="true"
+        size="80%">
+        <div class="demo-drawer__content">
+          <ProcessDetail
+            :agreementId="agreementId"
+            :processForm="processForm"
+            :staticOptions="staticOptions"
+            v-on:getDrawingDesigns="getDrawingDesigns"
+            v-on:getTestMethod="getTestMethod"
+            v-on:getTestParameter="getTestParameter"
+            v-on:updateTestedItemTasks="updateTestedItemTasks"
+            v-on:updateTestedItemTask="updateTestedItemTask"
+            v-on:addTestedItemTask="addTestedItemTask"
+            v-on:updateTestedItemProduct="updateTestedItemProduct"
+            />
+          <div style="padding: 40px;">
+            <el-button @click="dialog = false">取 消</el-button>
+            <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading">{{ loading ? '提交中 ...' : '保存' }}</el-button>
+          </div>
+        </div>
+      </el-drawer>
+    </div>
+    <workflowDialog ref="workflowDialog"
+     v-on:addWorkflow="confirmAddWorkflow"
+     v-on:closeWorkflowDialog="closeWorkflowDialog"
+    :workflowDialog="workflowDialog"/>
   </div>
 </template>
 
 <script>
 import ProcessDetail from '@/components/sample/process/ProcessDetail'
+import workflowDialog from '@/components/sample/process/dialog/WorkflowDialog'
 export default {
   name: 'processDetailAdd',
-  components: {ProcessDetail},
+  components: {ProcessDetail, workflowDialog},
+  props: ['agreementId', 'agreementNumber', 'agreementComment'],
   data () {
     return {
-      agreementForm: {
-        id: '',
-        sampleName: '',
-        receiveSampleTime: '',
-        materialNumber: '',
-        expectedCompletionTime: '',
-        drawingDesign: '',
-        submitFrom: '',
-        processingStatus: '',
-        submitTo: ''
-      },
+      dialog: false,
+      loading: false,
+      title: '委托协议编号：' + this.agreementNumber,
+      actions: [
+        {'ref': 'new', 'name': '新建', 'id': '1', 'icon': 'el-icon-circle-plus', 'loading': false, 'disabled': false},
+        {'ref': 'copy', 'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'disabled': false},
+        {'ref': 'submit', 'name': '提交', 'id': '3', 'icon': 'el-icon-document', 'loading': false, 'disabled': false},
+        {'ref': 'delete', 'name': '删除', 'id': '4', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false}
+      ],
       processForm: {
         id: '',
+        agreementId: '',
         agreementNumber: '',
         sampleClientNumber: '',
         sampleNumber: '',
@@ -134,12 +153,13 @@ export default {
         processPriority: '',
         submitTime: '',
         drawingDesign: '',
-        submitFrom: '',
-        processingStatus: '',
+        // submitFrom: '',
+        // processingStatus: '',
         submitTo: ''
       },
       processResetForm: {
         id: '',
+        agreementId: '',
         agreementNumber: '',
         sampleClientNumber: '',
         sampleNumber: '',
@@ -149,14 +169,22 @@ export default {
         processPriority: '',
         submitTime: '',
         drawingDesign: '',
-        submitFrom: '',
-        processingStatus: '',
+        // submitFrom: '',
+        // processingStatus: '',
         submitTo: ''
       },
+      workflowForm: {
+        id: '',
+        submitFrom: '',
+        submitTo: '',
+        submitDate: '',
+        submitPerson: '',
+        currentStatus: ''
+      },
+      workflowDialog: false,
       staticOptions: {
         department: '',
         testCategories: [],
-        testedItemTaskTableData: [],
         testedItemProducts: [],
         testMethods: [],
         checkedTestMethods: [],
@@ -172,45 +200,164 @@ export default {
         processPriorities: [],
         departments: [],
         processTableData: [],
-        agreements: []
+        selectedProcessTableData: [],
+        agreements: [],
+        sampleNumberButton: false
       }
     }
   },
   methods: {
-    checkAgreement (agreementNumber) {
-      this.$router.push('/lims/agreementDetailEdit/' + this.fetchAgreementId(agreementNumber))
-    },
-    processReview (agreementNumber) {
-      this.$router.push('/lims/processReview/' + agreementNumber)
-    },
-    fetchAgreementId (agreementNumber) {
-      let agreementId = ''
-      this.staticOptions.agreements.forEach(agreement => {
-        if (agreement.agreementNumber === agreementNumber) {
-          agreementId = agreement.id
+    processTableStyle ({row, rowIndex}) {
+      let backgroundColor = '#FFFFFF'
+      let color = '#000000'
+      this.staticOptions.processPriorities.forEach(item => {
+        if (row.processPriority === item.processPriorityName) {
+          backgroundColor = item.processPriorityColor
+          color = item.processPriorityFontColor
         }
       })
-      return agreementId
+      return 'background: ' + backgroundColor + ';color: ' + color
+    },
+    actionHandle (action) {
+      if (action.id === '1') {
+        this.new()
+      } else if (action.id === '2') {
+        this.copy()
+      } else if (action.id === '3') {
+        this.submit()
+      } else if (action.id === '4') {
+        this.confirmDelete()
+      }
+    },
+    handleProcessTableSelectionChange (selection) {
+      this.staticOptions.selectedProcessTableData = selection
+    },
+    new () {
+      this.dialog = true
+      this.staticOptions.sampleNumberButton = false
+      this.resetProcessForm()
+      // point to user department
+      this.queryApplicationUserDepartment()
+      // give agreement comment to process, meanwhile, process comment will update it back from back end.
+      this.processForm.comment = this.agreementComment
+      this.processForm.agreementId = this.agreementId
+      this.processForm.agreementNumber = this.agreementNumber
+    },
+    resetProcessForm () {
+      this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
+    },
+    submit () {
+      this.workflowDialog = true
+    },
+    confirmAddWorkflow (event) {
+      if (this.staticOptions.selectedProcessTableData.length > 0) {
+        this.$confirm('确认提交?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.addWorkflow(event)
+          this.closeWorkflowDialog()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消提交'
+          })
+          this.closeWorkflowDialog()
+        })
+      }
+    },
+    closeWorkflowDialog () {
+      this.workflowDialog = false
+    },
+    confirmDelete () {
+      let vm = this
+      if (this.staticOptions.selectedProcessTableData.length > 0) {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          vm.delete()
+          // vm.staticOptions.selectedProcessTableData = []
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      }
+    },
+    addWorkflow (event) {
+      let vm = this
+      let ids = []
+      this.staticOptions.selectedProcessTableData.forEach(item => {
+        ids.push(item.id)
+      })
+      this.workflowForm.id = ids.join(',')
+      this.workflowForm.submitTo = event.submitTo
+      this.workflowForm.processingStatus = event.processingStatus
+      this.$ajax.post('/api/sample/process/submitProcesses/', this.workflowForm)
+        .then(function (res) {
+          vm.$message('已经成功提交！')
+          vm.loadAgreementProcess(vm.agreementId)
+          vm.staticOptions.selectedProcessTableData = []
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
+        })
+    },
+    delete () {
+      let vm = this
+      let processIds = []
+      this.staticOptions.selectedProcessTableData.forEach(item => {
+        processIds.push(item.id)
+      })
+      this.$ajax.get('/api/sample/process/deleteProcesses/' + processIds.join(','))
+        .then(function (res) {
+          vm.$message('已经成功删除！')
+          vm.staticOptions.sampleNumberButton = false
+          vm.loadAgreementProcess(vm.agreementId)
+          vm.staticOptions.selectedProcessTableData = []
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
+        })
+    },
+    handleClose (done) {
+      this.$confirm('确定要提交表单吗？')
+        .then(_ => {
+          this.loading = true
+          this.saveToDB()
+        })
+        .catch(_ => {})
+    },
+    saveToDB () {
+      let vm = this
+      this.$ajax.post('/api/sample/process', this.processForm)
+        .then(function (res) {
+          vm.$message('已经成功保存到数据库!')
+          vm.processForm = res.data
+          vm.loading = false
+          vm.staticOptions.sampleNumberButton = false
+          vm.dialog = false
+          vm.loadAgreementProcess(vm.agreementId)
+          vm.$emit('refreshAgreement')
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
+          vm.loading = false
+        })
     },
     dblclick (row, event) {
-      this.$router.push('/lims/processDetailEdit/' + row.id)
-    },
-    getAgreementInfo (agreementId) {
-      let vm = this
-      this.staticOptions.agreements.forEach(agreement => {
-        if (agreement.agreementNumber === agreementId) {
-          vm.agreementForm.id = agreement.id
-          vm.agreementForm.sampleName = agreement.sampleName
-          vm.agreementForm.materialNumber = agreement.materialNumber
-          vm.agreementForm.receiveSampleTime = agreement.receiveSampleTime
-          vm.agreementForm.expectedCompletionTime = agreement.expectedCompletionTime
-          vm.processForm.agreementNumber = agreement.agreementNumber
-          vm.processForm.comment = agreement.comment
-          vm.processForm.processPriority = agreement.processPriority
-        }
-      })
-      // to display other added processes within the same agreementId at the bottom of page.
-      this.loadAgreementProcess(agreementId)
+      this.processForm = row
+      this.dialog = true
     },
     getDrawingDesigns (testedItemIds) {
       this.staticOptions.filteredDrawingDesigns =
@@ -230,24 +377,13 @@ export default {
           return val.testedItem === testedItemId
         })
     },
-    resetProcessId () {
-      this.processForm.id = ''
-    },
-    resetProcessForm () {
-      this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
-      this.staticOptions.testedItemTaskTableData = []
-    },
-    updateProcessForm (event) {
-      this.processForm.id = event.id
-    },
     updateTestedItemTasks () {
       let vm = this
       this.staticOptions.testedItemProducts.forEach(testItemProductGroup => {
         testItemProductGroup.testedItemTasks.forEach(item => {
           item.processPriority = vm.processForm.processPriority
-          vm.staticOptions.testedItemTaskTableData.push(item)
+          vm.processForm.testedItemTasks.push(item)
         })
-        // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
         vm.fetchDrawingDesign()
       })
     },
@@ -257,8 +393,7 @@ export default {
         vm.$ajax.post('/api/sample/testedItemProduct/getTestedItemTasks', testItemProduct)
           .then(function (res) {
             res.data.processPriority = vm.processForm.processPriority
-            vm.staticOptions.testedItemTaskTableData.push(res.data)
-            // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+            vm.processForm.testedItemTasks.push(res.data)
             vm.fetchDrawingDesign()
           }).catch(function (error) {
             vm.$message({
@@ -273,8 +408,7 @@ export default {
       vm.$ajax.get('/api/sample/testedItemProduct/getTestedItemTask')
         .then(function (res) {
           res.data.processPriority = vm.processForm.processPriority
-          vm.staticOptions.testedItemTaskTableData.push(res.data)
-          // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
+          vm.processForm.testedItemTasks.push(res.data)
         }).catch(function (error) {
           vm.$message({
             showClose: true,
@@ -287,35 +421,10 @@ export default {
     },
     fetchDrawingDesign () {
       let testedItemIds = []
-      this.staticOptions.testedItemTaskTableData.forEach(item => {
+      this.processForm.testedItemTasks.forEach(item => {
         testedItemIds.push(item.testedItem)
       })
       this.getDrawingDesigns(testedItemIds)
-    },
-    loadAgreement () {
-      let vm = this
-      this.$ajax.get('/api/sample/agreement/getAgreement')
-        .then(function (res) {
-          vm.staticOptions.agreements = res.data
-        }).catch(function (error) {
-          vm.$message({
-            showClose: true,
-            message: error.response.data.message
-          })
-        })
-    },
-    loadAndPopulateAgreement (agreementId) {
-      let vm = this
-      this.$ajax.get('/api/sample/agreement/getAgreement')
-        .then(function (res) {
-          vm.staticOptions.agreements = res.data
-          vm.getAgreementInfo(agreementId)
-        }).catch(function (error) {
-          vm.$message({
-            showClose: true,
-            message: error.response.data.message
-          })
-        })
     },
     loadAgreementProcess (agreementId) {
       let vm = this
@@ -447,6 +556,14 @@ export default {
       })
       return name
     },
+    submitTimeFormatter (row, column) {
+      if (row.submitDate) {
+        let dateTT = new Date(row.submitDate)
+        let hours = dateTT.getHours() < 10 ? '0' : ''
+        let min = dateTT.getMinutes() < 10 ? '0' : ''
+        return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`
+      }
+    },
     testedItemFormatter (row, column) {
       let name = ''
       this.staticOptions.testedItems.forEach(item => {
@@ -458,9 +575,7 @@ export default {
     }
   },
   mounted () {
-    if (this.$route.params.id !== undefined) {
-      this.loadAndPopulateAgreement(this.$route.params.id)
-    }
+    if (this.agreementId) { this.loadAgreementProcess(this.agreementId) }
     this.queryApplicationUserDepartment()
     this.loadTestCategory()
     this.loadTestMethodData()
@@ -470,6 +585,13 @@ export default {
     this.loadProcessingStatusData()
     this.loadProcessPriorityData()
     this.loadDepartment()
+  },
+  watch: {
+    agreementId () {
+      this.loadAgreementProcess(this.agreementId)
+    }
   }
 }
 </script>
+<style>
+</style>

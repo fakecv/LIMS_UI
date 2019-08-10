@@ -166,6 +166,14 @@ export default {
       this.loadUser(this.$route.params.id)
       this.loadSelectedUserRoleGroup(this.$route.params.id)
     }
+  },
+  activated () {
+    this.initRoleGroups()
+    this.loadDepartment()
+    if (this.$route.params.id !== undefined) {
+      this.loadUser(this.$route.params.id)
+      this.loadSelectedUserRoleGroup(this.$route.params.id)
+    }
   }
 }
 </script>

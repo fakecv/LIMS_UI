@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="testedItemProductGroupFormVisible" :modal-append-to-body="false">
+  <el-dialog :visible.sync="testedItemProductGroupFormVisible" append-to-body>
     <div>
     <el-container style="padding: 10px">
       <el-form :model="testedItemProductGroupForm" label-width="100px" label-position="left" size="mini">

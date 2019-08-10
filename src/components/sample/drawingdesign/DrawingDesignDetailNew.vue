@@ -55,6 +55,9 @@ export default {
   },
   mounted () {
     this.loadTestedItemData()
+  },
+  activated () {
+    this.resetDrawingDesignForm()
   }
 }
 </script>

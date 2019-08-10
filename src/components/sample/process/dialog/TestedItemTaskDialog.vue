@@ -1,13 +1,8 @@
 <template>
-  <el-dialog :visible.sync="testedItemTaskFormVisible" :modal-append-to-body="false">
+  <el-dialog :visible.sync="testedItemTaskFormVisible" append-to-body>
     <el-container style="padding: 10px">
       <el-form :model="testedItemTaskForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
-          <!-- <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="检测项目名称">
-              <el-input name="testedItemProductName" v-model="testedItemTaskForm.testedItemTaskName" autoComplete="testedItemTaskName"></el-input>
-            </el-form-item>
-          </el-col> -->
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="检测项目类别">
                 <el-select name="testedItem" filterable default-first-option v-model="testedItemTaskForm.testCategory" @change="handleTestCategoryChange">
@@ -54,7 +49,7 @@
               </el-checkbox-group>
             </el-form-item>
           </el-col>
-            <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <!-- <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
               <el-form-item label="优先级">
                 <el-select name="processPriority" filterable default-first-option v-model="testedItemTaskForm.processPriority">
                 <el-option v-for="item in processPriorities"
@@ -64,7 +59,7 @@
                 </el-option>
                 </el-select>
               </el-form-item>
-            </el-col>
+            </el-col> -->
           <el-col :span="24">
             <el-form-item label="驳回原因">
               <el-input type="textarea" name="rejectNote" v-model="testedItemTaskForm.rejectNote" autoComplete="rejectNote"></el-input>

@@ -225,7 +225,7 @@ export default {
       this.onSubmit()
     },
     dblclick (row, event) {
-      this.$router.push('/lims/agreementDetailEdit/' + row.id)
+      this.$router.push('/lims/agreementDetailNew/' + row.id)
     },
     onSubmit () {
       let vm = this

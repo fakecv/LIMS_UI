@@ -58,6 +58,10 @@ export default {
   },
   mounted () {
     this.loadMenuLinks()
+  },
+  activated () {
+    this.loadMenuLinks()
+    this.resetRoleForm()
   }
 }
 </script>

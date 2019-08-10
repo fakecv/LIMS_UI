@@ -58,6 +58,9 @@ export default {
   mounted () {
     this.loadTestCategory()
     this.sampleNumberGenerator()
+  },
+  activated () {
+    this.resetTestedItemForm()
   }
 }
 </script>

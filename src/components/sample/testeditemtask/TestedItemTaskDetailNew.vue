@@ -23,11 +23,7 @@ export default {
         testedItemName: '',
         testParameter: [],
         testMethod: '',
-        drawingDesign: '',
-        submitFrom: '',
-        processingStatus: '',
-        submitTo: '',
-        processPriority: '',
+        // processPriority: '',
         id: ''
       },
       testedItemTaskResetForm: {
@@ -36,11 +32,7 @@ export default {
         testedItemName: '',
         testParameter: [],
         testMethod: '',
-        drawingDesign: '',
-        submitFrom: '',
-        processingStatus: '',
-        submitTo: '',
-        processPriority: '',
+        // processPriority: '',
         id: ''
       },
       staticOptions: {
@@ -114,8 +106,6 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/drawingDesign/getDrawingDesign')
         .then(function (res) {
-          console.log('loadDrawingDesignData')
-          console.log(res.data)
           vm.staticOptions.drawingDesigns = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
@@ -143,7 +133,6 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/testedItem/getTestedItem')
         .then(function (res) {
-          console.log(res.data)
           vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
@@ -211,6 +200,16 @@ export default {
     }
   },
   mounted () {
+    this.loadTestMethodData()
+    this.loadTestedItemData()
+    this.loadDrawingDesignData()
+    this.loadTestParameterData()
+    this.loadDepartment()
+    this.loadProcessingStatusData()
+    this.loadProcessPriorityData()
+  },
+  activated () {
+    this.resetTestedItemTaskForm()
     this.loadTestMethodData()
     this.loadTestedItemData()
     this.loadDrawingDesignData()

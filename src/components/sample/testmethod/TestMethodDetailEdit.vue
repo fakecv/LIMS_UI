@@ -66,6 +66,12 @@ export default {
     if (this.$route.params.id !== undefined) {
       this.loadTestMethod(this.$route.params.id)
     }
+  },
+  activated () {
+    this.loadTestedItemData()
+    if (this.$route.params.id !== undefined) {
+      this.loadTestMethod(this.$route.params.id)
+    }
   }
 }
 </script>

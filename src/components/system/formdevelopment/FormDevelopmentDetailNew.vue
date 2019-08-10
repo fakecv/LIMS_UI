@@ -48,7 +48,8 @@ export default {
       this.formDevelopmentForm = JSON.parse(JSON.stringify(this.formDevelopmentResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetFormDevelopmentForm()
   }
 }
 </script>

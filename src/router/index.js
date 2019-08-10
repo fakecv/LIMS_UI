@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import ActionHeader from '@/components/frame/ActionHeader'
 import AgreementDetailNew from '@/components/sample/agreement/AgreementDetailNew'
-import AgreementDetailEdit from '@/components/sample/agreement/AgreementDetailEdit'
 import AgreementMaintenance from '@/components/sample/agreement/AgreementMaintenance'
 import AgreementReport from '@/components/sample/agreement/AgreementReport'
 import AuditDepartmentDetailNew from '@/components/internalaudit/auditdepartment/AuditDepartmentDetailNew'
@@ -157,7 +156,7 @@ const router = new Router({
   routes: [
     {
       path: '/login/:id/:userName',
-      name: 'login',
+      name: 'logon',
       component: login
     },
     {
@@ -176,9 +175,9 @@ const router = new Router({
       component: Lims,
       children: [
         {
-          path: 'agreementDetailEdit/:id',
+          path: 'agreementDetailNew/:id',
           name: 'agreementDetailEdit',
-          component: AgreementDetailEdit
+          component: AgreementDetailNew
         },
         {
           path: 'agreementDetailNew',

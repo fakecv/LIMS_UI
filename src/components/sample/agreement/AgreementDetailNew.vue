@@ -1,5 +1,6 @@
 <template>
   <AgreementDetail
+    ref="agreementDetail"
     :agreementForm="agreementForm"
     :staticOptions="staticOptions"
     v-on:updateCustomer="updateCustomer"
@@ -9,10 +10,11 @@
     v-on:updateAgreementForm="updateAgreementForm"
     v-on:deleteAgreementForm="resetAgreementForm"
     v-on:new="newAgreementForm"
-    v-on:copy="resetAgreementId"
+    v-on:copy="copyAgreement"
     v-on:removeImage="removeImage"
     v-on:addImage="addImage"
     v-on:agreementNumberGenerator="agreementNumberGenerator"
+    v-on:refreshAgreement="refreshAgreement"
     />
 </template>
 
@@ -104,6 +106,7 @@ export default {
         imageNameList: []
       },
       staticOptions: {
+        processListed: true,
         processPriorities: [],
         customers: [],
         customerNotes: [],
@@ -113,13 +116,11 @@ export default {
         images: [],
         privileges: '',
         actions: [
-          {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false, 'show': false},
-          {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'show': false},
-          {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false, 'show': false},
-          {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false, 'show': false},
-          {'name': '删除', 'id': '2', 'icon': 'el-icon-delete', 'loading': false, 'show': false},
-          {'name': '文件预览', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false, 'show': true},
-          {'name': '查看样品流转', 'id': '4', 'icon': 'el-icon-download', 'loading': false, 'show': true}
+          {'name': '新建', 'id': '1', 'icon': 'el-icon-circle-plus', 'loading': false, 'show': false},
+          {'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'show': false},
+          {'name': '保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false, 'show': false},
+          {'name': '删除', 'id': '4', 'icon': 'el-icon-delete', 'loading': false, 'show': false},
+          {'name': '文件预览', 'id': '5', 'icon': 'el-icon-upload2', 'loading': false, 'show': true}
         ]
       },
       customerRequestForm: {
@@ -137,21 +138,20 @@ export default {
   },
   methods: {
     displayActions () {
-      console.log(this.staticOptions.privileges.indexOf('unlock'))
       this.staticOptions.actions.forEach(item => {
-        if (item.name === '新建' && this.staticOptions.privileges.indexOf('new') > 0) {
+        if (item.name === '新建' && this.staticOptions.privileges.indexOf('new') > -1) {
           item.show = true
         }
-        if (item.name === '复制' && this.staticOptions.privileges.indexOf('copy') > 0) {
+        if (item.name === '复制' && this.staticOptions.privileges.indexOf('copy') > -1) {
           item.show = true
         }
-        if (item.name === '数据库保存' && this.staticOptions.privileges.indexOf('save') > 0) {
+        if (item.name === '保存' && this.staticOptions.privileges.indexOf('save') > -1) {
           item.show = true
         }
         if (item.name === '解锁' && this.staticOptions.privileges.indexOf('unlock') > -1) {
           item.show = true
         }
-        if (item.name === '删除' && this.staticOptions.privileges.indexOf('delete') > 0) {
+        if (item.name === '删除' && this.staticOptions.privileges.indexOf('delete') > -1) {
           item.show = true
         }
       })
@@ -179,6 +179,29 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadAgreement (agreementId) {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/' + agreementId)
+        .then(function (res) {
+          vm.agreementForm = res.data
+          if (res.data.imageNameList !== undefined && res.data.imageNameList.length > 0) {
+            vm.agreementForm.imageNameList.forEach(image => {
+              vm.downloadToFrontEnd(image, vm.agreementForm.agreementNumber)
+            })
+          }
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    copyAgreement (agreementId) {
+      let vm = this
+      console.log(agreementId)
+      this.$ajax.get('/api/sample/agreement/copyAgreement/' + agreementId)
+        .then(function (res) {
+          vm.agreementForm = res.data
+          vm.$router.push('/lims/agreementDetailNew/' + vm.agreementForm.id)
+        })
+    },
     loadProcessPriorityData () {
       let vm = this
       this.$ajax.get('/api/sample/processPriority/getProcessPriority')
@@ -190,11 +213,14 @@ export default {
         })
     },
     updateAgreementForm (event) {
-      this.agreementForm.id = event.id
+      this.agreementForm = event
+      this.$route.params.id = event.id
+      this.staticOptions.processListed = false
     },
     resetAgreementId () {
       this.agreementForm.id = ''
       this.staticOptions.images.length = 0
+      this.staticOptions.processListed = true
       this.agreementNumberGenerator()
     },
     newAgreementForm () {
@@ -282,13 +308,27 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    refreshAgreement () {
+      console.log('come to refresh')
+      this.loadAgreement(this.$route.params.id)
     }
   },
   mounted () {
+    if (this.$route.params.id !== undefined) {
+      this.loadAgreement(this.$route.params.id)
+      this.staticOptions.processListed = false
+    }
     this.loadProcessPriorityData()
     this.initCustomerData()
     this.initUserData()
     this.populatePrivileges()
+  },
+  activated () {
+    if (this.$route.params.id !== undefined) {
+      this.loadAgreement(this.$route.params.id)
+      this.staticOptions.processListed = false
+    }
   }
 }
 </script>

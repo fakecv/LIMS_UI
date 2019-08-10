@@ -58,6 +58,11 @@ export default {
     if (this.$route.params.id !== undefined) {
       this.loadFormDevelopment(this.$route.params.id)
     }
+  },
+  activated () {
+    if (this.$route.params.id !== undefined) {
+      this.loadFormDevelopment(this.$route.params.id)
+    }
   }
 }
 </script>

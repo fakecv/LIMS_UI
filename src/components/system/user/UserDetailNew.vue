@@ -138,6 +138,11 @@ export default {
   mounted () {
     this.loadDepartment()
     this.initRoleGroups()
+  },
+  activated () {
+    this.loadDepartment()
+    this.initRoleGroups()
+    this.resetUserForm()
   }
 }
 </script>
