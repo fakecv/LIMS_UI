@@ -301,6 +301,7 @@
       :form="form"
       :reportOptionDialog='reportOptionDialog'
       v-on:preview="preview"
+      v-on:close="closePreviewDialog"
     />
   </div>
 </template>
@@ -545,6 +546,9 @@ export default {
     preview () {
       this.reportOptionDialog = false
       this.$router.push('/lims/agreementReport/' + this.form.reportList.join(','))
+    },
+    closePreviewDialog () {
+      this.reportOptionDialog = false
     },
     removeImage (item) {
       this.$emit('removeImage', item)

@@ -14,7 +14,7 @@
       </el-form>
   </el-container>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="reportOptionDialog = false">取 消</el-button>
+      <el-button @click="close">取 消</el-button>
       <el-button type="primary" @click="preview">确 定</el-button>
     </div>
 </el-dialog>
@@ -30,6 +30,9 @@ export default {
   methods: {
     preview () {
       this.$emit('preview')
+    },
+    close () {
+      this.$emit('close')
     }
   }
 

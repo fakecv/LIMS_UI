@@ -90,7 +90,7 @@
     </el-container>
     <div class="drawer">
       <el-drawer
-        :title="title"
+        :title= "'委托协议编号：' + agreementNumber"
         :before-close="handleClose"
         :visible.sync="dialog"
         ref="drawer"
@@ -153,6 +153,7 @@ export default {
         processPriority: '',
         submitTime: '',
         drawingDesign: '',
+        read: 'no',
         // submitFrom: '',
         // processingStatus: '',
         submitTo: ''
@@ -169,6 +170,7 @@ export default {
         processPriority: '',
         submitTime: '',
         drawingDesign: '',
+        read: 'no',
         // submitFrom: '',
         // processingStatus: '',
         submitTo: ''
@@ -428,6 +430,7 @@ export default {
     },
     loadAgreementProcess (agreementId) {
       let vm = this
+      console.log(this.agreementNumber)
       this.$ajax.get('/api/sample/process/agreement/' + agreementId)
         .then(function (res) {
           vm.staticOptions.processTableData = res.data
