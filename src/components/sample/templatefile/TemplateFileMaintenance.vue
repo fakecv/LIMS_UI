@@ -61,6 +61,7 @@
         </el-table-column>
         <el-table-column
           prop="fileName"
+          show-overflow-tooltip
           label="文件名称"
           width="180">
         </el-table-column>
@@ -71,17 +72,14 @@
         </el-table-column>
         <el-table-column
           prop="content"
+          show-overflow-tooltip
           label="文件内容"
           width="180">
         </el-table-column>
         <el-table-column
           prop="displayName"
           label="文件显示名称"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="link"
-          label="文件下载链接"
+          show-overflow-tooltip
           width="180">
         </el-table-column>
         <el-table-column
@@ -124,11 +122,7 @@ export default {
         itemsPerPage: 20,
         currentPage: 1
       },
-      testedItems: [],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
-      staticOptions: {
-        types: []
-      }
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
     }
   },
   methods: {
@@ -276,6 +270,9 @@ export default {
     }
   },
   mounted () {
+    this.onSubmit()
+  },
+  activated () {
     this.onSubmit()
   }
 

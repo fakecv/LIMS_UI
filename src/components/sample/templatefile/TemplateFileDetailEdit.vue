@@ -21,7 +21,7 @@ export default {
         content: '',
         displayName: '',
         link: '',
-        show: '',
+        show: 'yes',
         id: ''
       },
       templateFileResetForm: {
@@ -30,7 +30,7 @@ export default {
         content: '',
         displayName: '',
         link: '',
-        show: '',
+        show: 'yes',
         id: ''
       },
       staticOptions: {
@@ -56,6 +56,11 @@ export default {
     }
   },
   mounted () {
+    if (this.$route.params.id !== undefined) {
+      this.loadTemplateFile(this.$route.params.id)
+    }
+  },
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadTemplateFile(this.$route.params.id)
     }

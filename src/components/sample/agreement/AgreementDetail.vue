@@ -299,6 +299,7 @@
       />
     <previewDialog
       :form="form"
+      :agreementId="agreementForm.id"
       :reportOptionDialog='reportOptionDialog'
       v-on:preview="preview"
       v-on:close="closePreviewDialog"

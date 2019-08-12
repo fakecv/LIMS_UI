@@ -7,36 +7,34 @@
       </el-button-group>
     </el-header>
     <el-container style="padding: 10px">
-      <el-form :model="templateFileRequestForm" label-width="100px" label-position="left" size="mini">
+      <el-form :model="templateFileForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="文件名称">
-              <el-input name="fileName" v-model="templateFileRequestForm.fileName" autoComplete="fileName"></el-input>
+              <el-input name="fileName" v-model="templateFileForm.fileName" autoComplete="fileName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="文件位置">
-              <el-input name="location" v-model="templateFileRequestForm.location" autoComplete="location"></el-input>
+              <el-input name="location" v-model="templateFileForm.location" autoComplete="location"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+          <el-col :span="24">
             <el-form-item label="文件内容">
-              <el-input name="content" v-model="templateFileRequestForm.content" autoComplete="content"></el-input>
+              <el-input type="textarea" autosize name="content" v-model="templateFileForm.content" autoComplete="content"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="文件显示名称">
-              <el-input name="displayName" v-model="templateFileRequestForm.displayName" autoComplete="displayName"></el-input>
+              <el-input name="displayName" v-model="templateFileForm.displayName" autoComplete="displayName"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="文件下载链接">
-              <el-input name="link" v-model="templateFileRequestForm.link" autoComplete="link"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="是否在列表中显示">
-              <el-switch name="switch" v-model="templateFileRequestForm.show" autoComplete="show"></el-switch>
+          <el-col :span="24">
+            <el-form-item label="是否在列表中显示" label-width="200px">
+              <el-radio-group v-model="templateFileForm.show">
+                <el-radio label="yes">是</el-radio>
+                <el-radio label="no">否</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
         </el-row>

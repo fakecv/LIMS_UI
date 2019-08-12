@@ -22,7 +22,7 @@ export default {
         content: '',
         displayName: '',
         link: '',
-        show: '',
+        show: 'yes',
         id: ''
       },
       templateFileResetForm: {
@@ -31,7 +31,7 @@ export default {
         content: '',
         displayName: '',
         link: '',
-        show: '',
+        show: 'yes',
         id: ''
       },
       staticOptions: {
@@ -50,7 +50,8 @@ export default {
       this.templateFileForm = JSON.parse(JSON.stringify(this.templateFileResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetTemplateFileForm()
   }
 }
 </script>
