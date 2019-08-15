@@ -14,11 +14,12 @@ import store from './store'
 // import toastr from 'toastr'
 // 界面元素开发页面使用
 import 'bootstrap/dist/css/bootstrap.min.css'
-// import 'bootstrap/dist/js/bootstrap.bundle.js'
+import 'bootstrap/dist/js/bootstrap.bundle.js'
 // import 'toastr/build/toastr.min.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import 'font-awesome/css/font-awesome.min.css'
+import vGallery from 'v-gallery'
 // import '@progress/kendo-ui'
 // import '@progress/kendo-theme-default/dist/all.css'
 // import Scheduler from '@progress/kendo-scheduler-vue-wrapper'
@@ -43,6 +44,7 @@ const auth = new AuthService()
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(filter)
+Vue.use(vGallery)
 Vue.component('icon', Icon)
 require('es6-promise').polyfill()
 router.beforeEach((to, from, next) => {

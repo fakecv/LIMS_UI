@@ -40,7 +40,7 @@
                 </el-col>
                 <el-col :span="24">
                   <el-form-item label="检测周期">
-                    <el-radio-group v-model="agreementForm.testDuration">
+                    <el-radio-group v-model="agreementForm.testDuration" @change="handleTestDuration">
                       <el-radio label="5">5个工作日</el-radio>
                       <el-radio label="3">3个工作日（加收50%检测费）</el-radio>
                       <el-radio label="1.5">1.5个工作日（加收100%检测费）</el-radio>
@@ -246,19 +246,15 @@
             </el-row>
             <div id="demo" v-if="staticOptions.images.length>0">
               <el-row>
-              <label style="width: 180px;">来样状态图片</label>
-              <el-tag v-for="(item,index) in staticOptions.images" :key="index" :closable="true" @close="removeImage(item)">{{item.caption}}</el-tag>
+                <el-col :span="24">
+                <label style="width: 180px;">来样状态图片</label>
+                </el-col>
+                <el-col>
+                <el-tag v-for="(item,index) in staticOptions.images" :key="index" :closable="true" @close="removeImage(item)">{{item.title}}</el-tag>
+                </el-col>
               </el-row>
-              <vue-images :imgs="staticOptions.images"
-                          :modalclose="modalclose"
-                          :keyinput="keyinput"
-                          :mousescroll="mousescroll"
-                          :showclosebutton="showclosebutton"
-                          :showcaption="showcaption"
-                          :imagecountseparator="imagecountseparator"
-                          :showimagecount="showimagecount"
-                          :showthumbnails="showthumbnails">
-              </vue-images>
+              <v-gallery :images="staticOptions.images"  >
+              </v-gallery>
             </div>
             </el-form>
           </el-container>
@@ -267,6 +263,7 @@
           <Process
            :agreementNumber="agreementForm.agreementNumber"
            :agreementId="agreementForm.id"
+           :processPriority="agreementForm.processPriority"
            :agreementComment="agreementForm.comment"
            v-on:refreshAgreement="refreshAgreement">
           </Process>
@@ -369,6 +366,18 @@ export default {
   methods: {
     handleClick (tab, event) {
       // console.log(tab, event)
+    },
+    handleTestDuration () {
+      let today = new Date()
+      if (this.agreementForm.testDuration === '3') {
+        this.agreementForm.expectedCompletionTime = today.setDate(today.getDate() + 3)
+      } else if (this.agreementForm.testDuration === '5') {
+        this.agreementForm.expectedCompletionTime = today.setDate(today.getDate() + 5)
+      } else if (this.agreementForm.testDuration === '1.5') {
+        this.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 1.5)
+      } else {
+        this.agreementForm.expectedCompletionTime = ''
+      }
     },
     actionHandle (action) {
       if (action.id === '1') {
@@ -539,6 +548,7 @@ export default {
     },
     previewReport (agreementNumber) {
       if (agreementNumber && agreementNumber !== '') {
+        this.form.reportList = []
         this.reportOptionDialog = true
         this.form.reportList.push(agreementNumber)
         this.form.reportList = this.form.reportList.concat(['agreement', 'process', 'task'])
@@ -617,8 +627,8 @@ export default {
           reader.readAsDataURL(res.data)
           reader.onload = function () {
             var imageCP = {}
-            imageCP.imageUrl = reader.result
-            imageCP.caption = file.name
+            imageCP.url = reader.result
+            imageCP.title = file.name
             vm.$emit('addImage', imageCP)
           }
         }).catch(function (error) {

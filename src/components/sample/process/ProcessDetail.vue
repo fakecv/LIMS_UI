@@ -19,7 +19,7 @@
               <el-input name="sampleClientNumber" v-model="processForm.sampleClientNumber" autoComplete="sampleClientNumber"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="样品编号">
               <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input>
               <el-button  :disabled="staticOptions.sampleNumberButton" @click="sampleNumberGenerator">生成样品编号</el-button>
@@ -47,7 +47,7 @@
         @row-dblclick="dblclick"
         @selection-change="handleTestedItemTaskChange"
         size="mini"
-        height="250">
+        >
           <el-table-column
             type="selection"
             width="55">
@@ -69,21 +69,6 @@
             label="检测方法"
             width="180">
           </el-table-column>
-          <!-- <el-table-column
-            prop="processPriority"
-            label="优先级"
-            :formatter="processPriorityFormatter"
-            width="180">
-              <template slot-scope="scope">
-                <el-select name="processPriority" filterable default-first-option v-model="scope.row.processPriority" size="mini">
-                  <el-option v-for="item in staticOptions.processPriorities"
-                    :key="item.id"
-                    :label="item.processPriorityName"
-                    :value="item.processPriorityName">
-                  </el-option>
-                  </el-select>
-              </template>
-          </el-table-column> -->
           <el-table-column
             prop="rejectNote"
             label="驳回原因"
@@ -112,39 +97,6 @@
                 </el-select>
             </el-form-item>
           </el-col>
-          <!-- <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="提交部门">
-              <el-select name="submitFrom" filterable default-first-option v-model="processForm.submitFrom">
-                <el-option v-for="item in staticOptions.departments"
-                  :key="item.id"
-                  :label="item.departmentName"
-                  :value="item.departmentName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="当前流转状态">
-              <el-select name="processingStatus" filterable default-first-option v-model="processForm.processingStatus">
-                <el-option v-for="item in staticOptions.processingStatuses"
-                  :key="item.id"
-                  :label="item.processingStatusName"
-                  :value="item.processingStatusName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="提交至">
-              <el-select name="submitTo" filterable default-first-option v-model="processForm.submitTo">
-                <el-option v-for="item in staticOptions.departments"
-                  :key="item.id"
-                  :label="item.departmentName"
-                  :value="item.departmentName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col> -->
         </el-row>
       </el-form>
     </el-container>
@@ -270,16 +222,16 @@ export default {
       this.getFilteredTestItems(this.testedItemTaskForm.testCategory)
       this.getTestMethod(this.testedItemTaskForm.testedItem)
     },
-    updateTestedItemProduct (val) {
-      this.$emit('updateTestedItemProduct', val)
+    updateTestedItemProduct () {
+      this.$emit('updateTestedItemProduct')
       this.testedItemProductFormVisible = false
     },
     updateTestedItemTask () {
       this.testedItemTaskFormVisible = false
       this.$emit('updateTestedItemTask')
     },
-    updateTestedItemTasks (val) {
-      this.$emit('updateTestedItemTasks', val)
+    updateTestedItemTasks () {
+      this.$emit('updateTestedItemTasks')
       this.testedItemProductGroupFormVisible = false
     },
     deleteTestedItemTask () {

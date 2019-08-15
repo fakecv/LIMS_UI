@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="用户列表" :visible.sync="workflowDialog"  append-to-body>
+  <el-dialog title="用户列表" :visible.sync="workflowDialog" :modal-append-to-body="false">
     <el-container style="padding: 10px">
       <el-form :model="workflowForm" label-width="100px" label-position="left" size="mini">
         <el-row>

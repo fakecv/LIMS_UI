@@ -56,7 +56,9 @@
         </el-row>
       </el-form>
     </el-container>
-    <el-table :data="testedItemProductTableData" style="width: 100%"  @selection-change="handleTestedItemProductChange">
+    <el-table :data="testedItemProductTableData" style="width: 100%"
+      @selection-change="handleTestedItemProductChange"
+      >
         <el-table-column
           type="selection"
           width="55">
@@ -134,8 +136,8 @@ export default {
     handleTestedItemProductCurrentChange (val) {
       this.$emit('handleTestedItemProductCurrentChange', val)
     },
-    updateTestedItemProduct (val) {
-      this.$emit('updateTestedItemProduct', val)
+    updateTestedItemProduct () {
+      this.$emit('updateTestedItemProduct')
     },
     testedItemFormatter (row, column) {
       let name = ''

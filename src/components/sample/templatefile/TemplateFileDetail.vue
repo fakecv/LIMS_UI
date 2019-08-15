@@ -38,6 +38,21 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+          <el-upload ref="upload"
+            class="upload-demo"
+            drag
+            action="dummy"
+            :file-list="fileList"
+            :auto-upload="false"
+            :on-change="handleChange"
+            multiple>
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击选取文件</em></div>
+            <div class="el-upload__tip" slot="tip">只能上传doc文件，且不超过2M</div>
+          </el-upload>
+          <el-button @click="uploadToServer">上传模板文件</el-button>
+        </el-row>
       </el-form>
     </el-container>
   </el-container>
@@ -58,6 +73,7 @@ export default {
         {'name': '文件导入', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '7', 'icon': 'el-icon-download', 'loading': false}
       ],
+      fileList: [],
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
     }
   },
@@ -75,6 +91,35 @@ export default {
         this.confirmDelete()
       } else if (action.id === '6') {
       } else if (action.id === '7') {
+      }
+    },
+    uploadPics () {
+      let vm = this
+      var formData = new FormData()
+      let config = {
+        headers: {'Content-Type': 'multipart/form-data'}
+      }
+      this.fileList.forEach(file => {
+        formData.append('files', file.raw)
+      })
+      this.$ajax.post('/api/sample/templateFile/uploadMultipleFiles', formData, config)
+        .then(function (res) {
+          vm.$message('图片已经上传到服务器!')
+          vm.fileList.forEach(file => {
+            vm.downloadToFrontEnd(file.raw)
+          })
+          vm.fileList = []
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    handleChange (file, fileList) {
+      this.fileList = fileList
+    },
+    uploadToServer () {
+      if (this.fileList.length > 0) {
+        this.uploadPics()
+        this.$refs.upload.clearFiles()
       }
     },
     new () {

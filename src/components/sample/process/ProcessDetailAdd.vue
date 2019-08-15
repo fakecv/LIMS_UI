@@ -28,27 +28,32 @@
             <el-table-column
               prop="submitFrom"
               label="提交部门"
-              width="180">
+              width="120">
             </el-table-column>
             <el-table-column
               prop="submitTo"
               label="提交至"
-              width="180">
+              width="120">
             </el-table-column>
             <el-table-column
               prop="submitPerson"
               label="提交人"
-              width="180">
+              width="120">
             </el-table-column>
             <el-table-column
               prop="processingStatus"
               label="当前状态"
-              width="180">
+              width="120">
             </el-table-column>
             <el-table-column
               prop="submitDate"
               label="提交时间"
               :formatter="submitTimeFormatter"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="comment"
+              label="提交说明"
               width="180">
             </el-table-column>
             </el-table>
@@ -88,14 +93,12 @@
         </el-table>
       </el-main>
     </el-container>
-    <div class="drawer">
-      <el-drawer
+      <el-dialog
         :title= "'委托协议编号：' + agreementNumber"
-        :before-close="handleClose"
         :visible.sync="dialog"
         ref="drawer"
         :append-to-body="true"
-        size="80%">
+        >
         <div class="demo-drawer__content">
           <ProcessDetail
             :agreementId="agreementId"
@@ -109,13 +112,12 @@
             v-on:addTestedItemTask="addTestedItemTask"
             v-on:updateTestedItemProduct="updateTestedItemProduct"
             />
-          <div style="padding: 40px;">
+          <div style="padding: 40px;" class="demo-drawer__footer">
             <el-button @click="dialog = false">取 消</el-button>
-            <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading">{{ loading ? '提交中 ...' : '保存' }}</el-button>
+            <el-button type="primary" @click="confirmSaveToDB" :loading="loading">{{ loading ? '提交中 ...' : '保存' }}</el-button>
           </div>
         </div>
-      </el-drawer>
-    </div>
+      </el-dialog>
     <workflowDialog ref="workflowDialog"
      v-on:addWorkflow="confirmAddWorkflow"
      v-on:closeWorkflowDialog="closeWorkflowDialog"
@@ -129,7 +131,7 @@ import workflowDialog from '@/components/sample/process/dialog/WorkflowDialog'
 export default {
   name: 'processDetailAdd',
   components: {ProcessDetail, workflowDialog},
-  props: ['agreementId', 'agreementNumber', 'agreementComment'],
+  props: ['agreementId', 'agreementNumber', 'agreementComment', 'processPriority'],
   data () {
     return {
       dialog: false,
@@ -138,7 +140,7 @@ export default {
       actions: [
         {'ref': 'new', 'name': '新建', 'id': '1', 'icon': 'el-icon-circle-plus', 'loading': false, 'disabled': false},
         {'ref': 'copy', 'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'disabled': false},
-        {'ref': 'submit', 'name': '提交', 'id': '3', 'icon': 'el-icon-document', 'loading': false, 'disabled': false},
+        {'ref': 'submit', 'name': '提交/驳回', 'id': '3', 'icon': 'el-icon-document', 'loading': false, 'disabled': false},
         {'ref': 'delete', 'name': '删除', 'id': '4', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false}
       ],
       processForm: {
@@ -244,6 +246,17 @@ export default {
       this.processForm.comment = this.agreementComment
       this.processForm.agreementId = this.agreementId
       this.processForm.agreementNumber = this.agreementNumber
+      this.processForm.processPriority = this.processPriority
+    },
+    copy () {
+      let vm = this
+      this.staticOptions.selectedProcessTableData.forEach(item => {
+        vm.processForm = JSON.parse(JSON.stringify(item))
+        vm.processForm.id = ''
+        vm.processForm.sampleNumber = ''
+        vm.processForm.sampleSubNumber = ''
+        vm.staticOptions.processTableData.push(this.processForm)
+      })
     },
     resetProcessForm () {
       this.processForm = JSON.parse(JSON.stringify(this.processResetForm))
@@ -298,6 +311,7 @@ export default {
       })
       this.workflowForm.id = ids.join(',')
       this.workflowForm.submitTo = event.submitTo
+      this.workflowForm.comment = event.comment
       this.workflowForm.processingStatus = event.processingStatus
       this.$ajax.post('/api/sample/process/submitProcesses/', this.workflowForm)
         .then(function (res) {
@@ -330,13 +344,20 @@ export default {
           })
         })
     },
-    handleClose (done) {
-      this.$confirm('确定要提交表单吗？')
-        .then(_ => {
-          this.loading = true
-          this.saveToDB()
+    confirmSaveToDB () {
+      let vm = this
+      this.$confirm('确认保存?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        vm.saveToDB()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消保存'
         })
-        .catch(_ => {})
+      })
     },
     saveToDB () {
       let vm = this
@@ -355,6 +376,7 @@ export default {
             message: error.response.data.message
           })
           vm.loading = false
+          vm.dialog = false
         })
     },
     dblclick (row, event) {

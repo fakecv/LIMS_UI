@@ -44,7 +44,8 @@ export default {
       this.customerForm = JSON.parse(JSON.stringify(this.customerResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetCustomerForm()
   }
 }
 </script>

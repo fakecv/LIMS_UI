@@ -42,6 +42,7 @@ export default {
     },
     downloadToFrontEnd () {
       let vm = this
+      this.fileUrl = ''
       this.$ajax.get('/api/sample/agreement/downloadPdfFile/' + this.agreementNumber, {responseType: 'blob'})
         .then(function (res) {
           vm.download(res.data)
@@ -52,6 +53,7 @@ export default {
     },
     download (data) {
       if (!data) {
+        console.log('data is null')
         return
       }
       let url = window.URL.createObjectURL(new Blob([data]), {type: 'application/pdf'})
@@ -127,7 +129,7 @@ export default {
       this.$router.go(-1)
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.agreementNumber = this.$route.params.id
       this.downloadToFrontEnd()

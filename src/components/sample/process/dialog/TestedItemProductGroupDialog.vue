@@ -22,7 +22,11 @@
         </el-row>
       </el-form>
     </el-container>
-    <el-table ref="testedItemProductGroupTable" :data="testedItemProductGroupTableData" style="width: 100%" @selection-change="handleTestedItemProductGroupChange">
+    <el-table ref="testedItemProductGroupTable"
+     :data="testedItemProductGroupTableData"
+      style="width: 100%"
+       @selection-change="handleTestedItemProductGroupChange"
+       >
         <el-table-column
           type="selection"
           width="55">
@@ -83,8 +87,8 @@ export default {
     handleTestedItemProductGroupCurrentChange (val) {
       this.$emit('handleTestedItemProductGroupCurrentChange', val)
     },
-    updateTestedItemTasks (val) {
-      this.$emit('updateTestedItemTasks', val)
+    updateTestedItemTasks () {
+      this.$emit('updateTestedItemTasks')
     }
   }
 

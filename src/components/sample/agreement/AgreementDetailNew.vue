@@ -29,8 +29,8 @@ export default {
         id: '',
         agreementNumber: '',
         sampleName: '',
-        receiveSampleTime: '',
-        expectedCompletionTime: '',
+        receiveSampleTime: new Date(),
+        expectedCompletionTime: new Date().setDate((new Date().getDate() + 5)),
         processPriority: '',
         materialNumber: '',
         noOfSample: '1组(2件)',
@@ -69,8 +69,8 @@ export default {
         id: '',
         agreementNumber: '',
         sampleName: '',
-        receiveSampleTime: '',
-        expectedCompletionTime: '',
+        receiveSampleTime: new Date(),
+        expectedCompletionTime: new Date().setDate((new Date().getDate() + 5)),
         processPriority: '',
         materialNumber: '',
         noOfSample: '1组(2件)',
@@ -181,6 +181,7 @@ export default {
     },
     loadAgreement (agreementId) {
       let vm = this
+      this.staticOptions.images.length = 0
       this.$ajax.get('/api/sample/agreement/' + agreementId)
         .then(function (res) {
           vm.agreementForm = res.data
@@ -193,12 +194,33 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    downloadToFrontEnd (fileName, agreementId) {
+      let vm = this
+      let downloadFormTemp = {agreementNumber: agreementId, fileName: fileName}
+      var reader = new FileReader()
+      this.$ajax.post('/api/sample/agreement/downloadFile', downloadFormTemp, { responseType: 'blob' })
+        .then(function (res) {
+          reader.readAsDataURL(res.data)
+          reader.onload = function () {
+            var imageCP = {}
+            imageCP.url = reader.result
+            imageCP.title = fileName
+            vm.staticOptions.images.push(imageCP)
+          }
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     copyAgreement (agreementId) {
       let vm = this
-      console.log(agreementId)
       this.$ajax.get('/api/sample/agreement/copyAgreement/' + agreementId)
         .then(function (res) {
           vm.agreementForm = res.data
+          vm.agreementForm.receiveSampleTime = vm.agreementResetForm.receiveSampleTime
+          vm.agreementForm.testDuration = vm.agreementResetForm.testDuration
+          vm.agreementForm.expectedCompletionTime = vm.agreementResetForm.expectedCompletionTime
+          vm.agreementForm.done = vm.agreementResetForm.done
+          vm.agreementForm.duration = vm.agreementResetForm.duration
           vm.$router.push('/lims/agreementDetailNew/' + vm.agreementForm.id)
         })
     },
@@ -227,6 +249,7 @@ export default {
       // it's better than vm.staticOptions.images = [], any reference will be also cleared.
       this.agreementForm = JSON.parse(JSON.stringify(this.agreementResetForm))
       this.staticOptions.images.length = 0
+      this.getTopOneUser()
     },
     resetAgreementForm () {
       let vm = this
@@ -282,6 +305,18 @@ export default {
           vm.staticOptions.totalUsers = res.data.totalUsers || 0
         })
     },
+    getTopOneUser () {
+      let vm = this
+      this.$ajax.get('/api/users/getTopOne')
+        .then(function (res) {
+          console.log(res.data)
+          vm.agreementForm.receiverName = res.data.name
+          vm.agreementForm.receiverMobileNumber = res.data.mobileNumber
+          vm.agreementForm.receiverFax = res.data.fax
+          vm.agreementForm.receiverEmail = res.data.email
+          vm.agreementForm.receiverAddress = res.data.address
+        })
+    },
     updateUser (row) {
       this.agreementForm.reeiverName = row.name
       this.agreementForm.receiverName = row.name
@@ -291,18 +326,18 @@ export default {
       this.agreementForm.receiverAddress = row.address
     },
     addImage (imageCP) {
-      this.agreementForm.imageNameList.push(imageCP.caption)
+      this.agreementForm.imageNameList.push(imageCP.title)
       this.staticOptions.images.push(imageCP)
     },
     removeImage (item) {
       let vm = this
-      let downloadFormTemp = {agreementNumber: this.agreementForm.agreementNumber, fileName: item.caption}
+      let downloadFormTemp = {agreementNumber: this.agreementForm.agreementNumber, fileName: item.title}
       this.$ajax.post('/api/sample/agreement/deleteFile', downloadFormTemp)
         .then(function (res) {
           vm.staticOptions.images.forEach(image => {
-            if (image.caption === item.caption) {
+            if (image.title === item.title) {
               vm.staticOptions.images.splice(vm.staticOptions.images.indexOf(image), 1)
-              vm.agreementForm.imageNameList.splice(vm.agreementForm.imageNameList.indexOf(item.caption), 1)
+              vm.agreementForm.imageNameList.splice(vm.agreementForm.imageNameList.indexOf(item.title), 1)
             }
           })
         }).catch(function (error) {
@@ -310,13 +345,12 @@ export default {
         })
     },
     refreshAgreement () {
-      console.log('come to refresh')
       this.loadAgreement(this.$route.params.id)
     }
   },
   mounted () {
     if (this.$route.params.id !== undefined) {
-      this.loadAgreement(this.$route.params.id)
+      // this.loadAgreement(this.$route.params.id)
       this.staticOptions.processListed = false
     }
     this.loadProcessPriorityData()

@@ -98,43 +98,46 @@
         <el-table-column
               prop="submitFrom"
               label="提交部门"
-              width="180">
+              width="120">
             </el-table-column>
             <el-table-column
               prop="submitTo"
               label="提交至"
-              width="180">
+              width="120">
             </el-table-column>
             <el-table-column
               prop="submitPerson"
               label="提交人"
-              width="180">
+              width="120">
             </el-table-column>
             <el-table-column
               prop="processingStatus"
               label="当前状态"
-              width="180">
+              width="120">
             </el-table-column>
             <el-table-column
               prop="submitDate"
               label="提交时间"
               :formatter="submitTimeFormatter"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="comment"
+              label="提交说明"
               width="180">
             </el-table-column>
         </el-table>
       </template>
       </el-table-column>
       <el-table-column
-        prop="agreementNumber"
-        label="委托编号"
-        fixed
-        width="150">
+            prop="sampleNumber"
+            label="样品编号"
+            width="180">
       </el-table-column>
       <el-table-column
         prop="sampleSubNumber"
         label="试样编号"
-        fixed
-        width="80">
+        width="180">
       </el-table-column>
       <el-table-column
         prop="drawingDesign"
@@ -142,33 +145,10 @@
         width="180">
       </el-table-column>
       <el-table-column
-        prop="submitFrom"
-        label="提交部门"
-        show-overflow-tooltip
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="submitTime"
-        label="提交时间"
-        :formatter="submitTimeFormatter"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="processingStatus"
-        label="当前流转状态"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="submitTo"
-        label="提交至"
-        show-overflow-tooltip
-        width="180">
-      </el-table-column>
-      <el-table-column
         prop="processPriority"
         label="优先级"
         show-overflow-tooltip
-        width="80">
+        width="180">
       </el-table-column>
       <el-table-column
         prop="comment"
@@ -388,8 +368,8 @@ export default {
       }
     },
     submitTimeFormatter (row, column) {
-      if (row.submitTime) {
-        let dateTT = new Date(row.submitTime)
+      if (row.submitDate) {
+        let dateTT = new Date(row.submitDate)
         let hours = dateTT.getHours() < 10 ? '0' : ''
         let min = dateTT.getMinutes() < 10 ? '0' : ''
         return `${dateTT.getFullYear()}/${dateTT.getMonth() + 1}/${dateTT.getDate()} ${hours + dateTT.getHours()}:${min + dateTT.getMinutes()}`

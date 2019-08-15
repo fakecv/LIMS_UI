@@ -38,7 +38,22 @@ export default {
         {'name': '文件导入', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '4', 'icon': 'el-icon-download', 'loading': false}
       ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
+      modalclose: true,
+      keyinput: true,
+      mousescroll: true,
+      showclosebutton: true,
+      showcaption: true,
+      imagecountseparator: 'of',
+      showimagecount: true,
+      showthumbnails: true,
+      imageNumber: 1,
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8},
+      images: [
+        {caption: '1', imageUrl: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=294891024,3760856881&fm=26&gp=0.jpg'},
+        {caption: '2', imageUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565668569011&di=2b6c2fd67f310dbb66a7c90a61b02cfc&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F0197fa570a2bfb6ac7251f05e8c74a.jpg%401280w_1l_2o_100sh.jpg'},
+        {caption: '3', imageUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565668569009&di=48f9ead951671d4e654f5eec564c811f&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F016e45578d9c010000012e7ece8753.jpg%40900w_1l_2o'},
+        {caption: '4', imageUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1565668569009&di=0afefaa510ec9f0147196456dea00228&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01550d5964b431a8012193a33b5cb8.jpg%401280w_1l_2o_100sh.jpg'}
+      ]
     }
   },
   methods: {

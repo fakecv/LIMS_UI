@@ -120,6 +120,11 @@ export default {
       this.$emit('close')
     }
   },
+  watch: {
+    agreementId (newValue, oldValue) {
+      return this.agreementId
+    }
+  },
   mounted () {
     this.onSubmit()
   },

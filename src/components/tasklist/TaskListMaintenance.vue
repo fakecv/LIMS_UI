@@ -13,18 +13,18 @@
         <el-table-column
           prop="bussinessId"
           label="业务编号"
-          width="180">
+          width="120">
         </el-table-column>
         <el-table-column
           prop="bussinessDescription"
           label="业务描述"
           show-overflow-tooltip
-          width="180">
+          width="120">
         </el-table-column>
         <el-table-column
           prop="submitFrom"
           label="提交人"
-          width="180">
+          width="120">
         </el-table-column>
         <el-table-column
           prop="submitTime"
@@ -36,13 +36,27 @@
           prop="status"
           label="当前状态"
           show-overflow-tooltip
-          width="180">
+          width="120">
         </el-table-column>
         <el-table-column
           prop="processPriority"
           label="优先级"
           show-overflow-tooltip
-          width="180">
+          width="120">
+        </el-table-column>
+        <el-table-column align="right" width="300">
+          <template slot-scope="scope">
+            <el-button-group>
+            <el-button
+              size="mini"
+              type="primary"
+              @click="handleDownloadTemplateFile(scope.$index, scope.row)">下载模板文件</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleViewSamplePicture(scope.$index, scope.row)">查看样品图片</el-button>
+            </el-button-group>
+          </template>
         </el-table-column>
       </el-table>
       <div class="block text-right">
@@ -56,21 +70,29 @@
           :total="totalTaskLists">
         </el-pagination>
       </div>
-    <workflowDialog ref="workflowDialog"
-     v-on:addWorkflow="confirmAddWorkflow"
-     v-on:closeWorkflowDialog="closeWorkflowDialog"
-    :workflowDialog="workflowDialog"/>
+      <samplePictureViewDialog
+        :samplePictureViewDialog="samplePictureViewDialog"
+        v-on:closeSamplePictureViewDialog="closeSamplePictureViewDialog"
+        :agreementId="taskListRequestForm.agreementId"
+        />
+      <workflowDialog ref="workflowDialog"
+        v-on:addWorkflow="confirmAddWorkflow"
+        v-on:closeWorkflowDialog="closeWorkflowDialog"
+        :workflowDialog="workflowDialog"/>
     </div>
   </template>
 
 <script>
 import workflowDialog from '@/components/sample/process/dialog/WorkflowDialog'
+import samplePictureViewDialog from '@/components/tasklist/SamplePictureViewDialog'
+import templateFileDialog from '@/components/tasklist/TemplateFileDialog'
 export default {
   name: 'taskListMaintenance',
-  components: {workflowDialog},
+  components: {workflowDialog, templateFileDialog, samplePictureViewDialog},
   data () {
     return {
       workflowDialog: false,
+      samplePictureViewDialog: false,
       workflowForm: {
         id: '',
         submitFrom: '',
@@ -85,6 +107,7 @@ export default {
       totalTaskLists: 0,
       taskListRequestForm: {
         processId: '',
+        agreementId: '',
         bussinessId: '',
         link: '',
         type: '',
@@ -99,6 +122,18 @@ export default {
     }
   },
   methods: {
+    closeSamplePictureViewDialog () {
+      this.samplePictureViewDialog = false
+    },
+    handleDownloadTemplateFile (index, row) {
+      console.log(index)
+      console.log(row)
+    },
+    handleViewSamplePicture (index, row) {
+      console.log(row)
+      this.taskListRequestForm = row
+      this.samplePictureViewDialog = true
+    },
     handleTaskSelect (selection) {
       console.log('select')
       this.selectedTasks = selection
