@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="用户列表" :visible.sync="workflowDialog"  append-to-body>
+  <el-dialog title="样品提交" :visible.sync="workflowDialog"  append-to-body>
     <el-container style="padding: 10px">
       <el-form :model="workflowForm" label-width="100px" label-position="left" size="mini">
         <el-row>
@@ -62,7 +62,11 @@ export default {
   },
   methods: {
     addWorkflow () {
-      this.$emit('addWorkflow', this.workflowForm)
+      if (this.workflowForm.processingStatus.indexOf('驳回') > -1 && this.workflowForm.comment === '') {
+        this.$message('驳回必须填写驳回说明！')
+      } else {
+        this.$emit('addWorkflow', this.workflowForm)
+      }
     },
     closeWorkflowDialog () {
       this.$emit('closeWorkflowDialog')

@@ -405,7 +405,6 @@ export default {
       let vm = this
       this.staticOptions.testedItemProducts.forEach(testItemProductGroup => {
         testItemProductGroup.testedItemTasks.forEach(item => {
-          item.processPriority = vm.processForm.processPriority
           vm.processForm.testedItemTasks.push(item)
         })
         vm.fetchDrawingDesign()
@@ -452,16 +451,17 @@ export default {
     },
     loadAgreementProcess (agreementId) {
       let vm = this
-      console.log(this.agreementNumber)
-      this.$ajax.get('/api/sample/process/agreement/' + agreementId)
-        .then(function (res) {
-          vm.staticOptions.processTableData = res.data
-        }).catch(function (error) {
-          vm.$message({
-            showClose: true,
-            message: error.response.data.message
+      if (agreementId !== '') {
+        this.$ajax.get('/api/sample/process/agreement/' + agreementId)
+          .then(function (res) {
+            vm.staticOptions.processTableData = res.data
+          }).catch(function (error) {
+            vm.$message({
+              showClose: true,
+              message: error.response.data.message
+            })
           })
-        })
+      }
     },
     loadDepartment () {
       let vm = this

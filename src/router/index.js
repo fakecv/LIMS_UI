@@ -78,9 +78,6 @@ import ProcessDetailNew from '@/components/sample/process/ProcessDetailNew'
 import ProcessDetailEdit from '@/components/sample/process/ProcessDetailEdit'
 import ProcessMaintenance from '@/components/sample/process/ProcessMaintenance'
 import ProcessReview from '@/components/sample/process/ProcessReview'
-import ProcessingDetailNew from '@/components/sample/processing/ProcessingDetailNew'
-import ProcessingDetailEdit from '@/components/sample/processing/ProcessingDetailEdit'
-import ProcessingMaintenance from '@/components/sample/processing/ProcessingMaintenance'
 import ProcessingStatusDetailNew from '@/components/sample/processingstatus/ProcessingStatusDetailNew'
 import ProcessingStatusDetailEdit from '@/components/sample/processingstatus/ProcessingStatusDetailEdit'
 import ProcessingStatusMaintenance from '@/components/sample/processingstatus/ProcessingStatusMaintenance'
@@ -521,21 +518,6 @@ const router = new Router({
           path: 'processReview/:id',
           name: 'processReview',
           component: ProcessReview
-        },
-        {
-          path: 'processingDetailEdit/:id',
-          name: 'processingDetailEdit',
-          component: ProcessingDetailEdit
-        },
-        {
-          path: 'processingDetailNew',
-          name: 'processingDetailNew',
-          component: ProcessingDetailNew
-        },
-        {
-          path: 'processingMaintenance',
-          name: 'processingMaintenance',
-          component: ProcessingMaintenance
         },
         {
           path: 'processingStatusDetailEdit/:id',

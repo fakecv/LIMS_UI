@@ -29,8 +29,8 @@ export default {
         id: '',
         agreementNumber: '',
         sampleName: '',
-        receiveSampleTime: new Date(),
-        expectedCompletionTime: new Date().setDate((new Date().getDate() + 5)),
+        receiveSampleTime: new Date(Date.now()),
+        expectedCompletionTime: new Date(Date.now() + 864e5 * 7),
         processPriority: '',
         materialNumber: '',
         noOfSample: '1组(2件)',
@@ -69,8 +69,8 @@ export default {
         id: '',
         agreementNumber: '',
         sampleName: '',
-        receiveSampleTime: new Date(),
-        expectedCompletionTime: new Date().setDate((new Date().getDate() + 5)),
+        receiveSampleTime: new Date(Date.now()),
+        expectedCompletionTime: new Date(Date.now() + 864e5 * 7),
         processPriority: '',
         materialNumber: '',
         noOfSample: '1组(2件)',
@@ -216,9 +216,9 @@ export default {
       this.$ajax.get('/api/sample/agreement/copyAgreement/' + agreementId)
         .then(function (res) {
           vm.agreementForm = res.data
-          vm.agreementForm.receiveSampleTime = vm.agreementResetForm.receiveSampleTime
           vm.agreementForm.testDuration = vm.agreementResetForm.testDuration
-          vm.agreementForm.expectedCompletionTime = vm.agreementResetForm.expectedCompletionTime
+          vm.agreementForm.receiveSampleTime = new Date(Date.now())
+          vm.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 7)
           vm.agreementForm.done = vm.agreementResetForm.done
           vm.agreementForm.duration = vm.agreementResetForm.duration
           vm.$router.push('/lims/agreementDetailNew/' + vm.agreementForm.id)
@@ -249,6 +249,8 @@ export default {
       // it's better than vm.staticOptions.images = [], any reference will be also cleared.
       this.agreementForm = JSON.parse(JSON.stringify(this.agreementResetForm))
       this.staticOptions.images.length = 0
+      this.agreementForm.receiveSampleTime = new Date(Date.now())
+      this.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 7)
       this.getTopOneUser()
     },
     resetAgreementForm () {
@@ -309,7 +311,6 @@ export default {
       let vm = this
       this.$ajax.get('/api/users/getTopOne')
         .then(function (res) {
-          console.log(res.data)
           vm.agreementForm.receiverName = res.data.name
           vm.agreementForm.receiverMobileNumber = res.data.mobileNumber
           vm.agreementForm.receiverFax = res.data.fax

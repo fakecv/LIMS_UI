@@ -1,6 +1,6 @@
     <template>
     <div>
-      <el-button type="primary" @click="submit">批量提交</el-button>
+      <el-button type="primary" @click="submit">批量提交/驳回</el-button>
       <el-table ref="multipleTable"
       :data="tableData" style="width: 100%"
       :row-style="processTableStyle"
@@ -10,14 +10,57 @@
           type="selection"
           width="55">
         </el-table-column>
+        <el-table-column type="expand">
+          <template slot-scope="scope">
+            <el-table :data="scope.row.testedItemTasks" size="mini">
+              <el-table-column
+                prop="testedItem"
+                label="检测项目"
+                :formatter="testedItemFormatter"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="testParameter"
+                label="检测项目参数"
+                show-overflow-tooltip
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="testMethod"
+                label="检测方法"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="processPriority"
+                label="优先级"
+                width="180">
+              </el-table-column>
+              <el-table-column align="right" width="300">
+                <template slot-scope="scope">
+                  <el-button
+                    size="mini"
+                    type="primary"
+                    @click="handleDownloadTemplateFile(scope.$index, scope.row)">下载模板文件</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </template>
+        </el-table-column>
         <el-table-column
-          prop="bussinessId"
-          label="业务编号"
+          prop="sampleName"
+          label="样品名称"
+          show-overflow-tooltip
           width="120">
         </el-table-column>
         <el-table-column
-          prop="bussinessDescription"
-          label="业务描述"
+          prop="materialNumber"
+          label="材质牌号"
+          show-overflow-tooltip
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="sampleSubNumber"
+          label="试样编号"
           show-overflow-tooltip
           width="120">
         </el-table-column>
@@ -46,16 +89,10 @@
         </el-table-column>
         <el-table-column align="right" width="300">
           <template slot-scope="scope">
-            <el-button-group>
-            <el-button
-              size="mini"
-              type="primary"
-              @click="handleDownloadTemplateFile(scope.$index, scope.row)">下载模板文件</el-button>
             <el-button
               size="mini"
               type="danger"
               @click="handleViewSamplePicture(scope.$index, scope.row)">查看样品图片</el-button>
-            </el-button-group>
           </template>
         </el-table-column>
       </el-table>
@@ -73,7 +110,12 @@
       <samplePictureViewDialog
         :samplePictureViewDialog="samplePictureViewDialog"
         v-on:closeSamplePictureViewDialog="closeSamplePictureViewDialog"
-        :agreementId="taskListRequestForm.agreementId"
+        :agreementId="agreementId"
+        />
+      <templateFileDialog
+        :templateFileDialog="templateFileDialog"
+        v-on:closeTemplateFileDialog="closeTemplateFileDialog"
+        :processId="processId"
         />
       <workflowDialog ref="workflowDialog"
         v-on:addWorkflow="confirmAddWorkflow"
@@ -93,6 +135,9 @@ export default {
     return {
       workflowDialog: false,
       samplePictureViewDialog: false,
+      templateFileDialog: false,
+      agreementId: '',
+      processId: '',
       workflowForm: {
         id: '',
         submitFrom: '',
@@ -108,6 +153,11 @@ export default {
       taskListRequestForm: {
         processId: '',
         agreementId: '',
+        sampleName: '',
+        materialNumber: '',
+        sampleClientNumber: '',
+        sampleSubNumber: '',
+        sampleNumber: '',
         bussinessId: '',
         link: '',
         type: '',
@@ -116,8 +166,14 @@ export default {
         status: '',
         processPriority: '',
         bussinessDescription: '',
+        testedItemTasks: [],
         itemsPerPage: 20,
         currentPage: 1
+      },
+      staticOptions: {
+        testMethods: [],
+        testParameters: [],
+        testedItems: []
       }
     }
   },
@@ -125,17 +181,18 @@ export default {
     closeSamplePictureViewDialog () {
       this.samplePictureViewDialog = false
     },
+    closeTemplateFileDialog () {
+      this.templateFileDialog = false
+    },
     handleDownloadTemplateFile (index, row) {
-      console.log(index)
-      console.log(row)
+      this.templateFileDialog = true
+      this.processId = row.id
     },
     handleViewSamplePicture (index, row) {
-      console.log(row)
-      this.taskListRequestForm = row
+      this.agreementId = row.agreementId
       this.samplePictureViewDialog = true
     },
     handleTaskSelect (selection) {
-      console.log('select')
       this.selectedTasks = selection
     },
     submit () {
@@ -192,6 +249,25 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
+    loadTestedItemData () {
+      let vm = this
+      this.$ajax
+        .get('/api/sample/testedItem/getTestedItem')
+        .then(function (res) {
+          vm.staticOptions.testedItems = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadProcessingStatusData () {
+      let vm = this
+      this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
+        .then(function (res) {
+          vm.staticOptions.processingStatuses = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     processTableStyle ({row, rowIndex}) {
       let backgroundColor = '#FFFFFF'
       let color = '#000000'
@@ -222,6 +298,33 @@ export default {
           vm.totalTaskLists = res.data.totalTaskLists || 0
         })
     },
+    testedItemFormatter (row, column) {
+      let name = ''
+      this.staticOptions.testedItems.forEach(item => {
+        if (row.testedItem === item.id) {
+          name = item.testedItemName
+        }
+      })
+      return name
+    },
+    processingStatusFormatter (row, column) {
+      let name = ''
+      this.processingStatuses.forEach(item => {
+        if (row.processingStatus === item.id) {
+          name = item.processingStatusName
+        }
+      })
+      return name
+    },
+    processPriorityFormatter (row, column) {
+      let name = ''
+      this.processPriorities.forEach(item => {
+        if (row.processPriority === item.id) {
+          name = item.processPriorityName
+        }
+      })
+      return name
+    },
     submitTimeFormatter (row, column) {
       if (row.submitTime) {
         let dateTT = new Date(row.submitTime)
@@ -231,13 +334,10 @@ export default {
       }
     }
   },
-  mounted () {
-    this.onSubmit()
-    this.loadProcessPriorityData()
-  },
   activated () {
     this.onSubmit()
     this.loadProcessPriorityData()
+    this.loadTestedItemData()
   }
 }
 </script>

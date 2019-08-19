@@ -45,9 +45,9 @@
       </el-form>
     </el-container>
     <div class="block text-right">
-      <!-- <el-button type="primary" icon="el-icon-download" circle @click="exportExcel">导出</el-button> -->
-      <el-button type="primary" icon="el-icon-download" circle @click="exportSettlementList">导出选中结算清单</el-button>
-      <el-button type="primary" icon="el-icon-download" circle @click="exportSettlementListAsCondition">按条件导出结算清单</el-button>
+      <el-button type="primary" size="mini" icon="el-icon-lock" @click="confirmFinish">批量完成</el-button>
+      <el-button type="primary" size="mini" icon="el-icon-shopping-cart-2" @click="exportSettlementList">导出选中结算清单</el-button>
+      <el-button type="primary" size="mini" icon="el-icon-shopping-cart-1" @click="exportSettlementListAsCondition">按条件导出结算清单</el-button>
     </div>
       <el-table id="out-table" :data="tableData" height="500" style="width: 100%" @row-dblclick=dblclick :row-style="agreementTableStyle"
       @selection-change="handleSelectionChange"
@@ -164,6 +164,33 @@ export default {
       val.forEach(element => {
         this.agreementIds.push(element.id)
       })
+    },
+    confirmFinish () {
+      if (this.agreementIds.length > 0) {
+        this.$confirm('确认更新为完成状态?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.finish()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消提交'
+          })
+        })
+      }
+    },
+    finish () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/finish/' + this.agreementIds.join(','))
+        .then(function (res) {
+          vm.$message('已更新为完成状态！')
+          vm.onSubmit()
+        }
+        ).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     exportSettlementList () {
       let vm = this
@@ -298,7 +325,7 @@ export default {
       return name
     }
   },
-  mounted () {
+  activated () {
     this.loadProcessPriorityData()
     this.loadCustomerData()
     this.onSubmit()

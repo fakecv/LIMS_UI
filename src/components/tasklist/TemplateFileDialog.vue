@@ -1,104 +1,117 @@
 <template>
-  <el-dialog title="用户列表" :visible.sync="workflowDialog" :modal-append-to-body="false">
-    <el-container style="padding: 10px">
-      <el-form :model="workflowForm" label-width="100px" label-position="left" size="mini">
-        <el-row>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="提交至">
-              <el-select name="submitTo" filterable default-first-option v-model="workflowForm.submitTo">
-                <el-option v-for="item in departments"
-                  :key="item.id"
-                  :label="item.departmentName"
-                  :value="item.departmentName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="当前流转状态">
-              <el-select name="processingStatus" filterable default-first-option v-model="workflowForm.processingStatus">
-                <el-option v-for="item in processingStatuses"
-                  :key="item.id"
-                  :label="item.processingStatusName"
-                  :value="item.processingStatusName">
-                </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="提交说明">
-              <el-input type="textarea" autosize v-model="workflowForm.comment">
-              </el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-container>
+  <el-dialog title="模板文件列表" :visible.sync="templateFileDialog"  append-to-body>
+        <el-table ref="multipleTable"
+          :data="tableData" style="width: 100%"
+          >
+          <el-table-column
+            prop="displayName"
+            show-overflow-tooltip
+            label="文件名称"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="content"
+            show-overflow-tooltip
+            label="文件内容"
+            width="480">
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)">下载</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      <div class="block text-right">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="templateFileRequestForm.currentPage"
+          :page-sizes="[10, 20, 50]"
+          :page-size="20"
+          layout="sizes, prev, pager, next"
+          :total="totalTemplateFiles">
+        </el-pagination>
+      </div>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="closeWorkflowDialog">取 消</el-button>
-      <el-button type="primary" @click="addWorkflow">确 定</el-button>
+      <el-button @click="closeTemplateFileDialog">取 消</el-button>
+      <el-button type="primary" @click="closeTemplateFileDialog">确 定</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 export default {
-  name: 'workflowDialog',
-  props: ['workflowDialog'],
+  name: 'templateFileDialog',
+  props: ['templateFileDialog', 'processId'],
   data () {
     return {
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 12},
-      departments: [],
-      processingStatuses: [],
-      workflowForm: {
-        id: '',
-        submitFrom: '',
-        submitTo: '',
-        submitDate: '',
-        submitPerson: '',
-        comment: '',
-        processingStatus: ''
+      tableData: [],
+      templateFileForm: {},
+      totalTemplateFiles: 0,
+      templateFileRequestForm: {
+        sampleId: '',
+        fileName: '',
+        location: '',
+        content: '',
+        displayName: '',
+        link: '',
+        show: '',
+        itemsPerPage: 20,
+        currentPage: 1
       }
     }
   },
   methods: {
-    addWorkflow () {
-      this.$emit('addWorkflow', this.workflowForm)
+    closeTemplateFileDialog () {
+      this.$emit('closeTemplateFileDialog')
     },
-    closeWorkflowDialog () {
-      this.$emit('closeWorkflowDialog')
-    },
-    loadDepartment () {
+    handleEdit (index, row) {
       let vm = this
-      this.$ajax.get('/api/sample/department/getDepartment')
+      row.sampleId = this.processId
+      this.$ajax.post('/api/sample/templateFile/downloadTemplateFile/', row, {responseType: 'blob'})
         .then(function (res) {
-          vm.departments = res.data
-        }).catch(function (error) {
-          vm.$message({
-            showClose: true,
-            message: error.response.data.message
-          })
+          if (!res.data) {
+            return
+          }
+          let url = window.URL.createObjectURL(new Blob([res.data]), {type: 'application/msword;charset=utf-8'})
+          let link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          link.setAttribute('download', 'lims.doc')
+          document.body.appendChild(link)
+          link.click()
+          link.remove()
+        }
+        ).catch(function (error) {
+          vm.$message(error.response.data.message)
         })
     },
-    loadProcessingStatusData () {
+    handleSizeChange (val) {
+      this.templateFileRequestForm.itemsPerPage = val
+      this.onSubmit()
+    },
+    handleCurrentChange (val) {
+      this.templateFileRequestForm.currentPage = val
+      this.onSubmit()
+    },
+    onSubmit () {
       let vm = this
-      this.$ajax.get('/api/sample/processingStatus/getProcessingStatus')
+      this.$ajax.post('/api/sample/templateFile/queryTemplateFile', this.templateFileRequestForm)
         .then(function (res) {
-          vm.processingStatuses = res.data
-        }).catch(function (error) {
-          vm.$message({
-            showClose: true,
-            message: error.response.data.message
-          })
+          vm.tableData = res.data.pageResult || []
+          vm.totalTemplateFiles = res.data.totalTemplateFiles || 0
         })
     }
   },
-  mounted () {
-    this.loadDepartment()
-    this.loadProcessingStatusData()
+  watch: {
+    processId (newValue, oldValue) {
+      return newValue
+    }
   },
   activated () {
-    this.loadDepartment()
-    this.loadProcessingStatusData()
+    this.onSubmit()
   }
 
 }

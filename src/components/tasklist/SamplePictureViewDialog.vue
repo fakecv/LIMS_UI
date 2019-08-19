@@ -31,6 +31,9 @@ export default {
       var reader = new FileReader()
       this.$ajax.post('/api/sample/agreement/downloadFile', downloadFormTemp, { responseType: 'blob' })
         .then(function (res) {
+          if (!res.data) {
+            return
+          }
           reader.readAsDataURL(res.data)
           reader.onload = function () {
             var imageCP = {}
@@ -44,16 +47,19 @@ export default {
     },
     loadAgreement (agreementId) {
       let vm = this
-      console.log('come to loadAgreement')
-      this.images.length = 0
+      this.images = []
       this.$ajax.get('/api/sample/agreement/' + agreementId)
         .then(function (res) {
           vm.agreementForm = res.data
           if (res.data.imageNameList !== undefined && res.data.imageNameList.length > 0) {
             vm.agreementForm.imageNameList.forEach(image => {
-              console.log(image)
               vm.downloadToFrontEnd(image, vm.agreementForm.agreementNumber)
             })
+          } else {
+            var imageCP = {}
+            imageCP.url = null
+            imageCP.title = '没有样品图片'
+            vm.images.push(imageCP)
           }
         }).catch(function (error) {
           vm.$message(error.response.data.message)

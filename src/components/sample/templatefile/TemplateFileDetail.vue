@@ -11,12 +11,7 @@
         <el-row :gutter="20">
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="文件名称">
-              <el-input name="fileName" v-model="templateFileForm.fileName" autoComplete="fileName"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="文件位置">
-              <el-input name="location" v-model="templateFileForm.location" autoComplete="location"></el-input>
+              <el-input name="fileName" readonly v-model="templateFileForm.fileName" autoComplete="fileName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -46,7 +41,8 @@
             :file-list="fileList"
             :auto-upload="false"
             :on-change="handleChange"
-            multiple>
+            :before-upload="beforeAvatarUpload"
+            :multiple="false">
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击选取文件</em></div>
             <div class="el-upload__tip" slot="tip">只能上传doc文件，且不超过2M</div>
@@ -61,7 +57,7 @@
 <script>
 export default {
   name: 'templateFileDetail',
-  props: ['templateFileForm', 'staticOptions'],
+  props: ['templateFileForm'],
   data () {
     return {
       actions: [
@@ -78,6 +74,18 @@ export default {
     }
   },
   methods: {
+    beforeAvatarUpload (file) {
+      const isJPG = file.type === 'doc/docx'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 DOC 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传文档大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
+    },
     actionHandle (action) {
       if (action.id === '1') {
         this.new()
@@ -105,16 +113,26 @@ export default {
       this.$ajax.post('/api/sample/templateFile/uploadMultipleFiles', formData, config)
         .then(function (res) {
           vm.$message('图片已经上传到服务器!')
-          vm.fileList.forEach(file => {
-            vm.downloadToFrontEnd(file.raw)
-          })
           vm.fileList = []
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
     handleChange (file, fileList) {
-      this.fileList = fileList
+      const isWORD = file.raw.type === 'application/msword'
+      const isLt2M = file.raw.size / 1024 / 1024 < 2
+      if (!isWORD) {
+        this.$message.error('上传文档只能是 DOC 格式!')
+        this.fileList = []
+      }
+      if (!isLt2M) {
+        this.$message.error('上传文档大小不能超过 2MB!')
+        this.fileList = []
+      }
+      if (isWORD && isLt2M) {
+        this.fileList = fileList
+        this.templateFileForm.fileName = file.name
+      }
     },
     uploadToServer () {
       if (this.fileList.length > 0) {
@@ -158,7 +176,7 @@ export default {
     },
     delete () {
       let vm = this
-      this.$ajax.get('/api/sample/templateFile/delete/' + this.templateFileForm.id)
+      this.$ajax.post('/api/sample/templateFile/delete', this.templateFileForm)
         .then(function (res) {
           vm.$message('已经成功删除！')
           vm.$emit('deleteTemplateFileForm')

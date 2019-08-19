@@ -58,6 +58,7 @@
     </el-container>
     <el-table :data="testedItemProductTableData" style="width: 100%"
       @selection-change="handleTestedItemProductChange"
+      @row-dblclick="handleTestedItemProductDbClick"
       >
         <el-table-column
           type="selection"
@@ -93,7 +94,7 @@
         </el-pagination>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="testedItemProductFormVisible = false">取 消</el-button>
+        <el-button @click="closeTestedItemProductDialog">取 消</el-button>
         <el-button type="primary" @click="updateTestedItemProduct">确 定</el-button>
       </div>
     </div>
@@ -118,6 +119,9 @@ export default {
     }
   },
   methods: {
+    closeTestedItemProductDialog () {
+      this.$emit('closeTestedItemProductDialog')
+    },
     handleTestCategoryChange (testCategoryId) {
       this.$emit('handleTestCategoryChange', testCategoryId)
     },
@@ -126,6 +130,9 @@ export default {
     },
     loadTestedItemProductData () {
       this.$emit('loadTestedItemProductData')
+    },
+    handleTestedItemProductDbClick (row) {
+      this.$emit('handleTestedItemProductDbClick', row)
     },
     handleTestedItemProductChange (val) {
       this.$emit('handleTestedItemProductChange', val)

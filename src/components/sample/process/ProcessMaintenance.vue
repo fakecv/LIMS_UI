@@ -98,7 +98,7 @@
         <el-table-column
               prop="submitFrom"
               label="提交部门"
-              width="120">
+              width="125">
             </el-table-column>
             <el-table-column
               prop="submitTo"

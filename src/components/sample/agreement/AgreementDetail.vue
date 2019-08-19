@@ -368,13 +368,12 @@ export default {
       // console.log(tab, event)
     },
     handleTestDuration () {
-      let today = new Date()
       if (this.agreementForm.testDuration === '3') {
-        this.agreementForm.expectedCompletionTime = today.setDate(today.getDate() + 3)
+        this.agreementForm.expectedCompletionTime = new Date().getDay() > 2 ? new Date(Date.now() + 864e5 * 5) : new Date(Date.now() + 864e5 * 3)
       } else if (this.agreementForm.testDuration === '5') {
-        this.agreementForm.expectedCompletionTime = today.setDate(today.getDate() + 5)
+        this.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 7)
       } else if (this.agreementForm.testDuration === '1.5') {
-        this.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 1.5)
+        this.agreementForm.expectedCompletionTime = new Date().getDay() > 3 && new Date().getHours() > 12 ? new Date(Date.now() + 864e5 * 3.5) : new Date(Date.now() + 864e5 * 1.5)
       } else {
         this.agreementForm.expectedCompletionTime = ''
       }

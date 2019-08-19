@@ -69,12 +69,6 @@
             label="检测方法"
             width="180">
           </el-table-column>
-          <el-table-column
-            prop="rejectNote"
-            label="驳回原因"
-            show-overflow-tooltip
-            width="180">
-          </el-table-column>
         </el-table>
       </el-col>
     </el-row>
@@ -114,9 +108,11 @@
       v-on:handleTestedItemChange="handleTestedItemChange"
       v-on:loadTestedItemProductData="loadTestedItemProductData"
       v-on:handleTestedItemProductChange="handleTestedItemProductChange"
+      v-on:handleTestedItemProductDbClick="handleTestedItemProductDbClick"
       v-on:handleTestedItemProductSizeChange="handleTestedItemProductSizeChange"
       v-on:handleTestedItemProductCurrentChange="handleTestedItemProductCurrentChange"
       v-on:updateTestedItemProduct="updateTestedItemProduct"
+      v-on:closeTestedItemProductDialog="closeTestedItemProductDialog"
       />
     <testedItemTaskDialog
       :testCategories="staticOptions.testCategories"
@@ -147,6 +143,8 @@
       v-on:handleTestedItemProductGroupSizeChange="handleTestedItemProductGroupSizeChange"
       v-on:handleTestedItemProductGroupCurrentChange="handleTestedItemProductGroupCurrentChange"
       v-on:updateTestedItemTasks="updateTestedItemTasks"
+      v-on:handleTestedItemProductGroupDblClick="handleTestedItemProductGroupDblClick"
+      v-on:closeTestedItemProductGroupDialog="closeTestedItemProductGroupDialog"
       />
   </div>
 </template>
@@ -268,12 +266,30 @@ export default {
         vm.staticOptions.testedItemProducts.push(item)
       })
     },
+    handleTestedItemProductGroupDblClick (val) {
+      this.staticOptions.testedItemProducts = []
+      this.staticOptions.testedItemProducts.push(val)
+      this.testedItemProductGroupFormVisible = false
+      this.$emit('updateTestedItemTasks')
+    },
     handleTestedItemProductChange (val) {
       let vm = this
       this.staticOptions.testedItemProducts = []
       val.forEach(item => {
         vm.staticOptions.testedItemProducts.push(item)
       })
+    },
+    handleTestedItemProductDbClick (val) {
+      this.staticOptions.testedItemProducts = []
+      this.staticOptions.testedItemProducts.push(val)
+      this.$emit('updateTestedItemProduct')
+      this.testedItemProductFormVisible = false
+    },
+    closeTestedItemProductDialog () {
+      this.testedItemProductFormVisible = false
+    },
+    closeTestedItemProductGroupDialog () {
+      this.testedItemProductGroupFormVisible = false
     },
     handleTestedItemTaskChange (val) {
       this.deletedTestedItemTasks = val

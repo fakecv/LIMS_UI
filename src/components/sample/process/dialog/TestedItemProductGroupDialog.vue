@@ -26,6 +26,7 @@
      :data="testedItemProductGroupTableData"
       style="width: 100%"
        @selection-change="handleTestedItemProductGroupChange"
+       @row-dblclick="handleTestedItemProductGroupDblClick"
        >
         <el-table-column
           type="selection"
@@ -55,7 +56,7 @@
       </div>
     </div>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="testedItemProductGroupFormVisible = false">取 消</el-button>
+      <el-button @click="closeTestedItemProductGroupDialog">取 消</el-button>
       <el-button type="primary" @click="updateTestedItemTasks">确 定</el-button>
     </div>
   </el-dialog>
@@ -75,6 +76,9 @@ export default {
     }
   },
   methods: {
+    closeTestedItemProductGroupDialog () {
+      this.$emit('closeTestedItemProductGroupDialog')
+    },
     loadTestedItemProductGroupData () {
       this.$emit('loadTestedItemProductGroupData')
     },
@@ -86,6 +90,9 @@ export default {
     },
     handleTestedItemProductGroupCurrentChange (val) {
       this.$emit('handleTestedItemProductGroupCurrentChange', val)
+    },
+    handleTestedItemProductGroupDblClick (row) {
+      this.$emit('handleTestedItemProductGroupDblClick', row)
     },
     updateTestedItemTasks () {
       this.$emit('updateTestedItemTasks')
