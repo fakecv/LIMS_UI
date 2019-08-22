@@ -1,7 +1,6 @@
 <template>
   <ProviderDetail
    :providerForm="providerForm"
-   :staticOptions="staticOptions"
    v-on:deleteProviderForm="resetProviderForm"
    v-on:new="resetProviderForm"
    v-on:copy="resetProviderId"
@@ -58,7 +57,7 @@ export default {
       this.providerForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadProvider(this.$route.params.id)
     }

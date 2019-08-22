@@ -363,7 +363,7 @@ export default {
       }
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.onSubmit(this.$route.params.id)
     }

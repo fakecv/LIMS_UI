@@ -220,9 +220,6 @@ export default {
       return 'background: ' + row.processPriorityColor + ';color: ' + row.processPriorityFontColor
     }
   },
-  mounted () {
-    this.onSubmit()
-  },
   activated () {
     this.onSubmit()
   }

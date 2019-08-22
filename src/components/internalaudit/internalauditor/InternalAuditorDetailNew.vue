@@ -36,7 +36,8 @@ export default {
       this.internalAuditorForm = JSON.parse(JSON.stringify(this.internalAuditorResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetInternalAuditorForm()
   }
 }
 </script>

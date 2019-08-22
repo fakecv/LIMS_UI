@@ -59,7 +59,8 @@ export default {
       this.generalApplicanceRequestForm = JSON.parse(JSON.stringify(this.generalApplicanceRequestResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetGeneralApplicanceRequestForm()
   }
 }
 </script>

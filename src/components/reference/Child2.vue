@@ -13,7 +13,7 @@ export default {
     return {}
   },
   inheritAttrs: false,
-  mounted () {
+  activated () {
     this.$emit('test2')
   }
 }

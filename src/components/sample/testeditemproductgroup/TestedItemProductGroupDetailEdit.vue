@@ -356,17 +356,6 @@ export default {
       this.testedItemProductGroupForm.id = event.id
     }
   },
-  mounted () {
-    if (this.$route.params.id !== undefined) {
-      this.loadTestedItemProductGroup(this.$route.params.id)
-      this.loadSelectedTestedItemProducts(this.$route.params.id)
-    }
-    this.initTestedItemProducts()
-    this.loadTestCategory()
-    this.loadTestMethodData()
-    this.loadTestParameterData()
-    this.loadTestedItemData()
-  },
   activated () {
     if (this.$route.params.id !== undefined) {
       this.loadTestedItemProductGroup(this.$route.params.id)

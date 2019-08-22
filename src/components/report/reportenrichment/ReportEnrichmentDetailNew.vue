@@ -98,7 +98,7 @@ export default {
       this.reportEnrichmentForm = JSON.parse(JSON.stringify(this.reportEnrichmentResetForm))
     }
   },
-  mounted () {
+  activated () {
     this.loadReportData()
     this.loadCollectionData()
   }

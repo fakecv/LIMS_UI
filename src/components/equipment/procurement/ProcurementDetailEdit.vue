@@ -80,7 +80,7 @@ export default {
       this.procurementForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadProcurement(this.$route.params.id)
     }

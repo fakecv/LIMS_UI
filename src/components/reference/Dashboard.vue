@@ -100,7 +100,7 @@ export default {
       })
     }
   },
-  mounted () {
+  activated () {
     this.drawLine()
     this.onSubmit()
   }

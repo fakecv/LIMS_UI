@@ -96,10 +96,6 @@ export default {
         })
     }
   },
-  mounted () {
-    this.loadDepartment()
-    this.loadProcessingStatusData()
-  },
   activated () {
     this.loadDepartment()
     this.loadProcessingStatusData()

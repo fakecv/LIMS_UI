@@ -69,7 +69,7 @@ export default {
       this.managementReviewYearPlanForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadManagementReviewYearPlan(this.$route.params.id)
     }

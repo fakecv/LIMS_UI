@@ -75,7 +75,7 @@ export default {
         })
     }
   },
-  mounted () {
+  activated () {
     this.loadAuditDepartment()
     this.loadInternalAuditor()
   }

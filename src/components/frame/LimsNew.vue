@@ -107,7 +107,7 @@ export default {
       topMenus: [],
       leftMenus: [],
       positions: [],
-      elAside: 235,
+      elAside: 300,
       instruction: '导航页',
       state1: '',
       state2: '',

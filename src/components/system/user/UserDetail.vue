@@ -307,8 +307,6 @@ export default {
     deleteUserRoleGroups () {
       this.$emit('deleteUserRoleGroups', this.deletedUserRoleGroups)
     }
-  },
-  mounted () {
   }
 }
 </script>

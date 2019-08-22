@@ -145,10 +145,6 @@ export default {
       reader.readAsText(file.raw)
     }
   },
-  mounted () {
-    this.formTemplateId = this.$route.params.id
-    this.$store.state.forms[this.$route.params.fid].id = this.$route.params.id
-  },
   activated () {
     this.formTemplateId = this.$route.params.id
     this.$store.state.forms[this.$route.params.fid].id = this.$route.params.id

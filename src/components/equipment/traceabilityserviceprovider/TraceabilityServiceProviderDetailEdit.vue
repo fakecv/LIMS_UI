@@ -70,7 +70,7 @@ export default {
       this.traceabilityServiceProviderForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadTraceabilityServiceProvider(this.$route.params.id)
     }

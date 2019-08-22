@@ -60,12 +60,6 @@ export default {
       this.testedItemForm.id = ''
     }
   },
-  mounted () {
-    this.loadTestCategory()
-    if (this.$route.params.id !== undefined) {
-      this.loadTestedItem(this.$route.params.id)
-    }
-  },
   activated () {
     this.loadTestCategory()
     if (this.$route.params.id !== undefined) {

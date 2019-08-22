@@ -51,9 +51,6 @@ export default {
       this.testParameterForm = JSON.parse(JSON.stringify(this.testParameterResetForm))
     }
   },
-  mounted () {
-    this.loadTestedItemData()
-  },
   activated () {
     this.resetTestParameterForm()
     this.loadTestedItemData()

@@ -61,7 +61,8 @@ export default {
       this.consumableProcurementForm = JSON.parse(JSON.stringify(this.consumableProcurementResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetConsumableProcurementForm()
   }
 }
 </script>

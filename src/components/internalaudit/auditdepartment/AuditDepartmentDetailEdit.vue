@@ -43,7 +43,7 @@ export default {
       this.auditDepartmentForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadAuditDepartment(this.$route.params.id)
     }

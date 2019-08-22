@@ -5,13 +5,7 @@
       <el-row :gutter="20">
         <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
           <el-form-item label="委托编号">
-            <el-select name="agreementNumber" filterable clearable default-first-option v-model="processRequestForm.agreementNumber">
-              <el-option v-for="item in staticOptions.agreements"
-                :key="item.Id"
-                :label="item.agreementNumber"
-                :value="item.agreementNumber">
-              </el-option>
-              </el-select>
+            <el-input name="agreementNumber" v-model="processRequestForm.agreementNumber"></el-input>
           </el-form-item>
         </el-col>
         <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -82,9 +76,9 @@
     </el-form>
   </el-container>
     <div class="block text-right">
-      <el-button type="primary" icon="el-icon-download" circle @click="exportExcel">导出</el-button>
+      <el-button type="primary" icon="el-icon-download" @click="exportExcel">导出</el-button>
     </div>
-    <el-table  id="out-table" :data="tableData"
+    <el-table id="out-table" :data="tableData"
       height="500"
       style="width: 100%"
       tooltip-effect="dark"
@@ -182,6 +176,7 @@ export default {
       tableData: [],
       totalProcesss: 0,
       processRequestForm: {
+        agreementId: '',
         agreementNumber: '',
         sampleNumber: '',
         sampleSubNumber: '',
@@ -250,10 +245,6 @@ export default {
     // load all the processes
     onSubmit () {
       let vm = this
-      if (this.$store.state.maintenanceParameters['processRequestForm']) {
-        this.processRequestForm = this.$store.state.maintenanceParameters['processRequestForm']
-      }
-      this.$store.commit('query', { fid: 'processRequestForm', requestForm: this.processRequestForm })
       this.$ajax
         .post('/api/sample/process/queryProcess', this.processRequestForm)
         .then(function (res) {
@@ -429,7 +420,7 @@ export default {
       }
     }
   },
-  mounted () {
+  activated () {
     this.onSubmit()
     this.loadTestMethodData()
     this.loadTestedItemData()

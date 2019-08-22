@@ -64,9 +64,6 @@ export default {
       this.menuForm.id = ''
     }
   },
-  mounted () {
-    this.loadParentMenu()
-  },
   activated () {
     this.loadParentMenu()
     this.resetMenuForm()

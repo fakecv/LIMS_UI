@@ -65,7 +65,8 @@ export default {
       this.traceabilityServiceProviderForm = JSON.parse(JSON.stringify(this.traceabilityServiceProviderResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetTraceabilityServiceProviderForm()
   }
 }
 </script>

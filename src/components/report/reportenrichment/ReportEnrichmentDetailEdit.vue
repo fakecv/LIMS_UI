@@ -107,7 +107,7 @@ export default {
       this.reportEnrichmentForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     this.loadCollectionData()
     this.loadReportData()
     if (this.$route.params.id !== undefined) {

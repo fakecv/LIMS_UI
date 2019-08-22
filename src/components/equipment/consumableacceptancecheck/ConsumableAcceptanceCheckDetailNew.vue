@@ -65,7 +65,8 @@ export default {
       this.consumableAcceptanceCheckForm = JSON.parse(JSON.stringify(this.consumableAcceptanceCheckResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetConsumableAcceptanceCheckForm()
   }
 }
 </script>

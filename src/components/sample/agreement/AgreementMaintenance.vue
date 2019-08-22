@@ -256,9 +256,6 @@ export default {
     },
     onSubmit () {
       let vm = this
-      if (this.$store.state.maintenanceParameters['agreementRequestForm']) {
-        this.agreementRequestForm = this.$store.state.maintenanceParameters['agreementRequestForm']
-      }
       this.$ajax.post('/api/sample/agreement/queryAgreement', this.agreementRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
@@ -330,6 +327,5 @@ export default {
     this.loadCustomerData()
     this.onSubmit()
   }
-
 }
 </script>

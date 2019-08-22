@@ -83,7 +83,8 @@ export default {
       this.equipmentAcceptanceForm = JSON.parse(JSON.stringify(this.equipmentAcceptanceResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetEquipmentAcceptanceForm()
   }
 }
 </script>

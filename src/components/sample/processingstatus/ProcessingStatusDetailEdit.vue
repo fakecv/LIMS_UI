@@ -44,11 +44,6 @@ export default {
       this.processingStatusForm.id = ''
     }
   },
-  mounted () {
-    if (this.$route.params.id !== undefined) {
-      this.loadProcessingStatus(this.$route.params.id)
-    }
-  },
   activated () {
     if (this.$route.params.id !== undefined) {
       this.loadProcessingStatus(this.$route.params.id)

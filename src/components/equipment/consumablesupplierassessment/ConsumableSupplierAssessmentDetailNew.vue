@@ -73,7 +73,8 @@ export default {
       this.consumableSupplierAssessmentForm = JSON.parse(JSON.stringify(this.consumableSupplierAssessmentResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetConsumableSupplierAssessmentForm()
   }
 }
 </script>

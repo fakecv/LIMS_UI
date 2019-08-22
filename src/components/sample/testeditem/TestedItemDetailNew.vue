@@ -55,10 +55,6 @@ export default {
       this.testedItemForm = JSON.parse(JSON.stringify(this.testedItemResetForm))
     }
   },
-  mounted () {
-    this.loadTestCategory()
-    this.sampleNumberGenerator()
-  },
   activated () {
     this.resetTestedItemForm()
   }

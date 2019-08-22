@@ -135,10 +135,6 @@ export default {
       this.userForm = JSON.parse(JSON.stringify(this.userResetForm))
     }
   },
-  mounted () {
-    this.loadDepartment()
-    this.initRoleGroups()
-  },
   activated () {
     this.loadDepartment()
     this.initRoleGroups()

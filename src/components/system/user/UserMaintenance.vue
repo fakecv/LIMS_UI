@@ -358,10 +358,6 @@ export default {
       }
     }
   },
-  mounted () {
-    this.onSubmit()
-    this.loadDepartment()
-  },
   activated () {
     this.onSubmit()
     this.loadDepartment()

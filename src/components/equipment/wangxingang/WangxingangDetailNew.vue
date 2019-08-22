@@ -39,7 +39,8 @@ export default {
       this.wangxingangForm = JSON.parse(JSON.stringify(this.wangxingangResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetWangxingangForm()
   }
 }
 </script>

@@ -61,29 +61,40 @@
         <el-table-column
           prop="sampleSubNumber"
           label="试样编号"
+          sortable
           show-overflow-tooltip
           width="120">
         </el-table-column>
         <el-table-column
           prop="submitFrom"
           label="提交人"
+          sortable
           width="120">
         </el-table-column>
         <el-table-column
           prop="submitTime"
           label="提交时间"
+          sortable
           :formatter="submitTimeFormatter"
           width="180">
         </el-table-column>
         <el-table-column
           prop="status"
           label="当前状态"
+          sortable
           show-overflow-tooltip
           width="120">
         </el-table-column>
         <el-table-column
           prop="processPriority"
           label="优先级"
+          sortable
+          show-overflow-tooltip
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="comment"
+          label="其它信息"
           show-overflow-tooltip
           width="120">
         </el-table-column>
@@ -96,17 +107,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="block text-right">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="taskListRequestForm.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="20"
-          layout="sizes, prev, pager, next"
-          :total="totalTaskLists">
-        </el-pagination>
-      </div>
       <samplePictureViewDialog
         :samplePictureViewDialog="samplePictureViewDialog"
         v-on:closeSamplePictureViewDialog="closeSamplePictureViewDialog"
@@ -149,10 +149,10 @@ export default {
       selectedTasks: [],
       processPriorities: [],
       tableData: [],
-      totalTaskLists: 0,
       taskListRequestForm: {
         processId: '',
         agreementId: '',
+        comment: '',
         sampleName: '',
         materialNumber: '',
         sampleClientNumber: '',
@@ -166,9 +166,7 @@ export default {
         status: '',
         processPriority: '',
         bussinessDescription: '',
-        testedItemTasks: [],
-        itemsPerPage: 20,
-        currentPage: 1
+        testedItemTasks: []
       },
       staticOptions: {
         testMethods: [],
@@ -279,23 +277,14 @@ export default {
       })
       return 'background: ' + backgroundColor + ';color: ' + color
     },
-    handleSizeChange (val) {
-      this.taskListRequestForm.itemsPerPage = val
-      this.onSubmit()
-    },
-    handleCurrentChange (val) {
-      this.taskListRequestForm.currentPage = val
-      this.onSubmit()
-    },
     dblclick (row, event) {
       this.$router.push(row.link)
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/tasklist/queryTaskList', this.taskListRequestForm)
+      this.$ajax.get('/api/tasklist/queryTaskList')
         .then(function (res) {
-          vm.tableData = res.data.pageResult || []
-          vm.totalTaskLists = res.data.totalTaskLists || 0
+          vm.tableData = res.data
         })
     },
     testedItemFormatter (row, column) {

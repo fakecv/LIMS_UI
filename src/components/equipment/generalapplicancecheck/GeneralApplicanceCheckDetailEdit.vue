@@ -60,7 +60,7 @@ export default {
       this.generalApplicanceCheckForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadGeneralApplicanceCheck(this.$route.params.id)
     }

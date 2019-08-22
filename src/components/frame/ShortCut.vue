@@ -35,7 +35,7 @@ export default {
       this.$router.push(value)
     }
   },
-  mounted () {
+  activated () {
     this.getSystemMenu()
   }
 }

@@ -73,7 +73,8 @@ export default {
       this.supplierAssessmentForm = JSON.parse(JSON.stringify(this.supplierAssessmentResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetSupplierAssessmentForm()
   }
 }
 </script>

@@ -65,7 +65,7 @@ export default {
       this.managementReviewInputMaterialsForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadManagementReviewInputMaterials(this.$route.params.id)
     }

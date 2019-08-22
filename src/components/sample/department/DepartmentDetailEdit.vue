@@ -44,11 +44,6 @@ export default {
       this.departmentForm.id = ''
     }
   },
-  mounted () {
-    if (this.$route.params.id !== undefined) {
-      this.loadDepartment(this.$route.params.id)
-    }
-  },
   activated () {
     if (this.$route.params.id !== undefined) {
       this.loadDepartment(this.$route.params.id)

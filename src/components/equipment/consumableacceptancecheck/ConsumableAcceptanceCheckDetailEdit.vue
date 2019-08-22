@@ -70,7 +70,7 @@ export default {
       this.consumableAcceptanceCheckForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadConsumableAcceptanceCheck(this.$route.params.id)
     }

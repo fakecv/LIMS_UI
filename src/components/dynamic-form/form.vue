@@ -34,9 +34,6 @@ export default {
       this.$emit('input', { ...formData })
     }
   },
-  mounted () {
-    this.setDefaultValue()
-  },
   activated () {
     this.setDefaultValue()
   }

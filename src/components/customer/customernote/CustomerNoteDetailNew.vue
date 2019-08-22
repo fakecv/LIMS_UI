@@ -53,7 +53,7 @@ export default {
       this.customerNoteForm = JSON.parse(JSON.stringify(this.customerNoteResetForm))
     }
   },
-  mounted () {
+  activated () {
     this.loadCustomerData()
   }
 }

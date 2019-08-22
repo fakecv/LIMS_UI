@@ -44,7 +44,7 @@ export default {
       this.wangxingangForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadWangxingang(this.$route.params.id)
     }

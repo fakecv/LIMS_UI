@@ -59,7 +59,7 @@ export default {
       this.reportDevelopmentForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     this.loadCollectionData()
     if (this.$route.params.id !== undefined) {
       this.loadReportDevelopment(this.$route.params.id)

@@ -236,7 +236,7 @@ export default {
     },
     updateAgreementForm (event) {
       this.agreementForm = event
-      this.$route.params.id = event.id
+      this.$router.push('/lims/agreementDetailNew/' + event.id)
       this.staticOptions.processListed = false
     },
     resetAgreementId () {
@@ -248,10 +248,12 @@ export default {
     newAgreementForm () {
       // it's better than vm.staticOptions.images = [], any reference will be also cleared.
       this.agreementForm = JSON.parse(JSON.stringify(this.agreementResetForm))
+      this.agreementForm.processPriority = this.staticOptions.processPriorities[0].processPriorityName
       this.staticOptions.images.length = 0
       this.agreementForm.receiveSampleTime = new Date(Date.now())
       this.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 7)
       this.getTopOneUser()
+      this.staticOptions.processListed = true
     },
     resetAgreementForm () {
       let vm = this
@@ -349,21 +351,15 @@ export default {
       this.loadAgreement(this.$route.params.id)
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
-      // this.loadAgreement(this.$route.params.id)
+      this.loadAgreement(this.$route.params.id)
       this.staticOptions.processListed = false
     }
     this.loadProcessPriorityData()
     this.initCustomerData()
     this.initUserData()
     this.populatePrivileges()
-  },
-  activated () {
-    if (this.$route.params.id !== undefined) {
-      this.loadAgreement(this.$route.params.id)
-      this.staticOptions.processListed = false
-    }
   }
 }
 </script>

@@ -78,7 +78,7 @@ export default {
       this.supplierAssessmentForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadSupplierAssessment(this.$route.params.id)
     }

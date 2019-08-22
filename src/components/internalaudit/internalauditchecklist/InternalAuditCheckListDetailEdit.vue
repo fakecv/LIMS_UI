@@ -80,7 +80,7 @@ export default {
       this.internalAuditCheckListForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     this.loadAuditDepartment()
     this.loadInternalAuditor()
     if (this.$route.params.id !== undefined) {

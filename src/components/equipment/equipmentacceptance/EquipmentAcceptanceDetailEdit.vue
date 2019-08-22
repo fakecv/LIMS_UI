@@ -88,7 +88,7 @@ export default {
       this.equipmentAcceptanceForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadEquipmentAcceptance(this.$route.params.id)
     }

@@ -57,12 +57,6 @@ export default {
       this.testParameterForm.id = ''
     }
   },
-  mounted () {
-    this.loadTestedItemData()
-    if (this.$route.params.id !== undefined) {
-      this.loadTestParameter(this.$route.params.id)
-    }
-  },
   activated () {
     this.loadTestedItemData()
     if (this.$route.params.id !== undefined) {

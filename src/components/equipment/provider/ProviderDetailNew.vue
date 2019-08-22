@@ -1,7 +1,6 @@
 <template>
   <ProviderDetail
    :providerForm="providerForm"
-   :staticOptions="staticOptions"
    v-on:updateProviderForm="updateProviderForm"
    v-on:deleteProviderForm="resetProviderForm"
    v-on:new="resetProviderForm"
@@ -53,7 +52,8 @@ export default {
       this.providerForm = JSON.parse(JSON.stringify(this.providerResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetProviderForm()
   }
 }
 </script>

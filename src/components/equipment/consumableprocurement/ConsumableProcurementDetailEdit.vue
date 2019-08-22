@@ -66,7 +66,7 @@ export default {
       this.consumableProcurementForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadConsumableProcurement(this.$route.params.id)
     }

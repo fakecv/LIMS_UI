@@ -264,10 +264,6 @@ export default {
       return name
     }
   },
-  mounted () {
-    this.onSubmit()
-    this.loadTestCategory()
-  },
   activated () {
     this.onSubmit()
     this.loadTestCategory()

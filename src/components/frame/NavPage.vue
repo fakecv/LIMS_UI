@@ -74,7 +74,7 @@ export default {
       router.replace('processMaintenance')
     }
   },
-  mounted () {
+  activated () {
     this.getTaskStatistic()
   }
 }

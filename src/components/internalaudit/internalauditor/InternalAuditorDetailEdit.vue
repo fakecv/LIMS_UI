@@ -42,7 +42,7 @@ export default {
       this.internalAuditorForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadInternalAuditor(this.$route.params.id)
     }

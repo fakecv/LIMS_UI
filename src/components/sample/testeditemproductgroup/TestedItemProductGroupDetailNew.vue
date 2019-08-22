@@ -346,13 +346,6 @@ export default {
       this.testedItemProductGroupForm.id = event.id
     }
   },
-  mounted () {
-    this.initTestedItemProducts()
-    this.loadTestCategory()
-    this.loadTestMethodData()
-    this.loadTestParameterData()
-    this.loadTestedItemData()
-  },
   activated () {
     this.resetTestedItemProductGroupForm()
     this.initTestedItemProducts()

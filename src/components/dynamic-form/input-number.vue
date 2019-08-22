@@ -32,9 +32,6 @@ export default {
       default: false
     }
   },
-  mounted () {
-    this.$nextTick(this.formatValue)
-  },
   activated () {
     this.$nextTick(this.formatValue)
   },

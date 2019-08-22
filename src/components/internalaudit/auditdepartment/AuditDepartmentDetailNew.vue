@@ -37,7 +37,8 @@ export default {
       this.auditDepartmentForm = JSON.parse(JSON.stringify(this.auditDepartmentResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetAuditDepartmentForm()
   }
 }
 </script>

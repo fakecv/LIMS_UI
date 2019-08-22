@@ -115,10 +115,6 @@ export default {
       this.userRoleGroupForm = ''
     }
   },
-  mounted () {
-    this.initUserRoles()
-    this.loadMenuLinks()
-  },
   activated () {
     this.initUserRoles()
     this.loadMenuLinks()

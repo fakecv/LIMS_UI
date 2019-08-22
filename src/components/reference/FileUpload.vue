@@ -66,7 +66,7 @@ export default {
       link.click()
     }
   },
-  mounted () {
+  activated () {
     var loadingTask = pdf.createLoadingTask('/api/sample/agreement/downloadPdfFile/5b78251d34cb682670b68ad1')
     this.src = loadingTask
     let vm = this

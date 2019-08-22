@@ -128,7 +128,7 @@ export default {
       return name
     }
   },
-  mounted () {
+  activated () {
     this.onSubmit()
     this.loadCustomerData()
   }

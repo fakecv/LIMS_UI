@@ -64,7 +64,7 @@ export default {
       this.generalApplicanceRequestForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadGeneralApplicanceRequest(this.$route.params.id)
     }

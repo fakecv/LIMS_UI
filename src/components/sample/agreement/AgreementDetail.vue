@@ -260,7 +260,7 @@
           </el-container>
         </el-tab-pane>
         <el-tab-pane label="样品流转列表" name="process" :disabled="staticOptions.processListed">
-          <Process
+          <Process ref="process"
            :agreementNumber="agreementForm.agreementNumber"
            :agreementId="agreementForm.id"
            :processPriority="agreementForm.processPriority"
@@ -365,7 +365,9 @@ export default {
   },
   methods: {
     handleClick (tab, event) {
-      // console.log(tab, event)
+      if (tab.name === 'process') {
+        this.$refs.process.loadAgreementProcess(this.agreementForm.id)
+      }
     },
     handleTestDuration () {
       if (this.agreementForm.testDuration === '3') {

@@ -60,7 +60,8 @@ export default {
       this.managementReviewInputMaterialsForm = JSON.parse(JSON.stringify(this.managementReviewInputMaterialsResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetManagementReviewInputMaterialsForm()
   }
 }
 </script>

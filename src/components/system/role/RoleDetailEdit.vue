@@ -62,12 +62,6 @@ export default {
       this.roleForm.id = ''
     }
   },
-  mounted () {
-    this.loadMenuLinks()
-    if (this.$route.params.id !== undefined) {
-      this.loadUserRole(this.$route.params.id)
-    }
-  },
   activated () {
     this.loadMenuLinks()
     if (this.$route.params.id !== undefined) {

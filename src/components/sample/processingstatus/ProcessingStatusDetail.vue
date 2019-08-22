@@ -19,10 +19,10 @@
           </el-form-item>
         </el-row>
       </el-form>
-      <el-transfer v-model="staticOptions.selectedDepartments"
+      <!-- <el-transfer v-model="staticOptions.selectedDepartments"
        :props="{key: 'id',label: 'departmentName'}"
        :data="staticOptions.departments">
-      </el-transfer>
+      </el-transfer> -->
     </el-container>
   </el-container>
 </template>
@@ -105,8 +105,6 @@ export default {
           vm.$message(error.response.data.message)
         })
     }
-  },
-  mounted () {
   }
 }
 </script>

@@ -438,7 +438,7 @@ export default {
         })
     }
   },
-  mounted () {
+  activated () {
     this.onSubmit()
   }
 

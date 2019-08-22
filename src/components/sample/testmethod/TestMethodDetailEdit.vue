@@ -61,12 +61,6 @@ export default {
       // this.testMethodForm.sort = ''
     }
   },
-  mounted () {
-    this.loadTestedItemData()
-    if (this.$route.params.id !== undefined) {
-      this.loadTestMethod(this.$route.params.id)
-    }
-  },
   activated () {
     this.loadTestedItemData()
     if (this.$route.params.id !== undefined) {

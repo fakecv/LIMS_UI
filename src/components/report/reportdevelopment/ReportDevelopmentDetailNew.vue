@@ -53,7 +53,7 @@ export default {
       this.reportDevelopmentForm = JSON.parse(JSON.stringify(this.reportDevelopmentResetForm))
     }
   },
-  mounted () {
+  activated () {
     this.loadCollectionData()
   }
 }

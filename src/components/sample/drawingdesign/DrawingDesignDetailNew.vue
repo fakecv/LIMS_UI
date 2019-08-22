@@ -53,11 +53,8 @@ export default {
       this.drawingDesignForm = JSON.parse(JSON.stringify(this.drawingDesignResetForm))
     }
   },
-  mounted () {
-    this.loadTestedItemData()
-  },
   activated () {
-    this.resetDrawingDesignForm()
+    this.loadTestedItemData()
   }
 }
 </script>

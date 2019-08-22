@@ -78,7 +78,7 @@ export default {
       this.consumableSupplierAssessmentForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadConsumableSupplierAssessment(this.$route.params.id)
     }

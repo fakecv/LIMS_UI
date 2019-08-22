@@ -58,7 +58,7 @@ export default {
       this.customerNoteForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     this.loadCustomerData()
     if (this.$route.params.id !== undefined) {
       this.loadCustomerNote(this.$route.params.id)

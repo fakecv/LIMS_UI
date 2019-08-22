@@ -56,9 +56,6 @@ export default {
       this.roleForm.id = ''
     }
   },
-  mounted () {
-    this.loadMenuLinks()
-  },
   activated () {
     this.loadMenuLinks()
     this.resetRoleForm()

@@ -133,8 +133,6 @@ export default {
           vm.$message(error.response.data.message)
         })
     }
-  },
-  mounted () {
   }
 }
 </script>

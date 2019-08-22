@@ -19,7 +19,7 @@ export default {
   },
   inheritAttrs: false,
   components: { child2 },
-  mounted () {
+  activated () {
     this.$emit('test1')
   }
 }

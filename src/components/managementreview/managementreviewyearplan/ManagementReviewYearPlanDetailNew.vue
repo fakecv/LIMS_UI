@@ -64,7 +64,8 @@ export default {
       this.managementReviewYearPlanForm = JSON.parse(JSON.stringify(this.managementReviewYearPlanResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetManagementReviewYearPlanForm()
   }
 }
 </script>

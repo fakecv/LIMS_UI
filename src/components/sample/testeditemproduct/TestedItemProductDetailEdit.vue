@@ -199,16 +199,11 @@ export default {
         })
     }
   },
-  mounted () {
+  activated () {
     this.loadTestCategory()
     this.loadTestedItemData()
     this.loadTestMethodData()
     this.loadTestParameterData()
-    if (this.$route.params.id !== undefined) {
-      this.loadTestedItemProduct(this.$route.params.id)
-    }
-  },
-  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadTestedItemProduct(this.$route.params.id)
     }

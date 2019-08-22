@@ -120,17 +120,7 @@ export default {
       this.userRoleGroupForm = ''
     }
   },
-  mounted () {
-    console.log('mounted')
-    this.initUserRoles()
-    this.loadMenuLinks()
-    if (this.$route.params.id !== undefined) {
-      this.loadUserRoleGroup(this.$route.params.id)
-      this.loadSelectedUserRoles(this.$route.params.id)
-    }
-  },
   activated () {
-    console.log('activated')
     this.initUserRoles()
     this.loadMenuLinks()
     if (this.$route.params.id !== undefined) {

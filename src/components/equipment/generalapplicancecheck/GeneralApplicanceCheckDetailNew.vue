@@ -55,7 +55,8 @@ export default {
       this.generalApplicanceCheckForm = JSON.parse(JSON.stringify(this.generalApplicanceCheckResetForm))
     }
   },
-  mounted () {
+  activated () {
+    this.resetGeneralApplicanceCheckForm()
   }
 }
 </script>

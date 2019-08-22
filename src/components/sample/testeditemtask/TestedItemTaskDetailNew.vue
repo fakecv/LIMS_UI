@@ -199,15 +199,6 @@ export default {
       return name
     }
   },
-  mounted () {
-    this.loadTestMethodData()
-    this.loadTestedItemData()
-    this.loadDrawingDesignData()
-    this.loadTestParameterData()
-    this.loadDepartment()
-    this.loadProcessingStatusData()
-    this.loadProcessPriorityData()
-  },
   activated () {
     this.resetTestedItemTaskForm()
     this.loadTestMethodData()

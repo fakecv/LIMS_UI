@@ -139,10 +139,6 @@ export default {
         })
     }
   },
-  mounted () {
-    this.loadParentMenu()
-    this.onSubmit()
-  },
   activated () {
     this.loadParentMenu()
     this.onSubmit()

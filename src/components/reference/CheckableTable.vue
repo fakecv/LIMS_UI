@@ -85,7 +85,7 @@ export default {
       this.multipleSelection = val
     }
   },
-  mounted () {
+  activated () {
     this.$refs.multipleTable.toggleRowSelection(this.tableData3[1])
   }
 }

@@ -495,7 +495,7 @@ export default {
     }
   },
 
-  mounted () {
+  activated () {
     this.change(new Date())
     this.generateData()
   }

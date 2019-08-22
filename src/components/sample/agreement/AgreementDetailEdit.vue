@@ -326,7 +326,7 @@ export default {
         })
     }
   },
-  mounted () {
+  activated () {
     this.loadProcessPriorityData()
     this.initCustomerData()
     this.initUserData()

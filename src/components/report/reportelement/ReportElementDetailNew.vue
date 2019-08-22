@@ -212,7 +212,7 @@ export default {
       this.reportElementForm = JSON.parse(JSON.stringify(this.reportElementResetForm))
     }
   },
-  mounted () {
+  activated () {
     this.loadReportData()
   }
 }

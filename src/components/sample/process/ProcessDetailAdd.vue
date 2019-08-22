@@ -599,7 +599,7 @@ export default {
       return name
     }
   },
-  mounted () {
+  activated () {
     if (this.agreementId) { this.loadAgreementProcess(this.agreementId) }
     this.queryApplicationUserDepartment()
     this.loadTestCategory()

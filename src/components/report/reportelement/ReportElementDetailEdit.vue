@@ -201,7 +201,7 @@ export default {
       this.reportElementForm.id = ''
     }
   },
-  mounted () {
+  activated () {
     if (this.$route.params.id !== undefined) {
       this.loadReportElement(this.$route.params.id)
     }
