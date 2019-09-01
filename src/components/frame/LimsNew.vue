@@ -151,7 +151,7 @@ export default {
         })
     },
     collapseChange () {
-      this.elAside = this.isCollapse ? 235 : 0
+      this.elAside = this.isCollapse ? 300 : 0
       this.menuStatus = this.isCollapse ? '收起菜单' : '展开菜单'
       this.isCollapse = !this.isCollapse
     },
@@ -266,22 +266,6 @@ export default {
           })
         })
     },
-    leftSlide (paths, fp, tp) {
-      paths.forEach(path => {
-        // eslint-disable-next-line no-eval
-        if (eval(path)) {
-          this.transitionName = 'slide-left'
-        }
-      })
-    },
-    rightSlide (paths, fp, tp) {
-      paths.forEach(path => {
-        // eslint-disable-next-line no-eval
-        if (eval(path)) {
-          this.transitionName = 'slide-right'
-        }
-      })
-    },
     menuSelected (key, keyPath, value) {
       // console.log(value)
       let menu = value.$attrs.data
@@ -313,32 +297,6 @@ export default {
       // 调用 callback 返回建议列表的数据
       cb(this.shortCuts)
     }
-  },
-  beforeRouteUpdate (to, from, next) {
-    const tp = to.path
-    const fp = from.path
-
-    let leftPaths = [
-      `fp === "/lims/agreementDetailNew" && tp === "/lims/processReview"`,
-      `fp === "/lims/agreementDetailEdit" && tp === "/lims/processReview"`,
-      `fp === "/lims/processReview" && tp === "/lims/processDetailAdd"`
-    ]
-    let rightPaths = [
-      `fp === "/lims/processDetailAdd" && tp === "/lims/agreementDetailNew"`,
-      `fp === "/lims/processDetailAdd" && tp === "/lims/agreementDetailEdit"`,
-      `fp === "/lims/processDetailEdit" && tp === "/lims/agreementDetailEdit"`,
-      `fp === "/lims/processDetailAdd" && tp === "/lims/processReview"`,
-      `fp === "/lims/processDetailEdit" && tp === "/lims/processReview"`,
-      `fp === "/lims/processReview" && tp === "/lims/agreementDetailEdit"`,
-      `fp === "/lims/processReview" && tp === "/lims/agreementDetailNew"`
-    ]
-    this.transitionName = ''
-    this.leftSlide(leftPaths, fp.substring(0, fp.lastIndexOf('/')), tp.substring(0, tp.lastIndexOf('/')))
-    this.rightSlide(rightPaths, fp.substring(0, fp.lastIndexOf('/')), tp.substring(0, tp.lastIndexOf('/')))
-
-    setTimeout(() => {
-      next()
-    }, 50)
   },
   mounted: function () {
     this.$notify({
@@ -414,42 +372,5 @@ export default {
   .image {
     height: 30px;
     width: 80px;
-  }
-  .slide-left-enter {
-  transform: translateX(100%);
-  }
-  .slide-left-enter-active{
-    transition: transform 2s;
-  }
-  .slide-left-enter-to{
-    transform: translateX(0);
-  }
-  .slide-left-leave {
-    transform: translateX(0);
-  }
-  .slide-left-leave-active {
-    transition: transform 1s
-  }
-  .slide-left-leave-to {
-    transform: translateX(0);
-  }
-
-  .slide-right-enter {
-    transform: translateX(0);
-  }
-  .slide-right-enter-active{
-    transition: transform 2s;
-  }
-  .slide-right-enter-to{
-    transform: translateX(0);
-  }
-  .slide-right-leave {
-    transform: translateX(0);
-  }
-  .slide-right-leave-active {
-    transition: transform 1s;
-  }
-  .slide-right-leave-to {
-    transform: translateX(100%);
   }
 </style>
