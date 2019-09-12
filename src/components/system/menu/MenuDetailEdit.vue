@@ -2,6 +2,7 @@
   <MenuDetail :staticOptions="staticOptions"
    :menuForm="menuForm"
    v-on:deleteMenuItem="resetMenuForm"
+   v-on:updateMenuForm="updateMenuForm"
    v-on:new="resetMenuForm"
    v-on:copy="resetMenuId"/>
 </template>
@@ -60,6 +61,9 @@ export default {
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    updateMenuForm (event) {
+      this.menuForm.id = event.id
     },
     resetMenuForm () {
       this.loadParentMenu()

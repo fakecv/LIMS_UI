@@ -6,9 +6,9 @@
           <el-col :lg="columnSize.lg*2" :md="columnSize.md*2" :xl="columnSize.xl*2" :xs="columnSize.xs*2" :sm="columnSize.sm*2">
             <el-form-item label="客户单位">
               <el-select name="customerCompany" filterable clearable default-first-option v-model="customerNoteForm.customerCompany">
-                <el-option v-for="item in staticOptions.customers"
+                <el-option v-for="item in staticOptions.customerCompanies"
                   :key="item.id"
-                  :label="item.company"
+                  :label="item.customerCompanyName"
                   :value="item.id">
                 </el-option>
                 </el-select>
@@ -81,7 +81,7 @@ export default {
       },
       columnSize: { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 },
       staticOptions: {
-        customers: []
+        customerCompanies: []
       }
     }
   },
@@ -97,11 +97,11 @@ export default {
       this.customerNoteForm.currentPage = val
       this.onSubmit()
     },
-    loadCustomerData () {
+    loadCustomerCompanyData () {
       let vm = this
-      this.$ajax.get('/api/customer/getCustomer')
+      this.$ajax.get('/api/customer/customerCompany/getCustomerCompany')
         .then(function (res) {
-          vm.staticOptions.customers = res.data
+          vm.staticOptions.customerCompanies = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -120,9 +120,9 @@ export default {
     },
     customerCompanyFormatter (row, column) {
       let name = ''
-      this.staticOptions.customers.forEach(item => {
+      this.staticOptions.customerCompanies.forEach(item => {
         if (row.customerCompany === item.id) {
-          name = item.company
+          name = item.customerCompanyName
         }
       })
       return name
@@ -130,7 +130,7 @@ export default {
   },
   activated () {
     this.onSubmit()
-    this.loadCustomerData()
+    this.loadCustomerCompanyData()
   }
 }
 </script>

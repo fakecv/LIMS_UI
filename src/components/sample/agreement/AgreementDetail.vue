@@ -146,15 +146,21 @@
                   </el-form-item>
                 </el-col>
                 <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-                  <el-form-item label="委托方联系人">
-                    <el-input name="clientName" v-model="agreementForm.customerName" autoComplete="clientName">
+                  <el-form-item label="委托单位">
+                    <el-input name="customerCompany" v-model="agreementForm.customerCompany" autoComplete="customerCompany">
                       <el-button slot="append" icon="el-icon-search" @click.native="openCustomer"></el-button>
                     </el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-                  <el-form-item label="委托单位">
-                    <el-input name="client" v-model="agreementForm.customerCompany" autoComplete="company"></el-input>
+                  <el-form-item label="委托方联系人">
+                  <el-select name="customerName" filterable clearable default-first-option v-model="agreementForm.customerName">
+                    <el-option v-for="item in staticOptions.customerNames"
+                      :key="item"
+                      :label="item"
+                      :value="item">
+                    </el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -271,14 +277,8 @@
       </el-tabs>
     </el-container>
     <clientDialog
-      :customers="staticOptions.customers"
-      :customerRequestForm="customerRequestForm"
       :customerDialogFormVisible="customerDialogFormVisible"
-      :totalCustomers="staticOptions.totalCustomers"
       v-on:confirmCustomer="confirmCustomer"
-      v-on:reloadCustomers="reloadCustomers"
-      v-on:handleCustomerSizeChange="handleCustomerSizeChange"
-      v-on:handleCustomerCurrentChange="handleCustomerCurrentChange"
       v-on:handleCustomerRowClick="handleCustomerRowClick"
       v-on:handleCustomerRowDLClick="handleCustomerRowDLClick"
       />
@@ -482,19 +482,8 @@ export default {
         this.agreementForm.duration = ''
       }
     },
-    handleCustomerSizeChange (val) {
-      this.customerRequestForm.itemsPerPage = val
-      this.$emit('reloadCustomerData', this.customerRequestForm)
-    },
-    handleCustomerCurrentChange (val) {
-      this.customerRequestForm.currentPage = val
-      this.$emit('reloadCustomerData', this.customerRequestForm)
-    },
     handleCustomerNoteChange (val) {
       this.agreementForm.comment = val
-    },
-    reloadCustomers () {
-      this.$emit('reloadCustomerData', this.customerRequestForm)
     },
     openCustomer () {
       this.customerDialogFormVisible = true
@@ -513,15 +502,9 @@ export default {
       this.$emit('updateCustomer', row)
     },
     handleCustomerRowDLClick (row) {
-      let vm = this
       this.$emit('updateCustomer', row)
       this.customerDialogFormVisible = false
-      this.$ajax.get('/api/customer/customerNote/getSingleCustomerNotes/' + this.agreementForm.customerId)
-        .then(function (res) {
-          vm.staticOptions.customerNotes = res.data
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
+      this.confirmCustomer()
     },
     handleUserSizeChange (val) {
       this.userRequestForm.itemsPerPage = val

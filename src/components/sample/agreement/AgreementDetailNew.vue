@@ -4,7 +4,6 @@
     :agreementForm="agreementForm"
     :staticOptions="staticOptions"
     v-on:updateCustomer="updateCustomer"
-    v-on:reloadCustomerData="reloadCustomerData"
     v-on:updateUser="updateUser"
     v-on:reloadUserData="reloadUserData"
     v-on:updateAgreementForm="updateAgreementForm"
@@ -108,7 +107,7 @@ export default {
       staticOptions: {
         processListed: true,
         processPriorities: [],
-        customers: [],
+        customerNames: [],
         customerNotes: [],
         users: [],
         totalCustomers: 0,
@@ -122,12 +121,6 @@ export default {
           {'name': '删除', 'id': '4', 'icon': 'el-icon-delete', 'loading': false, 'show': false},
           {'name': '文件预览', 'id': '5', 'icon': 'el-icon-upload2', 'loading': false, 'show': true}
         ]
-      },
-      customerRequestForm: {
-        company: '',
-        name: '',
-        itemsPerPage: 20,
-        currentPage: 1
       },
       userRequestForm: {
         name: '',
@@ -266,32 +259,24 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    reloadCustomerData (event) {
-      let vm = this
-      this.$ajax.post('/api/customer/queryCustomer', event)
-        .then(function (res) {
-          vm.staticOptions.customers = res.data.pageResult || []
-          vm.staticOptions.totalCustomers = res.data.totalCustomers || 0
-        })
-    },
-    initCustomerData () {
-      let vm = this
-      this.$ajax.post('/api/customer/queryCustomer', this.customerRequestForm)
-        .then(function (res) {
-          vm.staticOptions.customers = res.data.pageResult || []
-          vm.staticOptions.totalCustomers = res.data.totalCustomers || 0
-        })
-    },
     updateCustomer (row) {
       this.agreementForm.customerId = row.id
       this.agreementForm.customerName = row.name
-      this.agreementForm.customerCompany = row.company
+      this.agreementForm.customerCompany = row.customerCompanyName
       this.agreementForm.customerMobileNumber = row.mobileNumber
       this.agreementForm.customerFax = row.fax
       this.agreementForm.customerEmail = row.email
       this.agreementForm.customerAddress = row.address
-      this.agreementForm.customerInvoiceTitle = row.company
-      this.agreementForm.invoiceTitle = row.company
+      this.agreementForm.customerInvoiceTitle = row.customerCompanyName
+      this.agreementForm.invoiceTitle = row.customerCompanyName
+      this.getCustomerNames(row.id)
+    },
+    getCustomerNames (customerCompanyId) {
+      let vm = this
+      this.$ajax.get('/api/customer/customer/getCustomerNames/' + customerCompanyId)
+        .then(function (res) {
+          vm.staticOptions.customerNames = res.data || []
+        })
     },
     reloadUserData (event) {
       let vm = this
@@ -357,7 +342,6 @@ export default {
       this.staticOptions.processListed = false
     }
     this.loadProcessPriorityData()
-    this.initCustomerData()
     this.initUserData()
     this.populatePrivileges()
   }

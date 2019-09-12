@@ -10,9 +10,12 @@ import AuditDepartmentMaintenance from '@/components/internalaudit/auditdepartme
 import CheckableTable from '@/components/reference/CheckableTable'
 import Child from '@/components/reference/Child'
 import ComposeSchedule from '@/components/equipment/ComposeSchedule'
-import CustomerDetailNew from '@/components/customer/CustomerDetailNew'
-import CustomerDetailEdit from '@/components/customer/CustomerDetailEdit'
-import CustomerMaintenance from '@/components/customer/CustomerMaintenance'
+import CustomerCompanyDetailNew from '@/components/customer/customercompany/CustomerCompanyDetailNew'
+import CustomerCompanyDetailEdit from '@/components/customer/customercompany/CustomerCompanyDetailEdit'
+import CustomerCompanyMaintenance from '@/components/customer/customercompany/CustomerCompanyMaintenance'
+import CustomerDetailNew from '@/components/customer/customer/CustomerDetailNew'
+import CustomerDetailEdit from '@/components/customer/customer/CustomerDetailEdit'
+import CustomerMaintenance from '@/components/customer/customer/CustomerMaintenance'
 import CustomerNoteDetailNew from '@/components/customer/customernote/CustomerNoteDetailNew'
 import CustomerNoteDetailEdit from '@/components/customer/customernote/CustomerNoteDetailEdit'
 import CustomerNoteMaintenance from '@/components/customer/customernote/CustomerNoteMaintenance'
@@ -270,8 +273,23 @@ const router = new Router({
           component: ConsumableSupplierAssessmentMaintenance
         },
         {
+          path: 'customerCompanyDetailEdit/:id',
+          name: 'customerCompanyDetailEdit',
+          component: CustomerCompanyDetailEdit
+        },
+        {
+          path: 'customerCompanyDetailNew',
+          name: 'customerCompanyDetailNew',
+          component: CustomerCompanyDetailNew
+        },
+        {
+          path: 'customerCompanyMaintenance',
+          name: 'customerCompanyMaintenance',
+          component: CustomerCompanyMaintenance
+        },
+        {
           path: 'customerDetailEdit/:id',
-          name: 'customerDetailEdit',
+          name: 'customerAuditorDetailEdit',
           component: CustomerDetailEdit
         },
         {

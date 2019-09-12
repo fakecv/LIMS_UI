@@ -29,16 +29,16 @@ export default {
         id: ''
       },
       staticOptions: {
-        customers: []
+        customerCompanies: []
       }
     }
   },
   methods: {
-    loadCustomerData () {
+    loadCustomerCompanyData () {
       let vm = this
-      this.$ajax.get('/api/customer/getCustomer')
+      this.$ajax.get('/api/customer/customerCompany/getCustomerCompany')
         .then(function (res) {
-          vm.staticOptions.customers = res.data
+          vm.staticOptions.customerCompanies = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -54,7 +54,8 @@ export default {
     }
   },
   activated () {
-    this.loadCustomerData()
+    this.loadCustomerCompanyData()
+    this.resetCustomerNoteForm()
   }
 }
 </script>

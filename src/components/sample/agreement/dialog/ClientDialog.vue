@@ -4,7 +4,7 @@
       <el-form :model="customerRequestForm" label-width="100px" label-position="left" size="mini">
       <el-row :gutter="20">
         <el-form-item label="客户单位">
-          <el-input name="company" v-model="customerRequestForm.company" autoComplete="company"></el-input>
+          <el-input name="company" v-model="customerRequestForm.customerCompanyName" autoComplete="company"></el-input>
         </el-form-item>
       </el-row>
         <el-row :gutter="20">
@@ -14,7 +14,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-form-item>
-            <el-button type="primary" @click="reloadCustomers">查询</el-button>
+            <el-button type="primary" @click="reloadCustomerData">查询</el-button>
           </el-form-item>
         </el-row>
       </el-form>
@@ -24,7 +24,7 @@
       @row-click="handleCustomerRowClick"
       @row-dblclick="handleCustomerRowDLClick"
       >
-      <el-table-column prop="company" label="客户单位"
+      <el-table-column prop="customerCompanyName" label="客户单位"
         show-overflow-tooltip
         width="180"></el-table-column>
       <el-table-column prop="name" label="客户名称" width="180"></el-table-column>
@@ -55,23 +55,44 @@
 <script>
 export default {
   name: 'clientDialog',
-  props: ['customers', 'customerRequestForm', 'customerDialogFormVisible', 'totalCustomers'],
+  props: ['customerDialogFormVisible'],
   data () {
     return {
+      customerRequestForm: {
+        name: '',
+        itemsPerPage: 20,
+        currentPage: 1
+      },
+      customers: [],
+      totalCustomers: 0
     }
   },
   methods: {
     confirmCustomer () {
       this.$emit('confirmCustomer')
     },
-    reloadCustomers () {
-      this.$emit('reloadCustomers')
+    reloadCustomerData () {
+      let vm = this
+      this.$ajax.post('/api/customer/customerCompany/queryCustomerCompany', this.customerRequestForm)
+        .then(function (res) {
+          vm.customers = res.data.pageResult || []
+          vm.totalCustomers = res.data.totalCustomers || 0
+        })
+    },
+    initCustomerData () {
+      let vm = this
+      this.$ajax.post('/api/customer/customerCompany/queryCustomerCompany', this.customerRequestForm)
+        .then(function (res) {
+          vm.customers = res.data.pageResult || []
+          vm.totalCustomers = res.data.totalCustomers || 0
+        })
     },
     handleCustomerSizeChange (val) {
-      this.$emit('handleCustomerSizeChange', val)
+      this.customerRequestForm.itemsPerPage = val
+      this.reloadCustomerData()
     },
-    handleCustomerCurrentChange (val) {
-      this.$emit('handleCustomerCurrentChange', val)
+    handleCustomerCurrentChange () {
+      this.reloadCustomerData()
     },
     handleCustomerRowClick (row, event, column) {
       this.$emit('handleCustomerRowClick', row)
@@ -79,8 +100,10 @@ export default {
     handleCustomerRowDLClick (row, event, column) {
       this.$emit('handleCustomerRowDLClick', row)
     }
+  },
+  mounted () {
+    this.initCustomerData()
   }
-
 }
 </script>
 <style>

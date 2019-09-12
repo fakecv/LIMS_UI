@@ -7,27 +7,22 @@
       </el-button-group>
     </el-header>
     <el-container style="padding: 10px">
-      <el-form :model="customerNoteForm" label-width="100px" label-position="left" size="mini">
+      <el-form :model="customerRequestForm" label-width="100px" label-position="left" size="mini">
         <el-row :gutter="20">
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="客户姓名">
+              <el-input name="customerName" v-model="customerRequestForm.customerName" autoComplete="customerName"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="客户单位">
-              <el-select name="customerCompany" filterable clearable default-first-option v-model="customerNoteForm.customerCompany">
+              <el-select name="customerCompany" filterable clearable default-first-option v-model="customerRequestForm.companyId">
                 <el-option v-for="item in staticOptions.customerCompanies"
                   :key="item.id"
                   :label="item.customerCompanyName"
                   :value="item.id">
                 </el-option>
                 </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="客户样品备注信息名称" label-width="160px">
-              <el-input name="customerNoteName" v-model="customerNoteForm.customerNoteName" autoComplete="customerNoteName"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="客户样品备注信息" label-width="160px">
-              <el-input type="textarea" name="customerNoteDescription" v-model="customerNoteForm.customerNoteDescription" autoComplete="customerNoteDescription"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -38,8 +33,8 @@
 
 <script>
 export default {
-  name: 'customerNoteDetail',
-  props: ['customerNoteForm', 'staticOptions'],
+  name: 'customerDetail',
+  props: ['customerRequestForm', 'staticOptions'],
   data () {
     return {
       actions: [
@@ -51,7 +46,7 @@ export default {
         {'name': '文件导入', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false},
         {'name': '文件保存', 'id': '7', 'icon': 'el-icon-download', 'loading': false}
       ],
-      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 12}
+      columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
     }
   },
   methods: {
@@ -75,20 +70,21 @@ export default {
     },
     copy () {
       this.$emit('copy')
+      this.$message('复制成功!')
     },
     saveToDB () {
       let vm = this
-      this.$ajax.post('/api/customer/customerNote', this.customerNoteForm)
+      this.$ajax.post('/api/customer/customer', this.customerRequestForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
-          vm.$emit('updateCustomerNoteForm', res.data)
+          vm.$emit('updateCustomerForm', res.data)
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
     confirmDelete () {
       let vm = this
-      if (this.customerNoteForm.id && this.customerNoteForm.id !== '') {
+      if (this.customerForm.id && this.customerRequestForm.id !== '') {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -105,10 +101,10 @@ export default {
     },
     delete () {
       let vm = this
-      this.$ajax.get('/api/customer/customerNote/delete/' + this.customerNoteForm.id)
+      this.$ajax.get('/api/customer/customer/delete/' + this.customerRequestForm.id)
         .then(function (res) {
           vm.$message('已经成功删除！')
-          vm.$emit('deleteCustomerNoteForm')
+          vm.$emit('deleteCustomerForm')
           vm.sampleNumberButton = false
         }).catch(function (error) {
           vm.$message(error.response.data.message)
