@@ -154,11 +154,13 @@
                 </el-col>
                 <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
                   <el-form-item label="委托方联系人">
-                  <el-select name="customerName" filterable clearable default-first-option v-model="agreementForm.customerName">
+                  <el-select name="customerName" filterable clearable
+                   default-first-option v-model="agreementForm.customerName"
+                   @change="updateCustomer">
                     <el-option v-for="item in staticOptions.customerNames"
-                      :key="item"
-                      :label="item"
-                      :value="item">
+                      :key="item.id"
+                      :label="item.customerName"
+                      :value="item.id">
                     </el-option>
                     </el-select>
                   </el-form-item>
@@ -364,6 +366,9 @@ export default {
     Process: Process
   },
   methods: {
+    updateCustomer (val) {
+      this.$emit('updateCustomer', val)
+    },
     handleClick (tab, event) {
       if (tab.name === 'process') {
         this.$refs.process.loadAgreementProcess(this.agreementForm.id)
@@ -499,10 +504,10 @@ export default {
         })
     },
     handleCustomerRowClick (row) {
-      this.$emit('updateCustomer', row)
+      this.$emit('updateCustomerCompany', row)
     },
     handleCustomerRowDLClick (row) {
-      this.$emit('updateCustomer', row)
+      this.$emit('updateCustomerCompany', row)
       this.customerDialogFormVisible = false
       this.confirmCustomer()
     },

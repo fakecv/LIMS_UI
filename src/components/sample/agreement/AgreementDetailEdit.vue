@@ -2,6 +2,7 @@
   <AgreementDetail
     :agreementForm="agreementForm"
     :staticOptions="staticOptions"
+    v-on:updateCustomerCompany="updateCustomerCompany"
     v-on:updateCustomer="updateCustomer"
     v-on:updateUser="updateUser"
     v-on:reloadUserData="reloadUserData"
@@ -118,12 +119,6 @@ export default {
           {'name': '查看样品流转', 'id': '4', 'icon': 'el-icon-download', 'loading': false, 'show': true}
         ],
         images: []
-      },
-      customerRequestForm: {
-        company: '',
-        name: '',
-        itemsPerPage: 20,
-        currentPage: 1
       },
       userRequestForm: {
         name: '',
@@ -246,7 +241,7 @@ export default {
       this.staticOptions.images.length = 0
       this.agreementNumberGenerator()
     },
-    updateCustomer (row) {
+    updateCustomerCompany (row) {
       this.agreementForm.customerId = row.id
       this.agreementForm.customerName = row.name
       this.agreementForm.customerCompany = row.customerCompanyName
@@ -257,6 +252,15 @@ export default {
       this.agreementForm.customerInvoiceTitle = row.customerCompanyName
       this.agreementForm.invoiceTitle = row.customerCompanyName
       this.getCustomerNames(row.id)
+    },
+    updateCustomer (row) {
+      this.staticOptions.customerNames.forEach(item => {
+        if (item.id === row) {
+          this.agreementForm.customerName = item.customerName
+          this.agreementForm.customerMobileNumber = item.mobileNumber
+          this.agreementForm.customerEmail = item.email
+        }
+      })
     },
     getCustomerNames (customerCompanyId) {
       let vm = this

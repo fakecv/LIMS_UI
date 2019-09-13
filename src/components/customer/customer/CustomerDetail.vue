@@ -15,6 +15,16 @@
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="客户电话">
+              <el-input name="mobileNumber" v-model="customerRequestForm.mobileNumber" autoComplete="mobileNumber"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+            <el-form-item label="客户邮箱">
+              <el-input name="email" v-model="customerRequestForm.email" autoComplete="email"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
             <el-form-item label="客户单位">
               <el-select name="customerCompany" filterable clearable default-first-option v-model="customerRequestForm.companyId">
                 <el-option v-for="item in staticOptions.customerCompanies"
@@ -84,7 +94,7 @@ export default {
     },
     confirmDelete () {
       let vm = this
-      if (this.customerForm.id && this.customerRequestForm.id !== '') {
+      if (this.customerRequestForm.id && this.customerRequestForm.id !== '') {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

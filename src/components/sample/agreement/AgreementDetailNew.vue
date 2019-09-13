@@ -3,6 +3,7 @@
     ref="agreementDetail"
     :agreementForm="agreementForm"
     :staticOptions="staticOptions"
+    v-on:updateCustomerCompany="updateCustomerCompany"
     v-on:updateCustomer="updateCustomer"
     v-on:updateUser="updateUser"
     v-on:reloadUserData="reloadUserData"
@@ -259,7 +260,7 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    updateCustomer (row) {
+    updateCustomerCompany (row) {
       this.agreementForm.customerId = row.id
       this.agreementForm.customerName = row.name
       this.agreementForm.customerCompany = row.customerCompanyName
@@ -270,6 +271,15 @@ export default {
       this.agreementForm.customerInvoiceTitle = row.customerCompanyName
       this.agreementForm.invoiceTitle = row.customerCompanyName
       this.getCustomerNames(row.id)
+    },
+    updateCustomer (row) {
+      this.staticOptions.customerNames.forEach(item => {
+        if (item.id === row) {
+          this.agreementForm.customerName = item.customerName
+          this.agreementForm.customerMobileNumber = item.mobileNumber
+          this.agreementForm.customerEmail = item.email
+        }
+      })
     },
     getCustomerNames (customerCompanyId) {
       let vm = this

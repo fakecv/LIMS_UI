@@ -17,11 +17,15 @@ export default {
     return {
       customerRequestForm: {
         customerName: '',
+        mobileNumber: '',
+        email: '',
         companyId: '',
         id: ''
       },
       customerResetForm: {
         customerName: '',
+        mobileNumber: '',
+        email: '',
         companyId: '',
         id: ''
       },
