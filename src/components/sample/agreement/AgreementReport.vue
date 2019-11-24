@@ -4,6 +4,7 @@
       <el-button @click="downloadToFrontEnd">重新加载</el-button>
       <el-button @click="goBackAgreement">返回</el-button>
       <el-button @click="print1">打印</el-button>
+      <el-button @click="downloadAction">下载</el-button>
     </el-row>
     <iframe id='previewPdf' :src="'/static/pdf/web/viewer.html?file=' + fileUrl" height="800"
         width="100%" class="page">
@@ -64,6 +65,10 @@ export default {
       // link.setAttribute('download', this.agreementNumber + '.pdf')
       // document.body.appendChild(link)
       // link.click()
+    },
+    downloadAction () {
+      alert('haha')
+      document.getElementById('previewPdf').contentWindow.PDFViewerApplication.download()
     },
     print (data) {
       let pdfjsLib = pdfJS

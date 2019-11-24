@@ -60,6 +60,9 @@ export default {
         duration: '',
         invoice: 'no',
         invoiceTitle: '',
+        samplingBasis: '',
+        testingBasis: '',
+        sampleSpecification: '',
         imageNameList: []
       },
       agreementResetForm: {
@@ -100,12 +103,16 @@ export default {
         duration: '',
         invoice: 'no',
         invoiceTitle: '',
+        samplingBasis: '',
+        testingBasis: '',
+        sampleSpecification: '',
         imageNameList: []
       },
       staticOptions: {
         processPriorities: [],
         customerNames: [],
         customerNotes: [],
+        testingBasises: [],
         users: [],
         totalCustomers: 0,
         totalUsers: 0,
@@ -204,6 +211,15 @@ export default {
       this.$ajax.get('/api/users/' + receiverId)
         .then(function (res) {
           vm.userForm = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadTestingBasis () {
+      let vm = this
+      this.$ajax.get('/api/sample/testingBasis/getTestingBasis')
+        .then(function (res) {
+          vm.staticOptions.testingBasises = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -316,6 +332,7 @@ export default {
     this.loadProcessPriorityData()
     this.initUserData()
     this.populatePrivileges()
+    this.loadTestingBasis()
     if (this.$route.params.id !== undefined) {
       this.loadAgreement(this.$route.params.id)
     }

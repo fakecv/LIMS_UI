@@ -7,6 +7,9 @@ import AgreementReport from '@/components/sample/agreement/AgreementReport'
 import AuditDepartmentDetailNew from '@/components/internalaudit/auditdepartment/AuditDepartmentDetailNew'
 import AuditDepartmentDetailEdit from '@/components/internalaudit/auditdepartment/AuditDepartmentDetailEdit'
 import AuditDepartmentMaintenance from '@/components/internalaudit/auditdepartment/AuditDepartmentMaintenance'
+import AvailableEquipmentDetailNew from '@/components/sample/availableequipment/AvailableEquipmentDetailNew'
+import AvailableEquipmentDetailEdit from '@/components/sample/availableequipment/AvailableEquipmentDetailEdit'
+import AvailableEquipmentMaintenance from '@/components/sample/availableequipment/AvailableEquipmentMaintenance'
 import CheckableTable from '@/components/reference/CheckableTable'
 import Child from '@/components/reference/Child'
 import ComposeSchedule from '@/components/equipment/ComposeSchedule'
@@ -118,6 +121,9 @@ import TaskListMaintenance from '@/components/tasklist/taskListMaintenance'
 import TemplateFileDetailNew from '@/components/sample/templatefile/TemplateFileDetailNew'
 import TemplateFileDetailEdit from '@/components/sample/templatefile/TemplateFileDetailEdit'
 import TemplateFileMaintenance from '@/components/sample/templatefile/TemplateFileMaintenance'
+import TestingBasisDetailNew from '@/components/sample/testingbasis/TestingBasisDetailNew'
+import TestingBasisDetailEdit from '@/components/sample/testingbasis/TestingBasisDetailEdit'
+import TestingBasisMaintenance from '@/components/sample/testingbasis/TestingBasisMaintenance'
 import TestCategoryDetailNew from '@/components/sample/testcategory/TestCategoryDetailNew'
 import TestCategoryDetailEdit from '@/components/sample/testcategory/TestCategoryDetailEdit'
 import TestCategoryMaintenance from '@/components/sample/testcategory/TestCategoryMaintenance'
@@ -211,6 +217,21 @@ const router = new Router({
           path: 'auditDepartmentMaintenance',
           name: 'auditDepartmentMaintenance',
           component: AuditDepartmentMaintenance
+        },
+        {
+          path: 'availableEquipmentDetailEdit/:id',
+          name: 'availableEquipmentDetailEdit',
+          component: AvailableEquipmentDetailEdit
+        },
+        {
+          path: 'availableEquipmentDetailNew',
+          name: 'availableEquipmentDetailNew',
+          component: AvailableEquipmentDetailNew
+        },
+        {
+          path: 'availableEquipmentMaintenance',
+          name: 'availableEquipmentMaintenance',
+          component: AvailableEquipmentMaintenance
         },
         {
           path: 'checkableTable',
@@ -721,6 +742,21 @@ const router = new Router({
           path: 'templateFileMaintenance',
           name: 'templateFileMaintenance',
           component: TemplateFileMaintenance
+        },
+        {
+          path: 'testingBasisDetailEdit/:id',
+          name: 'testingBasisDetailEdit',
+          component: TestingBasisDetailEdit
+        },
+        {
+          path: 'testingBasisDetailNew',
+          name: 'testingBasisDetailNew',
+          component: TestingBasisDetailNew
+        },
+        {
+          path: 'testingBasisMaintenance',
+          name: 'testingBasisMaintenance',
+          component: TestingBasisMaintenance
         },
         {
           path: 'testCategoryDetailEdit/:id',

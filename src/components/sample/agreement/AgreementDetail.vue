@@ -83,6 +83,27 @@
                   </el-form-item>
                 </el-col>
                 <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+                  <el-form-item label="规格">
+                    <el-input name="sampleSpecification" v-model="agreementForm.sampleSpecification" autoComplete="sampleSpecification"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+                  <el-form-item label="取样依据">
+                    <el-input name="samplingBasis" v-model="agreementForm.samplingBasis" autoComplete="samplingBasis"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
+                  <el-form-item label="检测依据">
+                    <el-select name="testingBasis" filterable clearable default-first-option editable v-model="agreementForm.testingBasis">
+                      <el-option v-for="item in staticOptions.testingBasises"
+                        :key="item.id"
+                        :label="item.testingBasisName"
+                        :value="item.testingBasisName">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
                   <el-form-item label="已经完成">
                       <el-radio-group name="done" v-model="agreementForm.done">
                         <el-radio label="true">是</el-radio>
