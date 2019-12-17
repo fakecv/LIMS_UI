@@ -57,6 +57,7 @@ export default {
   },
   activated () {
     this.resetTestedItemForm()
+    this.loadTestCategory()
   }
 }
 </script>

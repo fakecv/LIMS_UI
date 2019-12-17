@@ -20,7 +20,7 @@
               :fetch-suggestions="querySearch"
               placeholder="请输入内容"
               :trigger-on-focus="true"
-              @select="handleSelect"
+              @select="handleSelectSearchItem"
             >
             </el-autocomplete>
           </el-row>
@@ -243,8 +243,8 @@ export default {
     handleTaskListSelect (index, indexPath) {
       this.$router.push('/lims/taskListMaintenance')
     },
-    handleSelect () {
-      console.log(this.state2)
+    handleSelectSearchItem (item) {
+      this.$router.push(item.path)
     },
     initialPosition () {
       this.positions = [{

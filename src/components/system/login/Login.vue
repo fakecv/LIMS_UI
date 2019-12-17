@@ -148,10 +148,11 @@ export default {
             .then(function (res) {
               vm.auth.login(res.headers.authorization)
             }).catch(function (error) {
+              console.log(error.response.data.message)
               vm.$message({
                 showClose: true,
                 duration: 0,
-                message: error.response.data.message
+                message: '用户或密码不正确'
               })
             })
         } else {
