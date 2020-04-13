@@ -7,7 +7,7 @@
           </el-button>
         </el-button-group>
       </el-header>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs ref="agreementTabs" v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="委托协议信息" name="agreement">
           <el-container style="padding: 10px">
             <el-form :model="agreementForm" label-width="100px" label-position="left" size="mini">
@@ -318,7 +318,7 @@
       v-on:handleUserRowDLClick="handleUserRowDLClick"
       />
     <previewDialog
-      :form="form"
+      :previewForm="previewForm"
       :agreementId="agreementForm.id"
       :reportOptionDialog='reportOptionDialog'
       v-on:preview="preview"
@@ -343,7 +343,7 @@ export default {
       activeName: 'agreement',
       agreementNumberButton: false,
       reportOptionDialog: false,
-      form: {
+      previewForm: {
         reportList: []
       },
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 12},
@@ -558,15 +558,18 @@ export default {
     },
     previewReport (agreementNumber) {
       if (agreementNumber && agreementNumber !== '') {
-        this.form.reportList = []
+        this.previewForm.reportList = []
         this.reportOptionDialog = true
-        this.form.reportList.push(agreementNumber)
-        this.form.reportList = this.form.reportList.concat(['agreement', 'process', 'task'])
+        this.previewForm.reportList.push(agreementNumber)
+        this.previewForm.reportList = this.previewForm.reportList.concat(['agreement', 'process', 'task'])
       }
     },
     preview () {
       this.reportOptionDialog = false
-      this.$router.push('/lims/agreementReport/' + this.form.reportList.join(','))
+      if (this.agreementForm.customerCompany === '') {
+        this.agreementForm.customerCompany = 'document'
+      }
+      this.$router.push('/lims/agreementReport/' + this.previewForm.reportList.join(',') + '/' + this.agreementForm.customerCompany)
     },
     closePreviewDialog () {
       this.reportOptionDialog = false

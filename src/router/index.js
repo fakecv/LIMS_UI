@@ -199,7 +199,7 @@ const router = new Router({
           component: AgreementMaintenance
         },
         {
-          path: 'agreementReport/:id',
+          path: 'agreementReport/:id/:companyName',
           name: 'agreementReport',
           component: AgreementReport
         },

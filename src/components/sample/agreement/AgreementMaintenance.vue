@@ -49,80 +49,80 @@
       <el-button type="primary" size="mini" icon="el-icon-shopping-cart-2" @click="exportSettlementList">导出选中结算清单</el-button>
       <el-button type="primary" size="mini" icon="el-icon-shopping-cart-1" @click="exportSettlementListAsCondition">按条件导出结算清单</el-button>
     </div>
-      <el-table id="out-table" :data="tableData" height="500" style="width: 100%" @row-dblclick=dblclick :row-style="agreementTableStyle"
-      @selection-change="handleSelectionChange"
-      >
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column
-          prop="agreementNumber"
-          label="委托编号"
-          sortable
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="sampleName"
-          label="样品名称"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="processPriority"
-          label="优先级"
-          width="80">
+    <el-table id="out-table" :data="tableData" height="500" style="width: 100%" @row-dblclick=dblclick :row-style="agreementTableStyle"
+    @selection-change="handleSelectionChange"
+    >
+      <el-table-column
+        type="selection"
+        width="55">
       </el-table-column>
-        <el-table-column
-          prop="materialNumber"
-          label="材质牌号"
-          width="180">
+      <el-table-column
+        prop="agreementNumber"
+        label="委托编号"
+        sortable
+        width="180">
       </el-table-column>
-        <el-table-column
-          prop="customerCompany"
-          label="委托单位"
-          show-overflow-tooltip
-          width="180">
+      <el-table-column
+        prop="sampleName"
+        label="样品名称"
+        width="180">
       </el-table-column>
-        <el-table-column
-          prop="receiveSampleTime"
-          label="样品接收时间"
-          sortable
-          :formatter="receiveSampleTimeFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="expectedCompletionTime"
-          label="要求完成时间"
-          sortable
-          :formatter="expectedCompletionTimeFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="comment"
-          label="其它信息"
-          show-overflow-tooltip
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="done"
-          label="完成状态"
-          :formatter="doneFormatter"
-          width="180">
-        </el-table-column>
-      </el-table>
-      <div class="block text-right">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="agreementRequestForm.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="20"
-          layout="sizes, prev, pager, next"
-          :total="totalAgreements">
-        </el-pagination>
-      </div>
+      <el-table-column
+        prop="processPriority"
+        label="优先级"
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="materialNumber"
+        label="材质牌号"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="customerCompany"
+        label="委托单位"
+        show-overflow-tooltip
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="receiveSampleTime"
+        label="样品接收时间"
+        sortable
+        :formatter="receiveSampleTimeFormatter"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="expectedCompletionTime"
+        label="要求完成时间"
+        sortable
+        :formatter="expectedCompletionTimeFormatter"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="comment"
+        label="其它信息"
+        show-overflow-tooltip
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="done"
+        label="完成状态"
+        :formatter="doneFormatter"
+        width="180">
+      </el-table-column>
+    </el-table>
+    <div class="block text-right">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="agreementRequestForm.currentPage"
+        :page-sizes="[10, 20, 50]"
+        :page-size="20"
+        layout="sizes, prev, pager, next"
+        :total="totalAgreements">
+      </el-pagination>
     </div>
-  </template>
+  </div>
+</template>
 
 <script>
 import FileSaver from 'file-saver'

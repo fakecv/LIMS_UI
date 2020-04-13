@@ -17,6 +17,7 @@
         <el-table :data="staticOptions.processTableData"
         style="width: 100%"
         tooltip-effect="dark"
+        :default-sort = "{prop: 'sampleNumber'}"
         :row-style="processTableStyle"
         @selection-change="handleProcessTableSelectionChange"
         @row-dblclick=dblclick

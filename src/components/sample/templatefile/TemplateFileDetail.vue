@@ -119,17 +119,18 @@ export default {
         })
     },
     handleChange (file, fileList) {
-      const isWORD = file.raw.type === 'application/msword'
+      console.log(file)
+      // const isWORD = file.raw.type === 'application/msword'
       const isLt2M = file.raw.size / 1024 / 1024 < 2
-      if (!isWORD) {
-        this.$message.error('上传文档只能是 DOC 格式!')
-        this.fileList = []
-      }
+      // if (!isWORD) {
+      //   this.$message.error('上传文档只能是 DOC 格式!')
+      //   this.fileList = []
+      // }
       if (!isLt2M) {
         this.$message.error('上传文档大小不能超过 2MB!')
         this.fileList = []
       }
-      if (isWORD && isLt2M) {
+      if (isLt2M) {
         this.fileList = fileList
         this.templateFileForm.fileName = file.name
       }

@@ -247,6 +247,8 @@ export default {
         .then(function (res) {
           // it's better than vm.staticOptions.images = [], any reference will be also cleared.
           vm.agreementForm = JSON.parse(JSON.stringify(vm.agreementResetForm))
+          vm.staticOptions.processListed = true
+          vm.$refs.agreementDetail.activeName = 'agreement'
           vm.staticOptions.images.length = 0
         }).catch(function (error) {
           vm.$message(error.response.data.message)

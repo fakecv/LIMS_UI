@@ -67,7 +67,10 @@ export default {
       } else if (action.id === '5') {
         this.confirmDelete()
       } else if (action.id === '6') {
+        console.log('6')
+        // this.loadQuotation()
       } else if (action.id === '7') {
+        // this.auditQuotation()
       }
     },
     new () {
@@ -75,6 +78,12 @@ export default {
     },
     copy () {
       this.$emit('copy')
+    },
+    loadQuotation () {
+      this.$emit('loadQuotation')
+    },
+    auditQuotation () {
+      this.$emit('auditQuotation')
     },
     saveToDB () {
       let vm = this

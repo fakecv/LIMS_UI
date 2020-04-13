@@ -270,8 +270,11 @@ export default {
       this.$ajax.get('/api/sample/agreement/deleteFileFolder/' + this.agreementForm.agreementNumber)
         .then(function (res) {
           // it's better than vm.staticOptions.images = [], any reference will be also cleared.
-          vm.agreementForm = JSON.parse(JSON.stringify(vm.agreementResetForm))
-          vm.staticOptions.images.length = 0
+          // vm.agreementForm = JSON.parse(JSON.stringify(vm.agreementResetForm))
+          // vm.staticOptions.processListed = true
+          // vm.staticOptions.images.length = 0
+          vm.newAgreementForm()
+          vm.$refs.agreementDetail.activeName = 'agreement'
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
