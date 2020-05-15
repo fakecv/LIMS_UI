@@ -6,6 +6,8 @@
    v-on:deleteCustomerNoteForm="resetCustomerNoteForm"
    v-on:new="resetCustomerNoteForm"
    v-on:copy="resetCustomerNoteId"
+   v-on:loadQuotation="loadQuotation"
+   v-on:auditQuotation="auditQuotation"
   />
 </template>
 
@@ -34,6 +36,24 @@ export default {
     }
   },
   methods: {
+    loadQuotation () {
+      let vm = this
+      this.$ajax.post('/api/illegal/bidding/quotationList/loadQuotation')
+        .then(function (res) {
+          console.log('load quotation')
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    auditQuotation () {
+      let vm = this
+      this.$ajax.post('/api/illegal/bidding/quotationList/auditQuotation')
+        .then(function (res) {
+          console.log('audit quotation')
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     loadCustomerCompanyData () {
       let vm = this
       this.$ajax.get('/api/customer/customerCompany/getCustomerCompany')

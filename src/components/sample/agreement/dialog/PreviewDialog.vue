@@ -1,9 +1,9 @@
 <template>
   <el-dialog :visible.sync="reportOptionDialog"  append-to-body>
     <el-container style="padding: 10px">
-        <el-form :model="form">
+        <el-form :model="previewForm">
           <el-form-item label="可预览文件列表">
-              <el-checkbox-group v-model="form.reportList">
+              <el-checkbox-group v-model="previewForm.reportList">
                 <el-checkbox label="cover">检测报表封面</el-checkbox>
                 <el-checkbox label="agreement">委托协议书</el-checkbox>
                 <el-checkbox label="process">样品流转表</el-checkbox>
@@ -22,7 +22,7 @@
 <script>
 export default {
   name: 'previewDialog',
-  props: ['form', 'reportOptionDialog'],
+  props: ['previewForm', 'reportOptionDialog'],
   data () {
     return {
     }

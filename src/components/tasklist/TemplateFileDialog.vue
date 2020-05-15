@@ -1,6 +1,7 @@
 <template>
   <el-dialog title="模板文件列表" :visible.sync="templateFileDialog"  append-to-body>
         <el-table ref="multipleTable"
+          max-height="250"
           :data="tableData" style="width: 100%"
           >
           <el-table-column
@@ -13,7 +14,7 @@
             prop="content"
             show-overflow-tooltip
             label="文件内容"
-            width="480">
+            width="180">
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
@@ -72,20 +73,25 @@ export default {
       row.sampleId = this.processId
       this.$ajax.post('/api/sample/templateFile/downloadTemplateFile/', row, {responseType: 'blob'})
         .then(function (res) {
-          if (!res.data) {
-            return
-          }
           let url = window.URL.createObjectURL(new Blob([res.data]), {type: 'application/msword;charset=utf-8'})
           let link = document.createElement('a')
           link.style.display = 'none'
           link.href = url
-          link.setAttribute('download', 'lims.doc')
+          link.setAttribute('download', res.headers.filename)
           document.body.appendChild(link)
           link.click()
           link.remove()
-        }
-        ).catch(function (error) {
-          vm.$message(error.response.data.message)
+        }).catch(function (error) {
+          let fileReader = new FileReader()
+          fileReader.onload = function () {
+            try {
+              let jsonData = JSON.parse(this.result) // 说明是普通对象数据，后台转换失败
+              vm.$message(jsonData.message)
+            } catch (err) { // 解析成对象失败，说明是正常的文件流
+              alert('success...')
+            }
+          }
+          fileReader.readAsText(error.response.data)
         })
     },
     handleSizeChange (val) {

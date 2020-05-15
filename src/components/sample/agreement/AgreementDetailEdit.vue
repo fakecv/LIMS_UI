@@ -1,27 +1,24 @@
 <template>
   <AgreementDetail
-    ref="agreementDetail"
     :agreementForm="agreementForm"
     :staticOptions="staticOptions"
     v-on:updateCustomerCompany="updateCustomerCompany"
     v-on:updateCustomer="updateCustomer"
     v-on:updateUser="updateUser"
     v-on:reloadUserData="reloadUserData"
-    v-on:updateAgreementForm="updateAgreementForm"
     v-on:deleteAgreementForm="resetAgreementForm"
-    v-on:new="newAgreementForm"
-    v-on:copy="copyAgreement"
+    v-on:new="resetAgreementForm"
+    v-on:copy="resetAgreementId"
     v-on:removeImage="removeImage"
     v-on:addImage="addImage"
     v-on:agreementNumberGenerator="agreementNumberGenerator"
-    v-on:refreshAgreement="refreshAgreement"
     />
 </template>
 
 <script>
 import AgreementDetail from '@/components/sample/agreement/AgreementDetail'
 export default {
-  name: 'agreementDetailNew',
+  name: 'agreementDetailEdit',
   components: {AgreementDetail},
   data () {
     return {
@@ -29,8 +26,8 @@ export default {
         id: '',
         agreementNumber: '',
         sampleName: '',
-        receiveSampleTime: new Date(Date.now()),
-        expectedCompletionTime: new Date(Date.now() + 864e5 * 7),
+        receiveSampleTime: '',
+        expectedCompletionTime: '',
         processPriority: '',
         materialNumber: '',
         noOfSample: '1组(2件)',
@@ -72,8 +69,8 @@ export default {
         id: '',
         agreementNumber: '',
         sampleName: '',
-        receiveSampleTime: new Date(Date.now()),
-        expectedCompletionTime: new Date(Date.now() + 864e5 * 7),
+        receiveSampleTime: '',
+        expectedCompletionTime: '',
         processPriority: '',
         materialNumber: '',
         noOfSample: '1组(2件)',
@@ -112,7 +109,6 @@ export default {
         imageNameList: []
       },
       staticOptions: {
-        processListed: true,
         processPriorities: [],
         customerNames: [],
         customerNotes: [],
@@ -120,16 +116,16 @@ export default {
         users: [],
         totalCustomers: 0,
         totalUsers: 0,
-        images: [],
-        privileges: '',
         actions: [
-          {'name': '新建', 'id': '1', 'icon': 'el-icon-circle-plus', 'loading': false, 'show': false},
-          {'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'show': false},
-          {'name': '保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false, 'show': false},
-          {'name': '删除', 'id': '4', 'icon': 'el-icon-delete', 'loading': false, 'show': false},
-          {'name': '文件预览', 'id': '5', 'icon': 'el-icon-upload2', 'loading': false, 'show': true},
-          {'name': '保存为模板', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false, 'show': true}
-        ]
+          {'name': '新建', 'id': '5', 'icon': 'el-icon-circle-plus', 'loading': false, 'show': false},
+          {'name': '复制', 'id': '6', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'show': false},
+          {'name': '数据库保存', 'id': '1', 'icon': 'el-icon-document', 'loading': false, 'show': false},
+          {'name': '解锁', 'id': '7', 'icon': 'el-icon-edit', 'loading': false, 'show': false},
+          {'name': '删除', 'id': '2', 'icon': 'el-icon-delete', 'loading': false, 'show': false},
+          {'name': '文件预览', 'id': '3', 'icon': 'el-icon-upload2', 'loading': false, 'show': true},
+          {'name': '查看样品流转', 'id': '4', 'icon': 'el-icon-download', 'loading': false, 'show': true}
+        ],
+        images: []
       },
       userRequestForm: {
         name: '',
@@ -141,19 +137,19 @@ export default {
   methods: {
     displayActions () {
       this.staticOptions.actions.forEach(item => {
-        if (item.name === '新建' && this.staticOptions.privileges.indexOf('new') > -1) {
+        if (item.name === '新建' && this.staticOptions.privileges.indexOf('new') > 0) {
           item.show = true
         }
-        if (item.name === '复制' && this.staticOptions.privileges.indexOf('copy') > -1) {
+        if (item.name === '复制' && this.staticOptions.privileges.indexOf('copy') > 0) {
           item.show = true
         }
-        if (item.name === '保存' && this.staticOptions.privileges.indexOf('save') > -1) {
+        if (item.name === '数据库保存' && this.staticOptions.privileges.indexOf('save') > 0) {
           item.show = true
         }
         if (item.name === '解锁' && this.staticOptions.privileges.indexOf('unlock') > -1) {
           item.show = true
         }
-        if (item.name === '删除' && this.staticOptions.privileges.indexOf('delete') > -1) {
+        if (item.name === '删除' && this.staticOptions.privileges.indexOf('delete') > 0) {
           item.show = true
         }
       })
@@ -183,11 +179,16 @@ export default {
     },
     loadAgreement (agreementId) {
       let vm = this
-      this.staticOptions.images.length = 0
       this.$ajax.get('/api/sample/agreement/' + agreementId)
         .then(function (res) {
           vm.agreementForm = res.data
-          if (res.data.imageNameList !== undefined && res.data.imageNameList.length > 0) {
+          if (res.data.customerId !== '') {
+            vm.loadCustomer(res.data.customerId)
+          }
+          if (res.data.receiverId !== '') {
+            vm.loadReceiver(res.data.receiverId)
+          }
+          if (res.data.imageNameList.length > 0) {
             vm.agreementForm.imageNameList.forEach(image => {
               vm.downloadToFrontEnd(image, vm.agreementForm.agreementNumber)
             })
@@ -196,45 +197,20 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    downloadToFrontEnd (fileName, agreementId) {
-      let vm = this
-      let downloadFormTemp = {agreementNumber: agreementId, fileName: fileName}
-      var reader = new FileReader()
-      this.$ajax.post('/api/sample/agreement/downloadFile', downloadFormTemp, { responseType: 'blob' })
-        .then(function (res) {
-          reader.readAsDataURL(res.data)
-          reader.onload = function () {
-            var imageCP = {}
-            imageCP.url = reader.result
-            imageCP.title = fileName
-            vm.staticOptions.images.push(imageCP)
-          }
-        }).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    copyAgreement (agreementId) {
-      let vm = this
-      this.$ajax.get('/api/sample/agreement/copyAgreement/' + agreementId)
-        .then(function (res) {
-          vm.agreementForm.id = res.data.id
-          vm.agreementForm.agreementNumber = res.data.agreementNumber
-          vm.agreementForm.testDuration = vm.agreementResetForm.testDuration
-          vm.agreementForm.receiveSampleTime = new Date(Date.now())
-          vm.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 7)
-          vm.agreementForm.done = vm.agreementResetForm.done
-          vm.agreementForm.duration = vm.agreementResetForm.duration
-          vm.agreementForm.imageNameList = []
-          vm.staticOptions.images.length = 0
-          vm.$router.push('/lims/agreementDetailNew/' + vm.agreementForm.id)
-        })
-    },
     loadProcessPriorityData () {
       let vm = this
       this.$ajax.get('/api/sample/processPriority/getProcessPriority')
         .then(function (res) {
           vm.staticOptions.processPriorities = res.data
-          vm.agreementForm.processPriority = vm.staticOptions.processPriorities[0].processPriorityName
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    loadReceiver (receiverId) {
+      let vm = this
+      this.$ajax.get('/api/users/' + receiverId)
+        .then(function (res) {
+          vm.userForm = res.data
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -248,40 +224,40 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    updateAgreementForm (event) {
-      this.agreementForm = event
-      this.$router.push('/lims/agreementDetailNew/' + event.id)
-      this.staticOptions.processListed = false
-    },
-    resetAgreementId () {
-      this.agreementForm.id = ''
-      this.staticOptions.images.length = 0
-      this.staticOptions.processListed = true
-      this.agreementNumberGenerator()
-    },
-    newAgreementForm () {
-      // it's better than vm.staticOptions.images = [], any reference will be also cleared.
-      this.agreementForm = JSON.parse(JSON.stringify(this.agreementResetForm))
-      this.agreementForm.processPriority = this.staticOptions.processPriorities[0].processPriorityName
-      this.staticOptions.images.length = 0
-      this.agreementForm.receiveSampleTime = new Date(Date.now())
-      this.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 7)
-      this.getTopOneUser()
-      this.staticOptions.processListed = true
+    downloadToFrontEnd (fileName, agreementId) {
+      let vm = this
+      let downloadFormTemp = {agreementNumber: agreementId, fileName: fileName}
+      var reader = new FileReader()
+      this.$ajax.post('/api/sample/agreement/downloadFile', downloadFormTemp, { responseType: 'blob' })
+        .then(function (res) {
+          reader.readAsDataURL(res.data)
+          reader.onload = function () {
+            var imageCP = {}
+            imageCP.imageUrl = reader.result
+            imageCP.caption = fileName
+            vm.staticOptions.images.push(imageCP)
+          }
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     resetAgreementForm () {
       let vm = this
       this.$ajax.get('/api/sample/agreement/deleteFileFolder/' + this.agreementForm.agreementNumber)
         .then(function (res) {
           // it's better than vm.staticOptions.images = [], any reference will be also cleared.
-          // vm.agreementForm = JSON.parse(JSON.stringify(vm.agreementResetForm))
-          // vm.staticOptions.processListed = true
-          // vm.staticOptions.images.length = 0
-          vm.newAgreementForm()
+          vm.agreementForm = JSON.parse(JSON.stringify(vm.agreementResetForm))
+          vm.staticOptions.processListed = true
           vm.$refs.agreementDetail.activeName = 'agreement'
+          vm.staticOptions.images.length = 0
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
+    },
+    resetAgreementId () {
+      this.agreementForm.id = ''
+      this.staticOptions.images.length = 0
+      this.agreementNumberGenerator()
     },
     updateCustomerCompany (row) {
       this.agreementForm.customerId = row.id
@@ -311,7 +287,7 @@ export default {
           vm.staticOptions.customerNames = res.data || []
         })
     },
-    reloadUserData (event) {
+    reloadUserData () {
       let vm = this
       this.$ajax.post('/api/users/queryApplicationUser', event)
         .then(function (res) {
@@ -327,19 +303,7 @@ export default {
           vm.staticOptions.totalUsers = res.data.totalUsers || 0
         })
     },
-    getTopOneUser () {
-      let vm = this
-      this.$ajax.get('/api/users/getTopOne')
-        .then(function (res) {
-          vm.agreementForm.receiverName = res.data.name
-          vm.agreementForm.receiverMobileNumber = res.data.mobileNumber
-          vm.agreementForm.receiverFax = res.data.fax
-          vm.agreementForm.receiverEmail = res.data.email
-          vm.agreementForm.receiverAddress = res.data.address
-        })
-    },
     updateUser (row) {
-      this.agreementForm.reeiverName = row.name
       this.agreementForm.receiverName = row.name
       this.agreementForm.receiverMobileNumber = row.mobileNumber
       this.agreementForm.receiverFax = row.fax
@@ -347,37 +311,33 @@ export default {
       this.agreementForm.receiverAddress = row.address
     },
     addImage (imageCP) {
-      this.agreementForm.imageNameList.push(imageCP.title)
+      this.agreementForm.imageNameList.push(imageCP.caption)
       this.staticOptions.images.push(imageCP)
     },
     removeImage (item) {
       let vm = this
-      let downloadFormTemp = {agreementNumber: this.agreementForm.agreementNumber, fileName: item.title}
+      let downloadFormTemp = {agreementNumber: this.agreementForm.agreementNumber, fileName: item.caption}
       this.$ajax.post('/api/sample/agreement/deleteFile', downloadFormTemp)
         .then(function (res) {
           vm.staticOptions.images.forEach(image => {
-            if (image.title === item.title) {
+            if (image.caption === item.caption) {
               vm.staticOptions.images.splice(vm.staticOptions.images.indexOf(image), 1)
-              vm.agreementForm.imageNameList.splice(vm.agreementForm.imageNameList.indexOf(item.title), 1)
+              vm.agreementForm.imageNameList.splice(vm.agreementForm.imageNameList.indexOf(item.caption), 1)
             }
           })
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
-    },
-    refreshAgreement () {
-      this.loadAgreement(this.$route.params.id)
     }
   },
   activated () {
-    if (this.$route.params.id !== undefined) {
-      this.loadAgreement(this.$route.params.id)
-      this.staticOptions.processListed = false
-    }
     this.loadProcessPriorityData()
     this.initUserData()
     this.populatePrivileges()
     this.loadTestingBasis()
+    if (this.$route.params.id !== undefined) {
+      this.loadAgreement(this.$route.params.id)
+    }
   }
 }
 </script>

@@ -19,7 +19,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.js'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import 'font-awesome/css/font-awesome.min.css'
-import vGallery from 'v-gallery'
+// import vGallery from 'v-gallery'
 // import '@progress/kendo-ui'
 // import '@progress/kendo-theme-default/dist/all.css'
 // import Scheduler from '@progress/kendo-scheduler-vue-wrapper'
@@ -44,7 +44,7 @@ const auth = new AuthService()
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(filter)
-Vue.use(vGallery)
+// Vue.use(vGallery)
 Vue.component('icon', Icon)
 require('es6-promise').polyfill()
 router.beforeEach((to, from, next) => {

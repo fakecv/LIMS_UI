@@ -205,7 +205,7 @@ const router = new Router({
           component: AgreementTemplateMaintenance
         },
         {
-          path: 'agreementReport/:id',
+          path: 'agreementReport/:id/:companyName',
           name: 'agreementReport',
           component: AgreementReport
         },

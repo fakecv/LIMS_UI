@@ -34,6 +34,7 @@ export default {
       fileUrl: '',
       fullscreenLoading: false,
       agreementNumber: '',
+      companyName: '',
       loading: {}
     }
   },
@@ -57,18 +58,30 @@ export default {
         console.log('data is null')
         return
       }
-      let url = window.URL.createObjectURL(new Blob([data]), {type: 'application/pdf'})
+      let dataFile = new File([new Blob([data])], this.agreementNumber + '_' + this.companyName + '.pdf', {type: 'application/pdf'})
+      let url = window.URL.createObjectURL(dataFile)
       this.fileUrl = url
-      // let link = document.createElement('a')
-      // link.style.display = 'none'
-      // link.href = url
-      // link.setAttribute('download', this.agreementNumber + '.pdf')
-      // document.body.appendChild(link)
-      // link.click()
     },
     downloadAction () {
-      alert('haha')
-      document.getElementById('previewPdf').contentWindow.PDFViewerApplication.download()
+      // document.getElementById('previewPdf').contentWindow.PDFViewerApplication.download()
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/downloadPdfFile/' + this.agreementNumber, {responseType: 'blob'})
+        .then(function (res) {
+          if (!res.data) {
+            return
+          }
+          let url = window.URL.createObjectURL(new Blob([res.data]))
+          let link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          let agreementNumberfileName = vm.agreementNumber.split(',')[0]
+          link.setAttribute('download', agreementNumberfileName + vm.companyName + '.pdf')
+          document.body.appendChild(link)
+          link.click()
+        }
+        ).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     print (data) {
       let pdfjsLib = pdfJS
@@ -137,6 +150,7 @@ export default {
   activated () {
     if (this.$route.params.id !== undefined) {
       this.agreementNumber = this.$route.params.id
+      this.companyName = this.$route.params.companyName
       this.downloadToFrontEnd()
     }
   }

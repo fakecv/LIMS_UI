@@ -28,11 +28,12 @@
               <el-input name="link" v-model="templateFileRequestForm.link" autoComplete="link"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-            <el-form-item label="是否在列表中显示">
-              <el-switch name="switch" v-model="templateFileRequestForm.show" autoComplete="show"></el-switch>
+            <el-form-item label="是否在列表中显示" label-width="200px">
+              <el-radio-group v-model="templateFileRequestForm.show">
+                <el-radio label="yes">是</el-radio>
+                <el-radio label="no">否</el-radio>
+              </el-radio-group>
             </el-form-item>
-          </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-form-item>
@@ -118,7 +119,7 @@ export default {
         content: '',
         displayName: '',
         link: '',
-        show: '',
+        show: 'yes',
         itemsPerPage: 20,
         currentPage: 1
       },
