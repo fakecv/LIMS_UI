@@ -324,6 +324,17 @@
       v-on:preview="preview"
       v-on:close="closePreviewDialog"
     />
+    <el-dialog title="模板定义" :visible.sync="agreementTemplateDialogFormVisible" append-to-body>
+      <el-form :model="agreementTemplateForm">
+        <el-form-item label="模板名称" :label-width="formLabelWidth">
+          <el-input v-model="agreementTemplateForm.templateName" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="agreementTemplateDialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveTemplateToDB">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -339,6 +350,16 @@ export default {
   props: ['agreementForm', 'staticOptions'],
   data () {
     return {
+      agreementTemplateDialogFormVisible: false,
+      agreementTemplateForm: {
+        agreementId: '',
+        templateName: '',
+        comment: '',
+        customerCompany: '',
+        materialNumber: '',
+        sampleName: ''
+      },
+      formLabelWidth: '120px',
       processListed: true,
       activeName: 'agreement',
       agreementNumberButton: false,
@@ -387,6 +408,21 @@ export default {
     Process: Process
   },
   methods: {
+    saveTemplateToDB () {
+      let vm = this
+      this.agreementTemplateForm.agreementId = this.agreementForm.id
+      this.agreementTemplateForm.comment = this.agreementForm.comment
+      this.agreementTemplateForm.customerCompany = this.customerCompany
+      this.agreementTemplateForm.materialNumber = this.agreementForm.materialNumber
+      this.agreementTemplateForm.sampleName = this.agreementForm.sampleName
+      this.$ajax.post('/api/sample/agreement/addAgreementTemplate', this.agreementTemplateForm)
+        .then(function (res) {
+          vm.$message('已经成功保存到数据库!')
+          vm.agreementTemplateDialogFormVisible = false
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     updateCustomer (val) {
       this.$emit('updateCustomer', val)
     },
@@ -421,6 +457,11 @@ export default {
       } else if (action.id === '5') {
         if (this.agreementForm.agreementNumber && this.agreementForm.agreementNumber !== '') {
           this.previewReport(this.agreementForm.agreementNumber)
+        }
+      } else if (action.id === '6') {
+        if (this.agreementForm.id && this.agreementForm.id !== '') {
+          this.agreementTemplateForm.templateName = ''
+          this.agreementTemplateDialogFormVisible = true
         }
       }
     },
@@ -642,7 +683,7 @@ export default {
             vm.$emit('addImage', imageCP)
           }
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message(reader.readAsText(error.response.data).message)
         })
     },
     uploadToServer () {

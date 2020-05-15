@@ -127,7 +127,8 @@ export default {
           {'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'show': false},
           {'name': '保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false, 'show': false},
           {'name': '删除', 'id': '4', 'icon': 'el-icon-delete', 'loading': false, 'show': false},
-          {'name': '文件预览', 'id': '5', 'icon': 'el-icon-upload2', 'loading': false, 'show': true}
+          {'name': '文件预览', 'id': '5', 'icon': 'el-icon-upload2', 'loading': false, 'show': true},
+          {'name': '保存为模板', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false, 'show': true}
         ]
       },
       userRequestForm: {
@@ -216,12 +217,15 @@ export default {
       let vm = this
       this.$ajax.get('/api/sample/agreement/copyAgreement/' + agreementId)
         .then(function (res) {
-          vm.agreementForm = res.data
+          vm.agreementForm.id = res.data.id
+          vm.agreementForm.agreementNumber = res.data.agreementNumber
           vm.agreementForm.testDuration = vm.agreementResetForm.testDuration
           vm.agreementForm.receiveSampleTime = new Date(Date.now())
           vm.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 7)
           vm.agreementForm.done = vm.agreementResetForm.done
           vm.agreementForm.duration = vm.agreementResetForm.duration
+          vm.agreementForm.imageNameList = []
+          vm.staticOptions.images.length = 0
           vm.$router.push('/lims/agreementDetailNew/' + vm.agreementForm.id)
         })
     },

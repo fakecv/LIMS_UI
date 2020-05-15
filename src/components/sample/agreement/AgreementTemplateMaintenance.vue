@@ -6,19 +6,6 @@
           <el-form :model="agreementRequestForm" label-width="100px" label-position="left" size="mini">
             <el-row :gutter="20">
               <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-                <el-form-item label="委托编号">
-                  <el-input name="agreementNumber" v-model="agreementRequestForm.agreementNumber"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
-                <el-form-item label="完成状态">
-                  <el-select name="done" clearable v-model="agreementRequestForm.done">
-                  <el-option label="未完成" value="false"></el-option>
-                  <el-option label="已完成" value="true"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
                 <el-form-item label="材质牌号">
                   <el-input name="materialNumber" v-model="agreementRequestForm.materialNumber" autoComplete="materialNumber"></el-input>
                 </el-form-item>
@@ -55,22 +42,11 @@
         </el-container>
       </el-collapse-item>
       <el-collapse-item title="查询结果" name="2">
-        <div class="block text-right">
-          <el-button type="primary" size="mini" icon="el-icon-lock" @click="confirmFinish">批量完成</el-button>
-          <el-button type="primary" size="mini" icon="el-icon-shopping-cart-2" @click="exportSettlementList">导出选中结算清单</el-button>
-          <el-button type="primary" size="mini" icon="el-icon-shopping-cart-1" @click="exportSettlementListAsCondition">按条件导出结算清单</el-button>
-        </div>
-        <el-table id="out-table" :data="tableData" height="500" style="width: 100%" @row-dblclick=dblclick :row-style="agreementTableStyle"
-        @selection-change="handleSelectionChange" size="mini"
-        >
+        <el-table id="out-table" :data="tableData" height="500" style="width: 100%" @row-dblclick="dblclick" size="mini"
+          >
           <el-table-column
-            type="selection"
-            width="55">
-          </el-table-column>
-          <el-table-column
-            prop="agreementNumber"
-            label="委托编号"
-            sortable
+            prop="templateName"
+            label="模板名称"
             width="180">
           </el-table-column>
           <el-table-column
@@ -79,14 +55,9 @@
             width="180">
           </el-table-column>
           <el-table-column
-            prop="processPriority"
-            label="优先级"
-            width="80">
-        </el-table-column>
-          <el-table-column
             prop="materialNumber"
             label="材质牌号"
-            width="180">
+            width="120">
         </el-table-column>
           <el-table-column
             prop="customerCompany"
@@ -95,30 +66,18 @@
             width="180">
         </el-table-column>
           <el-table-column
-            prop="receiveSampleTime"
-            label="样品接收时间"
-            sortable
-            :formatter="receiveSampleTimeFormatter"
-            width="140">
-          </el-table-column>
-          <el-table-column
-            prop="expectedCompletionTime"
-            label="要求完成时间"
-            sortable
-            :formatter="expectedCompletionTimeFormatter"
-            width="140">
-          </el-table-column>
-          <el-table-column
             prop="comment"
             label="其它信息"
             show-overflow-tooltip
             width="180">
           </el-table-column>
           <el-table-column
-            prop="done"
-            label="完成状态"
-            :formatter="doneFormatter"
-            width="180">
+            fixed="right"
+            label="操作"
+            width="100">
+            <template slot-scope="scope">
+              <el-button @click="handleClick(scope.row.id)" type="text" size="small">删除</el-button>
+            </template>
           </el-table-column>
         </el-table>
         <div class="block text-right">
@@ -138,10 +97,8 @@
 </template>
 
 <script>
-import FileSaver from 'file-saver'
-import XLSX from 'xlsx'
 export default {
-  name: 'agreementMaintenance',
+  name: 'agreementTemplateMaintenance',
   data () {
     return {
       tableData: [],
@@ -153,7 +110,7 @@ export default {
         sampleName: '',
         company: '',
         experimentalCategory: '',
-        itemsPerPage: 50,
+        itemsPerPage: 20,
         currentPage: 1
       },
       processPriorities: [],
@@ -163,106 +120,42 @@ export default {
     }
   },
   methods: {
+    handleClick (id) {
+      let vm = this
+      if (id && id !== '') {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          vm.delete(id)
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      }
+    },
+    delete (id) {
+      let vm = this
+      this.$ajax.get('/api/sample/agreementTemplate/delete/' + id)
+        .then(function (res) {
+          vm.$message({
+            type: 'success',
+            message: '已经成功删除！'
+          })
+          vm.onSubmit()
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     getCustomerCompanyNames () {
       let vm = this
       this.$ajax.get('/api/customer/customerCompany/getCustomerCompany')
         .then(function (res) {
           vm.customerCompanyNames = res.data || []
         })
-    },
-    exportExcel () {
-      /* generate workbook object from table */
-      var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
-      /* get binary string as output */
-      var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-      try {
-        FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '委托协议.xlsx')
-      } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-      return wbout
-    },
-    handleSelectionChange (val) {
-      this.agreementIds = []
-      val.forEach(element => {
-        this.agreementIds.push(element.id)
-      })
-    },
-    confirmFinish () {
-      if (this.agreementIds.length > 0) {
-        this.$confirm('确认更新为完成状态?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.finish()
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消提交'
-          })
-        })
-      }
-    },
-    finish () {
-      let vm = this
-      this.$ajax.get('/api/sample/agreement/finish/' + this.agreementIds.join(','))
-        .then(function (res) {
-          vm.$message('已更新为完成状态！')
-          vm.onSubmit()
-        }
-        ).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    exportSettlementList () {
-      let vm = this
-      this.$ajax.get('/api/sample/agreement/downloadExportSettlementList/' + this.agreementIds.join(','), {responseType: 'blob'})
-        .then(function (res) {
-          if (!res.data) {
-            return
-          }
-          let url = window.URL.createObjectURL(new Blob([res.data]), {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'})
-          let link = document.createElement('a')
-          link.style.display = 'none'
-          link.href = url
-          link.setAttribute('download', '结算清单.xls')
-
-          document.body.appendChild(link)
-          link.click()
-        }
-        ).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    exportSettlementListAsCondition () {
-      let vm = this
-      this.$ajax.post('/api/sample/agreement/downloadExportSettlementListAsCondition', this.agreementRequestForm, {responseType: 'blob'})
-        .then(function (res) {
-          if (!res.data) {
-            return
-          }
-          let url = window.URL.createObjectURL(new Blob([res.data]), {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'})
-          let link = document.createElement('a')
-          link.style.display = 'none'
-          link.href = url
-          link.setAttribute('download', '结算清单.xls')
-
-          document.body.appendChild(link)
-          link.click()
-        }
-        ).catch(function (error) {
-          vm.$message(error.response.data.message)
-        })
-    },
-    agreementTableStyle ({row, rowIndex}) {
-      let backgroundColor = '#FFFFFF'
-      let color = '#000000'
-      this.processPriorities.forEach(item => {
-        if (row.processPriority === item.processPriorityName) {
-          backgroundColor = item.processPriorityColor
-          color = item.processPriorityFontColor
-        }
-      })
-      return 'background: ' + backgroundColor + ';color: ' + color
     },
     handleSizeChange (val) {
       this.agreementRequestForm.itemsPerPage = val
@@ -273,11 +166,11 @@ export default {
       this.onSubmit()
     },
     dblclick (row, event) {
-      this.$router.push('/lims/agreementDetailNew/' + row.id)
+      this.$router.push('/lims/agreementDetailNew/' + row.agreementId)
     },
     onSubmit () {
       let vm = this
-      this.$ajax.post('/api/sample/agreement/queryAgreement', this.agreementRequestForm)
+      this.$ajax.post('/api/sample/agreementTemplate/queryAgreementTemplate', this.agreementRequestForm)
         .then(function (res) {
           vm.tableData = res.data.pageResult || []
           vm.totalAgreements = res.data.totalAgreements || 0

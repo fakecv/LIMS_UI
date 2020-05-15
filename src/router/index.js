@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import ActionHeader from '@/components/frame/ActionHeader'
 import AgreementDetailNew from '@/components/sample/agreement/AgreementDetailNew'
+import AgreementTemplateMaintenance from '@/components/sample/agreement/AgreementTemplateMaintenance'
 import AgreementMaintenance from '@/components/sample/agreement/AgreementMaintenance'
 import AgreementReport from '@/components/sample/agreement/AgreementReport'
 import AuditDepartmentDetailNew from '@/components/internalaudit/auditdepartment/AuditDepartmentDetailNew'
@@ -197,6 +198,11 @@ const router = new Router({
           path: 'agreementMaintenance',
           name: 'agreementMaintenance',
           component: AgreementMaintenance
+        },
+        {
+          path: 'agreementTemplateMaintenance',
+          name: 'agreementTemplateMaintenance',
+          component: AgreementTemplateMaintenance
         },
         {
           path: 'agreementReport/:id',
