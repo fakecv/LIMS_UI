@@ -19,7 +19,6 @@
         tooltip-effect="dark"
         :default-sort = "{prop: 'sampleNumber'}"
         :row-style="processTableStyle"
-        :default-sort = "{prop: 'sampleSubNumber', order: 'ascending'}"
         @selection-change="handleProcessTableSelectionChange"
         @row-dblclick="dblclick"
         >
