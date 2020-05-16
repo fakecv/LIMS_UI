@@ -1,129 +1,129 @@
-    <template>
-    <div>
-      <el-button type="primary" @click="submit">批量提交/驳回</el-button>
-      <el-table ref="multipleTable"
-      :data="tableData" style="width: 100%"
-      :row-style="processTableStyle"
-      max-height="400"
-      @selection-change="handleTaskSelect"
-      @row-dblclick=dblclick>
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column type="expand">
-          <template slot-scope="scope">
-            <el-table :data="scope.row.testedItemTasks" size="mini">
-              <el-table-column
-                prop="testedItem"
-                label="检测项目"
-                :formatter="testedItemFormatter"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                prop="testParameter"
-                label="检测项目参数"
-                show-overflow-tooltip
-                width="180">
-              </el-table-column>
-              <el-table-column
-                prop="testMethod"
-                label="检测方法"
-                width="180">
-              </el-table-column>
-              <el-table-column
-                prop="processPriority"
-                label="优先级"
-                width="180">
-              </el-table-column>
-              <el-table-column align="right" width="300">
-                <template slot-scope="scope">
-                  <el-button
-                    size="mini"
-                    type="primary"
-                    @click="handleDownloadTemplateFile(scope.$index, scope.row)">下载模板文件</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="sampleName"
-          label="样品名称"
-          show-overflow-tooltip
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="materialNumber"
-          label="材质牌号"
-          show-overflow-tooltip
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="sampleSubNumber"
-          label="试样编号"
-          sortable
-          show-overflow-tooltip
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="submitFrom"
-          label="提交人"
-          sortable
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="submitTime"
-          label="提交时间"
-          sortable
-          :formatter="submitTimeFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="status"
-          label="当前状态"
-          sortable
-          show-overflow-tooltip
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="processPriority"
-          label="优先级"
-          sortable
-          show-overflow-tooltip
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="comment"
-          label="其它信息"
-          show-overflow-tooltip
-          width="120">
-        </el-table-column>
-        <el-table-column align="right" width="300">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleViewSamplePicture(scope.$index, scope.row)">查看样品图片</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <samplePictureViewDialog
-        :samplePictureViewDialog="samplePictureViewDialog"
-        v-on:closeSamplePictureViewDialog="closeSamplePictureViewDialog"
-        :agreementId="agreementId"
-        />
-      <templateFileDialog
-        :templateFileDialog="templateFileDialog"
-        v-on:closeTemplateFileDialog="closeTemplateFileDialog"
-        :processId="processId"
-        />
-      <workflowDialog ref="workflowDialog"
-        v-on:addWorkflow="confirmAddWorkflow"
-        v-on:closeWorkflowDialog="closeWorkflowDialog"
-        :workflowDialog="workflowDialog"/>
-    </div>
-  </template>
+<template>
+  <div>
+    <el-button type="primary" @click="submit">批量提交/驳回</el-button>
+    <el-table ref="multipleTable"
+    :data="tableData" style="width: 100%"
+    :row-style="processTableStyle"
+    max-height="400"
+    @selection-change="handleTaskSelect"
+    @row-dblclick="dblclick">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
+      <el-table-column type="expand">
+        <template slot-scope="scope">
+          <el-table :data="scope.row.testedItemTasks" size="mini">
+            <el-table-column
+              prop="testedItem"
+              label="检测项目"
+              :formatter="testedItemFormatter"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="testParameter"
+              label="检测项目参数"
+              show-overflow-tooltip
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="testMethod"
+              label="检测方法"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="processPriority"
+              label="优先级"
+              width="180">
+            </el-table-column>
+            <el-table-column align="right" width="300">
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  type="primary"
+                  @click="handleDownloadTemplateFile(scope.$index, scope.row)">下载模板文件</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="sampleName"
+        label="样品名称"
+        show-overflow-tooltip
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="materialNumber"
+        label="材质牌号"
+        show-overflow-tooltip
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="sampleSubNumber"
+        label="试样编号"
+        sortable
+        show-overflow-tooltip
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="submitFrom"
+        label="提交人"
+        sortable
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="submitTime"
+        label="提交时间"
+        sortable
+        :formatter="submitTimeFormatter"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="status"
+        label="当前状态"
+        sortable
+        show-overflow-tooltip
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="processPriority"
+        label="优先级"
+        sortable
+        show-overflow-tooltip
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="comment"
+        label="其它信息"
+        show-overflow-tooltip
+        width="120">
+      </el-table-column>
+      <el-table-column align="right" width="300">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleViewSamplePicture(scope.$index, scope.row)">查看样品图片</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <samplePictureViewDialog
+      :samplePictureViewDialog="samplePictureViewDialog"
+      v-on:closeSamplePictureViewDialog="closeSamplePictureViewDialog"
+      :agreementId="agreementId"
+      />
+    <templateFileDialog
+      :templateFileDialog="templateFileDialog"
+      v-on:closeTemplateFileDialog="closeTemplateFileDialog"
+      :processId="processId"
+      />
+    <workflowDialog ref="workflowDialog"
+      v-on:addWorkflow="confirmAddWorkflow"
+      v-on:closeWorkflowDialog="closeWorkflowDialog"
+      :workflowDialog="workflowDialog"/>
+  </div>
+</template>
 
 <script>
 import workflowDialog from '@/components/sample/process/dialog/WorkflowDialog'

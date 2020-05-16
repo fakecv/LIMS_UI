@@ -94,7 +94,7 @@
                 </el-col>
                 <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
                   <el-form-item label="检测依据">
-                    <el-select name="testingBasis" filterable clearable default-first-option editable v-model="agreementForm.testingBasis">
+                    <el-select name="testingBasis" filterable clearable default-first-option editable allow-create v-model="agreementForm.testingBasis">
                       <el-option v-for="item in staticOptions.testingBasises"
                         :key="item.id"
                         :label="item.testingBasisName"
@@ -686,7 +686,8 @@ export default {
             vm.$emit('addImage', imageCP)
           }
         }).catch(function (error) {
-          vm.$message(reader.readAsText(error.response.data).message)
+          vm.$message(error.response.data.message)
+          // vm.$message(reader.readAsText(error.response.data).message)
         })
     },
     uploadToServer () {
