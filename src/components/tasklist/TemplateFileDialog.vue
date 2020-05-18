@@ -82,16 +82,12 @@ export default {
           link.click()
           link.remove()
         }).catch(function (error) {
-          let fileReader = new FileReader()
-          fileReader.onload = function () {
-            try {
-              let jsonData = JSON.parse(this.result) // 说明是普通对象数据，后台转换失败
-              vm.$message(jsonData.message)
-            } catch (err) { // 解析成对象失败，说明是正常的文件流
-              alert('success...')
-            }
+          let reader = new FileReader()
+          reader.onload = function () {
+            let jsonData = JSON.parse(this.result)
+            vm.$message(jsonData.message)
           }
-          fileReader.readAsText(error.response.data)
+          reader.readAsText(error.response.data)
         })
     },
     handleSizeChange (val) {

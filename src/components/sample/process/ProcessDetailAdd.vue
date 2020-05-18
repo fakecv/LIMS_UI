@@ -91,7 +91,7 @@
         :append-to-body="true"
         >
         <div class="demo-drawer__content">
-          <ProcessDetail
+          <ProcessDetail ref="processDetail"
             :agreementId="agreementId"
             :processForm="processForm"
             :staticOptions="staticOptions"
@@ -122,7 +122,7 @@ import workflowDialog from '@/components/sample/process/dialog/WorkflowDialog'
 export default {
   name: 'processDetailAdd',
   components: {ProcessDetail, workflowDialog},
-  props: ['agreementId', 'agreementNumber', 'agreementComment', 'processPriority'],
+  props: ['agreementId', 'agreementNumber', 'agreementComment', 'processPriority', 'sampleNumbers'],
   data () {
     return {
       dialog: false,
@@ -197,6 +197,7 @@ export default {
         processTableData: [],
         selectedProcessTableData: [],
         agreements: [],
+        sampleNumbers: [],
         sampleNumberButton: false
       }
     }
@@ -372,6 +373,7 @@ export default {
     },
     dblclick (row, event) {
       this.processForm = row
+      this.loadSampleNumbers()
       this.dialog = true
     },
     getDrawingDesigns (testedItemIds) {
@@ -453,6 +455,15 @@ export default {
             })
           })
       }
+    },
+    loadSampleNumbers () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/getSampleNumbers')
+        .then(function (res) {
+          vm.staticOptions.sampleNumbers = res.data
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
     },
     loadDepartment () {
       let vm = this

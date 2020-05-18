@@ -21,8 +21,15 @@
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="样品编号">
-              <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input>
-              <el-button  :disabled="staticOptions.sampleNumberButton" @click="sampleNumberGenerator">生成样品编号</el-button>
+              <!-- <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input> -->
+              <el-select name="sampleNumber" filterable default-first-option allow-create v-model="processForm.sampleNumber" @change="sampleNumberChange">
+              <el-option v-for="item in staticOptions.sampleNumbers"
+                :key="item"
+                :label="item"
+                :value="item">
+              </el-option>
+              </el-select>
+              <!-- <el-button  :disabled="staticOptions.sampleNumberButton" @click="sampleNumberGenerator">生成样品编号</el-button> -->
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -201,6 +208,9 @@ export default {
     }
   },
   methods: {
+    sampleNumberChange (val) {
+      this.processForm.sampleSubNumber = val
+    },
     addTestedItemTask () {
       this.$emit('addTestedItemTask')
     },

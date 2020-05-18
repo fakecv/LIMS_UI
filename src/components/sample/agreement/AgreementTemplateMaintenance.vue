@@ -60,7 +60,7 @@
             width="120">
         </el-table-column>
           <el-table-column
-            prop="customerCompany"
+            prop="customerCompanyName"
             label="委托单位"
             show-overflow-tooltip
             width="180">

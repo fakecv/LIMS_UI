@@ -117,6 +117,7 @@ export default {
         customerNames: [],
         customerNotes: [],
         testingBasises: [],
+        sampleNumbers: [],
         users: [],
         totalCustomers: 0,
         totalUsers: 0,
@@ -210,7 +211,11 @@ export default {
             vm.staticOptions.images.push(imageCP)
           }
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          reader.onload = function () {
+            let jsonData = JSON.parse(this.result)
+            vm.$message(jsonData.message)
+          }
+          reader.readAsText(error.response.data)
         })
     },
     copyAgreement (agreementId) {
@@ -361,6 +366,16 @@ export default {
               vm.agreementForm.imageNameList.splice(vm.agreementForm.imageNameList.indexOf(item.title), 1)
             }
           })
+          vm.saveToDB()
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    saveToDB () {
+      let vm = this
+      this.$ajax.post('/api/sample/agreement', this.agreementForm)
+        .then(function (res) {
+          vm.$message('图片已删除!')
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })

@@ -68,7 +68,7 @@
                 </el-col>
                 <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
                   <el-form-item label="优先级">
-                    <el-select name="processPriority" filterable default-first-option v-model="agreementForm.processPriority">
+                    <el-select ref="processPriorityRef" name="processPriority" filterable default-first-option v-model="agreementForm.processPriority" @change="priorityChange">
                     <el-option v-for="item in staticOptions.processPriorities"
                       :key="item.Id"
                       :label="item.processPriorityName"
@@ -408,11 +408,31 @@ export default {
     Process: Process
   },
   methods: {
+    priorityChange (value) {
+      let vm = this
+      if (!this.staticOptions.processListed) {
+        this.$confirm('是否同时更新样品流转优先级?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$ajax.get('/api/sample/process/updateProcessPriority/' + this.agreementForm.id + ',' + value)
+            .then(function (res) {
+              vm.$message('已经成功更新样品流转优先级!')
+              vm.$refs.processPriorityRef.blur()
+            }).catch(function (error) {
+              vm.$message(error.response.data.message)
+            })
+        }).catch(() => {
+          this.$refs.processPriorityRef.blur()
+        })
+      }
+    },
     saveTemplateToDB () {
       let vm = this
       this.agreementTemplateForm.agreementId = this.agreementForm.id
       this.agreementTemplateForm.comment = this.agreementForm.comment
-      this.agreementTemplateForm.customerCompany = this.customerCompany
+      this.agreementTemplateForm.customerCompany = this.agreementForm.customerCompany
       this.agreementTemplateForm.materialNumber = this.agreementForm.materialNumber
       this.agreementTemplateForm.sampleName = this.agreementForm.sampleName
       this.$ajax.post('/api/sample/agreement/addAgreementTemplate', this.agreementTemplateForm)
@@ -686,8 +706,11 @@ export default {
             vm.$emit('addImage', imageCP)
           }
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
-          // vm.$message(reader.readAsText(error.response.data).message)
+          reader.onload = function () {
+            let jsonData = JSON.parse(this.result)
+            vm.$message(jsonData.message)
+          }
+          reader.readAsText(error.response.data)
         })
     },
     uploadToServer () {
