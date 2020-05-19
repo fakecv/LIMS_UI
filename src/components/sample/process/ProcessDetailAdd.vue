@@ -152,8 +152,7 @@ export default {
         submitTime: '',
         drawingDesign: '',
         read: 'no',
-        // submitFrom: '',
-        // processingStatus: '',
+        workflows: [],
         submitTo: ''
       },
       processResetForm: {
@@ -169,8 +168,7 @@ export default {
         submitTime: '',
         drawingDesign: '',
         read: 'no',
-        // submitFrom: '',
-        // processingStatus: '',
+        workflows: [],
         submitTo: ''
       },
       workflowForm: {
@@ -252,6 +250,7 @@ export default {
         vm.processForm.id = ''
         vm.processForm.sampleNumber = ''
         vm.processForm.sampleSubNumber = ''
+        vm.processForm.workflows = []
         vm.staticOptions.processTableData.push(this.processForm)
       })
     },
@@ -373,7 +372,7 @@ export default {
             message: error.response.data.message
           })
           vm.loading = false
-          vm.dialog = false
+          // vm.dialog = false
         })
     },
     dblclick (row, event) {

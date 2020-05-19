@@ -274,17 +274,13 @@ export default {
       this.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 7)
       this.getTopOneUser()
       this.staticOptions.processListed = true
+      this.$refs.agreementDetail.activeName = 'agreement'
     },
     resetAgreementForm () {
       let vm = this
       this.$ajax.get('/api/sample/agreement/deleteFileFolder/' + this.agreementForm.agreementNumber)
         .then(function (res) {
-          // it's better than vm.staticOptions.images = [], any reference will be also cleared.
-          // vm.agreementForm = JSON.parse(JSON.stringify(vm.agreementResetForm))
-          // vm.staticOptions.processListed = true
-          // vm.staticOptions.images.length = 0
           vm.newAgreementForm()
-          vm.$refs.agreementDetail.activeName = 'agreement'
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
@@ -394,6 +390,7 @@ export default {
     this.initUserData()
     this.populatePrivileges()
     this.loadTestingBasis()
+    this.$refs.agreementDetail.activeName = 'agreement'
   }
 }
 </script>
