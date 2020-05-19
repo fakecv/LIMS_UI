@@ -55,6 +55,11 @@
             width="55">
           </el-table-column>
           <el-table-column
+            prop="sampleClientNumber"
+            label="来样编号"
+            width="180">
+          </el-table-column>
+          <el-table-column
             prop="sampleNumber"
             label="样品编号"
             width="180">
@@ -375,6 +380,7 @@ export default {
       this.processForm = row
       this.loadSampleNumbers()
       this.dialog = true
+      this.staticOptions.sampleNumberButton = false
     },
     getDrawingDesigns (testedItemIds) {
       this.staticOptions.filteredDrawingDesigns =

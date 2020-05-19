@@ -21,15 +21,16 @@
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
             <el-form-item label="样品编号">
-              <!-- <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input> -->
-              <el-select name="sampleNumber" filterable default-first-option allow-create v-model="processForm.sampleNumber" @change="sampleNumberChange">
+              <el-input name="sampleNumber" v-model="processForm.sampleNumber" autoComplete="sampleNumber"></el-input>
+              <!-- <el-select name="sampleNumber" filterable default-first-option allow-create v-model="processForm.sampleNumber" @change="sampleNumberChange">
               <el-option v-for="item in staticOptions.sampleNumbers"
                 :key="item"
                 :label="item"
                 :value="item">
               </el-option>
-              </el-select>
-              <!-- <el-button  :disabled="staticOptions.sampleNumberButton" @click="sampleNumberGenerator">生成样品编号</el-button> -->
+              </el-select> -->
+              <el-button  :disabled="staticOptions.sampleNumberButton" @click="sameSampleNumberGenerator">重复样品编号</el-button>
+              <el-button  :disabled="staticOptions.sampleNumberButton" @click="sampleNumberGenerator">递增样品编号</el-button>
             </el-form-item>
           </el-col>
           <el-col :lg="columnSize.lg" :md="columnSize.md" :xl="columnSize.xl" :xs="columnSize.xs" :sm="columnSize.sm">
@@ -435,6 +436,20 @@ export default {
     sampleNumberGenerator () {
       let vm = this
       this.$ajax.get('/api/sample/process/generateSampleNumber')
+        .then(function (res) {
+          vm.processForm.sampleNumber = res.data
+          vm.processForm.sampleSubNumber = res.data
+          vm.staticOptions.sampleNumberButton = true
+        }).catch(function (error) {
+          vm.$message({
+            showClose: true,
+            message: error.response.data.message
+          })
+        })
+    },
+    sameSampleNumberGenerator () {
+      let vm = this
+      this.$ajax.get('/api/sample/process/generateSameSampleNumber')
         .then(function (res) {
           vm.processForm.sampleNumber = res.data
           vm.processForm.sampleSubNumber = res.data

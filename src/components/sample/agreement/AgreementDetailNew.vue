@@ -224,6 +224,7 @@ export default {
         .then(function (res) {
           vm.agreementForm.id = res.data.id
           vm.agreementForm.agreementNumber = res.data.agreementNumber
+          vm.agreementForm.processPriority = ''
           vm.agreementForm.testDuration = vm.agreementResetForm.testDuration
           vm.agreementForm.receiveSampleTime = new Date(Date.now())
           vm.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 7)
