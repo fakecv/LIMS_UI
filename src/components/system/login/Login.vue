@@ -252,6 +252,7 @@ export default {
     width: 100%;
     height: 100%;
     left: 0;
+    overflow: scroll;
     /* Equal to height of footer */
     /* But also accounting for potential margin-bottom of last child */
     margin-bottom: -50px;

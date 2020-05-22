@@ -58,8 +58,8 @@ export default {
         receiverEmail: '',
         receiverAddress: '',
         testDuration: '5',
-        distribution: '',
-        distributionOption: 'no',
+        distribution: '当面',
+        distributionOption: 'yes',
         duration: '',
         invoice: 'no',
         invoiceTitle: '',
@@ -101,8 +101,8 @@ export default {
         receiverEmail: '',
         receiverAddress: '',
         testDuration: '5',
-        distribution: '',
-        distributionOption: 'no',
+        distribution: '当面',
+        distributionOption: 'yes',
         duration: '',
         invoice: 'no',
         invoiceTitle: '',
@@ -184,11 +184,13 @@ export default {
     },
     loadAgreement (agreementId) {
       let vm = this
-      this.staticOptions.images.length = 0
+      if (this.staticOptions.images) {
+        this.staticOptions.images.length = 0
+      }
       this.$ajax.get('/api/sample/agreement/' + agreementId)
         .then(function (res) {
           vm.agreementForm = res.data
-          if (res.data.imageNameList !== undefined && res.data.imageNameList.length > 0) {
+          if (res.data.imageNameList && res.data.imageNameList !== undefined && res.data.imageNameList.length > 0) {
             vm.agreementForm.imageNameList.forEach(image => {
               vm.downloadToFrontEnd(image, vm.agreementForm.agreementNumber)
             })
@@ -231,7 +233,9 @@ export default {
           vm.agreementForm.done = vm.agreementResetForm.done
           vm.agreementForm.duration = vm.agreementResetForm.duration
           vm.agreementForm.imageNameList = []
-          vm.staticOptions.images.length = 0
+          if (vm.staticOptions.images) {
+            vm.staticOptions.images.length = 0
+          }
           vm.$router.push('/lims/agreementDetailNew/' + vm.agreementForm.id)
         })
     },
@@ -259,17 +263,13 @@ export default {
       this.$router.push('/lims/agreementDetailNew/' + event.id)
       this.staticOptions.processListed = false
     },
-    resetAgreementId () {
-      this.agreementForm.id = ''
-      this.staticOptions.images.length = 0
-      this.staticOptions.processListed = true
-      this.agreementNumberGenerator()
-    },
     newAgreementForm () {
       // it's better than vm.staticOptions.images = [], any reference will be also cleared.
       this.agreementForm = JSON.parse(JSON.stringify(this.agreementResetForm))
       this.agreementForm.processPriority = this.staticOptions.processPriorities[0].processPriorityName
-      this.staticOptions.images.length = 0
+      if (this.staticOptions.images) {
+        this.staticOptions.images.length = 0
+      }
       this.agreementForm.receiveSampleTime = new Date(Date.now())
       this.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 7)
       this.getTopOneUser()
@@ -377,8 +377,8 @@ export default {
           vm.$message(error.response.data.message)
         })
     },
-    refreshAgreement () {
-      this.loadAgreement(this.$route.params.id)
+    refreshAgreement (event) {
+      this.loadAgreement(event)
     }
   },
   activated () {

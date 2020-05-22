@@ -230,7 +230,12 @@ export default {
           link.click()
         }
         ).catch(function (error) {
-          vm.$message(error.response.data.message)
+          let reader = new FileReader()
+          reader.onload = function () {
+            let jsonData = JSON.parse(this.result)
+            vm.$message(jsonData.message)
+          }
+          reader.readAsText(error.response.data)
         })
     },
     exportSettlementListAsCondition () {
@@ -250,7 +255,12 @@ export default {
           link.click()
         }
         ).catch(function (error) {
-          vm.$message(error.response.data.message)
+          let reader = new FileReader()
+          reader.onload = function () {
+            let jsonData = JSON.parse(this.result)
+            vm.$message(jsonData.message)
+          }
+          reader.readAsText(error.response.data)
         })
     },
     agreementTableStyle ({row, rowIndex}) {

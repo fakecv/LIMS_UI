@@ -251,7 +251,7 @@ export default {
         vm.processForm.sampleNumber = ''
         vm.processForm.sampleSubNumber = ''
         vm.processForm.workflows = []
-        vm.staticOptions.processTableData.push(this.processForm)
+        vm.staticOptions.processTableData.push(vm.processForm)
       })
     },
     resetProcessForm () {

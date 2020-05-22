@@ -44,7 +44,7 @@
                       <el-radio label="5">5个工作日</el-radio>
                       <el-radio label="3">3个工作日（加收50%检测费）</el-radio>
                       <el-radio label="1.5">1.5个工作日（加收100%检测费）</el-radio>
-                      <el-radio label="0" @change="durationChange">其它</el-radio>
+                      <el-radio label="0">其它</el-radio>
                     </el-radio-group>
                     <el-input name="duration"
                       :disabled="durationDisable"
@@ -55,8 +55,8 @@
                 </el-col>
                 <el-col :span="24">
                   <el-form-item label="分包情况">
-                    <el-radio-group v-model="agreementForm.distributionOption">
-                      <el-radio label="yes" @change="distribution">涉及分包项目</el-radio>
+                    <el-radio-group v-model="agreementForm.distributionOption" @change="distribution">
+                      <el-radio label="yes">涉及分包项目</el-radio>
                       <el-radio label="no">未涉及分包项目</el-radio>
                     </el-radio-group>
                     <el-input name="distribution"
@@ -273,7 +273,7 @@
               </el-upload>
               <el-button @click="uploadToServer">上传图片</el-button>
             </el-row>
-            <div id="demo" v-if="staticOptions.images.length>0">
+            <div id="demo">
               <el-row>
                 <el-col :span="24">
                 <label style="width: 180px;">来样状态图片</label>
@@ -383,7 +383,7 @@ export default {
       reportTransferModeOtherDisable: true,
       experimentalCategoryOtherDisable: true,
       sampleStoreRequestDisable: true,
-      distributionDisable: true,
+      distributionDisable: false,
       durationDisable: true,
       invoiceDisable: true,
       invoiceTitleDisable: true,
@@ -451,15 +451,19 @@ export default {
         this.$refs.process.loadAgreementProcess(this.agreementForm.id)
       }
     },
-    handleTestDuration () {
-      if (this.agreementForm.testDuration === '3') {
+    handleTestDuration (val) {
+      if (val === '3') {
         this.agreementForm.expectedCompletionTime = new Date().getDay() > 2 ? new Date(Date.now() + 864e5 * 5) : new Date(Date.now() + 864e5 * 3)
-      } else if (this.agreementForm.testDuration === '5') {
+        this.durationDisable = true
+      } else if (val === '5') {
         this.agreementForm.expectedCompletionTime = new Date(Date.now() + 864e5 * 7)
-      } else if (this.agreementForm.testDuration === '1.5') {
+        this.durationDisable = true
+      } else if (val === '1.5') {
         this.agreementForm.expectedCompletionTime = new Date().getDay() > 3 && new Date().getHours() > 12 ? new Date(Date.now() + 864e5 * 3.5) : new Date(Date.now() + 864e5 * 1.5)
+        this.durationDisable = true
       } else {
         this.agreementForm.expectedCompletionTime = ''
+        this.durationDisable = false
       }
     },
     actionHandle (action) {
@@ -554,19 +558,12 @@ export default {
       }
     },
     distribution (val) {
-      if (val) {
+      if (val === 'yes') {
         this.distributionDisable = false
+        this.agreementForm.distribution = '当面'
       } else {
         this.distributionDisable = true
         this.agreementForm.distribution = ''
-      }
-    },
-    durationChange (val) {
-      if (val) {
-        this.durationDisable = false
-      } else {
-        this.durationDisable = true
-        this.agreementForm.duration = ''
       }
     },
     handleCustomerNoteChange (val) {
@@ -639,7 +636,7 @@ export default {
       this.$emit('removeImage', item)
     },
     refreshAgreement () {
-      this.$emit('refreshAgreement')
+      this.$emit('refreshAgreement', this.agreementForm.id)
     },
     uploadPics () {
       let vm = this
