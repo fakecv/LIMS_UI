@@ -14,7 +14,7 @@
         </el-button-group>
       </el-header>
       <el-main>
-        <el-table :data="staticOptions.processTableData"
+        <el-table ref="processTable" :data="staticOptions.processTableData"
         style="width: 100%"
         tooltip-effect="dark"
         :default-sort = "{prop: 'sampleSubNumber'}"
@@ -66,6 +66,8 @@
           </el-table-column>
           <el-table-column
             prop="sampleSubNumber"
+            sortable
+            :sort-method = "sampleSubNumberSortFunction"
             label="试样编号"
             width="180">
           </el-table-column>
@@ -132,12 +134,14 @@ export default {
     return {
       dialog: false,
       loading: false,
+      defaultExpandAll: false,
       title: '委托协议编号：' + this.agreementNumber,
       actions: [
         {'ref': 'new', 'name': '新建', 'id': '1', 'icon': 'el-icon-circle-plus', 'loading': false, 'disabled': false},
         {'ref': 'copy', 'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'disabled': false},
         {'ref': 'submit', 'name': '提交/驳回', 'id': '3', 'icon': 'el-icon-document', 'loading': false, 'disabled': false},
-        {'ref': 'delete', 'name': '删除', 'id': '4', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false}
+        {'ref': 'delete', 'name': '删除', 'id': '4', 'icon': 'el-icon-delete', 'loading': false, 'disabled': false},
+        {'ref': 'delete', 'name': '展开所有', 'id': '5', 'icon': 'el-icon-phone-outline', 'loading': false, 'disabled': false}
       ],
       processForm: {
         id: '',
@@ -206,6 +210,26 @@ export default {
     }
   },
   methods: {
+    sampleSubNumberSortFunction (str1, str2) {
+      if (this.getMainNumber(str1) === this.getMainNumber(str2)) {
+        return this.getNumber(str1) - this.getNumber(str2)
+      } else {
+        return this.getMainNumber(str1) - this.getMainNumber(str2)
+      }
+    },
+    getNumber (str1) {
+      let var1 = str1.sampleSubNumber.split('-')
+      let var2 = 0
+      for (let i = 0; i < var1.length; i++) {
+        var2 += Number(var1[i])
+      }
+      return var2
+    },
+    getMainNumber (str1) {
+      let var1 = str1.sampleSubNumber.split('-')
+
+      return Number(var1[0])
+    },
     processTableStyle ({row, rowIndex}) {
       let backgroundColor = '#FFFFFF'
       let color = '#000000'
@@ -226,6 +250,42 @@ export default {
         this.submit()
       } else if (action.id === '4') {
         this.confirmDelete()
+      } else if (action.id === '5') {
+        this.expandAll()
+      }
+    },
+    ifExpandAll () {
+      this.$nextTick(function () {
+        if (this.defaultExpandAll) {
+          this.actions[4].icon = 'el-icon-phone'
+          this.actions[4].name = '收起所有'
+          this.staticOptions.processTableData.forEach(row => {
+            this.$refs.processTable.toggleRowExpansion(row, true)
+          })
+        } else {
+          this.actions[4].icon = 'el-icon-phone-outline'
+          this.actions[4].name = '展开所有'
+          this.staticOptions.processTableData.forEach(row => {
+            this.$refs.processTable.toggleRowExpansion(row, false)
+          })
+        }
+      })
+    },
+    expandAll () {
+      if (this.defaultExpandAll) {
+        this.actions[4].icon = 'el-icon-phone-outline'
+        this.actions[4].name = '展开所有'
+        this.defaultExpandAll = false
+        this.staticOptions.processTableData.forEach(row => {
+          this.$refs.processTable.toggleRowExpansion(row, false)
+        })
+      } else {
+        this.actions[4].icon = 'el-icon-phone'
+        this.actions[4].name = '收起所有'
+        this.defaultExpandAll = true
+        this.staticOptions.processTableData.forEach(row => {
+          this.$refs.processTable.toggleRowExpansion(row, true)
+        })
       }
     },
     handleProcessTableSelectionChange (selection) {
@@ -245,6 +305,8 @@ export default {
     },
     copy () {
       let vm = this
+      this.staticOptions.checkedTestMethods = []
+      this.staticOptions.checkedTestParameters = []
       this.staticOptions.selectedProcessTableData.forEach(item => {
         vm.processForm = JSON.parse(JSON.stringify(item))
         vm.processForm.id = ''
@@ -453,6 +515,7 @@ export default {
         this.$ajax.get('/api/sample/process/agreement/' + agreementId)
           .then(function (res) {
             vm.staticOptions.processTableData = res.data
+            vm.ifExpandAll()
           }).catch(function (error) {
             vm.$message({
               showClose: true,

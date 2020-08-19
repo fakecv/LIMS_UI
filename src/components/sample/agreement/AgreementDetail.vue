@@ -487,7 +487,94 @@ export default {
           this.agreementTemplateForm.templateName = ''
           this.agreementTemplateDialogFormVisible = true
         }
+      } else if (action.id === '7') {
+        if (this.agreementForm.id && this.agreementForm.id !== '') {
+          this.downloadAgreement()
+        }
+      } else if (action.id === '8') {
+        if (this.agreementForm.id && this.agreementForm.id !== '') {
+          this.downloadProcess()
+        }
+      } else if (action.id === '9') {
+        if (this.agreementForm.id && this.agreementForm.id !== '') {
+          this.downloadTask()
+        }
       }
+    },
+    downloadAgreement () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/downloadAgreement/' + this.agreementForm.agreementNumber, {responseType: 'blob'})
+        .then(function (res) {
+          if (!res.data) {
+            return
+          }
+          let url = window.URL.createObjectURL(new Blob([res.data
+          ]), {type: 'application/vnd.ms-excel'})
+          let link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          link.setAttribute('download', '委托协议.xlsx')
+
+          document.body.appendChild(link)
+          link.click()
+        }).catch(function (error) {
+          var reader = new FileReader()
+          reader.onload = function () {
+            let jsonData = JSON.parse(this.result)
+            vm.$message(jsonData.message)
+          }
+          reader.readAsText(error.response.data)
+        })
+    },
+    downloadProcess () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/downloadProcess/' + this.agreementForm.agreementNumber, {responseType: 'blob'})
+        .then(function (res) {
+          if (!res.data) {
+            return
+          }
+          let url = window.URL.createObjectURL(new Blob([res.data
+          ]), {type: 'application/vnd.ms-excel'})
+          let link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          link.setAttribute('download', '样品加工及流转表.xlsx')
+
+          document.body.appendChild(link)
+          link.click()
+        }).catch(function (error) {
+          var reader = new FileReader()
+          reader.onload = function () {
+            let jsonData = JSON.parse(this.result)
+            vm.$message(jsonData.message)
+          }
+          reader.readAsText(error.response.data)
+        })
+    },
+    downloadTask () {
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/downloadTask/' + this.agreementForm.agreementNumber, {responseType: 'blob'})
+        .then(function (res) {
+          if (!res.data) {
+            return
+          }
+          let url = window.URL.createObjectURL(new Blob([res.data
+          ]), {type: 'application/vnd.ms-excel'})
+          let link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          link.setAttribute('download', '检测任务单.xlsx')
+
+          document.body.appendChild(link)
+          link.click()
+        }).catch(function (error) {
+          var reader = new FileReader()
+          reader.onload = function () {
+            let jsonData = JSON.parse(this.result)
+            vm.$message(jsonData.message)
+          }
+          reader.readAsText(error.response.data)
+        })
     },
     new () {
       this.$emit('new')

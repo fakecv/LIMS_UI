@@ -4,7 +4,6 @@
     <el-table ref="multipleTable"
     :data="tableData" style="width: 100%"
     :row-style="processTableStyle"
-    max-height="400"
     @selection-change="handleTaskSelect"
     @row-dblclick="dblclick">
       <el-table-column

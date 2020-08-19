@@ -147,6 +147,9 @@ import TestedItemTaskDetailNew from '@/components/sample/testeditemtask/TestedIt
 import TestedItemTaskDetailEdit from '@/components/sample/testeditemtask/TestedItemTaskDetailEdit'
 import TestedItemTaskMaintenance from '@/components/sample/testeditemtask/TestedItemTaskMaintenance'
 import ThemePicker from '@/components/frame/themePicker'
+import TokyoDetailNew from '@/components/sample/tokyo/TokyoDetailNew'
+import TokyoDetailEdit from '@/components/sample/tokyo/TokyoDetailEdit'
+import TokyoMaintenance from '@/components/sample/tokyo/TokyoMaintenance'
 import TraceabilityServiceProviderDetailNew from '@/components/equipment/traceabilityserviceprovider/TraceabilityServiceProviderDetailNew'
 import TraceabilityServiceProviderDetailEdit from '@/components/equipment/traceabilityserviceprovider/TraceabilityServiceProviderDetailEdit'
 import TraceabilityServiceProviderMaintenance from '@/components/equipment/traceabilityserviceprovider/TraceabilityServiceProviderMaintenance'
@@ -160,6 +163,11 @@ import WangxingangMaintenance from '@/components/equipment/wangxingang/Wangxinga
 
 Vue.use(Router)
 
+// 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
+// const originalPush = Router.prototype.push
+// Router.prototype.push = function push (location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
 const router = new Router({
   mode: 'history',
   // base: '/lims/',
@@ -873,6 +881,21 @@ const router = new Router({
           path: 'themePicker',
           name: 'themePicker',
           component: ThemePicker
+        },
+        {
+          path: 'tokyoDetailEdit/:id',
+          name: 'tokyoDetailEdit',
+          component: TokyoDetailEdit
+        },
+        {
+          path: 'tokyoDetailNew',
+          name: 'tokyoDetailNew',
+          component: TokyoDetailNew
+        },
+        {
+          path: 'tokyoMaintenance',
+          name: 'tokyoMaintenance',
+          component: TokyoMaintenance
         },
         {
           path: 'traceabilityServiceProviderDetailEdit/:id',

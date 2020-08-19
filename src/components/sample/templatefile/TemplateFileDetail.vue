@@ -37,17 +37,17 @@
           <el-upload ref="upload"
             class="upload-demo"
             drag
+            :limit="1"
             action="dummy"
             :file-list="fileList"
             :auto-upload="false"
             :on-change="handleChange"
-            :before-upload="beforeAvatarUpload"
             :multiple="false">
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">将文件拖到此处，或<em>点击选取文件</em></div>
-            <div class="el-upload__tip" slot="tip">只能上传doc文件，且不超过2M</div>
+            <div class="el-upload__tip" slot="tip">只能上传doc/docs文件，且不超过5M</div>
           </el-upload>
-          <el-button @click="uploadToServer">上传模板文件</el-button>
+          <el-button @click="confirmUpload(fileName)">上传模板文件</el-button>
         </el-row>
       </el-form>
     </el-container>
@@ -70,22 +70,11 @@ export default {
         {'name': '文件保存', 'id': '7', 'icon': 'el-icon-download', 'loading': false}
       ],
       fileList: [],
+      fileName: '',
       columnSize: {'xs': 24, 'sm': 12, 'md': 12, 'lg': 12, 'xl': 8}
     }
   },
   methods: {
-    beforeAvatarUpload (file) {
-      const isJPG = file.type === 'doc/docx'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 DOC 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传文档大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
-    },
     actionHandle (action) {
       if (action.id === '1') {
         this.new()
@@ -112,36 +101,57 @@ export default {
       })
       this.$ajax.post('/api/sample/templateFile/uploadMultipleFiles', formData, config)
         .then(function (res) {
-          vm.$message('图片已经上传到服务器!')
+          vm.$message('模板已经上传到服务器!')
+          vm.saveToDB()
+          vm.fileList = []
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    uploadAndCover () {
+      let vm = this
+      var formData = new FormData()
+      let config = {
+        headers: {'Content-Type': 'multipart/form-data'}
+      }
+      this.fileList.forEach(file => {
+        formData.append('files', file.raw)
+      })
+      this.$ajax.post('/api/sample/templateFile/uploadMultipleFiles', formData, config)
+        .then(function (res) {
+          vm.$message('模板已经上传到服务器!')
+          vm.updateToDB()
           vm.fileList = []
         }).catch(function (error) {
           vm.$message(error.response.data.message)
         })
     },
     handleChange (file, fileList) {
-      console.log(file)
-      // const isWORD = file.raw.type === 'application/msword'
-      const isLt2M = file.raw.size / 1024 / 1024 < 2
-      // if (!isWORD) {
-      //   this.$message.error('上传文档只能是 DOC 格式!')
-      //   this.fileList = []
-      // }
-      if (!isLt2M) {
-        this.$message.error('上传文档大小不能超过 2MB!')
-        this.fileList = []
-      }
-      if (isLt2M) {
-        this.fileList = fileList
+      let fileName = file.name.split('.')
+      let fileType = fileName[fileName.length - 1]
+      const isLt5M = file.raw.size / 1024 / 1024 < 5
+      if (fileType !== 'doc' && fileType !== 'docx') {
+        this.$refs.upload.clearFiles()
+        this.$message.error('上传文件只能是 doc/docx 格式!')
+      } else if (!isLt5M) {
+        this.$refs.upload.clearFiles()
+        this.$message.error('上传文档大小不能超过 5MB!')
+      } else if (this.templateFileForm.fileName && this.templateFileForm.fileName.length > 0 && this.templateFileForm.fileName !== file.name) {
+        this.$refs.upload.clearFiles()
+        this.$message.error('上传文档名称不一致!')
+      } else {
         this.templateFileForm.fileName = file.name
+        this.fileList = fileList
+        this.fileName = file.name
       }
     },
     uploadToServer () {
       if (this.fileList.length > 0) {
         this.uploadPics()
-        this.$refs.upload.clearFiles()
       }
     },
     new () {
+      this.fileList = []
       this.$emit('new')
     },
     copy () {
@@ -151,6 +161,16 @@ export default {
     saveToDB () {
       let vm = this
       this.$ajax.post('/api/sample/templateFile', this.templateFileForm)
+        .then(function (res) {
+          vm.$message('已经成功保存到数据库!')
+          vm.$emit('updateTemplateFileForm', res.data)
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
+    updateToDB () {
+      let vm = this
+      this.$ajax.post('/api/sample/templateFile/update', this.templateFileForm)
         .then(function (res) {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateTemplateFileForm', res.data)
@@ -175,6 +195,30 @@ export default {
         })
       }
     },
+    confirmUpload (fileName) {
+      let vm = this
+      this.$ajax.get('/api/sample/templateFile/checkIfExist/' + this.fileName)
+        .then(function (res) {
+          if (res.data) {
+            vm.$confirm('该模板文件已经存在, 是否覆盖已有模板?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              vm.uploadAndCover()
+            }).catch(() => {
+              vm.$message({
+                type: 'info',
+                message: '已取消'
+              })
+            })
+          } else {
+            vm.uploadToServer()
+          }
+        }).catch(function (error) {
+          vm.$message(error.response.data.message)
+        })
+    },
     delete () {
       let vm = this
       this.$ajax.post('/api/sample/templateFile/delete', this.templateFileForm)
@@ -183,6 +227,7 @@ export default {
           vm.$emit('deleteTemplateFileForm')
           vm.sampleNumberButton = false
         }).catch(function (error) {
+          vm.$emit('deleteTemplateFileForm')
           vm.$message(error.response.data.message)
         })
     }

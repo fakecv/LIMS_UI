@@ -166,7 +166,15 @@ export default {
       this.onSubmit()
     },
     dblclick (row, event) {
-      this.$router.push('/lims/agreementDetailNew/' + row.agreementId)
+      let vm = this
+      this.$ajax.get('/api/sample/agreement/copyAgreement/' + row.agreementId)
+        .then(function (res) {
+          if (res.data && res.data.id && res.data.id.length > 0) {
+            vm.$router.push('/lims/agreementDetailNew/' + res.data.id)
+          } else {
+            vm.$message('用于模板的原协议已被删除！')
+          }
+        })
     },
     onSubmit () {
       let vm = this
