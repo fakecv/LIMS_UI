@@ -34,6 +34,8 @@
           <el-checkbox label="delete">删除</el-checkbox>
           <el-checkbox label="save">保存</el-checkbox>
           <el-checkbox label="auth">授权</el-checkbox>
+          <el-checkbox label="preview">文件预览</el-checkbox>
+          <el-checkbox label="saveAsTemplate">保存为模板</el-checkbox>
         </el-checkbox-group>
       </el-row>
     </el-container>

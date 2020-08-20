@@ -128,8 +128,8 @@ export default {
           {'name': '复制', 'id': '2', 'icon': 'el-icon-circle-plus-outline', 'loading': false, 'show': false},
           {'name': '保存', 'id': '3', 'icon': 'el-icon-document', 'loading': false, 'show': false},
           {'name': '删除', 'id': '4', 'icon': 'el-icon-delete', 'loading': false, 'show': false},
-          {'name': '文件预览', 'id': '5', 'icon': 'el-icon-upload2', 'loading': false, 'show': true},
-          {'name': '保存为模板', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false, 'show': true}
+          {'name': '文件预览', 'id': '5', 'icon': 'el-icon-upload2', 'loading': false, 'show': false},
+          {'name': '保存为模板', 'id': '6', 'icon': 'el-icon-upload2', 'loading': false, 'show': false}
           // {'name': '下载委托协议', 'id': '7', 'icon': 'el-icon-upload2', 'loading': false, 'show': true},
           // {'name': '下载样品加工及流程表', 'id': '8', 'icon': 'el-icon-upload2', 'loading': false, 'show': true},
           // {'name': '下载检测任务单', 'id': '9', 'icon': 'el-icon-upload2', 'loading': false, 'show': true}
@@ -158,6 +158,12 @@ export default {
           item.show = true
         }
         if (item.name === '删除' && this.staticOptions.privileges.indexOf('delete') > -1) {
+          item.show = true
+        }
+        if (item.name === '文件预览' && this.staticOptions.privileges.indexOf('preview') > -1) {
+          item.show = true
+        }
+        if (item.name === '保存为模板' && this.staticOptions.privileges.indexOf('saveAsTemplate') > -1) {
           item.show = true
         }
       })
