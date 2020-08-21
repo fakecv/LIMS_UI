@@ -118,7 +118,7 @@ import SupplierAssessmentDetailNew from '@/components/equipment/supplierassessme
 import SupplierAssessmentDetailEdit from '@/components/equipment/supplierassessment/SupplierAssessmentDetailEdit'
 import SupplierAssessmentMaintenance from '@/components/equipment/supplierassessment/SupplierAssessmentMaintenance'
 import TableSchedule from '@/components/equipment/MyTableSchedule'
-import TaskListMaintenance from '@/components/tasklist/taskListMaintenance'
+import TaskListMaintenance from '@/components/tasklist/TaskListMaintenance'
 import TemplateFileDetailNew from '@/components/sample/templatefile/TemplateFileDetailNew'
 import TemplateFileDetailEdit from '@/components/sample/templatefile/TemplateFileDetailEdit'
 import TemplateFileMaintenance from '@/components/sample/templatefile/TemplateFileMaintenance'
@@ -131,8 +131,7 @@ import TestCategoryMaintenance from '@/components/sample/testcategory/TestCatego
 import TestedItemDetailNew from '@/components/sample/testeditem/TestedItemDetailNew'
 import TestedItemDetailEdit from '@/components/sample/testeditem/TestedItemDetailEdit'
 import TestedItemMaintenance from '@/components/sample/testeditem/TestedItemMaintenance'
-import TestMethodDetailNew from '@/components/sample/testmethod/TestMethodDetailNew'
-import TestMethodDetailEdit from '@/components/sample/testmethod/TestMethodDetailEdit'
+import TestMethodDetailNew from '@/components/sample/testmethod/TestMethodDetail'
 import TestMethodMaintenance from '@/components/sample/testmethod/TestMethodMaintenance'
 import TestParameterDetailNew from '@/components/sample/testparameter/TestParameterDetailNew'
 import TestParameterDetailEdit from '@/components/sample/testparameter/TestParameterDetailEdit'
@@ -147,9 +146,6 @@ import TestedItemTaskDetailNew from '@/components/sample/testeditemtask/TestedIt
 import TestedItemTaskDetailEdit from '@/components/sample/testeditemtask/TestedItemTaskDetailEdit'
 import TestedItemTaskMaintenance from '@/components/sample/testeditemtask/TestedItemTaskMaintenance'
 import ThemePicker from '@/components/frame/themePicker'
-import TokyoDetailNew from '@/components/sample/tokyo/TokyoDetailNew'
-import TokyoDetailEdit from '@/components/sample/tokyo/TokyoDetailEdit'
-import TokyoMaintenance from '@/components/sample/tokyo/TokyoMaintenance'
 import TraceabilityServiceProviderDetailNew from '@/components/equipment/traceabilityserviceprovider/TraceabilityServiceProviderDetailNew'
 import TraceabilityServiceProviderDetailEdit from '@/components/equipment/traceabilityserviceprovider/TraceabilityServiceProviderDetailEdit'
 import TraceabilityServiceProviderMaintenance from '@/components/equipment/traceabilityserviceprovider/TraceabilityServiceProviderMaintenance'
@@ -157,6 +153,7 @@ import UIGenerator from '@/components/develop/UIGenerator'
 import UserDetailNew from '@/components/system/user/UserDetailNew'
 import UserDetailEdit from '@/components/system/user/UserDetailEdit'
 import UserMaintenance from '@/components/system/user/UserMaintenance'
+import UnsubmittedTaskListMaintenance from '@/components/tasklist/UnsubmittedTaskListMaintenance'
 import WangxingangDetailNew from '@/components/equipment/wangxingang/WangxingangDetailNew'
 import WangxingangDetailEdit from '@/components/equipment/wangxingang/WangxingangDetailEdit'
 import WangxingangMaintenance from '@/components/equipment/wangxingang/WangxingangMaintenance'
@@ -820,7 +817,7 @@ const router = new Router({
         {
           path: 'testMethodDetailEdit/:id',
           name: 'testMethodDetailEdit',
-          component: TestMethodDetailEdit
+          component: TestMethodDetailNew
         },
         {
           path: 'testMethodDetailNew',
@@ -883,21 +880,6 @@ const router = new Router({
           component: ThemePicker
         },
         {
-          path: 'tokyoDetailEdit/:id',
-          name: 'tokyoDetailEdit',
-          component: TokyoDetailEdit
-        },
-        {
-          path: 'tokyoDetailNew',
-          name: 'tokyoDetailNew',
-          component: TokyoDetailNew
-        },
-        {
-          path: 'tokyoMaintenance',
-          name: 'tokyoMaintenance',
-          component: TokyoMaintenance
-        },
-        {
           path: 'traceabilityServiceProviderDetailEdit/:id',
           name: 'traceabilityServiceProviderAuditorDetailEdit',
           component: TraceabilityServiceProviderDetailEdit
@@ -937,6 +919,11 @@ const router = new Router({
               component: Preview
             }
           ]
+        },
+        {
+          path: 'unsubmittedTaskListMaintenance',
+          name: 'unsubmittedTaskListMaintenance',
+          component: UnsubmittedTaskListMaintenance
         },
         {
           path: 'userDetailEdit/:id',

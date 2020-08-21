@@ -452,7 +452,18 @@ export default {
     getTestMethod (testedItemId) {
       this.staticOptions.filteredTestMethods =
         this.staticOptions.testMethods.filter(function (val) {
-          return val.testedItem === testedItemId
+          if (val.testedItem instanceof Array) {
+            for (let i = 0; i < val.testedItem.length; i++) {
+              if (val.testedItem[i] === testedItemId) {
+                return true
+              }
+            }
+          } else {
+            if (val.testedItem === testedItemId) {
+              return true
+            }
+          }
+          return false
         })
     },
     getTestParameter (testedItemId) {

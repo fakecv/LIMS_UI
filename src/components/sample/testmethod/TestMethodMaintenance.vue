@@ -1,75 +1,60 @@
-    <template>
-    <div>
-      <el-container style="padding: 10px">
-        <el-form :model="testMethodRequestForm" label-width="100px" label-position="left" size="mini">
-          <el-row :gutter="20">
-            <el-form-item label="检测项目名称">
-              <el-select name="testedItem" filterable clearable default-first-option v-model="testMethodRequestForm.testedItem">
-                <el-option v-for="item in testedItems"
-                  :key="item.Id"
-                  :label="item.testedItemName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
+<template>
+  <div>
+    <el-container style="padding: 10px">
+      <el-form :model="testMethodRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-row :gutter="20">
+          <el-form-item label="试验方法编号">
+            <el-input name="testMethodName" v-model="testMethodRequestForm.testMethodName"></el-input>
           </el-form-item>
-            <el-form-item label="试验方法编号">
-              <el-input name="testMethodName" v-model="testMethodRequestForm.testMethodName"></el-input>
-            </el-form-item>
-          </el-row>
-          <el-row :gutter="20">
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">查询</el-button>
-            </el-form-item>
-          </el-row>
-        </el-form>
-      </el-container>
-      <el-row type="flex" justify="end">
-        <el-button-group size="mini">
-          <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveTop">置顶</el-button>
-          <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveUp">上移</el-button>
-          <el-button type="primary" @click.native="moveDown">下移<i class="el-icon-arrow-down"></i></el-button>
-          <el-button type="primary" @click.native="moveBottom">置底<i class="el-icon-arrow-down"></i></el-button>
-        </el-button-group>
-      </el-row>
-      <el-table ref="multipleTable"
-      :data="tableData" style="width: 100%"
-      @row-dblclick=dblclick
-      @selection-change="handleSelectionChange"
-      @select="handleSelection">
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column
-          prop="testedItem"
-          label="检测项目名称"
-          :formatter="testedItemFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testMethodName"
-          label="试验方法编号"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testMethodNumber"
-          label="试验方法描述"
-          width="180">
-        </el-table-column>
-      </el-table>
-      <div class="block text-right">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="testMethodRequestForm.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="20"
-          layout="sizes, prev, pager, next"
-          :total="totalTestMethods">
-        </el-pagination>
-      </div>
+        </el-row>
+        <el-row :gutter="20">
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+          </el-form-item>
+        </el-row>
+      </el-form>
+    </el-container>
+    <el-row type="flex" justify="end">
+      <el-button-group size="mini">
+        <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveTop">置顶</el-button>
+        <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveUp">上移</el-button>
+        <el-button type="primary" @click.native="moveDown">下移<i class="el-icon-arrow-down"></i></el-button>
+        <el-button type="primary" @click.native="moveBottom">置底<i class="el-icon-arrow-down"></i></el-button>
+      </el-button-group>
+    </el-row>
+    <el-table ref="multipleTable"
+    :data="tableData" style="width: 100%"
+    @row-dblclick=dblclick
+    @selection-change="handleSelectionChange"
+    @select="handleSelection">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
+      <el-table-column
+        prop="testMethodName"
+        label="试验方法编号"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="testMethodNumber"
+        label="试验方法描述"
+        width="180">
+      </el-table-column>
+    </el-table>
+    <div class="block text-right">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="testMethodRequestForm.currentPage"
+        :page-sizes="[10, 20, 50]"
+        :page-size="20"
+        layout="sizes, prev, pager, next"
+        :total="totalTestMethods">
+      </el-pagination>
     </div>
-  </template>
+  </div>
+</template>
 
 <script>
 export default {
@@ -82,7 +67,7 @@ export default {
       testMethodRequestForm: {
         testMethodName: '',
         testMethodNumber: '',
-        testedItem: '',
+        testedItem: [],
         itemsPerPage: 20,
         currentPage: 1
       },
@@ -92,14 +77,6 @@ export default {
     }
   },
   methods: {
-    loadTestedItemData () {
-      let vm = this
-      this.$ajax
-        .get('/api/sample/testedItem/getTestedItem')
-        .then(function (res) {
-          vm.testedItems = res.data
-        })
-    },
     handleSizeChange (val) {
       this.testMethodRequestForm.itemsPerPage = val
       this.onSubmit()
@@ -241,20 +218,10 @@ export default {
           vm.tableData = res.data.pageResult || []
           vm.totalTestMethods = res.data.totalTestMethods || 0
         })
-    },
-    testedItemFormatter (row, column) {
-      let name = ''
-      this.testedItems.forEach(item => {
-        if (row.testedItem === item.id) {
-          name = item.testedItemName
-        }
-      })
-      return name
     }
   },
   activated () {
     this.onSubmit()
-    this.loadTestedItemData()
   }
 }
 </script>

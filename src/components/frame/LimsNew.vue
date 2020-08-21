@@ -56,8 +56,9 @@
             </el-menu>
             </el-tab-pane>
             <el-tab-pane label="待完成事项" name="taskList">
-              <el-menu mode="horizontal" @select="handleTaskListSelect">
+              <el-menu @select="handleTaskListSelect">
                 <el-menu-item index="1">待处理任务</el-menu-item>
+                <el-menu-item index="2">待提交任务</el-menu-item>
               </el-menu>
             </el-tab-pane>
           </el-tabs>
@@ -241,7 +242,11 @@ export default {
     handleOpen (key, keyPath) {
     },
     handleTaskListSelect (index, indexPath) {
-      this.$router.push('/lims/taskListMaintenance')
+      if (index === '1') {
+        this.$router.push('/lims/taskListMaintenance')
+      } else if (index === '2') {
+        this.$router.push('/lims/unsubmittedTaskListMaintenance')
+      }
     },
     handleSelectSearchItem (item) {
       this.$router.push(item.path)

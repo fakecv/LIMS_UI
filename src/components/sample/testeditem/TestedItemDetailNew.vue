@@ -21,6 +21,7 @@ export default {
         testedItemName: '',
         sort: '',
         testedItemNumber: '',
+        testCategory: '',
         price: ''
       },
       testedItemResetForm: {
@@ -28,6 +29,7 @@ export default {
         testedItemName: '',
         sort: '',
         testedItemNumber: '',
+        testCategory: '',
         price: ''
       },
       staticOptions: {

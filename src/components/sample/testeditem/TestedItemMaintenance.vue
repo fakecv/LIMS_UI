@@ -1,85 +1,85 @@
-    <template>
-    <div>
-      <el-container style="padding: 10px">
-        <el-form :model="testedItemRequestForm" label-width="100px" label-position="left" size="mini">
-          <el-row :gutter="20">
-          <el-form-item label="检测项目类别">
-              <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemRequestForm.testCategory">
-                <el-option v-for="item in staticOptions.testCategories"
-                  :key="item.id"
-                  :label="item.testCategoryName"
-                  :value="item.id">
-                </el-option>
-                </el-select>
+<template>
+  <div>
+    <el-container style="padding: 10px">
+      <el-form :model="testedItemRequestForm" label-width="100px" label-position="left" size="mini">
+        <el-row :gutter="20">
+        <el-form-item label="检测项目类别">
+            <el-select name="testedItem" filterable clearable default-first-option v-model="testedItemRequestForm.testCategory">
+              <el-option v-for="item in staticOptions.testCategories"
+                :key="item.id"
+                :label="item.testCategoryName"
+                :value="item.id">
+              </el-option>
+              </el-select>
+        </el-form-item>
+      </el-row>
+        <el-row :gutter="20">
+          <el-form-item label="检测项目名称">
+            <el-input name="testedItemName" v-model="testedItemRequestForm.testedItemName"></el-input>
+          </el-form-item>
+          <el-form-item label="检测项目说明">
+            <el-input name="testedItemNumber" v-model="testedItemRequestForm.testedItemNumber"></el-input>
           </el-form-item>
         </el-row>
-          <el-row :gutter="20">
-            <el-form-item label="检测项目名称">
-              <el-input name="testedItemName" v-model="testedItemRequestForm.testedItemName"></el-input>
-            </el-form-item>
-            <el-form-item label="检测项目说明">
-              <el-input name="testedItemNumber" v-model="testedItemRequestForm.testedItemNumber"></el-input>
-            </el-form-item>
-          </el-row>
-          <el-row :gutter="20">
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">查询</el-button>
-            </el-form-item>
-          </el-row>
-        </el-form>
-      </el-container>
-      <el-row type="flex" justify="end">
-        <el-button-group size="mini">
-          <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveTop">置顶</el-button>
-          <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveUp">上移</el-button>
-          <el-button type="primary" @click.native="moveDown">下移<i class="el-icon-arrow-down"></i></el-button>
-          <el-button type="primary" @click.native="moveBottom">置底<i class="el-icon-arrow-down"></i></el-button>
-        </el-button-group>
-      </el-row>
-      <el-table ref="multipleTable"
+        <el-row :gutter="20">
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+          </el-form-item>
+        </el-row>
+      </el-form>
+    </el-container>
+    <el-row type="flex" justify="end">
+      <el-button-group size="mini">
+        <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveTop">置顶</el-button>
+        <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveUp">上移</el-button>
+        <el-button type="primary" @click.native="moveDown">下移<i class="el-icon-arrow-down"></i></el-button>
+        <el-button type="primary" @click.native="moveBottom">置底<i class="el-icon-arrow-down"></i></el-button>
+      </el-button-group>
+    </el-row>
+    <el-table ref="multipleTable"
       :data="tableData" style="width: 100%"
       @row-dblclick=dblclick
       @selection-change="handleSelectionChange"
       @select="handleSelection">
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column
-          prop="testCategory"
-          label="检测项目类别"
-          :formatter="testCategoryFormatter"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testedItemName"
-          label="检测项目名称"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="price"
-          label="检测项目价格"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="testedItemNumber"
-          label="检测项目说明"
-          width="180">
-        </el-table-column>
-      </el-table>
-      <div class="block text-right">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="testedItemRequestForm.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="20"
-          layout="sizes, prev, pager, next"
-          :total="totalTestedItems">
-        </el-pagination>
-      </div>
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
+      <el-table-column
+        prop="testCategory"
+        label="检测项目类别"
+        :formatter="testCategoryFormatter"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="testedItemName"
+        label="检测项目名称"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="price"
+        label="检测项目价格"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="testedItemNumber"
+        label="检测项目说明"
+        width="180">
+      </el-table-column>
+    </el-table>
+    <div class="block text-right">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="testedItemRequestForm.currentPage"
+        :page-sizes="[10, 20, 50]"
+        :page-size="20"
+        layout="sizes, prev, pager, next"
+        :total="totalTestedItems">
+      </el-pagination>
     </div>
-  </template>
+  </div>
+</template>
 
 <script>
 export default {
