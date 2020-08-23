@@ -89,7 +89,12 @@ export default {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateCustomerForm', res.data)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     confirmDelete () {
@@ -117,7 +122,12 @@ export default {
           vm.$emit('deleteCustomerForm')
           vm.sampleNumberButton = false
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     }
   }

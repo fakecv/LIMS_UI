@@ -66,7 +66,12 @@ export default {
           vm.getTestMethod(vm.testedItemProductForm.testedItem)
           vm.getTestParameter(vm.testedItemProductForm.testedItem)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     resetTestedItemProductForm () {
@@ -106,7 +111,18 @@ export default {
     getTestMethod (testedItemId) {
       this.staticOptions.filteredTestMethods =
         this.staticOptions.testMethods.filter(function (val) {
-          return val.testedItem === testedItemId
+          if (val.testedItem instanceof Array) {
+            for (let i = 0; i < val.testedItem.length; i++) {
+              if (val.testedItem[i] === testedItemId) {
+                return true
+              }
+            }
+          } else {
+            if (val.testedItem === testedItemId) {
+              return true
+            }
+          }
+          return false
         })
       if (this.testedItemProductForm.testMethod.length > 0) {
         this.staticOptions.checkedTestMethods = this.testedItemProductForm.testMethod.split(';')
@@ -165,7 +181,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testCategories = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestedItemData () {
@@ -175,7 +196,12 @@ export default {
           vm.staticOptions.testedItems = res.data
           vm.staticOptions.filteredTestedItems = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestMethodData () {
@@ -185,7 +211,12 @@ export default {
           vm.staticOptions.testMethods = res.data
           vm.staticOptions.filteredTestMethods = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestParameterData () {
@@ -195,7 +226,12 @@ export default {
           vm.staticOptions.testParameters = res.data
           vm.staticOptions.filteredTestParameters = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     }
   },

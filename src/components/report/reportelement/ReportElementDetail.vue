@@ -237,7 +237,12 @@ export default {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updatereportElementForm', res.data)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     confirmDelete () {
@@ -265,7 +270,12 @@ export default {
           vm.$emit('deleteReportElementForm')
           vm.disableSortButton = false
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     handleObjectChange (val) {
@@ -292,7 +302,12 @@ export default {
           vm.reportElementForm.reportElementSort = res.data
           vm.disableSortButton = true
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     getCascadeItems (val) {

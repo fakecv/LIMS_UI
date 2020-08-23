@@ -62,10 +62,11 @@ export default class AuthService {
     localStorage.removeItem('access_token')
     localStorage.removeItem('id_token')
     localStorage.removeItem('expires_at')
+    localStorage.removeItem('userProfile')
     this.userProfile = null
     this.authNotifier.emit('authChange', false)
     // navigate to the home route
-    router.replace({path: '/login/first'})
+    router.replace({path: '/'})
   }
 
   isAuthenticated () {

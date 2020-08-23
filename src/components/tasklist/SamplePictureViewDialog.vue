@@ -42,7 +42,12 @@ export default {
             vm.images.push(imageCP)
           }
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadAgreement (agreementId) {
@@ -62,7 +67,12 @@ export default {
             vm.images.push(imageCP)
           }
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     }
   },

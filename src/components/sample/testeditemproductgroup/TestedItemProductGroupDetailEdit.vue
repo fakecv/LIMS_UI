@@ -142,13 +142,24 @@ export default {
             return val.testCategory === testCategoryId
           })
     },
-    getTestMethod (testedItemId, form) {
+    getTestMethod (testedItemId) {
       this.staticOptions.filteredTestMethods =
         this.staticOptions.testMethods.filter(function (val) {
-          return val.testedItem === testedItemId
+          if (val.testedItem instanceof Array) {
+            for (let i = 0; i < val.testedItem.length; i++) {
+              if (val.testedItem[i] === testedItemId) {
+                return true
+              }
+            }
+          } else {
+            if (val.testedItem === testedItemId) {
+              return true
+            }
+          }
+          return false
         })
-      if (form.testMethod.length > 0) {
-        this.staticOptions.checkedTestMethods = form.testMethod.split(';')
+      if (this.testedItemProductForm.testMethod.length > 0) {
+        this.staticOptions.checkedTestMethods = this.testedItemProductForm.testMethod.split(';')
       }
     },
     getTestParameter (testedItemId, form) {
@@ -231,7 +242,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testCategories = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestedItemData () {
@@ -240,7 +256,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestMethodData () {
@@ -249,7 +270,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testMethods = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestParameterData () {
@@ -267,7 +293,12 @@ export default {
           vm.getTestMethod(vm.testedItemProductForm.testedItem, this.testedItemProductForm)
           vm.getTestParameter(vm.testedItemProductForm.testedItem, this.testedItemProductForm)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestedItemTask (itemTaskForm) {
@@ -282,7 +313,12 @@ export default {
         .then(function (res) {
           vm.testedItemProductGroupForm = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadSelectedTestedItemProducts (testedItemProductGroupId) {
@@ -291,7 +327,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.selectedTestedItemProducts = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     newTestedItemProducts (id) {
@@ -302,7 +343,7 @@ export default {
         }).catch(function (error) {
           vm.$message({
             showClose: true,
-            message: error.response.data.message
+            message: error.response.data.detail
           })
         })
     },
@@ -346,7 +387,7 @@ export default {
             }).catch(function (error) {
               vm.$message({
                 showClose: true,
-                message: error.response.data.message
+                message: error.response.data.detail
               })
             })
         })

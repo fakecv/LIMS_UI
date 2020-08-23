@@ -143,7 +143,12 @@ export default {
           vm.$store.commit('FORM_IMPORT_WITH_FID_G', {fid: vm.$route.params.fid, initV: document})
           vm.$router.push('/lims/UIGenerator/form/qry/' + row.id)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     handleSizeChange (val) {
@@ -163,7 +168,12 @@ export default {
           vm.tableData = res.data.pageResult || []
           vm.totalFormTemplates = res.data.totalFormTemplates || 0
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     translateInlineFormatter (row, column) {

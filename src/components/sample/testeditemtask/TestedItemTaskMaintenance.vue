@@ -219,7 +219,12 @@ export default {
           vm.tableData = res.data.pageResult || []
           vm.totalTestedItemTasks = res.data.totalTestedItemTasks || 0
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     getCascadeItems (itemId) {
@@ -258,7 +263,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.departments = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadDrawingDesignData () {
@@ -270,7 +280,12 @@ export default {
           vm.staticOptions.drawingDesigns = res.data
           vm.staticOptions.filteredDrawingDesigns = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadProcessingStatusData () {
@@ -279,7 +294,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.processingStatuses = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadProcessPriorityData () {
@@ -288,7 +308,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.processPriorities = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestedItemData () {
@@ -298,7 +323,12 @@ export default {
           console.log(res.data)
           vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestMethodData () {
@@ -308,7 +338,12 @@ export default {
           vm.staticOptions.testMethods = res.data
           vm.staticOptions.filteredTestMethods = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestParameterData () {

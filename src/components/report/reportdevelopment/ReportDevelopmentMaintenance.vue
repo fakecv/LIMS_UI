@@ -106,7 +106,12 @@ export default {
           vm.tableData = res.data.pageResult || []
           vm.totalReportDevelopments = res.data.totalReportDevelopments || 0
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     }
   },

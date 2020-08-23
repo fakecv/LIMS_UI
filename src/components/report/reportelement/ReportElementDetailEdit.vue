@@ -109,7 +109,12 @@ export default {
           vm.getCascadeItems(vm.reportElementForm.reportName)
           vm.loadReportEnrichmentData(vm.reportElementForm.reportName)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadReportData () {
@@ -118,7 +123,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.reports = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadReportEnrichmentData (reportId) {
@@ -127,7 +137,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.objects = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     getCascadeItems (event) {
@@ -142,7 +157,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.values = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
       this.staticOptions.input = false
     },
@@ -190,7 +210,7 @@ export default {
           vm.$message({
             showClose: true,
             duration: 0,
-            message: error.response.data.message
+            message: error.response.data.detail
           })
         })
     },

@@ -99,7 +99,18 @@ export default {
     getTestMethod (testedItemId) {
       this.staticOptions.filteredTestMethods =
         this.staticOptions.testMethods.filter(function (val) {
-          return val.testedItem === testedItemId
+          if (val.testedItem instanceof Array) {
+            for (let i = 0; i < val.testedItem.length; i++) {
+              if (val.testedItem[i] === testedItemId) {
+                return true
+              }
+            }
+          } else {
+            if (val.testedItem === testedItemId) {
+              return true
+            }
+          }
+          return false
         })
     },
     getTestParameter (testedItemId) {
@@ -152,7 +163,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testCategories = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestedItemData () {
@@ -161,7 +177,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestMethodData () {
@@ -170,7 +191,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testMethods = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestParameterData () {

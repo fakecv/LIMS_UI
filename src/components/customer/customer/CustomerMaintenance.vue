@@ -116,7 +116,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.customerCompanies = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     dblclick (row, event) {
@@ -169,7 +174,12 @@ export default {
           .then(vm.$ajax.spread((res1, res2) => {
             vm.reload(res1.data)
           })).catch(function (error) {
-            vm.$message(error.response.data.message)
+            vm.$message({
+              showClose: true,
+              duration: 0,
+              type: 'error',
+              message: error.response.data.detail
+            })
           })
       }
     },
@@ -181,7 +191,12 @@ export default {
           .then(function (res) {
             vm.reload(res.data)
           }).catch(function (error) {
-            vm.$message(error.response.data.message)
+            vm.$message({
+              showClose: true,
+              duration: 0,
+              type: 'error',
+              message: error.response.data.detail
+            })
           })
       }
     },
@@ -210,7 +225,12 @@ export default {
           .then(vm.$ajax.spread((res1, res2) => {
             vm.reload(res1.data)
           })).catch(function (error) {
-            vm.$message(error.response.data.message)
+            vm.$message({
+              showClose: true,
+              duration: 0,
+              type: 'error',
+              message: error.response.data.detail
+            })
           })
       }
     },
@@ -222,7 +242,12 @@ export default {
           .then(function (res) {
             vm.reload(res.data)
           }).catch(function (error) {
-            vm.$message(error.response.data.message)
+            vm.$message({
+              showClose: true,
+              duration: 0,
+              type: 'error',
+              message: error.response.data.detail
+            })
           })
       }
     },
@@ -243,7 +268,12 @@ export default {
             })
           })
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     customerCompanyFormatter (row, column) {

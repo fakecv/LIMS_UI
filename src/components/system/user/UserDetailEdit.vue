@@ -98,7 +98,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.departments = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     initRoleGroups () {
@@ -146,7 +151,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.selectedUserRoleGroups = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadUser (userId) {
@@ -155,7 +165,12 @@ export default {
         .then(function (res) {
           vm.userForm = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     }
   },

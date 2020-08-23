@@ -238,7 +238,12 @@ export default {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateUserForm', res.data)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     confirmDelete () {
@@ -265,7 +270,12 @@ export default {
           vm.$message('已经成功删除！')
           vm.$emit('deleteUser')
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     modifyPassword () {

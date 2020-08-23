@@ -41,7 +41,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.customerCompanies = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadCustomer (customerId) {
@@ -50,7 +55,12 @@ export default {
         .then(function (res) {
           vm.customerRequestForm = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     resetCustomerForm () {

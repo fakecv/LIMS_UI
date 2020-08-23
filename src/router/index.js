@@ -76,6 +76,7 @@ import MenuDetailNew from '@/components/system/menu/MenuDetailNew'
 import MenuDetailEdit from '@/components/system/menu/MenuDetailEdit'
 import MenuMaintenance from '@/components/system/menu/MenuMaintenance'
 import NavPage from '@/components/frame/NavPage'
+import Error from '@/components/system/Error'
 import NumberGeneratorDetailNew from '@/components/sample/numbergenerator/NumberGeneratorDetailNew'
 import NumberGeneratorDetailEdit from '@/components/sample/numbergenerator/NumberGeneratorDetailEdit'
 import NumberGeneratorMaintenance from '@/components/sample/numbergenerator/NumberGeneratorMaintenance'
@@ -169,6 +170,11 @@ const router = new Router({
   mode: 'history',
   // base: '/lims/',
   routes: [
+    {
+      path: '/',
+      name: 'root',
+      component: login
+    },
     {
       path: '/login/:id/:userName',
       name: 'logon',
@@ -528,6 +534,11 @@ const router = new Router({
           path: 'navPage',
           name: 'navPage',
           component: NavPage
+        },
+        {
+          path: 'not-found',
+          name: 'NotFound',
+          component: Error
         },
         {
           path: 'numberGeneratorDetailEdit/:id',
@@ -956,12 +967,6 @@ const router = new Router({
           component: UserMaintenance
         }
       ]
-
-    },
-    // 正式上线后要改为 /login/first 或者错误信息提示页面，跳转后需要用户重新登录系统, 当出现问题后跳转至该页面，提示问题
-    {
-      path: '*',
-      redirect: 'login/first'
     }
   ]
 })

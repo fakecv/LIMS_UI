@@ -178,7 +178,7 @@ export default {
           vm.$message({
             showClose: true,
             duration: 0,
-            message: error.response.data.message
+            message: error.response.data.detail
           })
         })
     },
@@ -188,7 +188,12 @@ export default {
         .then(function (res) {
           vm.agreementForm.agreementNumber = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadAgreement (agreementId) {
@@ -205,7 +210,12 @@ export default {
             })
           }
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     downloadToFrontEnd (fileName, agreementId) {
@@ -255,7 +265,12 @@ export default {
           vm.staticOptions.processPriorities = res.data
           vm.agreementForm.processPriority = vm.staticOptions.processPriorities[0].processPriorityName
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestingBasis () {
@@ -264,7 +279,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testingBasises = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     updateAgreementForm (event) {
@@ -291,7 +311,12 @@ export default {
         .then(function (res) {
           vm.newAgreementForm()
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     updateCustomerCompany (row) {
@@ -374,7 +399,12 @@ export default {
           })
           vm.saveToDB()
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     saveToDB () {
@@ -383,7 +413,12 @@ export default {
         .then(function (res) {
           vm.$message('图片已删除!')
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     refreshAgreement (event) {

@@ -230,7 +230,12 @@ export default {
           .then(vm.$ajax.spread((res1, res2) => {
             vm.reload(res1.data)
           })).catch(function (error) {
-            vm.$message(error.response.data.message)
+            vm.$message({
+              showClose: true,
+              duration: 0,
+              type: 'error',
+              message: error.response.data.detail
+            })
           })
       }
     },
@@ -242,7 +247,12 @@ export default {
           .then(function (res) {
             vm.reload(res.data)
           }).catch(function (error) {
-            vm.$message(error.response.data.message)
+            vm.$message({
+              showClose: true,
+              duration: 0,
+              type: 'error',
+              message: error.response.data.detail
+            })
           })
       }
     },
@@ -271,7 +281,12 @@ export default {
           .then(vm.$ajax.spread((res1, res2) => {
             vm.reload(res1.data)
           })).catch(function (error) {
-            vm.$message(error.response.data.message)
+            vm.$message({
+              showClose: true,
+              duration: 0,
+              type: 'error',
+              message: error.response.data.detail
+            })
           })
       }
     },
@@ -283,7 +298,12 @@ export default {
           .then(function (res) {
             vm.reload(res.data)
           }).catch(function (error) {
-            vm.$message(error.response.data.message)
+            vm.$message({
+              showClose: true,
+              duration: 0,
+              type: 'error',
+              message: error.response.data.detail
+            })
           })
       }
     },
@@ -305,7 +325,12 @@ export default {
             })
           })
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     // load all the testedItemProductes
@@ -317,7 +342,12 @@ export default {
           vm.tableData = res.data.pageResult || []
           vm.totalTestedItemProducts = res.data.totalTestedItemProducts || 0
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestCategory () {
@@ -326,7 +356,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testCategories = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestedItemData () {
@@ -335,7 +370,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestMethodData () {
@@ -344,7 +384,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testMethods = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestParameterData () {
@@ -353,7 +398,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testParameters = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     testedItemFormatter (row, column) {

@@ -421,7 +421,12 @@ export default {
               vm.$message('已经成功更新样品流转优先级!')
               vm.$refs.processPriorityRef.blur()
             }).catch(function (error) {
-              vm.$message(error.response.data.message)
+              vm.$message({
+                showClose: true,
+                duration: 0,
+                type: 'error',
+                message: error.response.data.detail
+              })
             })
         }).catch(() => {
           this.$refs.processPriorityRef.blur()
@@ -440,7 +445,12 @@ export default {
           vm.$message('已经成功保存到数据库!')
           vm.agreementTemplateDialogFormVisible = false
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     updateCustomer (val) {
@@ -590,7 +600,12 @@ export default {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateAgreementForm', res.data)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     confirmDelete () {
@@ -621,7 +636,12 @@ export default {
           vm.$emit('deleteAgreementForm')
           vm.agreementNumberButton = false
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     agreementNumberGenerator () {
@@ -666,7 +686,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.customerNotes = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     handleCustomerRowClick (row) {
@@ -743,7 +768,12 @@ export default {
           })
           vm.fileList = []
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     handleChange (file, fileList) {

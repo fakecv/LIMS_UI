@@ -52,7 +52,7 @@ export default {
           vm.$message({
             showClose: true,
             duration: 0,
-            message: error.response.data.message
+            message: error.response.data.detail
           })
         })
     },
@@ -65,7 +65,7 @@ export default {
           vm.$message({
             showClose: true,
             duration: 0,
-            message: error.response.data.message
+            message: error.response.data.detail
           })
         })
     },
@@ -84,7 +84,7 @@ export default {
           vm.$message({
             showClose: true,
             duration: 0,
-            message: error.response.data.message
+            message: error.response.data.detail
           })
         })
     },

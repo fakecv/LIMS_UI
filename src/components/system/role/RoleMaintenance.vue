@@ -99,7 +99,12 @@ export default {
         .then(function (res) {
           vm.linkMenus = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     }
   },

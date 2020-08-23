@@ -7,7 +7,7 @@
     <el-main class="login-main">
       <el-tabs v-model="activeName" style="color::active: #005458" @tab-click="clickTab">
         <el-tab-pane label="用户登录" name="first" style="{color: #005458, active: {color: #005458} width: 175px}">
-          <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="0px" @keyup.enter.native="submitForm('loginForm')">
+          <el-form :model="loginForm" :rules="simpleRules" ref="loginForm" label-width="0px" @keyup.enter.native="submitForm('loginForm')">
             <el-form-item prop="userName">
               <el-input v-model="loginForm.userName" placeholder="输入用户名">
                 <template slot="prepend"><i class="fa fa-user" aria-hidden="true"></i></template>
@@ -127,6 +127,13 @@ export default {
         confirmPassword: [
           { validator: validatePass, trigger: 'blur' }
         ]
+      },
+      simpleRules: {
+        userName: [
+          { required: true, message: '用户名不能为空', trigger: 'blur' }],
+        password: [
+          { required: true, message: '密码不能为空', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -137,22 +144,20 @@ export default {
       this.loginForm.confirmPassword = ''
     },
     submitForm (formName) {
-      var credentials = {
-        userName: this.loginForm.userName,
-        password: this.loginForm.password
-      }
+      const loginVM = {username: this.loginForm.userName, password: this.loginForm.password, rememberMe: false}
       var vm = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          vm.$ajax.post('/login', credentials)
+          vm.$ajax.post('/api/users/authenticate', loginVM)
             .then(function (res) {
               vm.auth.login(res.headers.authorization)
             }).catch(function (error) {
-              console.log(error.response.data.message)
+              console.log(error.response)
               vm.$message({
                 showClose: true,
                 duration: 0,
-                message: '用户或密码不正确'
+                type: 'error',
+                message: error.response.data.detail
               })
             })
         } else {
@@ -168,10 +173,12 @@ export default {
             .then(function (res) {
               vm.$message('密码更新成功，请重新登录！')
             }).catch(function (error) {
+              console.log(error.response)
               vm.$message({
                 showClose: true,
                 duration: 0,
-                message: error.response.data.message
+                type: 'error',
+                message: error.response.data.detail
               })
             })
         } else {
@@ -194,7 +201,7 @@ export default {
               vm.$message({
                 showClose: true,
                 duration: 0,
-                message: error.response.data.message
+                message: error.response.data.detail
               })
             })
         } else {
@@ -204,7 +211,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.$route.params.id)
     if (this.$route.params.id !== undefined) {
       this.activeName = this.$route.params.id
     }

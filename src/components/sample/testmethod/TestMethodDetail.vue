@@ -110,7 +110,12 @@ export default {
         .then(function (res) {
           vm.testedMethodRequestForm = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestCategory () {
@@ -119,7 +124,12 @@ export default {
         .then(function (res) {
           vm.testCategories = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     addTestedItems () {
@@ -154,7 +164,12 @@ export default {
         .then(function (res) {
           vm.testedItemTable = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     updateTestMethod (event) {
@@ -195,7 +210,12 @@ export default {
           vm.$message('已经成功保存到数据库!')
           vm.updateTestMethodForm(res.data)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     confirmDelete () {
@@ -222,7 +242,12 @@ export default {
           vm.$message('已经成功删除！')
           vm.resetTestMethodForm()
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     updateTestMethodForm (event) {

@@ -251,7 +251,12 @@ export default {
           vm.tableData = res.data.pageResult || []
           vm.totalProcesss = res.data.totalProcesss || 0
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     // loading configurable parameters start
@@ -261,7 +266,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.agreements = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadDepartment () {
@@ -270,7 +280,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.departments = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadDrawingDesignData () {
@@ -279,7 +294,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.drawingDesigns = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestMethodData () {
@@ -289,7 +309,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testMethods = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestedItemData () {
@@ -299,7 +324,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testedItems = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadProcessingStatusData () {
@@ -308,7 +338,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.processingStatuses = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadProcessPriorityData () {
@@ -317,7 +352,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.processPriorities = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     // loading configurable parameters end

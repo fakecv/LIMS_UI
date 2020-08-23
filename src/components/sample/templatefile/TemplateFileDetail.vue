@@ -105,7 +105,12 @@ export default {
           vm.saveToDB()
           vm.fileList = []
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     uploadAndCover () {
@@ -123,7 +128,12 @@ export default {
           vm.updateToDB()
           vm.fileList = []
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     handleChange (file, fileList) {
@@ -165,7 +175,12 @@ export default {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateTemplateFileForm', res.data)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     updateToDB () {
@@ -175,7 +190,12 @@ export default {
           vm.$message('已经成功保存到数据库!')
           vm.$emit('updateTemplateFileForm', res.data)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     confirmDelete () {
@@ -216,7 +236,12 @@ export default {
             vm.uploadToServer()
           }
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     delete () {
@@ -228,7 +253,12 @@ export default {
           vm.sampleNumberButton = false
         }).catch(function (error) {
           vm.$emit('deleteTemplateFileForm')
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     }
   }

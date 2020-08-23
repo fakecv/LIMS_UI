@@ -48,15 +48,17 @@ Vue.use(vGallery)
 Vue.component('icon', Icon)
 require('es6-promise').polyfill()
 router.beforeEach((to, from, next) => {
-  if (to.name === 'login') {
+  if (to.name === 'root') {
     next()
-    return
   }
-  if (localStorage.token && new Date().getTime() < localStorage.tokenExpired) {
-    next()
+  if (localStorage.getItem('id_token') && new Date().getTime() < localStorage.getItem('expires_at')) {
+    if (!to.matched.length) {
+      next('/lims/not-found')
+    } else {
+      next()
+    }
   } else {
-    // next('/login')
-    next()
+    next('/')
   }
 })
 // http request 拦截器
@@ -84,7 +86,7 @@ Axios.interceptors.response.use((response) => {
   // Do something with response error
   if (error.response.status === 401) {
     auth.logout()
-    router.replace('/login')
+    router.replace('/')
   }
   return Promise.reject(error)
 })

@@ -50,7 +50,7 @@ export default {
         }).catch(function (error) {
           vm.$message({
             showClose: true,
-            message: error.response.data.message
+            message: error.response.data.detail
           })
         })
     }

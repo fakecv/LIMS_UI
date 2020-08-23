@@ -138,7 +138,18 @@ export default {
     getTestMethod (testedItemId) {
       this.staticOptions.filteredTestMethods =
         this.staticOptions.testMethods.filter(function (val) {
-          return val.testedItem === testedItemId
+          if (val.testedItem instanceof Array) {
+            for (let i = 0; i < val.testedItem.length; i++) {
+              if (val.testedItem[i] === testedItemId) {
+                return true
+              }
+            }
+          } else {
+            if (val.testedItem === testedItemId) {
+              return true
+            }
+          }
+          return false
         })
     },
     resetProcessForm () {
@@ -171,7 +182,12 @@ export default {
             // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
             vm.fetchDrawingDesign()
           }).catch(function (error) {
-            vm.$message(error.response.data.message)
+            vm.$message({
+              showClose: true,
+              duration: 0,
+              type: 'error',
+              message: error.response.data.detail
+            })
           })
       })
     },
@@ -184,7 +200,12 @@ export default {
           // vm.staticOptions.testedItemTaskTableData.push.apply(vm.staticOptions.testedItemTaskTableData, res.data)
           // vm.fetchDrawingDesign()
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     updateTestedItemTask () {
@@ -203,7 +224,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.agreements = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadAgreementProcess (agreementId) {
@@ -212,7 +238,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.processTableData = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadDepartment () {
@@ -221,7 +252,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.departments = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadDrawingDesignData () {
@@ -230,7 +266,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.drawingDesigns = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestCategory () {
@@ -239,7 +280,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testCategories = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestedItemData () {
@@ -249,7 +295,12 @@ export default {
           vm.staticOptions.testedItems = res.data
           vm.staticOptions.filteredTestedItems = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestMethodData () {
@@ -258,7 +309,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.testMethods = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadTestParameterData () {
@@ -280,7 +336,12 @@ export default {
           vm.getTestParameter(vm.processForm.testedItem)
           // vm.getDrawingDesigns(vm.processForm.testedItem)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadProcessingStatusData () {
@@ -289,7 +350,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.processingStatuses = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadProcessPriorityData () {
@@ -298,7 +364,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.processPriorities = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     }
   },

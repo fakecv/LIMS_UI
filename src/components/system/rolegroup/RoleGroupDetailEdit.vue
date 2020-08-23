@@ -49,7 +49,12 @@ export default {
         .then(function (res) {
           vm.userRoleGroupForm = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadSelectedUserRoles (userRoleGroupId) {
@@ -58,7 +63,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.selectedUserRoles = [].concat(res.data)
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadMenuLinks () {
@@ -67,7 +77,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.linkMenus = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     reloadUserRoles (event) {

@@ -49,7 +49,7 @@ export default {
           vm.download(res.data)
         }
         ).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message(error.response.data.detail)
         })
     },
     download (data) {

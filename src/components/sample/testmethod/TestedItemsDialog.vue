@@ -93,7 +93,12 @@ export default {
           vm.testedItemTable = res.data.pageResult || []
           vm.totalTestedItems = res.data.totalTestedItems || 0
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     handleSizeChange (val) {

@@ -175,7 +175,12 @@ export default {
           vm.tableData = res.data.pageResult || []
           vm.totalReportElements = res.data.totalReportElements || 0
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     loadReportData () {
@@ -184,7 +189,12 @@ export default {
         .then(function (res) {
           vm.staticOptions.reports = res.data
         }).catch(function (error) {
-          vm.$message(error.response.data.message)
+          vm.$message({
+            showClose: true,
+            duration: 0,
+            type: 'error',
+            message: error.response.data.detail
+          })
         })
     },
     reportFormatter (row, column) {
