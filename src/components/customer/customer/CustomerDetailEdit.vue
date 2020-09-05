@@ -39,7 +39,7 @@ export default {
       let vm = this
       this.$ajax.get('/api/customer/customerCompany/getCustomerCompany')
         .then(function (res) {
-          vm.staticOptions.customerCompanies = res.data
+          vm.staticOptions.customerCompanies = res.data || []
         }).catch(function (error) {
           vm.$message({
             showClose: true,
@@ -53,7 +53,7 @@ export default {
       let vm = this
       this.$ajax.get('/api/customer/customer/' + customerId)
         .then(function (res) {
-          vm.customerRequestForm = res.data
+          vm.customerRequestForm = res.data || {}
         }).catch(function (error) {
           vm.$message({
             showClose: true,

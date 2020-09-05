@@ -42,67 +42,67 @@
       </el-form>
     </el-container>
 
-      <el-row type="flex" justify="end">
-        <el-button-group size="mini">
-          <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveTop">置顶</el-button>
-          <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveUp">上移</el-button>
-          <el-button type="primary" @click.native="moveDown">下移<i class="el-icon-arrow-down"></i></el-button>
-          <el-button type="primary" @click.native="moveBottom">置底<i class="el-icon-arrow-down"></i></el-button>
-        </el-button-group>
-      </el-row>
-      <el-table ref="multipleTable"
-      :data="tableData" style="width: 100%"
-      @row-dblclick=dblclick
-      @selection-change="handleSelectionChange"
-      @select="handleSelection">
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column
-          prop="customerCompanyName"
-          label="单位名称"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="客户姓名"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="mobileNumber"
-          label="手机号码"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="fax"
-          label="传真"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="email"
-          label="邮箱"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          label="单位地址"
-          width="180">
-        </el-table-column>
-      </el-table>
-      <div class="block text-right">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="customerCompanyRequestForm.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="20"
-          layout="sizes, prev, pager, next"
-          :total="totalCustomerCompanys">
-        </el-pagination>
-      </div>
+    <el-row type="flex" justify="end">
+      <el-button-group size="mini">
+        <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveTop">置顶</el-button>
+        <el-button type="primary" icon="el-icon-arrow-up" @click.native="moveUp">上移</el-button>
+        <el-button type="primary" @click.native="moveDown">下移<i class="el-icon-arrow-down"></i></el-button>
+        <el-button type="primary" @click.native="moveBottom">置底<i class="el-icon-arrow-down"></i></el-button>
+      </el-button-group>
+    </el-row>
+    <el-table ref="multipleTable"
+    :data="tableData" style="width: 100%"
+    @row-dblclick=dblclick
+    @selection-change="handleSelectionChange"
+    @select="handleSelection">
+      <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
+      <el-table-column
+        prop="customerCompanyName"
+        label="单位名称"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="客户姓名"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="mobileNumber"
+        label="手机号码"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="fax"
+        label="传真"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="email"
+        label="邮箱"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="单位地址"
+        width="180">
+      </el-table-column>
+    </el-table>
+    <div class="block text-right">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="customerCompanyRequestForm.currentPage"
+        :page-sizes="[10, 20, 50]"
+        :page-size="20"
+        layout="sizes, prev, pager, next"
+        :total="totalCustomerCompanys">
+      </el-pagination>
     </div>
-  </template>
+  </div>
+</template>
 
 <script>
 export default {
@@ -300,7 +300,7 @@ export default {
         })
     }
   },
-  mounted () {
+  activated () {
     this.onSubmit()
   }
 

@@ -8,6 +8,10 @@ import Axios from 'axios'
 import echarts from 'echarts'
 import ElementUI from 'element-ui'
 import filter from '@/components/filter'
+//  [Violation] Added non-passive event listener to a scroll-blocking 'mousewheel' event.
+//  Consider marking event handler as 'passive' to make the page more responsive.
+
+import 'default-passive-events'
 // import * as formatter from '@/components/formatter'
 import Icon from 'vue2-svg-icon/Icon.vue'
 import store from './store'

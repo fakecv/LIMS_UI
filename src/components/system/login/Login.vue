@@ -152,7 +152,6 @@ export default {
             .then(function (res) {
               vm.auth.login(res.headers.authorization)
             }).catch(function (error) {
-              console.log(error.response)
               vm.$message({
                 showClose: true,
                 duration: 0,
@@ -173,7 +172,6 @@ export default {
             .then(function (res) {
               vm.$message('密码更新成功，请重新登录！')
             }).catch(function (error) {
-              console.log(error.response)
               vm.$message({
                 showClose: true,
                 duration: 0,

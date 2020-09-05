@@ -40,7 +40,6 @@ export default {
       let vm = this
       this.$ajax.post('/api/illegal/bidding/quotationList/loadQuotation')
         .then(function (res) {
-          console.log('load quotation')
         }).catch(function (error) {
           vm.$message({
             showClose: true,
@@ -54,7 +53,6 @@ export default {
       let vm = this
       this.$ajax.post('/api/illegal/bidding/quotationList/auditQuotation')
         .then(function (res) {
-          console.log('audit quotation')
         }).catch(function (error) {
           vm.$message({
             showClose: true,
